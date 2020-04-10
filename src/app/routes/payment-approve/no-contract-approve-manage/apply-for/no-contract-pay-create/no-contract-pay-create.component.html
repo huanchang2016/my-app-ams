@@ -7,10 +7,28 @@
       <nz-breadcrumb-item>项目预览</nz-breadcrumb-item>
     </nz-breadcrumb>
   </ng-template>
-
+    
+<!-- <ng-container *ngIf="validateTreatyForm.valid && listOfData.length !== 0;else InvalidReferTpl">
+  <button nz-button [nzType]="'primary'" (click)="submitTreatyForm()" [nzLoading]="submitLoading"
+    class="mt-lg">保存协议支付</button>
+</ng-container> -->
   <ng-template #actionBtn>
-    <!-- <button nz-button [nzType]="'primary'" (click)="addPayConstract()">新增合同支付</button> -->
+    <ng-container *ngIf="listOfData.length !== 0 ">
+      <button *ngIf="!treatypayInfo || treatypayInfo.draft" nz-button [nzType]="'dashed'" (click)="submitTreatyForm()" [nzLoading]="submitLoading">保存协议支付</button>
+      
+      <ng-container *ngIf="treaty_pay_id">
+        <a *ngIf="!treatypayInfo || treatypayInfo.draft" nz-popconfirm nz-button [nzType]="'primary'" class="mx-sm"
+            nzPopconfirmTitle="请确认协议支付信息填写完整，无误后继续提交！！！"
+            (nzOnConfirm)="submitContractPay()"
+            (nzOnCancel)="cancel()">
+            提交支付申请
+        </a>
+      </ng-container>
+
+    </ng-container>
+   
   </ng-template>
+  
 
   <sv-container size="small" col="2">
     <sv label="项目名称"><strong>{{ projectInfo?.name }}</strong></sv>
@@ -154,14 +172,10 @@
   </nz-table>
 
 </nz-card>
-
-<ng-container *ngIf="validateTreatyForm.valid && listOfData.length !== 0;else InvalidReferTpl">
-  <button nzBlock nz-button [nzType]="'primary'" (click)="submitTreatyForm()" [nzLoading]="submitLoading"
-    class="mt-lg">保存协议支付</button>
+<ng-container *ngIf="!treatypayInfo || treatypayInfo.draft">
+  <div class="my-md p-md bg-warning text-md"><span class="text-error">*</span>以上信息需全部填写，才可以保存非合同支付信息</div>
 </ng-container>
-<ng-template #InvalidReferTpl>
-  <div class="my-md p-md bg-warning text-md "><span class="text-error">*</span>以上信息需全部填写，才可以保存非合同支付信息</div>
-</ng-template>
+  
 
 <!-- 成本支付新增 modal -->
 

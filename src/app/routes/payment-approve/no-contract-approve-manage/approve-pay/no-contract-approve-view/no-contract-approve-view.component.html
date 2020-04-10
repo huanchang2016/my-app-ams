@@ -1,0 +1,176 @@
+<page-header [title]="'项目协议支付管理'" [breadcrumb]="breadcrumb" [action]="actionBtn">
+
+    <ng-template #breadcrumb>
+      <nz-breadcrumb>
+        <nz-breadcrumb-item><a [routerLink]="['/dashboard']">首页</a></nz-breadcrumb-item>
+        <nz-breadcrumb-item>项目管理</nz-breadcrumb-item>
+        <nz-breadcrumb-item>项目预览</nz-breadcrumb-item>
+      </nz-breadcrumb>
+    </ng-template>
+      
+    <ng-template #actionBtn>
+     
+    </ng-template>
+    
+  
+    <sv-container size="small" col="2">
+      <sv label="项目名称"><strong>{{ projectInfo?.name }}</strong></sv>
+      <sv label="客户"><strong>{{ projectInfo?.customer?.name }}</strong></sv>
+      <sv label="负责部门">{{ projectInfo?.department?.name }}</sv>
+      <sv label="创建时间">{{ projectInfo?.create_time | date: 'yyyy/MM/dd HH:mm:ss' }}</sv>
+      <sv label="项目创建人">{{ projectInfo?.user.name }}</sv>
+    </sv-container>
+  
+  </page-header>
+  
+  
+  <!-- 支付流程进展： 草稿 不显示 -->
+  <nz-card [nzBordered]="false" class="mb-md" [nzTitle]="workflowStatusTitle">
+    <ng-template #workflowStatusTitle>
+      <span>审批进展</span>
+      <span class="text-primary ml-md text-sm">{{ progressInfo?.workflow_status.name }}</span>
+    </ng-template>
+    <ng-container *ngIf="nodeProcess.length !== 0;else nodeProcessLoadingTpl">
+      <nz-steps nzDirection="vertical" nzProgressDot class="hidden-pc">
+        <ng-container *ngFor="let process of nodeProcess">
+          <nz-step [nzTitle]="process.node.name"
+            [nzStatus]=" process.current ? 'process' : ( !process.finished ? 'wait' : ( !process.agree ?  'error' : 'finish') )"
+            [nzDescription]="createDesc">
+            <ng-template #createDesc>
+              <div class="desc">
+                <div class="my-sm">
+                  {{ process.user.name }}
+                </div>
+                <div *ngIf="process.finished; else notFinished">
+                  {{ process.finished_time }}
+                </div>
+                <span class="text-sm text-primary" [class.text-error]="process.finished && !process.agree">{{ process.remark }}</span>
+                <ng-template #notFinished>
+                  <!-- TODO:暂不开发 -->
+                  <!-- <a *ngIf="process.current" (click)="msg.success('click')">催一下</a> -->
+                </ng-template>
+              </div>
+            </ng-template>
+          </nz-step>
+        </ng-container>
+
+        <nz-step [nzTitle]="'完成'"
+          [nzStatus]=" !progressInfo.finished ? 'wait' : ( progressInfo.agree ? 'finish' : 'error' ) "></nz-step>
+      </nz-steps>
+      <nz-steps nzProgressDot class="hidden-mobile">
+        <ng-container *ngFor="let process of nodeProcess">
+          <nz-step [nzTitle]="process.node.name"
+            [nzStatus]=" process.current ? 'process' : ( !process.finished ? 'wait' : ( !process.agree ?  'error' : 'finish') )"
+            [nzDescription]="createDesc">
+            <ng-template #createDesc>
+              <div class="desc">
+                <div class="my-sm">
+                  {{ process.user.name }}
+                </div>
+                <div *ngIf="process.finished; else notFinished">
+                  {{ process.finished_time }}
+                </div>
+                <span class="text-sm text-primary" [class.text-error]="process.finished && !process.agree">{{ process.remark }}</span>
+                <ng-template #notFinished>
+                  <!-- TODO:暂不开发 -->
+                  <!-- <a *ngIf="process.current" (click)="msg.success('click')">催一下</a> -->
+                </ng-template>
+              </div>
+            </ng-template>
+          </nz-step>
+        </ng-container>
+
+        <nz-step [nzTitle]="'完成'"
+          [nzStatus]=" !progressInfo.finished ? 'wait' : ( progressInfo.agree ? 'finish' : 'error' ) " [nzDescription]="'合同支付审批完成'"></nz-step>
+      </nz-steps>
+
+    </ng-container>
+    <ng-template #nodeProcessLoadingTpl>
+      <div class="p-xl text-center text-lg text-primary">
+        <nz-spin></nz-spin>
+      </div>
+    </ng-template>
+
+    <div class="steps-content" *ngIf="isCurrentCheck">
+      <div class="check-box mt-md float-right">
+        <nz-radio-group [(ngModel)]="checkOption.agree" [nzButtonStyle]="'solid'">
+          <label nz-radio-button [nzValue]="true">通过</label>
+          <label nz-radio-button [nzValue]="false">不通过</label>
+        </nz-radio-group>
+        <textarea nz-input placeholder="请填写审核备注" [(ngModel)]="checkOption.remark"
+          [nzAutosize]="{ minRows: 3, maxRows: 6 }" class="my-sm"></textarea>
+        <div class="text-right">
+          <a nz-popconfirm nz-button [nzType]="'primary'" nzPopconfirmTitle="请确认支付信息已全部查看，且审核无误后确认提交！！！"
+            (nzOnConfirm)="submitCheckCurrentProcess()" (nzOnCancel)="cancel()">
+            审批
+          </a>
+        </div>
+      </div>
+    </div>
+  </nz-card>
+   
+  <nz-card nzTitle="协议支付资料">
+    <sv-container col="2" *ngIf="treatypayInfo">
+        <sv label="协议名称"><span class="font-weight-bold">{{ treatypayInfo.treaty.name }}</span></sv>
+        <sv label="收款单位">{{ treatypayInfo.pay_company }}</sv>
+        <sv label="银行账号"><span class="font-weight-bold">{{ treatypayInfo.bank_account }}</span></sv>
+        <sv label="银行名称">{{ treatypayInfo.bank_name }}</sv>
+        <sv label="抵扣金额">
+            <span class="text-error font-weight-bold" *ngIf="treatypayInfo.if_write_off;else notWriteOff">{{ treatypayInfo.write_off_amount | currency: 'CNY' }} 元</span>
+            <ng-template #notWriteOff>
+                <span class="text-primary">无抵扣金额</span>
+            </ng-template>
+        </sv>
+    </sv-container>
+
+  </nz-card>
+  
+  <nz-card nzTitle="协议成本支付" class="mt-md">
+    <nz-table #costSelectTable [nzData]="listOfData" [nzFrontPagination]="false">
+      <thead>
+        <tr>
+          <th>序号</th>
+          <th>摘要</th>
+          <th>费用类型</th>
+          <th>本期支付（元）</th>
+          <th>支付统计</th>
+          <th>收款信息</th>
+          <th>描述</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of costSelectTable.data; let i = index">
+          <td>{{ i + 1}}</td>
+          <td>{{ data.abstract }}</td>
+          <td>
+            <span>{{ data.cost.cost_category.name }}</span>
+            <span nz-tooltip [nzTooltipTitle]="data.cost.cost_category.description" class="text-md ml-sm">
+            <i nz-icon nzType="exclamation-circle" nzTheme="outline"></i></span>
+          </td>
+          <td class="text-error">{{ data.amount | currency: 'CNY' }}</td>
+          <td>
+            <sv-container size="small" col="1">
+              <sv label="总计支付"><span class="text-error">{{ data.cost.amount }}</span> 元</sv>
+              <sv label="累计支付"><span class="text-success">{{ data.cost.pay_amount }}</span> 元</sv>
+              <sv label="剩余支付"><span class="text-primary">{{ data.cost.amount - data.cost.pay_amount }}</span> 元</sv>
+            </sv-container>
+          </td>
+          <td>
+            <div>
+              <span>商务卡：</span><strong [innerHtml]="data.is_business_card | yn"></strong>
+            </div>
+            <div>
+              <strong>户&nbsp;&nbsp; 主：</strong><span>{{ data.account_name }}</span>
+            </div>
+            <div>
+              <strong>卡&nbsp;&nbsp; 号：</strong><span>{{ data.card_number }}</span>
+            </div>
+          </td>
+          <td>
+            <span [innerHtml]="data.remark | showTextareaContent"></span>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  
+  </nz-card>

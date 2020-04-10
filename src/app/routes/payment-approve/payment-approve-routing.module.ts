@@ -21,12 +21,20 @@ import { WithoutApprovalListComponent } from './contract-approve-manage/approve-
 // 查看合约支付信息  及 流程处理
 import { ApplyContractViewComponent } from './contract-approve-manage/approve-pay/apply-contract-view/apply-contract-view.component';
 
-// 无合约  协议审批管理
+// 无合约  协议支付 申请管理
 import { NoContractNotStartedComponent } from './no-contract-approve-manage/apply-for/no-contract-not-started/no-contract-not-started.component';
 import { NoContractPayCreateComponent } from './no-contract-approve-manage/apply-for/no-contract-pay-create/no-contract-pay-create.component';
-import { NoContractProjectFinishedComponent } from './no-contract-approve-manage/apply-for/no-contract-project-finished/no-contract-project-finished.component';
 import { NoContractProjectProgressComponent } from './no-contract-approve-manage/apply-for/no-contract-project-progress/no-contract-project-progress.component';
 import { ProjectNoContractListComponent } from './no-contract-approve-manage/apply-for/project-no-contract-pay-list/project-no-contract-list.component';
+import { NoContractApplyPassComponent } from './no-contract-approve-manage/apply-for/no-contract-apply-pass/no-contract-apply-pass.component';
+import { NoContractApplyRefuseComponent } from './no-contract-approve-manage/apply-for/no-contract-apply-refuse/no-contract-apply-refuse.component';
+
+// 无合约 协议支付审批 (我的， 该我审批， 审批完成， 未审批已被拒绝的)
+import { NoContractApproveListComponent } from './no-contract-approve-manage/approve-pay/no-contract-approve-list/no-contract-approve-list.component';
+import { NoContractForApproveListComponent } from './no-contract-approve-manage/approve-pay/no-contract-for-approve-list/no-contract-for-approve-list.component';
+import { NoContractApprovedFinishedListComponent } from './no-contract-approve-manage/approve-pay/no-contract-approved-finished-list/no-contract-approved-finished-list.component';
+import { NoContractApprovedWithoutListComponent } from './no-contract-approve-manage/approve-pay/no-contract-approved-without-list/no-contract-approved-without-list.component';
+import { NoContractApproveViewComponent } from './no-contract-approve-manage/approve-pay/no-contract-approve-view/no-contract-approve-view.component';
 
 
 const routes: Routes = [
@@ -56,12 +64,20 @@ const routes: Routes = [
   // 无合约  支付申请管理
   { path: 'no-contract/apply/draft', component: NoContractNotStartedComponent },
   { path: 'no-contract/apply/in_progress', component: NoContractProjectProgressComponent },
+  { path: 'no-contract/apply/pass', component: NoContractApplyPassComponent },
+  { path: 'no-contract/apply/refuse', component: NoContractApplyRefuseComponent },
   { path: 'no-contract/apply/pay/:id', component: ProjectNoContractListComponent, data: { title: '非合约项目支付列表' } },
   { path: 'no-contract/apply/pay/create/:id', component: NoContractPayCreateComponent, data: { title: '创建非合约协议支付' } },
   { path: 'no-contract/apply/pay/edit/:id', component: NoContractPayCreateComponent, data: { title: '编辑非合约协议支付' } },
 
   // 无合约 支付审批管理
-  { path: 'no-contract/apply/finished', component: NoContractProjectFinishedComponent },
+  { path: 'no-contract/pay/progress', component: NoContractApproveListComponent },
+  { path: 'no-contract/pay/forApproval', component: NoContractForApproveListComponent },
+  { path: 'no-contract/pay/finished', component: NoContractApprovedFinishedListComponent },
+  { path: 'no-contract/pay/without-pass', component: NoContractApprovedWithoutListComponent },
+
+  // 协议审批  信息查看
+  { path: 'no-contract/pay/view/:id', component: NoContractApproveViewComponent, data: { title: '协议支付详情查看' } }
 ];
 
 @NgModule({

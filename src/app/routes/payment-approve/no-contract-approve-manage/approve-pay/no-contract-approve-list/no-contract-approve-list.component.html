@@ -22,6 +22,7 @@
             <th>协议信息</th>
             <th>项目信息</th>
             <th>支付信息</th>
+            <th width="120">审批状态</th>
             <th>操作</th>
         </tr>
     </thead>
@@ -48,8 +49,11 @@
                     <sv label="收款单位"><span class="font-weight-bold">{{ data.pay_company }}</span></sv>
                     <sv label="银行名称"><span class="font-weight-bold">{{ data.bank_name }}</span></sv>
                     <sv label="银行账号"><span class="text-success">{{ data.bank_account }}</span></sv>
-                    <sv label="支付金额"><span class="text-error font-weight-bold">{{ data.amount | number: '1.2-2' }} 元</span></sv>
+                    <sv label="支付金额"><span class="text-error font-weight-bold">{{ data.amount | currency: 'CNY' }}</span></sv>
                 </sv-container>
+            </td>
+            <td>
+                <span class="text-primary" [class.text-error]="data.pay_status?.name === '未通过'" [class.text-success]="data.pay_status?.name === '已通过'">{{ data.pay_status?.name }}</span>
             </td>
             <td>
                 <!-- <nz-divider nzType="vertical"></nz-divider> -->

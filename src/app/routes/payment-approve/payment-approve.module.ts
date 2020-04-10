@@ -29,9 +29,15 @@ import { ViewApproveProjectComponent } from './contract-approve-manage/view-appr
 // 无合约  协议审批管理
 import { NoContractNotStartedComponent } from './no-contract-approve-manage/apply-for/no-contract-not-started/no-contract-not-started.component';
 import { NoContractPayCreateComponent } from './no-contract-approve-manage/apply-for/no-contract-pay-create/no-contract-pay-create.component';
-import { NoContractProjectFinishedComponent } from './no-contract-approve-manage/apply-for/no-contract-project-finished/no-contract-project-finished.component';
 import { NoContractProjectProgressComponent } from './no-contract-approve-manage/apply-for/no-contract-project-progress/no-contract-project-progress.component';
 import { ProjectNoContractListComponent } from './no-contract-approve-manage/apply-for/project-no-contract-pay-list/project-no-contract-list.component';
+import { NoContractApplyPassComponent } from './no-contract-approve-manage/apply-for/no-contract-apply-pass/no-contract-apply-pass.component';
+import { NoContractApplyRefuseComponent } from './no-contract-approve-manage/apply-for/no-contract-apply-refuse/no-contract-apply-refuse.component';
+import { NoContractApproveListComponent } from './no-contract-approve-manage/approve-pay/no-contract-approve-list/no-contract-approve-list.component';
+import { NoContractForApproveListComponent } from './no-contract-approve-manage/approve-pay/no-contract-for-approve-list/no-contract-for-approve-list.component';
+import { NoContractApprovedFinishedListComponent } from './no-contract-approve-manage/approve-pay/no-contract-approved-finished-list/no-contract-approved-finished-list.component';
+import { NoContractApprovedWithoutListComponent } from './no-contract-approve-manage/approve-pay/no-contract-approved-without-list/no-contract-approved-without-list.component';
+import { NoContractApproveViewComponent } from './no-contract-approve-manage/approve-pay/no-contract-approve-view/no-contract-approve-view.component';
 
 const COMPONENTS = [
   // 有合约  合约审批管理
@@ -51,12 +57,19 @@ const COMPONENTS = [
   WithoutApprovalListComponent,
   ApplyContractViewComponent, // 审批查看 合约信息
 
-  // 无合约  协议审批管理
+  // 无合约  协议 申请管理
   NoContractNotStartedComponent,
   NoContractPayCreateComponent,
-  NoContractProjectFinishedComponent,
   NoContractProjectProgressComponent,
   ProjectNoContractListComponent,
+  NoContractApplyPassComponent,
+  NoContractApplyRefuseComponent,
+  // 无合约 协议审批
+  NoContractApproveListComponent,
+  NoContractForApproveListComponent,
+  NoContractApprovedFinishedListComponent,
+  NoContractApprovedWithoutListComponent,
+  NoContractApproveViewComponent
 ];
 const COMPONENTS_NOROUNT = [
   ApproveSearchOptionComponent,

@@ -1,16 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonFunctionService } from 'src/app/routes/service/common-function.service';
-import { NzModalService, NzMessageService, NzDrawerService } from 'ng-zorro-antd';
 import { ApiData } from 'src/app/data/interface.data';
 import { SettingsConfigService } from 'src/app/routes/service/settings-config.service';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-no-contract-not-started',
-  templateUrl: './no-contract-not-started.component.html',
+  selector: 'app-no-contract-for-approve-list',
+  templateUrl: './no-contract-for-approve-list.component.html',
   styles: []
 })
-export class NoContractNotStartedComponent implements OnInit {
+export class NoContractForApproveListComponent implements OnInit {
 
   list: any[] = [];
   listOfData:any[] = [];
@@ -24,20 +23,12 @@ export class NoContractNotStartedComponent implements OnInit {
     page_size: 10
   };
 
-  // TODO: checkbox
-  isAllDisplayDataChecked = false;
-  isIndeterminate = false;
-  listOfDisplayData: any[] = [];
   // listOfData: any[] = [];
-  mapOfCheckedId: { [key: string]: boolean } = {};
   selectedMemberIds: number[] = []; // 已选成员
   // TODO: checkbox
   constructor(
-    private modalService: NzModalService,
     private commonFn: CommonFunctionService,
     private settingConfigService: SettingsConfigService,
-    private msg: NzMessageService,
-    private drawerService: NzDrawerService,
     private router: Router
   ) {}
 
@@ -45,25 +36,25 @@ export class NoContractNotStartedComponent implements OnInit {
     this.getDataList();
   }
 
-  getDataList() { // 获取单位下的数据
+  getDataList() {
     this.loading = true;
-    this.settingConfigService.get('/api/my/pay/project', this.pageOption).subscribe((res:ApiData) => {
-      console.log(res);
+    this.settingConfigService.get('/api/treaty/pay/for_approval/my', this.pageOption).subscribe((res:ApiData) => {
+      console.log('协议支付信息，已审批完成：', res);
+
       this.loading = false;
       if(res.code === 200) {
-        let data:any[] = res.data.project;
+        let data:any[] = res.data.treaty_pay;
         this.total = res.data.count;
         this.list = data;
-        this.listOfDisplayData = this.list;
         this.searchOptionsChange();
       }
     });
   }
 
-  
   view(data:any) {
-    this.router.navigateByUrl(`/approve/contract/view/${data.id}`);
+    this.router.navigateByUrl(`/approve/no-contract/pay/view/${data.project.id}?treaty_pay_id=${data.id}`);
   }
+
   pageIndexChange($event:number) {
     this.pageOption.page = $event;
     this.getDataList();
@@ -71,23 +62,6 @@ export class NoContractNotStartedComponent implements OnInit {
   pageSizeChange($event:number) {
     this.pageOption.page_size = $event;
     this.getDataList();
-  }
-
-  refreshStatus(): void {
-    if(this.listOfDisplayData.length !== 0) {
-      this.isAllDisplayDataChecked = this.listOfDisplayData.every(item => this.mapOfCheckedId[item.id]);
-      this.isIndeterminate =
-        this.listOfDisplayData.some(item => this.mapOfCheckedId[item.id]) &&
-        !this.isAllDisplayDataChecked;
-    }else {
-      this.isIndeterminate = false;
-    }
-  }
-
-  checkAll(value: boolean): void {
-    // this.listOfDisplayData.forEach(item => (this.mapOfCheckedId[item.id] = value));
-    this.listOfDisplayData.forEach(item => (this.mapOfCheckedId[item.id] = value));
-    this.refreshStatus();
   }
 
   // 搜索条件发生变化
@@ -98,7 +72,6 @@ export class NoContractNotStartedComponent implements OnInit {
     option = option || this.searchOption;
 
     if(this.list.length !== 0) {
-      this.isIndeterminate = false;
       let object:any = {};
       for (const key in option) {
         if (option.hasOwnProperty(key)) {

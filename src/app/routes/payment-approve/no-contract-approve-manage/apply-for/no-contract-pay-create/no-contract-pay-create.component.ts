@@ -26,6 +26,7 @@ export class NoContractPayCreateComponent implements OnInit {
   projectId:number = null;
 
   treaty_pay_id:number = null;
+  treatypayInfo:any = null;
   treaty_id:number = null;
 
   treatyListArr:any[] = [];
@@ -149,6 +150,7 @@ export class NoContractPayCreateComponent implements OnInit {
           console.log(res, '协议支付信息1111');
           if(res.code === 200) {
             this.treaty_id = res.data.id;
+            this.treatypayInfo = res.data;
             this.setTreatyForm(res.data);
             this.getTreatyPayment();
           }
@@ -415,6 +417,18 @@ export class NoContractPayCreateComponent implements OnInit {
       account_name: opt.account_name,
       is_business_card: opt.is_business_card,
       remark: opt.remark
+    });
+  }
+  
+  submitContractPay():void {
+    console.log(this.treaty_pay_id, '协议支付信息提交')
+    this.settingsConfigService.post('/api/treaty_pay/submit', { treaty_pay_id: this.treaty_pay_id }).subscribe((res:ApiData) => {
+      console.log(res);
+      this.submitLoading = false;
+      if(res.code === 200) {
+        this.msg.success('支付信息提交成功');
+        this.router.navigateByUrl(`/approve/no-contract/apply/pay/${this.projectId}`);
+      }
     });
   }
 }

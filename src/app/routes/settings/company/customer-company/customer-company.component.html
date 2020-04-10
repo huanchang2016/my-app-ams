@@ -28,11 +28,10 @@
                 (nzCheckedChange)="checkAll($event)"
             ></th>
             <th>单位</th>
-            <th>客户编码</th>
-            <th>类型</th>
-            <th>法人</th>
+            <th>纳税人识别号</th>
+            <th>银行信息</th>
             <th>联系方式</th>
-            <th>状态</th>
+            <!-- <th>状态</th> -->
             <th>操作</th>
         </tr>
     </thead>
@@ -43,21 +42,33 @@
                 [(nzChecked)]="mapOfCheckedId[data.id]"
                 (nzCheckedChange)="refreshStatus()"
             ></td>
-            <td>{{ data.name }}</td>
             <td>
-                <span *ngIf="data.customer; else notCustomer">
-                    {{ data.customer_code }}
-                </span>
-                <ng-template #notCustomer>
-                    <span [innerHTML]="data.customer | yn"></span>
-                </ng-template>
+                <div>单位：<strong>{{ data.name }}</strong></div>
+                <div>客户编码：
+                    <strong>
+                        <span *ngIf="data.customer; else notCustomer">
+                            {{ data.customer_code }}
+                        </span>
+                        <ng-template #notCustomer>
+                            <span [innerHTML]="data.customer | yn"></span>
+                        </ng-template>
+                    </strong>
+                </div>
+                <span class="text-primary"></span>
             </td>
-            <td>{{ data.nature?.name }}</td>
-            <td>{{ data.represent }}</td>
-            <td>{{ data.tel }}</td>
+            <td>{{ data.code }}</td>
             <td>
+                <div>支行名称：<strong>{{ data.bank_name }}</strong></div>
+                <div>银行账号：<strong>{{ data.bank_account }}</strong></div>
+            </td>
+            
+            <td>
+                <div>电话号码：<span class="text-primary">{{ data.tel }}</span></div>
+                <div>单位地址：<strong>{{ data.address }}</strong></div>
+            </td>
+            <!-- <td>
                 <span [innerHTML]="data.active | yn"></span>
-            </td>
+            </td> -->
             <td>
                 <a (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
                 <!-- <nz-divider nzType="vertical"></nz-divider>

@@ -143,7 +143,7 @@ export class StartupService {
               ]
             },
             {
-              text: '非合同支付申请',
+              text: '协议支付申请',
               link: '/approve/no-contract/apply',
               children: [
                 {
@@ -163,7 +163,29 @@ export class StartupService {
                   link: '/approve/no-contract/apply/refuse'
                 }
               ]
-            }
+            },
+            {
+              text: '协议支付审批',
+              link: '/approve/no-contract/pay',
+              children: [
+                {
+                  text: '我的审批',
+                  link: '/approve/no-contract/pay/progress'
+                },
+                {
+                  text: '待审批',
+                  link: '/approve/no-contract/pay/forApproval'
+                },
+                {
+                  text: '审批完成',
+                  link: '/approve/no-contract/pay/finished'
+                },
+                {
+                  text: '未审批未通过',
+                  link: '/approve/no-contract/pay/without-pass'
+                }
+              ]
+            },
             
           ]
         },

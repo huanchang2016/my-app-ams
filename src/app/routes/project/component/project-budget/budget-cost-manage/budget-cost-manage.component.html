@@ -1,0 +1,49 @@
+<div nz-row nzGutter="24">
+    <div nz-col [nzSm]="24" [nzMd]="12" *ngFor="let item of costArr; let i = index">
+        <app-budget-cost-form [data]="item" (deletedCostItem)="deletedCostItem(i, $event)"></app-budget-cost-form>
+    </div>
+    <div nz-col nzSpan="24" *ngIf="costArr && costArr.length !== 0" class="mt-md mb-md text-right">
+        <span class="text-md font-weight-bold">成本总计：</span>
+        <span class="text-md font-weight-bold text-error">{{ total | number: '0.2-2' }}</span>
+    </div>
+    <div nz-col nzSpan="24">
+        <a nzBlock nz-button nzType="dashed" (click)="createTplModal(tplTitle, tplContent, tplFooter, $event)">
+            <i nz-icon nzType="plus"></i>
+            新增
+        </a>
+    </div>
+</div>
+
+<ng-template #tplTitle>
+    <span>添加成本预算</span>
+  </ng-template>
+  <ng-template #tplContent>
+    <div class="modal-form">
+        <form nz-form [formGroup]="validateCostForm">
+            <nz-form-item nzFlex>
+                <nz-form-label nzFor="cost_category" nzRequired>成本类型</nz-form-label>
+                <nz-form-control nzErrorTip="请选择成本类型">
+                    <nz-select style="width: 100%;" id="cost_category" nzShowSearch nzAllowClear
+                        nzPlaceHolder="请选择成本类型" formControlName="cost_category">
+                        <ng-container *ngFor="let item of costCategoryArr">
+                            <nz-option [nzLabel]="item.name" [nzValue]="item.id" [nzDisabled]="item.active"></nz-option>
+                        </ng-container>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item nzFlex>
+                <nz-form-label nzFor="amount" nzRequired>金额</nz-form-label>
+                <nz-form-control nzErrorTip="预算成本只能输入数字且最多保留2位小数">
+                    <nz-input-group nzSuffix="元" nzPrefix="￥" style="width: 100%">
+                        <input type="text" id="amount" nzPlaceHolder="填写预算成本金额" formControlName="amount" nz-input />
+                    </nz-input-group>
+                </nz-form-control>
+            </nz-form-item>
+            
+        </form>
+    </div>
+  </ng-template>
+  <ng-template #tplFooter>
+    <button nz-button nzType="default" (click)="closeModal()">取消</button>
+      <button nz-button nzType="primary" (click)="handleOk()">确定</button>
+  </ng-template>

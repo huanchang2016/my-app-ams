@@ -1,0 +1,88 @@
+<div class="steps-content-box">
+
+  <nz-card class="mb-md">
+    <div class="project-info">
+      <div nz-row [nzGutter]="24" nzType="flex" *ngIf="projectInfo">
+        <div class="pro-info-list" nz-col nzSpan="24">
+          <span class="label-title">项目名称</span>： <span class="font-weight-bold">{{ projectInfo.name }}</span>
+        </div>
+        <div class="pro-info-list" nz-col nzSpan="24">
+          <span class="label-title">项目业主</span>： <span class="font-weight-bold">{{ projectInfo.customer?.name }}</span>
+        </div>
+        <div class="pro-info-list" nz-col [nzSm]="{span:24}" [nzMd]="{span: 12}">
+          <span class="label-title">负责部门</span>： <span
+            class="font-weight-bold">{{ projectInfo.department?.name }}</span>
+        </div>
+        <div class="pro-info-list" nz-col [nzSm]="{span:24}" [nzMd]="{span: 12}">
+          <span class="label-title">项目类型</span>： <span class="font-weight-bold">{{ projectInfo.category?.name }}</span>
+        </div>
+        <div class="pro-info-list" nz-col [nzSm]="{span:24}" [nzMd]="{span: 12}">
+          <span class="label-title">计划执行时间</span>： <span
+            class="font-weight-bold">{{ projectInfo.plan_execution_start_time }} 至
+            {{ projectInfo.plan_execution_end_time }}</span>
+        </div>
+        <div class="pro-info-list" nz-col [nzSm]="{span:24}" [nzMd]="{span: 12}">
+          <span class="label-title">项目来源</span>： <span
+            class="font-weight-bold">{{ projectInfo.origin.code.code_name + projectInfo.origin.name }}</span>
+        </div>
+        <div class="pro-info-list" nz-col [nzSm]="{span:24}" [nzMd]="{span: 12}">
+          <span class="label-title">实际执行时间</span>： <span
+            class="font-weight-bold">{{ projectInfo.actual_execution_start_time }} 至
+            {{ projectInfo.actual_execution_end_time }}</span>
+        </div>
+      </div>
+    </div>
+  </nz-card>
+  <nz-card>
+    <div class="operate mb-md">
+
+      <button class="mr-lg" nz-button [nzType]="'primary'" (click)="addSupplier()">新增</button>
+
+      <button nz-button [disabled]="numberOfChecked === 0" [nzType]="'danger'" [nzLoading]="isOperating"
+        (click)="deletedSelectList()">删除</button>
+
+    </div>
+
+    <nz-table #basicTable [nzFrontPagination]="false" [nzData]="listOfAllData">
+      <thead>
+        <tr>
+          <th nzShowCheckbox [(nzChecked)]="isAllDisplayDataChecked" [nzIndeterminate]="isIndeterminate"
+            (nzCheckedChange)="checkAll($event)" class="text-left"></th>
+          <th>供应商名称</th>
+          <th>编号</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let data of basicTable.data">
+          <tr>
+            <td nzShowCheckbox [(nzChecked)]="mapOfCheckedId[data.id]" [nzDisabled]="data.disabled"
+              (nzCheckedChange)="refreshStatus()" class="text-left"></td>
+            <td>{{ data.name }}</td>
+            <td>{{ data.supplier_code }}</td>
+            <td>
+              <a (click)="showContract(data.id)">合约<i nz-icon
+                  nzType="{{ showExpand[data.id] ? 'caret-up' : 'caret-down' }}" nzTheme="outline"></i></a>
+              <nz-divider nzType="vertical"></nz-divider>
+              <a (click)="editSupplier(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
+              <nz-divider nzType="vertical"></nz-divider>
+              <a nz-popconfirm nzPopconfirmTitle="确定删除当前供应商？" (nzOnConfirm)="delete(data.id)" (nzOnCancel)="cancel()"
+                class="text-error"><i nz-icon nzType="delete" nzTheme="outline"></i></a>
+            </td>
+          </tr>
+          <tr *ngIf="showExpand[data.id]" style="background-color: #f1f1f1;">
+            <td colspan="4">
+              <app-supplier-contract-list [projectInfo]="projectInfo" [supplierInfo]="data"
+                [serviceCategory]="serviceCategory"></app-supplier-contract-list>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </nz-table>
+
+    <div class="steps-operate mt-md mb-md text-right">
+      <a nz-button (click)="prevSteps()">上一步</a>
+      <button nz-button nzType="primary" (click)="nextSteps()">下一步</button>
+    </div>
+  </nz-card>
+</div>

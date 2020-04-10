@@ -1,0 +1,85 @@
+<form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="company_id" nzRequired>单位</nz-form-label>
+        <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请选择单位">
+            <nz-select style="width: 100%;" id="company_id" nzShowSearch nzPlaceHolder="请选择单位" [nzDisabled]="data" formControlName="company_id">
+                <ng-container *ngFor="let item of company">
+                    <nz-option [nzLabel]="item.name" [nzValue]="item.id" [nzDisabled]="isDisabled(item.id)"></nz-option>
+                </ng-container>
+            </nz-select>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="name" nzRequired>限额名称</nz-form-label>
+        <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请输入限额名称">
+            <input nz-input id="name" formControlName="name" placeholder="输入限额名称" />
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>
+            <span>
+            董事长 <i nz-tooltip nzTooltipTitle="需要通过董事长权限审批的金额范围，不设上线则设置最大值9999999" nz-icon nzType="question-circle" nzTheme="outline"></i>
+            </span>
+        </nz-form-label>
+        <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请填写审批权限金额范围，只能填写数字且不能超过9999999">
+            <nz-input-group nzCompact>
+                <nz-input-number formControlName="chairman_amount_start" [nzMin]="1" [nzMax]="9999999" [nzStep]="100" nzPlaceHolder="最小金额" style="width:200px; text-align: center;"></nz-input-number>
+                <input
+                  type="text"
+                  disabled
+                  nz-input
+                  placeholder="~"
+                  style="width: 30px; border-left: 0px; pointer-events: none; background-color: rgb(255, 255, 255);"
+                />
+                <nz-input-number formControlName="chairman_amount_end" [nzMin]="1" [nzMax]="9999999" [nzStep]="100" nzPlaceHolder="最大金额" style="width:200px; text-align: center; border-left: 0px;"></nz-input-number>
+            </nz-input-group>
+        </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>
+            <span>
+            总经理办公会 <i nz-tooltip nzTooltipTitle="需要通过总经理办公会审批的金额范围" nz-icon nzType="question-circle" nzTheme="outline"></i>
+            </span>
+        </nz-form-label>
+        <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请填写审批权限金额范围，只能填写数字">
+            <nz-input-group nzCompact>
+                <nz-input-number formControlName="meeting_amount_start" [nzMin]="1" [nzMax]="9999999" [nzStep]="100" nzPlaceHolder="最小金额" style="width:200px; text-align: center;"></nz-input-number>
+                <input
+                  type="text"
+                  disabled
+                  nz-input
+                  placeholder="~"
+                  style="width: 30px; border-left: 0px; pointer-events: none; background-color: rgb(255, 255, 255);"
+                />
+                <nz-input-number formControlName="meeting_amount_end" [nzMin]="1" [nzMax]="9999999" [nzStep]="100" nzPlaceHolder="最大金额" style="width:200px; text-align: center; border-left: 0px;"></nz-input-number>
+            </nz-input-group>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>
+            <span>
+            董事会 <i nz-tooltip nzTooltipTitle="需要通过董事会决议审批的金额范围" nz-icon nzType="question-circle" nzTheme="outline"></i>
+            </span>
+        </nz-form-label>
+        <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请填写审批权限金额范围，只能填写数字">
+            <nz-input-group nzCompact>
+                <nz-input-number formControlName="resolution_amount_start" [nzMin]="1" [nzMax]="9999999" [nzStep]="100" nzPlaceHolder="最小金额" style="width:200px; text-align: center;"></nz-input-number>
+                <input
+                  type="text"
+                  disabled
+                  nz-input
+                  placeholder="~"
+                  style="width: 30px; border-left: 0px; pointer-events: none; background-color: rgb(255, 255, 255);"
+                />
+                <nz-input-number formControlName="resolution_amount_end" [nzMin]="1" [nzMax]="9999999" [nzStep]="100" nzPlaceHolder="最大金额" style="width:200px; text-align: center; border-left: 0px;"></nz-input-number>
+            </nz-input-group>
+        </nz-form-control>
+    </nz-form-item>
+    
+    <nz-form-item nz-row class="register-area">
+        <nz-form-control [nzSpan]="18" [nzOffset]="6">
+            <button nz-button nzType="primary">{{ data ? '保存' : '新增' }}</button>
+        </nz-form-control>
+    </nz-form-item>
+</form>

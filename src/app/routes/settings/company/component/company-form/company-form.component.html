@@ -1,0 +1,166 @@
+<!-- 步骤条 自适应 -->
+<div class="hidden-mobile">
+    <nz-steps [nzCurrent]="currentStep" [nzSize]="'small'">
+        <nz-step nzTitle="基本资料"></nz-step>
+        <nz-step nzTitle="信息完善"></nz-step>
+        <nz-step nzTitle="操作完成"></nz-step>
+
+    </nz-steps>
+</div>
+<div class="hidden-pc">
+    <div class="dy-steps-box d-flex justify-content-between">
+        <div class="dy-steps d-flex align-items-center">
+            <span class="dy-steps-title rounded-circle" [class.bg-primary]="currentStep === 0" [class.text-white]="currentStep === 0" [class.border-primary]="currentStep === 0">1</span>
+            <span class="dy-steps-name" [class.text-primary]="currentStep === 0">基本资料<i [class.bg-primary]="currentStep === 0"></i></span>
+        </div>
+        <div class="dy-steps d-flex align-items-center">
+            <span class="dy-steps-title rounded-circle" [class.bg-primary]="currentStep === 1" [class.text-white]="currentStep === 1" [class.border-primary]="currentStep === 1">2</span>
+            <span class="dy-steps-name" [class.text-primary]="currentStep === 1">信息完善<i [class.bg-primary]="currentStep === 1"></i></span>
+        </div>
+        <div class="dy-steps d-flex align-items-center">
+            <span class="dy-steps-title rounded-circle" [class.bg-primary]="currentStep === 2" [class.text-white]="currentStep === 2" [class.border-primary]="currentStep === 2">3</span>
+            <span class="dy-steps-name" [class.text-primary]="currentStep === 2">操作完成<i [class.bg-primary]="currentStep === 2"></i></span>
+        </div>
+    </div>
+</div>
+<!-- 步骤条 自适应 -->
+
+<div class="steps-content pt-lg">
+    <div *ngIf="currentStep === 0">
+        <form nz-form [formGroup]="basicInfoForm" (ngSubmit)="submitbasicInfoForm()">
+            <nz-form-item nzFlex>
+                <nz-form-label nzFor="name" nzRequired>单位全称</nz-form-label>
+                <nz-form-control nzErrorTip="请输入单位全称">
+                    <input nz-input id="name" formControlName="name" placeholder="输入单位全称" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item nzFlex *ngIf="type === 'customer' || type === 'user'">
+                <nz-form-label nzFor="customer_code" [nzRequired]="type === 'customer'">客户编码</nz-form-label>
+                <nz-form-control nzErrorTip="请输入客户编码">
+                    <input nz-input id="customer_code" formControlName="customer_code" (ngModelChange)="codeValueChange()" placeholder="输入客户编码" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item nzFlex *ngIf="type === 'supplier' || type === 'user'">
+                <nz-form-label nzFor="supplier_code" [nzRequired]="type === 'supplier'">供应商编码</nz-form-label>
+                <nz-form-control nzErrorTip="请输入供应商编码">
+                    <input nz-input id="supplier_code" formControlName="supplier_code" (ngModelChange)="codeValueChange()" placeholder="输入供应商编码" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item nzFlex *ngIf="type === 'user'">
+                <nz-form-label nzFor="is_user" [nzRequired]="type === 'user'">用户单位</nz-form-label>
+                <nz-form-control nzErrorTip="请选择是否为用户">
+                    <nz-radio-group id="is_user" formControlName="is_user" nzName="radiogroup">
+                        <label nz-radio [nzValue]="true">是</label>
+                        <label nz-radio [nzValue]="false">否</label>
+                    </nz-radio-group>
+                </nz-form-control>
+            </nz-form-item>
+
+            <p class="text-error" *ngIf="showReferInfo">客户编码或者供应商编码必填一项</p>
+            <nz-form-item nz-row class="register-area">
+                <nz-form-control [nzSpan]="18" [nzOffset]="6">
+                    <button nz-button nzType="primary" [nzLoading]="submitBasicLoading">{{ data ? '保存' : '新增' }}</button>
+                </nz-form-control>
+            </nz-form-item>
+        </form>
+    </div>
+    <div *ngIf="currentStep === 1">
+        <form nz-form [formGroup]="otherInfoForm" (ngSubmit)="submitOtherInfoForm()">
+            <nz-form-item nzFlex>
+                <nz-form-label nzFor="logo">单位LOGO</nz-form-label>
+                <nz-form-control>
+                    <app-upload-image-base64 id="logo" formControlName="logo"></app-upload-image-base64>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item nzFlex>
+                <nz-form-label nzFor="company_nature_id">单位类型</nz-form-label>
+                <nz-form-control nzErrorTip="请选择单位类型">
+                    <nz-select style="width: 100%;" id="company_nature_id" nzShowSearch nzAllowClear nzPlaceHolder="请选择单位类型"
+                        formControlName="company_nature_id">
+                        <ng-container *ngFor="let item of settingConfigService.configs.companyNature">
+                            <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
+                        </ng-container>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item nzFlex>
+                <nz-form-label nzFor="code">企业识别号</nz-form-label>
+                <nz-form-control>
+                    <input nz-input id="code" formControlName="code" placeholder="请填写企业识别号" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item nzFlex>
+                <nz-form-label nzFor="represent">企业法人</nz-form-label>
+                <nz-form-control>
+                    <input nz-input id="represent" formControlName="represent" placeholder="请填写企业法人" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item nzFlex>
+                <nz-form-label nzFor="cascader">单位地址</nz-form-label>
+                <nz-form-control>
+                    <app-cascader-area id="cascader" formControlName="cascader"></app-cascader-area>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item nzFlex>
+                <nz-form-label nzFor="address">详细地址</nz-form-label>
+                <nz-form-control>
+                    <input nz-input id="address" formControlName="address" placeholder="请选择单位详细地址" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item nzFlex>
+                <nz-form-label nzFor="tel">企业电话</nz-form-label>
+                <nz-form-control>
+                    <input nz-input id="tel" formControlName="tel" placeholder="请填写企业电话" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item nzFlex>
+                <nz-form-label nzFor="email">企业邮箱</nz-form-label>
+                <nz-form-control [nzErrorTip]="emailErrorTpl">
+                    <input nz-input formControlName="email" placeholder="请填写企业邮箱" type="email" />
+                    <ng-template #emailErrorTpl let-control>
+                        <ng-container *ngIf="control.hasError('email')">
+                            邮箱格式不正确
+                        </ng-container>
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item nzFlex>
+                <nz-form-label nzFor="description">单位描述</nz-form-label>
+                <nz-form-control>
+                    <textarea nz-input id="description" placeholder="请输入单位描述" formControlName="description"
+                        [nzAutosize]="{ minRows: 4, maxRows: 10 }"></textarea>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item nzFlex>
+                <nz-form-label nzFor="capital">注册资金</nz-form-label>
+                <nz-form-control>
+                    <nz-input-group id="capital" nzSuffix="万元" nzPrefix="￥">
+                        <input type="text" nz-input formControlName="capital" placeholder="请填写单位注册资金" />
+                    </nz-input-group>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item nzFlex>
+                <nz-form-label nzFor="website">单位网址</nz-form-label>
+                <nz-form-control>
+                    <input nz-input id="website" formControlName="website" placeholder="请填写单位网址,如: www.cdtfhr.com" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item nz-row class="register-area">
+                <nz-form-control [nzSpan]="18" [nzOffset]="6">
+                    <button nz-button nzType="primary" [nzLoading]="submitOtherLoading">更新</button>
+                </nz-form-control>
+            </nz-form-item>
+        </form>
+    </div>
+    <div *ngIf="currentStep === 2">
+        <div class="text-center text-success p-md success-icon">
+            <i nz-icon nzType="check-circle" nzTheme="fill"></i>
+        </div>
+        <div class="text-center">
+            <button nz-button nzType="default" (click)="finished()">
+                <span>完成</span>
+            </button>
+        </div>
+        
+    </div>
+</div>

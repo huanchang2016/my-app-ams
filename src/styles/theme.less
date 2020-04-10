@@ -1,0 +1,76 @@
+// 可以通过 https://ng-alain.github.io/ng-alain/ 获取主题参数代码
+// The theme paraments can be generated at https://ng-alain.github.io/ng-alain/
+
+@import "../../node_modules/ng-zorro-antd/ng-zorro-antd.less";
+
+// -------- 自定义参数覆盖 -----------
+// @blue-6          : #1890ff;
+@primary-color: #1890ff;
+@alain-default-header-bg: #fff;
+@alain-default-header-text-color: rgba(0, 0, 0, 0.65);
+@alain-default-aside-bg: #001529;
+@alain-default-aside-nav-selected-bg: @alain-default-aside-bg;
+@alain-default-aside-nav-selected-text-color: @primary-color;
+@alain-default-aside-nav-text-color: rgba(255, 255, 255, 0.65);
+@alain-default-aside-nav-text-hover-color: rgba(255, 255, 255, 1);
+
+body {
+    background-color: #f8f8f8;
+}
+/*****修改主题布局样式*****/
+// 头部样式
+.alain-default__header {
+    background-color: #002140;
+    padding-right: 0;
+}
+.alain-default__header-logo {
+    max-width: 236px;
+    width: 236px;
+    box-shadow: 2px 0 6px rgba(0, 21, 41, 0.35);
+}
+.alain-default__nav-wrap {
+    height: 64px;
+    padding: 0 12px 0 0;
+    background-color: #fff;
+    box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+    .alain-default__nav-item {
+        color: @alain-default-header-text-color;
+    }
+}
+// 侧边栏
+.sidebar-nav__item-link {
+    padding: 10px 32px 10px 16px;
+}
+.alain-default__aside {
+    max-width: 237px;
+    width: 237px;
+    box-shadow: 2px 0 6px rgba(0, 21, 41, 0.35);
+}
+
+// 无效 样式
+.yn__no {
+    color: @red-6;
+}
+
+@media (max-width: 767px) {
+    body {
+        background-color: #fff;
+    }
+    .alain-default__header {
+       background-color: #fff;
+       .alain-default__header-logo {
+           box-shadow: none;
+       }
+    }
+    .alain-default__aside {
+        box-shadow: none;
+    }
+    .alain-default__content {
+        transform: translate3d(237px, 0, 0);
+    }
+}
+@media (min-width: 768px) {
+    .alain-default__content {
+        margin-left: 260px;
+    }
+}

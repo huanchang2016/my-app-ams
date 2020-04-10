@@ -1,0 +1,36 @@
+<form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+    <nz-form-item nzFlex *ngIf="projectInfo" class="mb-0">
+        <nz-form-label>项目名称</nz-form-label>
+        <nz-form-control>
+            <strong>{{ projectInfo.name }}</strong>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item nzFlex *ngIf="supplierInfo" class="mb-0">
+        <nz-form-label>供 应 商</nz-form-label>
+        <nz-form-control>
+            <strong>{{ supplierInfo.name }}</strong>
+        </nz-form-control>
+    </nz-form-item>
+    
+    <nz-form-item nzFlex>
+        <nz-form-label nzFor="name" nzRequired>名称</nz-form-label>
+        <nz-form-control nzErrorTip="请填写名称">
+            <input id="name" formControlName="name" nz-input placeholder="填写合同名称" />
+        </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item nzFlex>
+        <nz-form-label nzFor="amount" nzRequired>合同金额</nz-form-label>
+        <nz-form-control nzErrorTip="请填写无合约金额，金额大于2万需要签订合约">
+            <nz-input-group nzSuffix="元">
+                <input type="text" id="amount" formControlName="amount" nz-input placeholder="请填写无合约金额，金额不得大于2万" />
+            </nz-input-group>
+        </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item nz-row>
+        <nz-form-control [nzSpan]="18" [nzOffset]="6">
+            <button nz-button nzType="primary" [nzLoading]="submitLoading">{{ data ? '保存' : '新增' }}</button>
+        </nz-form-control>
+    </nz-form-item>
+</form>

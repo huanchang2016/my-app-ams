@@ -1,0 +1,108 @@
+<page-header [action]="action">
+
+    <ng-template #action>
+        <button class="hidden-pc" nz-button (click)="add()" [nzType]="'primary'">新增</button >
+    </ng-template>
+</page-header>
+
+<div class="hidden-pc search-btn-mobile rounded-sm bg-primary text-white text-lg text-center">
+    <i nz-icon nzType="menu-{{ isCollapsed ? 'unfold' : 'fold' }}" nzTheme="outline" (click)="openComponent()"></i>
+</div>
+
+<div class="hidden-mobile">
+    <app-approve-search-option (searchOptionsEmit)="searchOptionsChange($event)"></app-approve-search-option>
+</div>
+<nz-table
+    #ajaxTable
+    nzShowSizeChanger
+    [nzFrontPagination]="false"
+    [nzData]="listOfData"
+    [nzLoading]="loading"
+    [nzTotal]="total"
+    [(nzPageIndex)]="pageOption.page"
+    [(nzPageSize)]="pageOption.page_size"
+    (nzPageIndexChange)="pageIndexChange($event)"
+    (nzPageSizeChange)="pageSizeChange($event)"
+    class="mt-md hidden-mobile">
+    <thead>
+        <tr>
+            <th
+                nzShowCheckbox
+                [(nzChecked)]="isAllDisplayDataChecked"
+                [nzIndeterminate]="isIndeterminate"
+                (nzCheckedChange)="checkAll($event)"
+            ></th>
+            <th>合同名称</th>
+            <th>支付金额（元）</th>
+            <th>项目信息</th>
+            <th>审批状态</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let data of ajaxTable.data; let i = index">
+            <td
+                nzShowCheckbox
+                [(nzChecked)]="mapOfCheckedId[data.id]"
+                (nzCheckedChange)="refreshStatus()"
+            ></td>
+            <td>{{ data.contract.name }}</td>
+            <td class="text-error">{{ data.amount }}</td>
+            <td>
+                <sv-container size="small" col="1">
+                    <sv label="项目名称"><span class="font-weight-bold">{{ data.project.name }}</span></sv>
+                    <sv label="创 建 人 "><span class="text-success">{{ data.user.name }}</span></sv>
+                    <sv label="所在部门">{{ data.user.department?.name }}</sv>
+                    <sv label="所属单位">{{ data.user.company?.name }}</sv>
+                </sv-container>
+            </td>
+            <td class="text-primary">{{ data.pay_status?.name }}</td>
+            <td>
+                <!-- <nz-divider nzType="vertical"></nz-divider>
+                <ng-container *ngIf="data.active; else activeFalse">
+                    <a (click)="disabled(data.id)">禁用</a>
+                </ng-container>
+                <ng-template #activeFalse>
+                    <a (click)="enabled(data.id)">启用</a>
+                </ng-template> -->
+                <!-- <a [routerLink]="['/approve/contract/apply/pay', data.id]">合同支付</a>
+                <nz-divider nzType="vertical"></nz-divider> -->
+                <a (click)="view(data)"><i nz-icon nzType="eye" nzTheme="outline"></i></a>
+            </td>
+        </tr>
+    </tbody>
+</nz-table>
+<div class="hidden-pc mt-md">
+    <div *ngIf="loading && listOfData.length === 0" class="p-md text-center">
+        <nz-spin nzSimple></nz-spin>
+    </div>
+    <div *ngIf="!loading && listOfData.length !== 0">
+        <ng-container *ngFor="let data of listOfData">
+            <nz-card [nzActions]="[actionEdit, actionEllipsis]" class="mt-md">
+                <nz-skeleton [nzActive]="true" [nzLoading]="false">
+                    <nz-card-meta [nzTitle]="data.name"></nz-card-meta>
+                    <div class="pt-md">
+                        <sv-container size="small" col="1">
+                            <sv label="合同名称"><span class="font-weight-bold">{{ data.contract.name }}</span></sv>
+                            <sv label="支付金额"><span class="font-weight-bold text-error">{{ data.amount }}</span> 元</sv>
+                            <sv label="项目名称"><span class="font-weight-bold">{{ data.project.name }}</span></sv>
+                            <sv label="创 建 人 "><span class="text-success">{{ data.user.name }}</span></sv>
+                            <sv label="所在部门">{{ data.user.department?.name }}</sv>
+                            <sv label="所属单位">{{ data.user.company?.name }}</sv>
+                            <sv label="审批状态">{{ data.pay_status?.name }}</sv>
+                        </sv-container>
+                    </div>
+                </nz-skeleton>
+                <ng-template #actionEdit>
+                    <i nz-icon nzType="edit" (click)="edit(data)"></i>
+                </ng-template>
+                <ng-template #actionEllipsis>
+                    <a (click)="view(data)"><i nz-icon nzType="eye" nzTheme="outline"></i></a>
+                </ng-template>
+            </nz-card>
+        </ng-container>
+        <div class="mt-md text-center">
+            <nz-pagination [nzSize]="'small'" nzShowSizeChanger [(nzPageSize)]="pageOption.page_size" [nzPageIndex]="pageOption.page" [nzTotal]="total" (nzPageIndexChange)="pageIndexChange($event)" (nzPageSizeChange)="pageSizeChange($event)"></nz-pagination>
+        </div>
+    </div>
+</div>

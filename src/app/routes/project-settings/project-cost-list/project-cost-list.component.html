@@ -1,0 +1,56 @@
+<page-header></page-header>
+
+<app-cost-search-component [COMPANY]="companyArray" (companyValueChange)="companyValueChange($event)" (searchOptionsEmit)="searchOptionsChange($event)" (addContentEmit)="add()"></app-cost-search-component>
+
+<nz-table #basicTable [nzData]="listOfData" [nzLoading]="loading" class="mt-md hidden-mobile">
+    <thead>
+        <tr>
+            <th>序号</th>
+            <th>名称</th>
+            <th>描述</th>
+            <th>状态</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let data of basicTable.data; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ data.name }}</td>
+            <td>{{ data.description }}</td>
+            <td>
+                <span [innerHTML]="data.active | yn"></span>
+            </td>
+            <td>
+                <a (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
+                <nz-divider nzType="vertical"></nz-divider>
+                <ng-container *ngIf="data.active; else activeFalse">
+                    <a (click)="disabled(data.id)">禁用</a>
+                </ng-container>
+                <ng-template #activeFalse>
+                    <a (click)="enabled(data.id)">启用</a>
+                </ng-template>
+            </td>
+        </tr>
+    </tbody>
+</nz-table>
+<div class="hidden-pc mt-md">
+    <div *ngIf="loading && listOfData.length === 0" class="p-md text-center">
+        <nz-spin nzSimple></nz-spin>
+    </div>
+    <div *ngIf="!loading && listOfData.length !== 0">
+        <ng-container *ngFor="let data of listOfData">
+            <nz-card [nzActions]="[actionEdit, actionEllipsis]">
+                <nz-skeleton [nzActive]="true" [nzLoading]="false" [nzAvatar]="{ size: 'large' }">
+                    <nz-card-meta [nzTitle]="data.name" [nzDescription]="data.address">
+                    </nz-card-meta>
+                </nz-skeleton>
+                <ng-template #actionEdit>
+                    <i nz-icon nzType="edit"></i>
+                </ng-template>
+                <ng-template #actionEllipsis>
+                    <i class="text-danger" nz-icon nzType="stop" nzTheme="outline"></i>
+                </ng-template>
+            </nz-card>
+        </ng-container>
+    </div>
+</div>

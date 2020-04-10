@@ -1,0 +1,67 @@
+<page-header [title]="'项目合同支付管理'" [breadcrumb]="breadcrumb" [action]="actionBtn">
+
+  <ng-template #breadcrumb>
+    <nz-breadcrumb>
+      <nz-breadcrumb-item><a [routerLink]="['/dashboard']">首页</a></nz-breadcrumb-item>
+      <nz-breadcrumb-item>项目管理</nz-breadcrumb-item>
+      <nz-breadcrumb-item>项目预览</nz-breadcrumb-item>
+    </nz-breadcrumb>
+  </ng-template>
+
+  <ng-template #actionBtn>
+    <!-- <button nz-button [nzType]="'primary'" (click)="addPayConstract()">新增合同支付</button> -->
+  </ng-template>
+
+  <sv-container size="small" col="2">
+    <sv label="项目名称"><strong>{{ projectInfo?.name }}</strong></sv>
+    <sv label="客户"><strong>{{ projectInfo?.customer?.name }}</strong></sv>
+    <sv label="负责部门">{{ projectInfo?.department?.name }}</sv>
+    <sv label="创建时间">{{ projectInfo?.create_time | date: 'yyyy/MM/dd HH:mm:ss' }}</sv>
+    <sv label="项目创建人">{{ projectInfo?.user.name }}</sv>
+  </sv-container>
+
+  <a nz-button [nzType]="'primary'" [routerLink]="['/approve/contract/apply/pay/create', projectId]" class="my-md">新增合同支付</a>
+
+</page-header>
+
+<nz-card [nzBordered]="false">
+  <nz-table #basicTable [nzData]="listOfData" [nzFrontPagination]="false">
+    <thead>
+      <tr>
+        <th>序号</th>
+        <th>合同名称</th>
+        <th>合同编号</th>
+        <th>支付金额（元）</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of basicTable.data; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ data.contract.name }}</td>
+        <td>{{ data.number }}</td>
+        <td class="text-error">{{ data.amount }}</td>
+        <td>
+          <a [routerLink]="['/approve/contract/apply/pay/edit', projectId]" [queryParams]="{contract_pay_id: data.id }"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
+          <nz-divider nzType="vertical"></nz-divider>
+          
+          <a nz-popconfirm
+            nzPopconfirmTitle="请确认合同支付信息填写完整，无误后继续提交！！！"
+            (nzOnConfirm)="submitContractPay(data.id)"
+            (nzOnCancel)="cancel()">
+            提交支付申请
+        </a>
+          <nz-divider nzType="vertical"></nz-divider>
+          <a
+            nz-popconfirm
+            nzPopconfirmTitle="确认禁用当前合同支付?"
+            (nzOnConfirm)="disabled(data.id)"
+            (nzOnCancel)="cancel()"
+            class="text-error"
+            >禁用</a>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+
+</nz-card>

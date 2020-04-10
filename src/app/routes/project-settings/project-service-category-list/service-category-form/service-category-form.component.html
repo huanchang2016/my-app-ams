@@ -1,0 +1,26 @@
+<form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="name" nzRequired>类型名称</nz-form-label>
+        <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请输入服务商类型名称">
+            <input nz-input id="name" formControlName="name" placeholder="输入服务商类型名称" />
+        </nz-form-control>
+    </nz-form-item>
+    <ng-container *ngIf="!data">
+        <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="company" nzRequired>所属单位</nz-form-label>
+            <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请选择项目成本类型所属单位">
+                <nz-select style="width: 100%;" id="company" nzShowSearch nzAllowClear nzPlaceHolder="请选择项目成本类型所属单位" [nzDisabled]="companyId" formControlName="company_id">
+                    <ng-container *ngFor="let item of COMPANY">
+                        <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
+                    </ng-container>
+                </nz-select>
+            </nz-form-control>
+        </nz-form-item>
+    </ng-container>
+    
+    <nz-form-item nz-row class="register-area">
+        <nz-form-control [nzSpan]="18" [nzOffset]="6">
+            <button nz-button nzType="primary">{{ data ? '保存' : '新增' }}</button>
+        </nz-form-control>
+    </nz-form-item>
+</form>

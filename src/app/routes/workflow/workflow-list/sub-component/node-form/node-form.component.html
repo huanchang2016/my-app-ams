@@ -1,0 +1,23 @@
+<form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="name" nzRequired>节点名称</nz-form-label>
+        <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请输入节点名称">
+            <input nz-input id="name" formControlName="name" placeholder="输入节点名称" />
+        </nz-form-control>
+    </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="user_id" nzRequired>用户</nz-form-label>
+            <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请选择用户">
+                <nz-select style="width: 100%;" id="user_id" formControlName="user_id" nzShowSearch nzPlaceHolder="请选择用户">
+                    <ng-container *ngFor="let item of USERS">
+                        <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
+                    </ng-container>
+                </nz-select>
+            </nz-form-control>
+        </nz-form-item>
+    <nz-form-item nz-row class="register-area">
+        <nz-form-control [nzSpan]="18" [nzOffset]="6">
+            <button nz-button nzType="primary">{{ data ? '保存' : '新增' }}</button>
+        </nz-form-control>
+    </nz-form-item>
+</form>

@@ -1,0 +1,68 @@
+<form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="name" nzRequired>税目名称</nz-form-label>
+        <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请输入税目名称">
+            <input nz-input id="name" formControlName="name" placeholder="输入税目名称" />
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="company" nzRequired>单位</nz-form-label>
+        <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请选择单位">
+            <nz-select style="width: 100%;" id="company" nzShowSearch nzPlaceHolder="请选择单位" [nzDisabled]="companyId" formControlName="company_id">
+                <ng-container *ngFor="let item of COMPANY">
+                    <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
+                </ng-container>
+            </nz-select>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="department" nzRequired>部门</nz-form-label>
+        <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请选择部门">
+            <nz-select style="width: 100%;" id="department" [nzLoading]="departmentLoading" nzShowSearch nzPlaceHolder="请选择部门" formControlName="department_id">
+                <ng-container *ngFor="let item of departmentArray">
+                    <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
+                </ng-container>
+            </nz-select>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="invoice_id" nzRequired>开票方式</nz-form-label>
+        <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请选择开票方式">
+            <nz-select style="width: 100%;" id="invoice_id" nzShowSearch nzPlaceHolder="请选择开票方式" formControlName="invoice_id">
+                <ng-container *ngFor="let item of settingConfigService.configs.invoiceArray">
+                    <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
+                </ng-container>
+            </nz-select>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="rate" nzRequired>开票税率</nz-form-label>
+        <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请填写税率">
+            <nz-input-number
+                formControlName="rate" id="rate"
+                [nzMin]="0"
+                [nzMax]="1"
+                [nzStep]="0.01"
+                [nzPlaceHolder]="'税率'"
+                ></nz-input-number>
+            <span class="text-error ml-md">取值范围[0, 1]，精度: 0.01</span>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="remark">备注</nz-form-label>
+        <nz-form-control [nzSm]="18" [nzXs]="24">
+            <textarea
+                nz-input
+                id="remark"
+                placeholder="请填写备注信息"
+                formControlName="remark"
+                [nzAutosize]="{ minRows: 2, maxRows: 6 }"
+            ></textarea>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item nz-row class="register-area">
+        <nz-form-control [nzSpan]="18" [nzOffset]="6">
+            <button nz-button nzType="primary">{{ data ? '保存' : '新增' }}</button>
+        </nz-form-control>
+    </nz-form-item>
+</form>

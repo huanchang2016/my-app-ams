@@ -1,0 +1,14 @@
+<div>
+    <nz-select nzShowSearch style="width: 32%;" nzPlaceHolder="请选择" [(ngModel)]="selectedProvince"
+        (ngModelChange)="provinceChange($event)">
+        <nz-option *ngFor="let p of provinceData" [nzValue]="p.id" [nzLabel]="p.name"></nz-option>
+    </nz-select>
+    <nz-select nzShowSearch style="width: 32%;" nzPlaceHolder="请选择" [(ngModel)]="selectedCity"
+        (ngModelChange)="cityChange($event)">
+        <nz-option *ngFor="let c of cityData" [nzValue]="c.id" [nzLabel]="c.name"></nz-option>
+    </nz-select>
+    <nz-select nzShowSearch style="width: 32%;" nzPlaceHolder="请选择" [(ngModel)]="selectedDistrict"
+        (ngModelChange)="selectedValueChange()">
+        <nz-option *ngFor="let d of districtData" [nzValue]="d.id" [nzLabel]="d.name"></nz-option>
+    </nz-select>
+</div>

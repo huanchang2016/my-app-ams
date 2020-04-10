@@ -1,0 +1,30 @@
+
+.info-box {
+    position: relative;
+    .photo-box {
+        position: absolute;
+        right: 0;
+        top: 30px;
+        max-width: 80px;
+        max-height: 80px;
+        overflow: hidden;
+        img {
+            width: 100%;
+        }
+    }
+    & > div {
+        line-height: 26px;
+        font-size: 14px;
+    }
+}
+
+.description {
+    flex-grow: 1;
+}
+
+
+@media (max-width: 575px) {
+    .info-box .photo-box {
+        top: 60px;
+    }
+}

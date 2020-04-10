@@ -1,0 +1,33 @@
+<nz-card>
+    <button nz-button nzType="primary" (click)="add()" class="mb-sm">创建节点</button>
+    <nz-table #basicTable [nzData]="listOfData" [nzLoading]="loading" [nzFrontPagination]="false"
+        class="mt-md hidden-mobile">
+        <thead>
+            <tr>
+                <th>序号</th>
+                <th>节点名称</th>
+                <th>节点用户</th>
+                <th>操作（拖动节点排序）</th>
+            </tr>
+        </thead>
+        <tbody cdkDropList (cdkDropListDropped)="drop($event)">
+            <tr *ngFor="let data of listOfData; let i = index" cdkDrag>
+                <td>{{ i + 1 }}</td>
+                <td>{{ data.name }}</td>
+                <td>{{ data.user.name }}</td>
+                <td>
+                    <a (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
+
+                    <nz-divider nzType="vertical"></nz-divider>
+
+                    <a nz-popconfirm nzPopconfirmTitle="确认是否需要禁用当前节点" class="text-error"
+                        (nzOnConfirm)="disabled(data.id)" (nzOnCancel)="cancel()">
+                        禁用
+                    </a>
+
+                </td>
+            </tr>
+        </tbody>
+    </nz-table>
+
+</nz-card>

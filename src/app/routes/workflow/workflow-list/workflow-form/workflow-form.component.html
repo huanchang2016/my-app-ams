@@ -1,0 +1,52 @@
+<form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="name" nzRequired>流程名称</nz-form-label>
+        <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请输入流程名称">
+            <input nz-input id="name" formControlName="name" placeholder="输入流程名称" />
+        </nz-form-control>
+    </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="company" nzRequired>单位</nz-form-label>
+            <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请选择所在单位">
+                <nz-select style="width: 100%;" id="company" nzShowSearch nzAllowClear nzPlaceHolder="请选择所在单位" formControlName="company_id">
+                    <ng-container *ngFor="let item of COMPANY">
+                        <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
+                    </ng-container>
+                </nz-select>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="department" nzRequired>部门</nz-form-label>
+            <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请选择部门">
+                <nz-select style="width: 100%;" id="department" formControlName="department_id" [nzLoading]="departmentLoading" nzShowSearch nzPlaceHolder="请选择部门">
+                    <ng-container *ngFor="let item of departmentArray">
+                        <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
+                    </ng-container>
+                </nz-select>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="workflow_category_id" nzRequired>流程类型</nz-form-label>
+            <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请选择流程类型">
+                <nz-select style="width: 100%;" id="workflow_category_id" formControlName="workflow_category_id" [nzLoading]="workflowCategoryLoading" nzShowSearch nzPlaceHolder="请选择流程类型">
+                    <ng-container *ngFor="let item of workflowCategoryArray">
+                        <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
+                    </ng-container>
+                </nz-select>
+            </nz-form-control>
+        </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="is_large">大金额流程</nz-form-label>
+        <nz-form-control [nzSm]="18" [nzXs]="24">
+            <nz-radio-group formControlName="is_large" id="is_large">
+                <label nz-radio [nzValue]="true">是</label>
+                <label nz-radio [nzValue]="false">否</label>
+            </nz-radio-group>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item nz-row class="register-area">
+        <nz-form-control [nzSpan]="18" [nzOffset]="6">
+            <button nz-button nzType="primary">{{ data ? '保存' : '新增' }}</button>
+        </nz-form-control>
+    </nz-form-item>
+</form>

@@ -1,0 +1,65 @@
+<page-header></page-header>
+
+<app-workflow-search-option [COMPANY]="companyArray" (companyValueChange)="companyValueChange($event)" (searchOptionsEmit)="searchOptionsChange($event)" (addContentEmit)="add()"></app-workflow-search-option>
+
+    <nz-table #basicTable [nzData]="listOfData" [nzLoading]="loading" [nzFrontPagination]="false" class="mt-md hidden-mobile">
+      <thead>
+        <tr>
+            <th>序号</th>
+            <th>流程名称</th>
+            <th>流程类型</th>
+            <th>是否大金额</th>
+            <th>部门</th>
+            <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let data of basicTable.data;let i = index">
+          <tr>
+            <td>{{ i + 1 }}</td>
+            <td>{{ data.name }}</td>
+            <td>{{ data.workflow_category.name }}</td>
+            <td>
+                <span [innerHTML]="data.is_large | yn"></span>
+            </td>
+            <td>{{ data.department.name }}</td>
+            <td>
+                <a (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
+
+                <nz-divider nzType="vertical"></nz-divider>
+
+                <a (click)="showNodeList(data.id)">节点<i nz-icon
+                    nzType="{{ showExpand[data.id] ? 'caret-up' : 'caret-down' }}" nzTheme="outline"></i></a>
+            </td>
+          </tr>
+          <tr *ngIf="showExpand[data.id]" style="background-color: #f1f1f1;">
+            <td colspan="6">
+              <app-node-list [workflowInfo]="data"></app-node-list>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </nz-table>
+
+
+<div class="hidden-pc mt-md">
+    <div *ngIf="loading && listOfData.length === 0" class="p-md text-center">
+        <nz-spin nzSimple></nz-spin>
+    </div>
+    <div *ngIf="!loading && listOfData.length !== 0">
+        <ng-container *ngFor="let data of listOfData">
+            <nz-card [nzActions]="[actionEdit, actionEllipsis]">
+                <nz-skeleton [nzActive]="true" [nzLoading]="false" [nzAvatar]="{ size: 'large' }">
+                    <nz-card-meta [nzTitle]="data.name" [nzDescription]="data.address">
+                    </nz-card-meta>
+                </nz-skeleton>
+                <ng-template #actionEdit>
+                    <i nz-icon nzType="edit"></i>
+                </ng-template>
+                <ng-template #actionEllipsis>
+                    <i class="text-danger" nz-icon nzType="stop" nzTheme="outline"></i>
+                </ng-template>
+            </nz-card>
+        </ng-container>
+    </div>
+</div>

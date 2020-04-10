@@ -1,0 +1,86 @@
+<div class="steps-content-box">
+
+    <nz-card class="mb-md">
+        <div class="project-info">
+            <div nz-row [nzGutter]="24" nzType="flex" *ngIf="projectInfo">
+                <h2>基础信息</h2>
+                <div class="pro-info-list" nz-col nzSpan="24">
+                    <span class="label-title">项目名称</span>： <span class="font-weight-bold">{{ projectInfo.name }}</span>
+                </div>
+                <div class="pro-info-list" nz-col nzSpan="24">
+                    <span class="label-title">项目业主</span>： <span
+                        class="font-weight-bold">{{ projectInfo.customer?.name }}</span>
+                </div>
+                <div class="pro-info-list" nz-col [nzSm]="{span:24}" [nzMd]="{span: 12}">
+                    <span class="label-title">项目编号</span>： <span
+                        class="font-weight-bold">{{ projectInfo.number }}</span>
+                </div>
+                <div class="pro-info-list" nz-col [nzSm]="{span:24}" [nzMd]="{span: 12}">
+                    <span class="label-title">项目类型</span>： <span
+                        class="font-weight-bold">{{ projectInfo.category?.name }}</span>
+                </div>
+                <div class="pro-info-list" nz-col [nzSm]="{span:24}" [nzMd]="{span: 12}">
+                    <span class="label-title">负责部门</span>： <span
+                        class="font-weight-bold">{{ projectInfo.department?.name }}</span>
+                </div>
+                <div class="pro-info-list" nz-col [nzSm]="{span:24}" [nzMd]="{span: 12}">
+                    <span class="label-title">项目来源</span>： <span
+                        class="font-weight-bold">{{ projectInfo.origin.code.code_name + projectInfo.origin.name }}</span>
+                </div>
+                <div class="pro-info-list" nz-col [nzSm]="{span:24}" [nzMd]="{span: 12}">
+                    <span class="label-title">计划执行时间</span>： <span
+                        class="font-weight-bold">{{ projectInfo.plan_execution_start_time }} 至
+                        {{ projectInfo.plan_execution_end_time }}</span>
+                </div>
+                <div class="pro-info-list" nz-col [nzSm]="{span:24}" [nzMd]="{span: 12}">
+                    <span class="label-title">实际执行时间</span>： <span
+                        class="font-weight-bold">{{ projectInfo.actual_execution_start_time }} 至
+                        {{ projectInfo.actual_execution_end_time }}</span>
+                </div>
+                <div class="pro-info-list d-flex" nz-col [nzSpan]="24">
+                    <span class="label-title">项目描述</span>： <span [innerHtml]="projectInfo.description | showTextareaContent" class="font-weight-bold description"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="project-info mt-md">
+            <h2>项目收入预算</h2>
+            <div nz-row [nzGutter]="24" nzType="flex" *ngIf="budgetInfo">
+                <div class="pro-info-list" nz-col [nzSm]="{span:24}" [nzMd]="{span: 12}">
+                    <span class="label-title">收入预算类型</span>： <span class="font-weight-bold">{{ budgetInfo.tax?.name }}</span>
+                </div>
+                <div class="pro-info-list" nz-col [nzSm]="{span:24}" [nzMd]="{span: 12}">
+                    <span class="label-title">收入预算税率</span>： <span class="font-weight-bold">{{ budgetInfo.tax?.invoice.name + ' ' }} <span class="text-error ml-md">{{ budgetInfo.tax?.rate }}</span></span>
+                </div>
+                <div class="pro-info-list" nz-col [nzSm]="{span:24}" [nzMd]="{span: 12}">
+                    <span class="label-title">收入预算金额</span>： <span class="font-weight-bold text-error">{{ budgetInfo.tax_amount }} 元</span>
+                </div>
+            </div>
+            
+            <h2 class="mt-md">项目成本预算</h2>
+            <div nz-row [nzGutter]="24" nzType="flex" *ngIf="costInfo && costInfo.length !== 0;">
+                <ng-container *ngFor="let cost of costInfo">
+                    <div class="pro-info-list" nz-col [nzSm]="{span:24}" [nzMd]="{span: 12}">
+                        <span class="cost-label-title">{{ cost.cost_category.name }}</span>： <span class="font-weight-bold text-error">{{ cost.amount }} 元</span>
+                    </div>
+                </ng-container>
+                <div nz-col nzSpan="24" class="cost-total text-right font-weight-bold mt-sm">
+                    成本预算合计： <span class="text-error font-weight-bold">{{ costTotal }} 元</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="project-info mt-md">
+            <h2>项目服务供应商</h2>
+            
+            <div nz-row [nzGutter]="24" nzType="flex" *ngIf="supplierList && supplierList.length !== 0;">
+                <ng-container *ngFor="let supplier of supplierList">
+                    <div class="pro-info-list" nz-col [nzSm]="{span:24}" [nzMd]="{span: 12}">
+                        <span class="font-weight-bold">{{ supplier.name }}</span>
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+
+    </nz-card>
+</div>

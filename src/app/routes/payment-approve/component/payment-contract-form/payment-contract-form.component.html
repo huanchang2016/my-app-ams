@@ -1,0 +1,38 @@
+<form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="contract_id" nzRequired>支付合同</nz-form-label>
+        <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请选择支付合同">
+            <nz-select style="width: 100%;" id="contract_id" nzShowSearch nzPlaceHolder="请选择支付合同" formControlName="contract_id">
+                <ng-container *ngFor="let item of contractArr">
+                    <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
+                </ng-container>
+            </nz-select>
+        </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="payment_amount" nzRequired>付款金额</nz-form-label>
+        <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请输入支付金额">
+            <input nz-input id="payment_amount" formControlName="payment_amount" placeholder="输入项目成本类型名称" />
+        </nz-form-control>
+    </nz-form-item>
+        
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="note">支付备注</nz-form-label>
+        <nz-form-control [nzSm]="18" [nzXs]="24">
+            <textarea
+                nz-input
+                id="note"
+                placeholder="请填写合同支付备注"
+                formControlName="note"
+                [nzAutosize]="{ minRows: 3, maxRows: 6 }"
+            ></textarea>
+        </nz-form-control>
+    </nz-form-item>
+    
+    <nz-form-item nz-row class="register-area">
+        <nz-form-control [nzSpan]="18" [nzOffset]="6">
+            <button nz-button nzType="primary">{{ data ? '保存' : '新增' }}</button>
+        </nz-form-control>
+    </nz-form-item>
+</form>

@@ -1,0 +1,253 @@
+<page-header [title]="title" [breadcrumb]="breadcrumb" [action]="action" [extra]="extra">
+  <ng-template #title>
+    <span>项目：</span>
+    <span class="font-weight-bold">{{ project.info?.name }}</span>
+    <span class="text-primary text-xs mx-lg" [class.text-error]="project.info?.project_status.name === '已提交，已通过'" [class.text-error]="project.info?.project_status.name === '已提交，未通过'">{{ project.info?.project_status.name }}</span>
+    <a *ngIf="project.info?.draft" class="text-md" [routerLink]="['/project/edit', projectId]">编辑</a>
+  </ng-template>
+
+  <ng-template #breadcrumb>
+    <nz-breadcrumb>
+      <nz-breadcrumb-item><a [routerLink]="['/dashboard']">首页</a></nz-breadcrumb-item>
+      <nz-breadcrumb-item>项目管理</nz-breadcrumb-item>
+      <nz-breadcrumb-item>项目预览</nz-breadcrumb-item>
+    </nz-breadcrumb>
+  </ng-template>
+
+  <ng-template #action>
+    <button nz-button (click)="printCurrentModal('print-box')">打印</button>
+    <button nz-button nz-dropdown [nzDropdownMenu]="opMenu" class="mx-sm">
+      下载 <i nz-icon nzType="download" nzTheme="outline"></i>
+    </button>
+    <nz-dropdown-menu #opMenu="nzDropdownMenu">
+      <ul nz-menu>
+        <li nz-menu-item (click)="downloadFile('pdf')"><i nz-icon nzType="file-pdf" nzTheme="outline"></i> .pdf</li>
+        <li nz-menu-item (click)="downloadFile('image')"><i nz-icon nzType="file-excel" nzTheme="outline"></i> .image
+        </li>
+      </ul>
+    </nz-dropdown-menu>
+
+    <a nz-popconfirm nz-button [nzType]="'primary'" *ngIf="project.info?.draft"
+      nzPopconfirmTitle="请确认项目信息全部填写完整，无误后确认提交！！！" (nzOnConfirm)="submitProject()" (nzOnCancel)="cancel()">
+      提交项目
+    </a>
+  </ng-template>
+  <ng-template #extra>
+    <!-- <div nz-row>
+      <div nz-col nzSpan="24">
+        <p class="text-grey">状态</p>
+        <p class="text-lg">待审批</p>
+      </div>
+      <div nz-col nzXs="24" nzSm="12">
+          <p class="text-grey">项目金额</p>
+          <p class="text-lg">¥ 568.08</p>
+        </div>
+    </div> -->
+  </ng-template>
+
+</page-header>
+
+<div class="print-box" id="print-box" #printBox>
+
+  <!-- 项目流程进展： 草稿 不显示 -->
+  <nz-card [nzBordered]="false" class="mb-md" [nzTitle]="workflowStatusTitle"
+    *ngIf="project.info && !project.info?.draft">
+    <ng-template #workflowStatusTitle>
+      <span>流程进度</span>
+      <span class="text-primary ml-md text-sm">{{ progressInfo?.workflow_status.name }}</span>
+    </ng-template>
+    <ng-container *ngIf="nodeProcess.length !== 0;else nodeProcessLoadingTpl">
+      <nz-steps nzDirection="vertical" nzProgressDot class="hidden-pc">
+        <ng-container *ngFor="let process of nodeProcess">
+          <nz-step [nzTitle]="process.node.name"
+            [nzStatus]=" process.current ? 'process' : ( !process.finished ? 'wait' : ( !process.agree ?  'error' : 'finish') )"
+            [nzDescription]="createDesc">
+            <ng-template #createDesc>
+              <div class="desc">
+                <div class="my-sm">
+                  {{ process.user.name }}
+                </div>
+                <div *ngIf="process.finished; else notFinished">
+                  {{ process.finished_time }}
+                </div>
+                <span class="text-sm text-primary" [class.text-error]="process.finished && !process.agree">{{ process.remark }}</span>
+                <ng-template #notFinished>
+                  <!-- TODO:暂不开发 -->
+                  <!-- <a *ngIf="process.current" (click)="msg.success('click')">催一下</a> -->
+                </ng-template>
+              </div>
+            </ng-template>
+          </nz-step>
+        </ng-container>
+
+        <nz-step [nzTitle]="'完成'"
+          [nzStatus]=" !progressInfo.finished ? 'wait' : ( progressInfo.agree ? 'finish' : 'error' ) "></nz-step>
+      </nz-steps>
+      <nz-steps nzProgressDot class="hidden-mobile">
+        <ng-container *ngFor="let process of nodeProcess">
+          <nz-step [nzTitle]="process.node.name"
+            [nzStatus]=" process.current ? 'process' : ( !process.finished ? 'wait' : ( !process.agree ?  'error' : 'finish') )"
+            [nzDescription]="createDesc">
+            <ng-template #createDesc>
+              <div class="desc">
+                <div class="my-sm">
+                  {{ process.user.name }}
+                </div>
+                <div *ngIf="process.finished; else notFinished">
+                  {{ process.finished_time }}
+                </div>
+                <span class="text-sm text-primary" [class.text-error]="process.finished && !process.agree">{{ process.remark }}</span>
+                <ng-template #notFinished>
+                  <!-- TODO:暂不开发 -->
+                  <!-- <a *ngIf="process.current" (click)="msg.success('click')">催一下</a> -->
+                </ng-template>
+              </div>
+            </ng-template>
+          </nz-step>
+        </ng-container>
+
+        <nz-step [nzTitle]="'完成'"
+          [nzStatus]=" !progressInfo.finished ? 'wait' : ( progressInfo.agree ? 'finish' : 'error' ) " [nzDescription]="'项目审核完成'"></nz-step>
+      </nz-steps>
+
+    </ng-container>
+    <ng-template #nodeProcessLoadingTpl>
+      <div class="p-xl text-center text-lg text-primary">
+        <nz-spin></nz-spin>
+      </div>
+    </ng-template>
+
+    <div class="steps-content" *ngIf="isCurrentCheck">
+      <div class="check-box mt-md float-right">
+        <nz-radio-group [(ngModel)]="checkOption.agree" [nzButtonStyle]="'solid'">
+          <label nz-radio-button [nzValue]="true">通过</label>
+          <label nz-radio-button [nzValue]="false">不通过</label>
+        </nz-radio-group>
+        <textarea nz-input placeholder="请填写审核备注" [(ngModel)]="checkOption.remark"
+          [nzAutosize]="{ minRows: 3, maxRows: 6 }" class="my-sm"></textarea>
+        <div class="text-right">
+          <a nz-popconfirm nz-button [nzType]="'primary'" nzPopconfirmTitle="请确认项目信息全部查看，审核无误后确认提交！！！"
+            (nzOnConfirm)="submitCheckCurrentProcess()" (nzOnCancel)="cancel()">
+            审批
+          </a>
+        </div>
+      </div>
+
+
+
+    </div>
+  </nz-card>
+
+  <!-- 项目信息 -->
+  <nz-card [nzTitle]="proTitle" [nzBordered]="false" class="mb-md">
+    <ng-template #proTitle>
+      <ng-container *ngIf="isPrinter;else noPrinter">
+        <div class="clearfix">
+          <div class="float-left title-logo">
+            <img src="/assets/imgs/export_logo.png" alt="天府人资">
+          </div>
+          <div class="float-right title-name text-right">我们以扎根新区、深耕新区、服务新区为己任，秉承拓荒牛精神，以专业优质的服务，致力于推动各类
+            人才向天府新区聚集，打造天府新区人才高地，成就天府新区人力资源服务第一品牌。</div>
+        </div>
+
+      </ng-container>
+      <ng-template #noPrinter>
+        <span class="font-weight-bold text-md">项目资料</span>
+      </ng-template>
+    </ng-template>
+    <!-- 基础信息 -->
+    <sv-container title="基础信息" class="mb-lg">
+      <sv label="项目名称"><strong>{{ project.info?.name }}</strong></sv>
+      <sv label="项目编号"><strong>{{ project.info?.number }}</strong></sv>
+      <sv label="项目类型">{{ project.info?.category?.name }}</sv>
+
+      <sv label="负 责 人 ">{{ project.info?.user.name }}</sv>
+      <sv label="负责部门">{{ project.info?.department?.name }}</sv>
+      <sv label="客户单位">{{ project.info?.customer?.name }}</sv>
+      
+      <sv label="客户来源">{{ project.info?.origin?.code.code_name + project.info?.origin.name }}</sv>
+      <sv label="预计执行时间">{{ project.info?.plan_execution_start_time }} - {{ project.info?.plan_execution_end_time }}
+      </sv>
+      <sv label="实际执行时间">{{ project.info?.actual_execution_start_time }} - {{ project.info?.actual_execution_end_time }}
+      </sv>
+    </sv-container>
+
+    <sv-container title="项目描述" col="1">
+      <sv>
+        <span [innerHtml]="project.info?.description | showTextareaContent"></span>
+      </sv>
+    </sv-container>
+
+  </nz-card>
+
+  <!-- 项目预算信息 -->
+  <nz-card [nzBordered]="false" nzTitle="项目预算" class="mb-md">
+
+    <sv-container class="mb-md" title="收入" *ngIf="project.budget">
+      <sv label="收入类型"><span class="text-primary">{{ project.budget.tax.name }} 元</span></sv>
+      <sv label="收入金额"><span class="text-primary font-weight-bold" [class.text-success]="project.budget.income > project.info.quota.chairman_amount_start">{{ project.budget.income }} 元</span></sv>
+    </sv-container>
+
+    <sv-container class="mb-md" title="成本" *ngIf="project.budget">
+      <ng-container *ngFor="let cost of project.budget.cost">
+        <sv [label]="cost.cost_category.name"><span class="text-error">{{ cost.amount }} 元</span></sv>
+      </ng-container>
+    </sv-container>
+
+    <sv-container title="预算统计" *ngIf="project.budget">
+      <sv label="不含税收入"><span class="text-primary">{{ project.budget.exclude_tax_income }} 元</span></sv>
+      <sv label="预算税率"><span class="text-error">{{ countPercent(project.budget.tax.rate, 100) }} %</span></sv>
+      <sv label="税金"><span class="text-error">{{ project.budget.tax_amount }} 元</span></sv>
+      <sv label="成本总计">{{ project.budget.cost_amount }} 元</sv>
+      <sv label="毛利润"><span class="text-primary">{{ project.budget.gross_profit }} 元</span></sv>
+      <sv label="毛利率"><span class="text-primary">{{ countPercent(project.budget.gross_profit_rate, 100) }} %</span></sv>
+    </sv-container>
+  </nz-card>
+
+  <!-- 项目供应商 -->
+  <nz-card [nzBordered]="false" nzTitle="供应商" class="hidden-mobile">
+    <nz-table #basicTable [nzFrontPagination]="false" [nzData]="project.supplier">
+      <thead>
+        <tr>
+          <th>序号</th>
+          <th>供应商名称</th>
+          <th>编号</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let data of basicTable.data;let i = index">
+          <tr>
+            <td>{{ i + 1 }}</td>
+            <td>{{ data.name }}</td>
+            <td>{{ data.supplier_code }}</td>
+            <td>
+              <a (click)="showContract(data.id)">合约<i nz-icon
+                  nzType="{{ showExpand[data.id] ? 'caret-up' : 'caret-down' }}" nzTheme="outline"></i></a>
+            </td>
+          </tr>
+          <tr *ngIf="showExpand[data.id]" style="background-color: #f1f1f1;">
+            <td colspan="4">
+              <app-supplier-contract-list [projectInfo]="project.info" [supplierInfo]="data"
+                [serviceCategory]="serviceCategory" [isView]="true"></app-supplier-contract-list>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </nz-table>
+  </nz-card>
+  <nz-card [nzBordered]="false" nzTitle="供应商" class="hidden-pc mobile-card" >
+    <ng-container *ngFor="let data of project.supplier;let i = index">
+      <nz-card nzType="inner" [nzTitle]="mobileSupplierTpl" class="mb-md inner-card">
+        <ng-template #mobileSupplierTpl>
+          <div>{{ data.name }} <span class="ml-sm text-sm">{{ data.supplier_code }}</span></div>
+        </ng-template>
+        <app-supplier-contract-list [projectInfo]="project.info" [supplierInfo]="data"
+              [serviceCategory]="serviceCategory" [isView]="true"></app-supplier-contract-list>
+      </nz-card>
+    </ng-container>
+  </nz-card>
+
+
+</div>
+<!-- 操作日志， *ngIf="!draft" -->

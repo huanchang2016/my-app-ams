@@ -1,0 +1,27 @@
+<ng-container *ngIf="data">
+    <div class="info-box">
+        <div class="photo-box"><img [src]="environment.SERVER_URL + data.logo" alt="单位logo"></div>
+
+        <h2>{{ data.name }}</h2>
+        <div>企业识别号： {{ data.code }}</div>
+        <div class="basic-info">
+            <div>
+                <span class="mr-sm text-primary" *ngIf="data.area">{{ data.province?.name }}-{{ data.city?.name }}-{{ data.area?.name }}</span>
+                <span class="mr-sm">{{ data.nature?.name }}</span>
+            </div>
+            <div>法&nbsp;&nbsp;&nbsp;&nbsp;人： {{ data.represent }}</div>
+            <div>电&nbsp;&nbsp;&nbsp;&nbsp;话： {{ data.tel }}</div>
+            <div>邮&nbsp;&nbsp;&nbsp;&nbsp;箱： {{ data.email }}</div>
+            <div>用&nbsp;&nbsp;&nbsp;&nbsp;户： <span class="text-primary" [class.text-error]="!data.is_user">{{ data.is_user ? '是' : '否' }}</span></div>
+            <div>客&nbsp;&nbsp;&nbsp;&nbsp;户： <span class="text-primary mr-md" [class.text-error]="!data.customer">{{ data.customer ? '是' : '否' }}</span> <span>编码： <span class="text-primary">{{ data.customer_code }}</span></span></div>
+            <div>供应商： <span class="text-primary mr-md" [class.text-error]="!data.supplier">{{ data.supplier ? '是' : '否' }}</span> <span>编码： <span class="text-primary">{{ data.supplier_code }}</span></span></div>
+
+            <div>地&nbsp;&nbsp;&nbsp;&nbsp;址： {{ data.address }}</div>
+            
+            <div class="d-flex">
+                <span>描&nbsp;&nbsp;&nbsp;&nbsp;述：</span>
+                <div class="description" [innerHtml]="data.description | showTextareaContent | html"></div>
+            </div>
+        </div>
+    </div>
+</ng-container>

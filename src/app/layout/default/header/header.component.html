@@ -1,0 +1,73 @@
+<div class="alain-default__header-logo">
+  <a [routerLink]="['/']" class="alain-default__header-logo-link">
+    <img class="alain-default__header-logo-expanded" src="./assets/imgs/logo-full.png" alt="{{settings.app.name}}" style="max-height:40px;" />
+    <img class="alain-default__header-logo-collapsed" src="./assets/imgs/logo-color.png" alt="{{settings.app.name}}" style="max-height:30px;" />
+  </a>
+</div>
+<div class="alain-default__nav-wrap">
+  <ul class="alain-default__nav">
+    <!-- Menu -->
+    <li>
+      <div class="alain-default__nav-item" (click)="toggleCollapsedSidebar()">
+        <i nz-icon nzType="menu-{{settings.layout.collapsed ? 'unfold' : 'fold'}}"></i>
+      </div>
+    </li>
+    <!-- <li class="hidden-mobile">
+      <div class="alain-default__nav-item d-flex align-items-center pl-sm pr-sm">
+        <div class="header-img-box">
+          <img src="./assets/imgs/test/ams_logo.jpg" alt="财务共享服务中心">
+        </div>
+        <div class="header-img-title d-flex flex-column justify-content-around text-left pl-md">
+          <h3>财务共享服务中心</h3>
+          <span>Financial Shared Service Center</span>
+        </div>
+      </div>
+    </li> -->
+    <!-- Lock Page -->
+    <!-- <li class="hidden-mobile">
+      <div class="alain-default__nav-item" [routerLink]="['/lock']">
+        <i nz-icon nzType="lock"></i>
+      </div>
+    </li> -->
+    <!-- Search Button -->
+    <!-- <li class="hidden-pc" (click)="searchToggleChange()">
+      <div class="alain-default__nav-item">
+        <i nz-icon nzType="search"></i>
+      </div>
+    </li> -->
+  </ul>
+  <!-- <header-search class="alain-default__search" [toggleChange]="searchToggleStatus"></header-search> -->
+  <ul class="alain-default__nav">
+    <!-- Notify -->
+    <!-- <li>
+      <header-notify></header-notify>
+    </li> -->
+    <!-- Task -->
+    <!-- <li class="hidden-mobile">
+      <header-task></header-task>
+    </li> -->
+    <!-- App Icons -->
+    <!-- <li class="hidden-mobile">
+      <header-icon></header-icon>
+    </li> -->
+    <!-- Settings -->
+    <li class="hidden-mobile">
+      <div class="alain-default__nav-item" nz-dropdown [nzDropdownMenu]="settingsMenu" nzTrigger="click" nzPlacement="bottomRight">
+        <i nz-icon nzType="setting"></i>
+      </div>
+      <nz-dropdown-menu #settingsMenu="nzDropdownMenu">
+        <div nz-menu style="width:200px;">
+          <div nz-menu-item>
+            <header-fullscreen></header-fullscreen>
+          </div>
+          <div nz-menu-item>
+            <header-storage></header-storage>
+          </div>
+        </div>
+      </nz-dropdown-menu>
+    </li>
+    <li class="hidden-mobile">
+      <header-user></header-user>
+    </li>
+  </ul>
+</div>

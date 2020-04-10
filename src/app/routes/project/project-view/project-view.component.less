@@ -1,0 +1,53 @@
+@import '~@delon/theme/styles/default';
+:host {
+  ::ng-deep {
+    @media screen and (max-width: @screen-sm) {
+      .desc {
+        left: 8px;
+      }
+      .page-header__action .ant-btn-group, .page-header__action .ant-btn {
+        display: inline-block;
+      }
+      .mobile-card .ant-card-body {
+        padding: 8px 0; 
+      }
+      .inner-card .ant-card-body {
+        padding: 16px;
+      }
+      .ant-steps-dot .ant-steps-item-content, .ant-steps-dot.ant-steps-small .ant-steps-item-content {
+        min-width: 200px;
+      }
+    }
+    .desc {
+      position: relative;
+      left: 38px;
+      font-size: @font-size-base;
+      // & > div {
+      //   margin-top: 8px;
+      //   margin-bottom: 4px;
+      // }
+    }
+  }
+}
+.title-logo {
+  width: 135px;
+  height: 48px;
+  overflow: hidden;
+  img {
+    width: 100%;
+  }
+}
+
+.title-name {
+  width: 800px;
+  line-height: 24px;
+  white-space: pre-wrap;
+}
+.check-box {
+  max-width: 400px;
+}
+@media screen and (max-width: @screen-sm) {
+  .check-box {
+    float: left!important;
+  }
+}

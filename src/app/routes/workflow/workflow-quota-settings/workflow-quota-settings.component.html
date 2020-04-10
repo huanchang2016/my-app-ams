@@ -1,0 +1,61 @@
+<page-header></page-header>
+
+<app-quota-search-component (searchOptionsEmit)="searchOptionsChange($event)" (addContentEmit)="add()"></app-quota-search-component>
+
+<nz-table #basicTable [nzData]="listOfData" [nzLoading]="loading" class="mt-md hidden-mobile">
+    <thead>
+        <tr>
+            <th>序号</th>
+            <th>单位名称</th>
+            <th>限额名称</th>
+            <th>审批额度</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let data of basicTable.data; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ data.company.name }}</td>
+            <td>{{ data.name }}</td>
+            <td>
+                <div class="quote-box">
+                    <sv-container col="1">
+                        <sv label="总经理">{{ data.chairman_amount_start }}元（不含）以下</sv>
+                        <sv label="董事长">{{ data.chairman_amount_start }} {{ data.chairman_amount_end < 9999999 ? '~ ' + data.chairman_amount_end + '元' : '元（含）以上'}}</sv>
+                        <sv label="总经理办公会">{{ data.meeting_amount_start }} - {{ data.meeting_amount_end }}元（不含）</sv>
+                        <sv label="董事会议审批">{{ data.resolution_amount_start }}元（含）以上</sv>
+                    </sv-container>
+                </div>
+            </td>
+            <td>
+                <a (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
+
+                <!-- <nz-divider nzType="vertical"></nz-divider>
+
+                <a (click)="view(data)"><i nz-icon nzType="eye" nzTheme="outline"></i></a> -->
+
+            </td>
+        </tr>
+    </tbody>
+</nz-table>
+<div class="hidden-pc mt-md">
+    <div *ngIf="loading && listOfData.length === 0" class="p-md text-center">
+        <nz-spin nzSimple></nz-spin>
+    </div>
+    <div *ngIf="!loading && listOfData.length !== 0">
+        <ng-container *ngFor="let data of listOfData">
+            <nz-card [nzActions]="[actionEdit, actionEllipsis]">
+                <nz-skeleton [nzActive]="true" [nzLoading]="false" [nzAvatar]="{ size: 'large' }">
+                    <nz-card-meta [nzTitle]="data.name" [nzDescription]="data.address">
+                    </nz-card-meta>
+                </nz-skeleton>
+                <ng-template #actionEdit>
+                    <i nz-icon nzType="edit"></i>
+                </ng-template>
+                <ng-template #actionEllipsis>
+                    <i class="text-danger" nz-icon nzType="stop" nzTheme="outline"></i>
+                </ng-template>
+            </nz-card>
+        </ng-container>
+    </div>
+</div>

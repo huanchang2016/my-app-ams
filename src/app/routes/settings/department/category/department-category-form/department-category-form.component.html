@@ -1,0 +1,60 @@
+<form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="company" nzRequired>所在单位</nz-form-label>
+        <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请选择职位所在单位">
+            <nz-select style="width: 100%;" id="company" nzShowSearch nzAllowClear nzPlaceHolder="请选择所在单位" [nzDisabled]="companyId" formControlName="company_id">
+                <ng-container *ngFor="let item of companyArray">
+                    <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
+                </ng-container>
+            </nz-select>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="name" nzRequired>部门类型</nz-form-label>
+        <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请输入部门类型名称">
+            <input nz-input id="name" formControlName="name" placeholder="输入部门类型名称" />
+        </nz-form-control>
+    </nz-form-item>
+    <!-- <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="department" nzRequired>所属部门</nz-form-label>
+        <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请选择职位所属部门">
+            <nz-select style="width: 100%;" id="department" [nzLoading]="departmentLoading" nzShowSearch nzAllowClear nzPlaceHolder="请选择所属部门" formControlName="department_id">
+                <ng-container *ngFor="let item of departmentArray">
+                    <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
+                </ng-container>
+            </nz-select>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="isleader">负责人</nz-form-label>
+        <nz-form-control [nzSm]="18" [nzXs]="24">
+            <nz-radio-group formControlName="isleader" id="isleader">
+                <label nz-radio [nzValue]="true">是</label>
+                <label nz-radio [nzValue]="false">否</label>
+            </nz-radio-group>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="description">职位描述</nz-form-label>
+        <nz-form-control [nzSm]="18" [nzXs]="24">
+            <textarea
+                nz-input
+                id="description"
+                placeholder="请输入职位描述"
+                formControlName="description"
+                [nzAutosize]="{ minRows: 2, maxRows: 6 }"
+            ></textarea>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="sequence">排序</nz-form-label>
+        <nz-form-control [nzSm]="18" [nzXs]="24">
+            <nz-input-number id="sequence" formControlName="sequence" [nzMin]="1" [nzStep]="1"></nz-input-number>
+        </nz-form-control>
+    </nz-form-item> -->
+    <nz-form-item nz-row class="register-area">
+        <nz-form-control [nzSpan]="18" [nzOffset]="6">
+            <button nz-button nzType="primary" [nzLoading]="submitLoading">{{ data ? '保存' : '添加' }}</button>
+        </nz-form-control>
+    </nz-form-item>
+</form>

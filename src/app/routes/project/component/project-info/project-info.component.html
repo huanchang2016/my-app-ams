@@ -1,0 +1,86 @@
+<form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()" class="info-form">
+
+    <div nz-row [nzGutter]="24">
+        <div nz-col [nzSpan]="24">
+            <nz-form-item nzFlex>
+                <nz-form-label nzFor="name" nzRequired>项目名称</nz-form-label>
+                <nz-form-control nzErrorTip="请填写项目名称">
+                    <input nz-input placeholder="项目名称" formControlName="name" id="name" />
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="24">
+            <nz-form-item nzFlex>
+                <nz-form-label nzFor="customer_id" nzRequired>业主单位</nz-form-label>
+                <nz-form-control nzErrorTip="请选择业主单位">
+                    <nz-select style="width: 100%;" id="customer_id" nzShowSearch
+                        nzPlaceHolder="请选择业主单位" formControlName="customer_id">
+                        <ng-container *ngFor="let item of customerCompanyArray">
+                            <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
+                        </ng-container>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+
+        <div nz-col [nzMd]="12" [nzSm]="24">
+            <nz-form-item nzFlex>
+                <nz-form-label nzFor="plan_time">计划时间</nz-form-label>
+                <nz-form-control>
+                    <app-range-datepicker id="plan_time" formControlName="plan_time"></app-range-datepicker>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div nz-col [nzMd]="12" [nzSm]="24">
+            <nz-form-item nzFlex>
+                <nz-form-label nzFor="category_id">项目类型</nz-form-label>
+                <nz-form-control>
+                    <nz-select style="width: 100%;" id="category_id" nzShowSearch
+                        nzPlaceHolder="请选择项目类型" formControlName="category_id">
+                        <ng-container *ngFor="let item of settingConfigService.configs.projectCateArray">
+                            <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
+                        </ng-container>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        
+        <div nz-col [nzMd]="12" [nzSm]="24">
+            <nz-form-item nzFlex>
+                <nz-form-label nzFor="actual_time">实际时间</nz-form-label>
+                <nz-form-control>
+                    <app-range-datepicker id="actual_time" formControlName="actual_time"></app-range-datepicker>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+
+        <div nz-col [nzMd]="12" [nzSm]="24">
+            <nz-form-item nzFlex>
+                <nz-form-label nzFor="origin_id">项目来源</nz-form-label>
+                <nz-form-control>
+                    <nz-select style="width: 100%;" id="origin_id" nzShowSearch
+                        nzPlaceHolder="请选择项目来源" formControlName="origin_id">
+                        <ng-container *ngFor="let item of settingConfigService.configs.originArray">
+                            <nz-option [nzLabel]="item.code.code_name + item.name" [nzValue]="item.id"></nz-option>
+                        </ng-container>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        
+        <div nz-col [nzSpan]="24">
+            <nz-form-item nzFlex>
+                <nz-form-label nzFor="description">项目描述</nz-form-label>
+                <nz-form-control>
+                    <textarea nz-input id="description" placeholder="请输入项目描述" formControlName="description" [nzAutosize]="{ minRows: 4, maxRows: 8 }"></textarea>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+    </div>
+
+    <nz-form-item nz-row class="register-area">
+        <nz-form-control [nzSpan]="24" class="text-right">
+            <button nz-button nzType="primary" [nzLoading]="submitLoading">下一步</button>
+        </nz-form-control>
+    </nz-form-item>
+</form>

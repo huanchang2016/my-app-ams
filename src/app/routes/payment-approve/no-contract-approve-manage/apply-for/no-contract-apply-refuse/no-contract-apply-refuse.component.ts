@@ -23,9 +23,6 @@ export class NoContractApplyRefuseComponent implements OnInit {
     page_size: 10
   };
 
-  // listOfData: any[] = [];
-  selectedMemberIds: number[] = []; // 已选成员
-  // TODO: checkbox
   constructor(
     private commonFn: CommonFunctionService,
     private settingConfigService: SettingsConfigService,

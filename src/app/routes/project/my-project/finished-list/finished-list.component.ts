@@ -1,15 +1,14 @@
+import { ProjectDrawerSearchOptionComponent } from '../../component/project-drawer-search-option/project-drawer-search-option.component';
 import { Component, OnInit } from '@angular/core';
 import { CommonFunctionService } from 'src/app/routes/service/common-function.service';
-import { NzDrawerService } from 'ng-zorro-antd';
+import { NzMessageService, NzDrawerService } from 'ng-zorro-antd';
 import { ApiData } from 'src/app/data/interface.data';
 import { SettingsConfigService } from 'src/app/routes/service/settings-config.service';
 import { Router } from '@angular/router';
-import { ProjectDrawerSearchOptionComponent } from './../component/project-drawer-search-option/project-drawer-search-option.component';
-
 
 @Component({
-  selector: 'app-my-for-approvaled-list',
-  templateUrl: './my-for-approvaled-list.component.html',
+  selector: 'app-finished-list',
+  templateUrl: './finished-list.component.html',
   styles: [`
     .search-btn-mobile {
       width: 48px;
@@ -22,7 +21,7 @@ import { ProjectDrawerSearchOptionComponent } from './../component/project-drawe
     }
   `]
 })
-export class MyForApprovaledListComponent implements OnInit {
+export class FinishedListComponent implements OnInit {
 
   // 单位id
   companyId: number = null;
@@ -63,13 +62,12 @@ export class MyForApprovaledListComponent implements OnInit {
 
   getDataList() { // 获取单位下的数据
     this.loading = true;
-    this.settingConfigService.get('/api/project/submit/forApproval/my', this.pageOption).subscribe((res: ApiData) => {
+    this.settingConfigService.get('/api/project/submit/pass/my', this.pageOption).subscribe((res: ApiData) => {
       console.log(res);
       this.loading = false;
       if (res.code === 200) {
         const data: any[] = res.data.project;
         this.total = res.data.count;
-
         this.list = data;
         this.searchOptionsChange();
       }
@@ -91,9 +89,9 @@ export class MyForApprovaledListComponent implements OnInit {
     this.getDataList();
   }
 
-  // companyValueChange(id: number) {
-  //   console.log(id, 'company select change!');
-  // }
+  companyValueChange(id: number) {
+    console.log(id, 'company select change!');
+  }
 
 
   // TODO: checkbox
@@ -144,4 +142,5 @@ export class MyForApprovaledListComponent implements OnInit {
       }
     });
   }
+
 }

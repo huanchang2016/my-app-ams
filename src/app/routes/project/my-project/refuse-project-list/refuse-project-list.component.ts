@@ -4,11 +4,11 @@ import { NzDrawerService } from 'ng-zorro-antd';
 import { ApiData } from 'src/app/data/interface.data';
 import { SettingsConfigService } from 'src/app/routes/service/settings-config.service';
 import { Router } from '@angular/router';
-import { ProjectDrawerSearchOptionComponent } from './../component/project-drawer-search-option/project-drawer-search-option.component';
+import { ProjectDrawerSearchOptionComponent } from '../../component/project-drawer-search-option/project-drawer-search-option.component';
 
 @Component({
-  selector: 'app-progress-list',
-  templateUrl: './progress-list.component.html',
+  selector: 'app-refuse-project-list',
+  templateUrl: './refuse-project-list.component.html',
   styles: [`
     .search-btn-mobile {
       width: 48px;
@@ -21,20 +21,20 @@ import { ProjectDrawerSearchOptionComponent } from './../component/project-drawe
     }
   `]
 })
-export class ProgressListComponent implements OnInit {
-  
+export class RefuseProjectListComponent implements OnInit {
+
   // 单位id
-  companyId:number = null;
-  companyArray:any[] = [];
+  companyId: number = null;
+  companyArray: any[] = [];
 
   list: any[] = [];
-  listOfData:any[] = [];
+  listOfData: any[] = [];
   loading: boolean = false;
-  searchOption:any = {};
+  searchOption: any = {};
 
   total = 0;
 
-  pageOption:any = {
+  pageOption: any = {
     page: 1,
     page_size: 10
   };
@@ -46,10 +46,10 @@ export class ProgressListComponent implements OnInit {
     private drawerService: NzDrawerService,
     private router: Router
   ) {
-    this.settingConfigService.get('/api/company/user/all').subscribe((res:ApiData) => {
-      if(res.code === 200) {
-        let data:any[] = res.data.company;
-        this.companyArray = data.map( v => {
+    this.settingConfigService.get('/api/company/user/all').subscribe((res: ApiData) => {
+      if (res.code === 200) {
+        let data: any[] = res.data.company;
+        this.companyArray = data.map(v => {
           return { id: v.id, name: v.name };
         });
       }
@@ -62,11 +62,11 @@ export class ProgressListComponent implements OnInit {
 
   getDataList() { // 获取单位下的数据
     this.loading = true;
-    this.settingConfigService.get('/api/project/submit/my', this.pageOption).subscribe((res:ApiData) => {
+    this.settingConfigService.get('/api/project/submit/refuse/my', this.pageOption).subscribe((res: ApiData) => {
       console.log(res);
       this.loading = false;
-      if(res.code === 200) {
-        const data:any[] = res.data.project;
+      if (res.code === 200) {
+        const data: any[] = res.data.project;
         this.total = res.data.count;
         this.list = data;
         this.searchOptionsChange();
@@ -74,22 +74,22 @@ export class ProgressListComponent implements OnInit {
     });
   }
 
-  
-  view(data:any) {
+
+  view(data: any) {
     this.router.navigateByUrl(`/project/view/${data.id}`);
   }
   // TODO: checkbox
 
-  pageIndexChange($event:number) {
+  pageIndexChange($event: number) {
     this.pageOption.page = $event;
     this.getDataList();
   }
-  pageSizeChange($event:number) {
+  pageSizeChange($event: number) {
     this.pageOption.page_size = $event;
     this.getDataList();
   }
 
-  companyValueChange(id:number) {
+  companyValueChange(id: number) {
     console.log(id, 'company select change!');
   }
 
@@ -97,19 +97,19 @@ export class ProgressListComponent implements OnInit {
   // TODO: checkbox
 
   // 搜索条件发生变化
-  searchOptionsChange(option?:any) {
-    
-    if(option) this.searchOption = option;
+  searchOptionsChange(option?: any) {
+
+    if (option) this.searchOption = option;
 
     option = option || this.searchOption;
-    if(this.list.length !== 0) {
-      let object:any = {};
+    if (this.list.length !== 0) {
+      let object: any = {};
       for (const key in option) {
         if (option.hasOwnProperty(key)) {
           const element = option[key];
-          if(key === 'code') {
+          if (key === 'code') {
             object['supplier_code'] = element;
-          }else {
+          } else {
             object[key] = element;
           }
         }
@@ -120,7 +120,7 @@ export class ProgressListComponent implements OnInit {
   }
 
   // 移动端搜索框
-  isCollapsed:boolean = false;
+  isCollapsed: boolean = false;
 
   openComponent(): void {
     this.isCollapsed = true;
@@ -142,5 +142,4 @@ export class ProgressListComponent implements OnInit {
       }
     });
   }
-
 }

@@ -1,17 +1,14 @@
 <page-header [action]="action">
 
     <ng-template #action>
-        <button class="hidden-pc" nz-button (click)="add()" [nzType]="'primary'">新增</button >
+        <button nz-button (click)="add()" [nzType]="'primary'">新增</button >
     </ng-template>
 </page-header>
-
-<div class="hidden-pc search-btn-mobile rounded-sm bg-primary text-white text-lg text-center">
-    <i nz-icon nzType="menu-{{ isCollapsed ? 'unfold' : 'fold' }}" nzTheme="outline" (click)="openComponent()"></i>
-</div>
 
 <div class="hidden-mobile">
     <app-approve-search-option (searchOptionsEmit)="searchOptionsChange($event)"></app-approve-search-option>
 </div>
+
 <nz-table
     #ajaxTable
     nzShowSizeChanger
@@ -51,16 +48,7 @@
             <td>{{ data.origin?.code.code_name + data.origin?.name }}</td>
             <td>{{ data.department?.name }}</td>
             <td>
-                <!-- <nz-divider nzType="vertical"></nz-divider>
-                <ng-container *ngIf="data.active; else activeFalse">
-                    <a (click)="disabled(data.id)">禁用</a>
-                </ng-container>
-                <ng-template #activeFalse>
-                    <a (click)="enabled(data.id)">启用</a>
-                </ng-template> -->
                 <a [routerLink]="['/approve/contract/apply/pay', data.id]">合同支付</a>
-                <nz-divider nzType="vertical"></nz-divider>
-                <!-- <a (click)="view(data)"><i nz-icon nzType="eye" nzTheme="outline"></i></a> -->
             </td>
         </tr>
     </tbody>

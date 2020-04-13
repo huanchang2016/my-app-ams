@@ -2,10 +2,10 @@ import { NgModule } from '@angular/core';
 import { SharedModule } from '@shared';
 import { ProjectRoutingModule } from './project-routing.module';
 
-import { DraftListComponent } from './draft-list/draft-list.component';
+import { DraftListComponent } from './my-project/draft-list/draft-list.component';
 import { ProductSearchOptionComponent } from './component/search-option/search-option.component';
-import { ProgressListComponent } from './progress-list/progress-list.component';
-import { FinishedListComponent } from './finished-list/finished-list.component';
+import { ProgressListComponent } from './my-project/progress-list/progress-list.component';
+import { FinishedListComponent } from './my-project/finished-list/finished-list.component';
 import { ProjectCreateComponent } from './project-create/project-create.component';
 import { ProjectDrawerSearchOptionComponent } from './component/project-drawer-search-option/project-drawer-search-option.component';
 import { ProjectViewComponent } from './project-view/project-view.component';
@@ -21,10 +21,10 @@ import { ProjectSupplierFormComponent } from './component/project-supplier/compo
 import { ProjectContractFormComponent } from './component/project-supplier/component/project-contract-form/project-contract-form.component';
 import { SupplierContractListComponent } from './component/project-supplier/component/supplier-contract-list/supplier-contract-list.component';
 import { ProjectEditSuccessComponent } from './component/project-edit-success/project-edit-success.component';
-import { MyInApprovalListComponent } from './my-in-approval-list/my-in-approval-list.component';
-import { RefuseProjectListComponent } from './refuse-project-list/refuse-project-list.component';
-import { MyApprovaledListComponent } from './my-approvaled-list/my-approvaled-list.component';
-import { MyForApprovaledListComponent } from './my-for-approvaled-list/my-for-approvaled-list.component';
+import { MyInApprovalListComponent } from './approval-project/my-in-approval-list/my-in-approval-list.component';
+import { RefuseProjectListComponent } from './my-project/refuse-project-list/refuse-project-list.component';
+import { MyApprovaledListComponent } from './approval-project/my-approvaled-list/my-approvaled-list.component';
+import { MyForApprovaledListComponent } from './approval-project/my-for-approvaled-list/my-for-approvaled-list.component';
 
 const COMPONENTS = [
   DraftListComponent,

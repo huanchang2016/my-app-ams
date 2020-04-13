@@ -26,15 +26,6 @@ export class InApproveProjectComponent implements OnInit {
     page_size: 10
   };
 
-  // TODO: checkbox
-  isAllDisplayDataChecked = false;
-  isOperating = false;
-  isIndeterminate = false;
-  listOfDisplayData: any[] = [];
-  // listOfData: any[] = [];
-  mapOfCheckedId: { [key: string]: boolean } = {};
-  selectedMemberIds: number[] = []; // 已选成员
-  // TODO: checkbox
   constructor(
     private commonFn: CommonFunctionService,
     private settingConfigService: SettingsConfigService,
@@ -63,7 +54,7 @@ export class InApproveProjectComponent implements OnInit {
         let data:any[] = res.data.contract_pay;
         this.total = res.data.count;
         
-        this.listOfDisplayData = this.list = data;
+        this.list = data;
         this.searchOptionsChange();
       }
     });
@@ -73,13 +64,7 @@ export class InApproveProjectComponent implements OnInit {
   view(data:any) {
     this.router.navigateByUrl(`/approve/contract/apply/pay/edit/${data.project.id}?contract_pay_id=${data.id}`);
   }
-  // TODO: checkbox
 
-  // currentPageDataChange($event: any[]): void {
-  //   console.log($event);
-  //   this.listOfDisplayData = $event;
-  //   this.refreshStatus();
-  // }
   pageIndexChange($event:number) {
     this.pageOption.page = $event;
     this.getDataList();
@@ -87,27 +72,6 @@ export class InApproveProjectComponent implements OnInit {
   pageSizeChange($event:number) {
     this.pageOption.page_size = $event;
     this.getDataList();
-  }
-
-  refreshStatus(): void {
-    if(this.listOfDisplayData.length !== 0) {
-      this.isAllDisplayDataChecked = this.listOfDisplayData.every(item => this.mapOfCheckedId[item.id]);
-      this.isIndeterminate =
-        this.listOfDisplayData.some(item => this.mapOfCheckedId[item.id]) &&
-        !this.isAllDisplayDataChecked;
-    }else {
-      this.isIndeterminate = false;
-    }
-  }
-
-  checkAll(value: boolean): void {
-    // this.listOfDisplayData.forEach(item => (this.mapOfCheckedId[item.id] = value));
-    this.listOfDisplayData.forEach(item => (this.mapOfCheckedId[item.id] = value));
-    this.refreshStatus();
-  }
-
-  companyValueChange(id:number) {
-    console.log(id, 'company select change!');
   }
 
   // 搜索条件发生变化
@@ -118,19 +82,13 @@ export class InApproveProjectComponent implements OnInit {
     option = option || this.searchOption;
 
     if(this.list.length !== 0) {
-      this.isIndeterminate = false;
       let object:any = {};
       for (const key in option) {
         if (option.hasOwnProperty(key)) {
           const element = option[key];
-          if(key === 'code') {
-            object['supplier_code'] = element;
-          }else {
-            object[key] = element;
-          }
+          object[key] = element;
         }
       }
-
       this.listOfData = this.commonFn.filterListOfData(this.list, object);
     }
   }

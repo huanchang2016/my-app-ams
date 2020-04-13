@@ -1,68 +1,99 @@
 <page-header [title]="'项目合同支付管理'" [breadcrumb]="breadcrumb" [action]="actionBtn">
 
-    <ng-template #breadcrumb>
-      <nz-breadcrumb>
-        <nz-breadcrumb-item><a [routerLink]="['/dashboard']">首页</a></nz-breadcrumb-item>
-        <nz-breadcrumb-item>项目管理</nz-breadcrumb-item>
-        <nz-breadcrumb-item>项目预览</nz-breadcrumb-item>
-      </nz-breadcrumb>
-    </ng-template>
-  
-    <ng-template #actionBtn>
-      <!-- <button nz-button [nzType]="'primary'" (click)="addPayConstract()">新增合同支付</button> -->
-    </ng-template>
-  
-    <sv-container size="small" col="2">
-      <sv label="项目名称"><strong>{{ projectInfo?.name }}</strong></sv>
-      <sv label="客户"><strong>{{ projectInfo?.customer?.name }}</strong></sv>
-      <sv label="负责部门">{{ projectInfo?.department?.name }}</sv>
-      <sv label="创建时间">{{ projectInfo?.create_time | date: 'yyyy/MM/dd HH:mm:ss' }}</sv>
-      <sv label="项目创建人">{{ projectInfo?.user.name }}</sv>
-    </sv-container>
-  
-    <a nz-button [nzType]="'primary'" [routerLink]="['/approve/no-contract/apply/pay/create', projectId]" class="my-md">新增非合同（协议）支付</a>
-  
-  </page-header>
-  
-  <nz-card [nzBordered]="false">
-    <nz-table #basicTable [nzData]="listOfData" [nzFrontPagination]="false">
-      <thead>
-        <tr>
-          <th>序号</th>
-          <th>协议名称</th>
-          <th>协议编号</th>
-          <th>收款单位</th>
-          <th>支付金额（元）</th>
-          <th>冲抵情况</th>
-          <th>操作</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let data of basicTable.data; let i = index">
-          <td>{{ i + 1 }}</td>
-          <td>{{ data.treaty.name }}</td>
-          <td>{{ data.number }}</td>
-          <td>{{ data.pay_company }}</td>
-          <td class="text-error">{{ data.amount }}</td>
-          <td>
-            <sv-container size="small" col="1">
-              <sv label="冲销借款"><span [innerHtml]="data.if_write_off | yn"></span></sv>
-              <sv label="冲抵金额"><span class="text-error">{{ data.if_write_off ? data.write_off_amount + '元' : '-' }}</span></sv>
-            </sv-container>
-          </td>
-          <td>
-            <a [routerLink]="['/approve/no-contract/apply/pay/edit', projectId]" [queryParams]="{treaty_pay_id: data.id }"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
-            <nz-divider nzType="vertical"></nz-divider>
-            <a
-              nz-popconfirm
-              nzPopconfirmTitle="确认禁用当前合同支付?"
-              (nzOnConfirm)="disabled(data.id)"
-              (nzOnCancel)="cancel()"
-              class="text-error"
-              >禁用</a>
-          </td>
-        </tr>
-      </tbody>
-    </nz-table>
-  
-  </nz-card>
+  <ng-template #breadcrumb>
+    <nz-breadcrumb>
+      <nz-breadcrumb-item><a [routerLink]="['/dashboard']">首页</a></nz-breadcrumb-item>
+      <nz-breadcrumb-item>项目管理</nz-breadcrumb-item>
+      <nz-breadcrumb-item>项目预览</nz-breadcrumb-item>
+    </nz-breadcrumb>
+  </ng-template>
+
+  <ng-template #actionBtn>
+    <!-- <button nz-button [nzType]="'primary'" (click)="addPayConstract()">新增合同支付</button> -->
+  </ng-template>
+
+  <sv-container size="small" col="2">
+    <sv label="项目名称"><strong>{{ projectInfo?.name }}</strong></sv>
+    <sv label="客户"><strong>{{ projectInfo?.customer?.name }}</strong></sv>
+    <sv label="负责部门">{{ projectInfo?.department?.name }}</sv>
+    <sv label="创建时间">{{ projectInfo?.create_time | date: 'yyyy/MM/dd HH:mm:ss' }}</sv>
+    <sv label="项目创建人">{{ projectInfo?.user.name }}</sv>
+  </sv-container>
+
+  <a nz-button [nzType]="'primary'" [routerLink]="['/approve/no-contract/apply/pay/create', projectId]"
+    class="my-md">新增非合同（协议）支付</a>
+
+</page-header>
+
+<nz-card [nzBordered]="false" class="hidden-mobile">
+  <nz-table #basicTable [nzData]="listOfData" [nzFrontPagination]="false">
+    <thead>
+      <tr>
+        <th>序号</th>
+        <th>协议名称</th>
+        <th>协议编号</th>
+        <th>收款单位</th>
+        <th>支付金额（元）</th>
+        <th>冲抵情况</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of basicTable.data; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ data.treaty.name }}</td>
+        <td>{{ data.number }}</td>
+        <td>{{ data.pay_company }}</td>
+        <td class="text-error">{{ data.amount }}</td>
+        <td>
+          <sv-container size="small" col="1">
+            <sv label="冲销借款"><span [innerHtml]="data.if_write_off | yn"></span></sv>
+            <sv label="冲抵金额"><span class="text-error">{{ data.if_write_off ? data.write_off_amount + '元' : '-' }}</span>
+            </sv>
+          </sv-container>
+        </td>
+        <td>
+          <a [routerLink]="['/approve/no-contract/apply/pay/edit', projectId]"
+            [queryParams]="{treaty_pay_id: data.id }"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
+          <nz-divider nzType="vertical"></nz-divider>
+          <a nz-popconfirm nzPopconfirmTitle="确认禁用当前合同支付?" (nzOnConfirm)="disabled(data.id)" (nzOnCancel)="cancel()"
+            class="text-error">禁用</a>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+
+</nz-card>
+
+<div class="hidden-pc">
+  <ng-container *ngFor="let data of listOfData">
+    <nz-card [nzTitle]="treatyTitltTpl" [nzActions]="[ actionEdit, actionEllipsis]" class="mt-md">
+      <nz-skeleton [nzActive]="true" [nzLoading]="false">
+        <ng-template #treatyTitltTpl>
+          <span>{{ data.treaty.name }}</span>
+        </ng-template>
+        <div class="pt-md">
+          <sv-container size="small">
+            <sv label="协议编号">{{data.number }}</sv>
+            <sv label="收款单位">{{ data.pay_company }}</sv>
+            <sv label="冲抵情况">
+              <span *ngIf="data.if_write_off;else notWriteOff">{{ data.write_off_amount | currency: 'CNY' }} 元</span>
+              <ng-template #notWriteOff>
+                <span class="text-primary">无冲抵金额</span>
+              </ng-template>
+            </sv>
+            <sv label="支付金额"><span class="text-primary">{{ data.treaty.amount | currency: 'CNY' }} 元</span></sv>
+          </sv-container>
+        </div>
+      </nz-skeleton>
+      <ng-template #actionEdit>
+        <a [routerLink]="['/approve/no-contract/apply/pay/edit', projectId]"
+            [queryParams]="{treaty_pay_id: data.id }"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
+      </ng-template>
+      <ng-template #actionEllipsis>
+        <a nz-popconfirm nzPopconfirmTitle="确认禁用当前合同支付?" (nzOnConfirm)="disabled(data.id)" (nzOnCancel)="cancel()"
+            class="text-error">禁用</a>
+      </ng-template>
+    </nz-card>
+  </ng-container>
+</div>

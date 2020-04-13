@@ -1,17 +1,14 @@
 <page-header [action]="action">
 
     <ng-template #action>
-        <button class="hidden-pc" nz-button (click)="add()" [nzType]="'primary'">新增</button >
+        <button nz-button (click)="add()" [nzType]="'primary'">新增</button >
     </ng-template>
 </page-header>
-
-<div class="hidden-pc search-btn-mobile rounded-sm bg-primary text-white text-lg text-center">
-    <i nz-icon nzType="menu-{{ isCollapsed ? 'unfold' : 'fold' }}" nzTheme="outline" (click)="openComponent()"></i>
-</div>
 
 <div class="hidden-mobile">
     <app-approve-search-option (searchOptionsEmit)="searchOptionsChange($event)"></app-approve-search-option>
 </div>
+
 <nz-table
     #ajaxTable
     nzShowSizeChanger
@@ -36,6 +33,7 @@
             <th>类型</th>
             <th>来源</th>
             <th>部门</th>
+            <th>客户单位</th>
             <th>操作</th>
         </tr>
     </thead>
@@ -50,17 +48,9 @@
             <td>{{ data.category?.name }}</td>
             <td>{{ data.origin?.code.code_name + data.origin?.name }}</td>
             <td>{{ data.department?.name }}</td>
+            <td>{{ data.customer?.name }}</td>
             <td>
-                <!-- <nz-divider nzType="vertical"></nz-divider>
-                <ng-container *ngIf="data.active; else activeFalse">
-                    <a (click)="disabled(data.id)">禁用</a>
-                </ng-container>
-                <ng-template #activeFalse>
-                    <a (click)="enabled(data.id)">启用</a>
-                </ng-template> -->
                 <a [routerLink]="['/approve/no-contract/apply/pay', data.id]">协议支付</a>
-                <!-- <nz-divider nzType="vertical"></nz-divider>
-                <a (click)="view(data)"><i nz-icon nzType="eye" nzTheme="outline"></i></a> -->
             </td>
         </tr>
     </tbody>
@@ -71,21 +61,20 @@
     </div>
     <div *ngIf="!loading && listOfData.length !== 0">
         <ng-container *ngFor="let data of listOfData">
-            <nz-card [nzActions]="[actionEdit, actionEllipsis]" class="mt-md">
+            <nz-card [nzActions]="[actionEdit]" class="mt-md">
                 <nz-skeleton [nzActive]="true" [nzLoading]="false">
                     <nz-card-meta [nzTitle]="data.name"></nz-card-meta>
                     <div class="pt-md">
-                        <div>类型： {{ data.category?.name }}</div>
-                        <div>来源： {{ data.origin?.code.code_name + data.origin?.name }}</div>
-                        <div>部门： {{ data.department.name }}</div>
-                        <!-- <div>描述： {{ data.description }}</div> -->
+                        <sv-container size="small">
+                            <sv label="类型">{{ data.category?.name }}</sv>
+                            <sv label="来源">{{ data.origin?.code.code_name + data.origin?.name }}</sv>
+                            <sv label="部门">{{ data.department?.name }}</sv>
+                            <sv label="客户单位">{{ data.customer?.name }}</sv>
+                        </sv-container>
                     </div>
                 </nz-skeleton>
                 <ng-template #actionEdit>
-                    <i nz-icon nzType="edit" (click)="edit(data)"></i>
-                </ng-template>
-                <ng-template #actionEllipsis>
-                    <a (click)="view(data)"><i nz-icon nzType="eye" nzTheme="outline"></i></a>
+                    <a [routerLink]="['/approve/no-contract/apply/pay', data.id]">协议支付</a>
                 </ng-template>
             </nz-card>
         </ng-container>

@@ -4,11 +4,12 @@ import { NzDrawerService } from 'ng-zorro-antd';
 import { ApiData } from 'src/app/data/interface.data';
 import { SettingsConfigService } from 'src/app/routes/service/settings-config.service';
 import { Router } from '@angular/router';
-import { ProjectDrawerSearchOptionComponent } from './../component/project-drawer-search-option/project-drawer-search-option.component';
+import { ProjectDrawerSearchOptionComponent } from '../../component/project-drawer-search-option/project-drawer-search-option.component';
+
 
 @Component({
-  selector: 'app-refuse-project-list',
-  templateUrl: './refuse-project-list.component.html',
+  selector: 'app-my-for-approvaled-list',
+  templateUrl: './my-for-approvaled-list.component.html',
   styles: [`
     .search-btn-mobile {
       width: 48px;
@@ -21,7 +22,7 @@ import { ProjectDrawerSearchOptionComponent } from './../component/project-drawe
     }
   `]
 })
-export class RefuseProjectListComponent implements OnInit {
+export class MyForApprovaledListComponent implements OnInit {
 
   // 单位id
   companyId: number = null;
@@ -62,12 +63,13 @@ export class RefuseProjectListComponent implements OnInit {
 
   getDataList() { // 获取单位下的数据
     this.loading = true;
-    this.settingConfigService.get('/api/project/submit/refuse/my', this.pageOption).subscribe((res: ApiData) => {
+    this.settingConfigService.get('/api/project/submit/forApproval/my', this.pageOption).subscribe((res: ApiData) => {
       console.log(res);
       this.loading = false;
       if (res.code === 200) {
         const data: any[] = res.data.project;
         this.total = res.data.count;
+
         this.list = data;
         this.searchOptionsChange();
       }
@@ -89,9 +91,9 @@ export class RefuseProjectListComponent implements OnInit {
     this.getDataList();
   }
 
-  companyValueChange(id: number) {
-    console.log(id, 'company select change!');
-  }
+  // companyValueChange(id: number) {
+  //   console.log(id, 'company select change!');
+  // }
 
 
   // TODO: checkbox

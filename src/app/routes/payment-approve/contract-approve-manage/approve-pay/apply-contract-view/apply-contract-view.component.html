@@ -121,7 +121,7 @@
   
   </nz-card>
   
-  <nz-card nzTitle="成本支付" class="mt-md" *ngIf="selectedContract" class="hidden-mobile">
+  <nz-card nzTitle="成本支付" *ngIf="selectedContract" class="mt-md hidden-mobile">
   
     <nz-table #costSelectTable [nzData]="listOfData" [nzFrontPagination]="false">
       <thead>
@@ -154,7 +154,7 @@
   
   </nz-card>
   
-  <nz-card [nzTitle]="'成本支付费用'" class="mt-md hidden-pc" *ngIf="listOfData.length !== 0">
+  <nz-card [nzTitle]="'成本支付费用'" *ngIf="listOfData.length !== 0" class="mt-md hidden-pc">
     
     <ng-container *ngFor="let data of listOfData">
       <sv-container size="small" [title]="data.cost.cost_category.name" class="py-sm">

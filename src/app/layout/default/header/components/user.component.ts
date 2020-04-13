@@ -16,7 +16,8 @@ import { NzMessageService } from 'ng-zorro-antd';
       nzPlacement="bottomRight"
       [nzDropdownMenu]="userMenu"
     >
-      <nz-avatar [nzSrc]="settings.user.avatar ? settings.user.avatar : './assets/imgs/logo-color.png'" nzSize="small" class="mr-sm"></nz-avatar>
+      <nz-avatar [nzSrc]="settings.user.avatar ? settings.user.avatar : './assets/imgs/logo-color.png'" nzSize="small" class="mr-sm hidden-mobile"></nz-avatar>
+      <i nz-icon class="hidden-pc text-primary mr-xs" nzType="user" nzTheme="outline"></i>
       {{ settings.user.name }}
     </div>
     <nz-dropdown-menu #userMenu="nzDropdownMenu">

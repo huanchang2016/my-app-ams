@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { DraftListComponent } from './draft-list/draft-list.component';
-import { ProgressListComponent } from './progress-list/progress-list.component';
-import { FinishedListComponent } from './finished-list/finished-list.component';
+import { DraftListComponent } from './my-project/draft-list/draft-list.component';
+import { ProgressListComponent } from './my-project/progress-list/progress-list.component';
+import { FinishedListComponent } from './my-project/finished-list/finished-list.component';
+import { RefuseProjectListComponent } from './my-project/refuse-project-list/refuse-project-list.component';
 import { ProjectCreateComponent } from './project-create/project-create.component';
 import { ProjectViewComponent } from './project-view/project-view.component';
-import { RefuseProjectListComponent } from './refuse-project-list/refuse-project-list.component';
-import { MyInApprovalListComponent } from './my-in-approval-list/my-in-approval-list.component';
-import { MyApprovaledListComponent } from './my-approvaled-list/my-approvaled-list.component';
-import { MyForApprovaledListComponent } from './my-for-approvaled-list/my-for-approvaled-list.component';
+import { MyInApprovalListComponent } from './approval-project/my-in-approval-list/my-in-approval-list.component';
+import { MyApprovaledListComponent } from './approval-project/my-approvaled-list/my-approvaled-list.component';
+import { MyForApprovaledListComponent } from './approval-project/my-for-approvaled-list/my-for-approvaled-list.component';
 
 const routes: Routes = [
   { path: 'my/draft', component: DraftListComponent, data: { title: '项目草稿'} },

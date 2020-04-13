@@ -32,9 +32,9 @@
                 <sv-container size="small" col="1">
                     <sv label="协议名称"><span class="font-weight-bold">{{ data.treaty.name }}</span></sv>
                     <sv label="协议单位"><span class="font-weight-bold">{{ data.treaty.company.name }}</span></sv>
-                    <sv label="协议金额"><span class="text-primary">{{ data.treaty.amount | number: '1.2-2' }} 元</span></sv>
+                    <sv label="协议金额"><span class="text-primary">{{ data.treaty.amount | currency: 'CNY' }} 元</span></sv>
                     <sv label="抵扣金额">
-                        <span *ngIf="data.if_write_off;else notWriteOff">{{ data.write_off_amount | number: '1.2-2' }} 元</span>
+                        <span *ngIf="data.if_write_off;else notWriteOff">{{ data.write_off_amount | currency: 'CNY' }} 元</span>
                         <ng-template #notWriteOff>
                             <span class="text-primary">无冲抵金额</span>
                         </ng-template>
@@ -48,7 +48,7 @@
                     <sv label="收款单位"><span class="font-weight-bold">{{ data.pay_company }}</span></sv>
                     <sv label="银行名称"><span class="font-weight-bold">{{ data.bank_name }}</span></sv>
                     <sv label="银行账号"><span class="text-success">{{ data.bank_account }}</span></sv>
-                    <sv label="支付金额"><span class="text-error font-weight-bold">{{ data.amount | number: '1.2-2' }} 元</span></sv>
+                    <sv label="支付金额"><span class="text-error font-weight-bold">{{ data.amount | currency: 'CNY' }} 元</span></sv>
                 </sv-container>
             </td>
             <td>
@@ -64,20 +64,30 @@
     </div>
     <div *ngIf="!loading && listOfData.length !== 0">
         <ng-container *ngFor="let data of listOfData">
-            <nz-card [nzActions]="[actionEdit, actionEllipsis]" class="mt-md">
+            <nz-card [nzActions]="[actionEdit]" class="mt-md">
                 <nz-skeleton [nzActive]="true" [nzLoading]="false">
-                    <!-- <nz-card-meta [nzTitle]="data.name"></nz-card-meta> -->
+                    <nz-card-meta [nzTitle]="treatyTitltTpl"></nz-card-meta>
+                    <ng-template #treatyTitltTpl>
+                        <span>{{ data.treaty.name }}</span>
+                        <span class="text-primary text-xs ml-md" [class.text-error]="data.pay_status?.name === '未通过'" [class.text-success]="data.pay_status?.name === '已通过'">{{ data.pay_status?.name }}</span>
+                    </ng-template>
                     <div class="pt-md">
-                        <!-- <div>类型： {{ data.category?.name }}</div>
-                        <div>来源： {{ data.origin?.code.code_name + data.origin?.name }}</div>
-                        <div>部门： {{ data.department.name }}</div> -->
-                        <!-- <div>描述： {{ data.description }}</div> -->
+                        <sv-container size="small">
+                            <sv label="协议名称"><span class="font-weight-bold">{{ data.treaty.name }}</span></sv>
+                            <sv label="协议单位"><span class="font-weight-bold">{{ data.treaty.company.name }}</span></sv>
+                            <sv label="协议金额"><span class="text-primary">{{ data.treaty.amount | currency: 'CNY' }} 元</span></sv>
+                            <sv label="抵扣金额">
+                                <span *ngIf="data.if_write_off;else notWriteOff">{{ data.write_off_amount | currency: 'CNY' }} 元</span>
+                                <ng-template #notWriteOff>
+                                    <span class="text-primary">无冲抵金额</span>
+                                </ng-template>
+                            </sv>
+                            <sv label="收款单位"><span class="font-weight-bold">{{ data.pay_company }}</span></sv>
+                            <sv label="支付金额"><span class="text-error font-weight-bold">{{ data.amount | currency: 'CNY' }}</span></sv>
+                        </sv-container>
                     </div>
                 </nz-skeleton>
                 <ng-template #actionEdit>
-                    <i nz-icon nzType="edit" (click)="edit(data)"></i>
-                </ng-template>
-                <ng-template #actionEllipsis>
                     <a (click)="view(data)"><i nz-icon nzType="eye" nzTheme="outline"></i></a>
                 </ng-template>
             </nz-card>

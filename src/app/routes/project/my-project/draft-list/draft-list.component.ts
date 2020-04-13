@@ -1,4 +1,4 @@
-import { ProjectDrawerSearchOptionComponent } from './../component/project-drawer-search-option/project-drawer-search-option.component';
+import { ProjectDrawerSearchOptionComponent } from '../../component/project-drawer-search-option/project-drawer-search-option.component';
 import { Component, OnInit } from '@angular/core';
 import { CommonFunctionService } from 'src/app/routes/service/common-function.service';
 import { NzMessageService, NzDrawerService } from 'ng-zorro-antd';

@@ -4,12 +4,11 @@ import { NzDrawerService } from 'ng-zorro-antd';
 import { ApiData } from 'src/app/data/interface.data';
 import { SettingsConfigService } from 'src/app/routes/service/settings-config.service';
 import { Router } from '@angular/router';
-import { ProjectDrawerSearchOptionComponent } from './../component/project-drawer-search-option/project-drawer-search-option.component';
-
+import { ProjectDrawerSearchOptionComponent } from '../../component/project-drawer-search-option/project-drawer-search-option.component';
 
 @Component({
-  selector: 'app-my-approvaled-list',
-  templateUrl: './my-approvaled-list.component.html',
+  selector: 'app-my-in-approval-list',
+  templateUrl: './my-in-approval-list.component.html',
   styles: [`
     .search-btn-mobile {
       width: 48px;
@@ -22,7 +21,7 @@ import { ProjectDrawerSearchOptionComponent } from './../component/project-drawe
     }
   `]
 })
-export class MyApprovaledListComponent implements OnInit {
+export class MyInApprovalListComponent implements OnInit {
 
   // 单位id
   companyId: number = null;
@@ -63,7 +62,7 @@ export class MyApprovaledListComponent implements OnInit {
 
   getDataList() { // 获取单位下的数据
     this.loading = true;
-    this.settingConfigService.get('/api/project/submit/approved/my', this.pageOption).subscribe((res: ApiData) => {
+    this.settingConfigService.get('/api/project/submit/inApproval/my', this.pageOption).subscribe((res: ApiData) => {
       console.log(res);
       this.loading = false;
       if (res.code === 200) {

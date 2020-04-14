@@ -1,6 +1,6 @@
 <ng-container *ngIf="data">
     <div class="info-box">
-        <div class="photo-box"><img [src]="environment.SERVER_URL + data.logo" alt="单位logo"></div>
+        <div class="photo-box" *ngIf="data.logo"><img [src]="environment.SERVER_URL + data.logo" alt="单位logo"></div>
 
         <h2>{{ data.name }}</h2>
         <div>企业识别号： {{ data.code }}</div>

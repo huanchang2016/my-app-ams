@@ -7,8 +7,8 @@
         <tr>
             <th>序号</th>
             <th>名称</th>
-            <th>从属</th>
             <th>开票</th>
+            <th>从属</th>
             <th>备注</th>
             <th>状态</th>
             <th>操作</th>
@@ -19,12 +19,16 @@
             <td>{{ i + 1 }}</td>
             <td>{{ data.name }}</td>
             <td>
-                <div><strong>单位：</strong>{{ data.company.name }}</div>
-                <div><strong>部门：</strong>{{ data.department.name }}</div>
+                <sv-container size="small" col="1">
+                    <sv label="方式">{{ data.invoice.name }}</sv>
+                    <sv label="税率"><span class="text-error">{{ data.rate }}</span></sv>
+                </sv-container>
             </td>
             <td>
-                <div><strong>方式：</strong>{{ data.invoice.name }}</div>
-                <div><strong>税率：</strong><span class="text-error">{{ data.rate }}</span></div>
+                <sv-container size="small" col="1">
+                    <sv label="部门">{{ data.department.name }}</sv>
+                    <sv label="单位">{{ data.company.name }}</sv>
+                </sv-container>
             </td>
             <td>
                 <span [innerHtml]="data.remark | showTextareaContent"></span>
@@ -51,16 +55,29 @@
     </div>
     <div *ngIf="!loading && listOfData.length !== 0">
         <ng-container *ngFor="let data of listOfData">
-            <nz-card [nzActions]="[actionEdit, actionEllipsis]">
-                <nz-skeleton [nzActive]="true" [nzLoading]="false" [nzAvatar]="{ size: 'large' }">
-                    <nz-card-meta [nzTitle]="data.name" [nzDescription]="data.address">
-                    </nz-card-meta>
+            <nz-card [nzActions]="[actionEdit, actionManage]" class="mt-sm">
+                <nz-skeleton [nzActive]="true" [nzLoading]="loading">
+                    <nz-card-meta [nzTitle]="data.name"></nz-card-meta>
+                    <div class="pt-md">
+                        <sv-container size="small">
+                            <sv label="方式">{{ data.invoice.name }}</sv>
+                            <sv label="税率"><span class="text-error">{{ data.rate }}</span></sv>
+                            <sv label="部门">{{ data.department.name }}</sv>
+                            <sv label="单位">{{ data.company.name }}</sv>
+                            <sv label="描述"><span [innerHtml]="data.remark | showTextareaContent"></span></sv>
+                        </sv-container>
+                    </div>
                 </nz-skeleton>
                 <ng-template #actionEdit>
-                    <i nz-icon nzType="edit"></i>
+                    <a (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
                 </ng-template>
-                <ng-template #actionEllipsis>
-                    <i class="text-danger" nz-icon nzType="stop" nzTheme="outline"></i>
+                <ng-template #actionManage>
+                    <ng-container *ngIf="data.active; else activeFalse">
+                        <a (click)="disabled(data.id)">禁用</a>
+                    </ng-container>
+                    <ng-template #activeFalse>
+                        <a (click)="enabled(data.id)">启用</a>
+                    </ng-template>
                 </ng-template>
             </nz-card>
         </ng-container>

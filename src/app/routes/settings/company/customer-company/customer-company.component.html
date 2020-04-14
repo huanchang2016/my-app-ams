@@ -27,12 +27,10 @@
                 [nzIndeterminate]="isIndeterminate"
                 (nzCheckedChange)="checkAll($event)"
             ></th>
-            <th>单位</th>
-            <th>纳税人识别号</th>
+            <th>单位信息</th>
             <th>银行信息</th>
             <th>联系方式</th>
-            <!-- <th>状态</th> -->
-            <th>操作</th>
+            <th width="120">操作</th>
         </tr>
     </thead>
     <tbody>
@@ -43,41 +41,33 @@
                 (nzCheckedChange)="refreshStatus()"
             ></td>
             <td>
-                <div>单位：<strong>{{ data.name }}</strong></div>
-                <div>客户编码：
-                    <strong>
+                <sv-container col="1" size="small">
+                    <sv label="名称"><strong>{{ data.name }}</strong></sv>
+                    <sv label="客户编码">
                         <span *ngIf="data.customer; else notCustomer">
                             {{ data.customer_code }}
                         </span>
                         <ng-template #notCustomer>
                             <span [innerHTML]="data.customer | yn"></span>
                         </ng-template>
-                    </strong>
-                </div>
-                <span class="text-primary"></span>
+                    </sv>
+                    <sv label="纳税人识别号">{{ data.code }}</sv>
+                </sv-container>
             </td>
-            <td>{{ data.code }}</td>
             <td>
-                <div>支行名称：<strong>{{ data.bank_name }}</strong></div>
-                <div>银行账号：<strong>{{ data.bank_account }}</strong></div>
+                <sv-container col="1" size="small">
+                    <sv label="支行名称">{{ data.bank_name }}</sv>
+                    <sv label="银行账号">{{ data.bank_account }}</sv>
+                </sv-container>
             </td>
-            
             <td>
-                <div>电话号码：<span class="text-primary">{{ data.tel }}</span></div>
-                <div>单位地址：<strong>{{ data.address }}</strong></div>
+                <sv-container col="1" size="small">
+                    <sv label="电话号码">{{ data.tel }}</sv>
+                    <sv label="单位地址">{{ data.address }}</sv>
+                </sv-container>
             </td>
-            <!-- <td>
-                <span [innerHTML]="data.active | yn"></span>
-            </td> -->
             <td>
                 <a (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
-                <!-- <nz-divider nzType="vertical"></nz-divider>
-                <ng-container *ngIf="data.active; else activeFalse">
-                    <a (click)="disabled(data.id)">禁用</a>
-                </ng-container>
-                <ng-template #activeFalse>
-                    <a (click)="enabled(data.id)">启用</a>
-                </ng-template> -->
                 <nz-divider nzType="vertical"></nz-divider>
                 <a (click)="view(data)"><i nz-icon nzType="eye" nzTheme="outline"></i></a>
             </td>
@@ -91,12 +81,24 @@
     <div *ngIf="!loading && listOfData.length !== 0">
         <ng-container *ngFor="let data of mobilePageList">
             <nz-card [nzActions]="[actionEdit, actionEllipsis]" class="mt-md">
-                <nz-skeleton [nzActive]="true" [nzLoading]="false">
+                <nz-skeleton [nzActive]="true" [nzLoading]="loading">
                     <nz-card-meta [nzTitle]="data.name"></nz-card-meta>
                     <div class="pt-md">
-                        <div>客户： <span class="text-primary" [class.text-error]="!data.customer">{{ data.customer ? data.customer_code : '否' }}</span></div>
-                        <div>企业法人： {{ data.represent || '未完善' }}</div>
-                        <div>联系电话： {{ data.tel || '未完善' }}</div>
+                        <sv-container col="1" size="small">
+                            <sv label="客户编码">
+                                <span *ngIf="data.customer; else notCustomer">
+                                    {{ data.customer_code }}
+                                </span>
+                                <ng-template #notCustomer>
+                                    <span [innerHTML]="data.customer | yn"></span>
+                                </ng-template>
+                            </sv>
+                            <sv label="纳税人识别号">{{ data.code }}</sv>
+                            <sv label="支行名称">{{ data.bank_name }}</sv>
+                            <sv label="银行账号">{{ data.bank_account }}</sv>
+                            <sv label="电话号码">{{ data.tel }}</sv>
+                            <sv label="单位地址">{{ data.address }}</sv>
+                        </sv-container>
                     </div>
                 </nz-skeleton>
                 <ng-template #actionEdit>

@@ -39,16 +39,21 @@
     </div>
     <div *ngIf="!loading && listOfData.length !== 0">
         <ng-container *ngFor="let data of listOfData">
-            <nz-card [nzActions]="[actionEdit, actionEllipsis]">
-                <nz-skeleton [nzActive]="true" [nzLoading]="false" [nzAvatar]="{ size: 'large' }">
+            <nz-card [nzActions]="[actionEdit, actionEllipsis]" class="mt-sm">
+                <nz-skeleton [nzActive]="true" [nzLoading]="loading">
                     <nz-card-meta [nzTitle]="data.name" [nzDescription]="data.company.name">
                     </nz-card-meta>
                 </nz-skeleton>
                 <ng-template #actionEdit>
-                    <i nz-icon nzType="edit"></i>
+                    <a (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
                 </ng-template>
                 <ng-template #actionEllipsis>
-                    <i class="text-danger" nz-icon nzType="stop" nzTheme="outline"></i>
+                    <ng-container *ngIf="data.active; else activeFalse">
+                        <a (click)="disabled(data.id)">禁用</a>
+                    </ng-container>
+                    <ng-template #activeFalse>
+                        <a (click)="enabled(data.id)">启用</a>
+                    </ng-template>
                 </ng-template>
             </nz-card>
         </ng-container>

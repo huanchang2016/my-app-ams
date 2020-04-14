@@ -21,11 +21,10 @@
             <th nzShowCheckbox [(nzChecked)]="isAllDisplayDataChecked" [nzIndeterminate]="isIndeterminate"
                 (nzCheckedChange)="checkAll($event)"></th>
             <th>单位</th>
-            <th>客户编码</th>
-            <th>供应商编码</th>
-            <th>联系方式</th>
-            <th>用户</th>
-            <th>操作</th>
+            <th width="250">编码</th>
+            <th width="450">基础信息</th>
+            <th>状态</th>
+            <th width="120">操作</th>
         </tr>
     </thead>
     <tbody>
@@ -33,40 +32,41 @@
             <td nzShowCheckbox [(nzChecked)]="mapOfCheckedId[data.id]" (nzCheckedChange)="refreshStatus()"></td>
             <td>{{ data.name }}</td>
             <td>
-                <span *ngIf="data.customer; else notCustomer">
-                    {{ data.customer_code }}
-                </span>
-                <ng-template #notCustomer>
-                    <span [innerHTML]="data.customer | yn"></span>
-                </ng-template>
+                <sv-container col="1" size="small">
+                    <sv label="供&nbsp;&nbsp;应&nbsp;&nbsp;商">
+                        <span *ngIf="data.customer; else notCustomer">
+                            {{ data.customer_code }}
+                        </span>
+                        <ng-template #notCustomer>
+                            <span [innerHTML]="data.customer | yn"></span>
+                        </ng-template>
+                    </sv>
+                    <sv label="客&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;户">
+                        <span *ngIf="data.supplier; else notSupplier">
+                            {{ data.supplier_code }}
+                        </span>
+                        <ng-template #notSupplier>
+                            <span [innerHTML]="data.supplier | yn"></span>
+                        </ng-template>
+                    </sv>
+                </sv-container>
+                
             </td>
             <td>
-                <span *ngIf="data.supplier; else notSupplier">
-                    {{ data.supplier_code }}
-                </span>
-                <ng-template #notSupplier>
-                    <span [innerHTML]="data.supplier | yn"></span>
-                </ng-template>
-            </td>
-            <td>
-                <div>{{ data.represent }}</div>
-                <div>{{ data.tel}}</div>
+                <sv-container col="1" size="small">
+                    <sv label="法人">{{ data.represent }}</sv>
+                    <sv label="电话">{{ data.tel}}</sv>
+                    <sv label="地址">{{ data.address}}</sv>
+                    <sv label="纳税人识别号">{{ data.code }}</sv>
+                </sv-container>
             </td>
             <td>
                 <span [innerHTML]="data.active | yn"></span>
             </td>
             <td>
                 <a (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
-                <!-- <nz-divider nzType="vertical"></nz-divider>
-                <ng-container *ngIf="data.active; else activeFalse">
-                    <a (click)="disabled(data.id)">禁用</a>
-                </ng-container>
-                <ng-template #activeFalse>
-                    <a (click)="enabled(data.id)">启用</a>
-                </ng-template> -->
                 <nz-divider nzType="vertical"></nz-divider>
                 <a (click)="view(data)"><i nz-icon nzType="eye" nzTheme="outline"></i></a>
-
             </td>
         </tr>
     </tbody>
@@ -81,17 +81,35 @@
                 <nz-skeleton [nzActive]="true" [nzLoading]="false">
                     <nz-card-meta [nzTitle]="data.name"></nz-card-meta>
                     <div class="pt-md">
-                        <div>客户： <span class="text-primary" [class.text-error]="!data.customer">{{ data.customer ? data.customer_code : '否' }}</span></div>
-                        <div>供应商： <span class="text-primary" [class.text-error]="!data.supplier">{{ data.supplier ? data.supplier_code : '否' }}</span></div>
-                        <div>企业法人： {{ data.represent || '未完善' }}</div>
-                        <div>联系电话： {{ data.tel || '未完善' }}</div>
+                        <sv-container col="1" size="small">
+                            <sv label="供&nbsp;&nbsp;应&nbsp;&nbsp;商">
+                                <span *ngIf="data.customer; else notCustomer">
+                                    {{ data.customer_code }}
+                                </span>
+                                <ng-template #notCustomer>
+                                    <span [innerHTML]="data.customer | yn"></span>
+                                </ng-template>
+                            </sv>
+                            <sv label="客&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;户">
+                                <span *ngIf="data.supplier; else notSupplier">
+                                    {{ data.supplier_code }}
+                                </span>
+                                <ng-template #notSupplier>
+                                    <span [innerHTML]="data.supplier | yn"></span>
+                                </ng-template>
+                            </sv>
+                            <sv label="法人">{{ data.represent }}</sv>
+                            <sv label="电话">{{ data.tel}}</sv>
+                            <sv label="地址">{{ data.address}}</sv>
+                            <sv label="纳税人识别号">{{ data.code }}</sv>
+                        </sv-container>
                     </div>
                 </nz-skeleton>
+                
                 <ng-template #actionEdit>
-                    <i nz-icon nzType="edit" (click)="edit(data)"></i>
+                    <a (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
                 </ng-template>
                 <ng-template #actionEllipsis>
-                    <!-- <i class="text-danger" nz-icon nzType="stop" nzTheme="outline"></i> -->
                     <a (click)="view(data)"><i nz-icon nzType="eye" nzTheme="outline"></i></a>
                 </ng-template>
             </nz-card>

@@ -31,6 +31,7 @@ export class ProjectCostListComponent implements OnInit {
           return { id: v.id, name: v.name };
         });
         if(this.companyArray.length === 1) {
+          this.companyId = this.companyArray[0].id;
           this.getDataList(this.companyArray[0].id);
         }
       }

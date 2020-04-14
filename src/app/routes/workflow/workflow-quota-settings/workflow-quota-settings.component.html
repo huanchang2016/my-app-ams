@@ -19,7 +19,7 @@
             <td>{{ data.name }}</td>
             <td>
                 <div class="quote-box">
-                    <sv-container col="1">
+                    <sv-container col="1" size="small">
                         <sv label="总经理">{{ data.chairman_amount_start }}元（不含）以下</sv>
                         <sv label="董事长">{{ data.chairman_amount_start }} {{ data.chairman_amount_end < 9999999 ? '~ ' + data.chairman_amount_end + '元' : '元（含）以上'}}</sv>
                         <sv label="总经理办公会">{{ data.meeting_amount_start }} - {{ data.meeting_amount_end }}元（不含）</sv>
@@ -29,11 +29,6 @@
             </td>
             <td>
                 <a (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
-
-                <!-- <nz-divider nzType="vertical"></nz-divider>
-
-                <a (click)="view(data)"><i nz-icon nzType="eye" nzTheme="outline"></i></a> -->
-
             </td>
         </tr>
     </tbody>
@@ -44,16 +39,20 @@
     </div>
     <div *ngIf="!loading && listOfData.length !== 0">
         <ng-container *ngFor="let data of listOfData">
-            <nz-card [nzActions]="[actionEdit, actionEllipsis]">
+            <nz-card [nzActions]="[actionEdit]">
                 <nz-skeleton [nzActive]="true" [nzLoading]="false" [nzAvatar]="{ size: 'large' }">
-                    <nz-card-meta [nzTitle]="data.name" [nzDescription]="data.address">
-                    </nz-card-meta>
+                    <nz-card-meta [nzTitle]="data.name" [nzDescription]=" data.company.name"></nz-card-meta>
+                    <div class="mt-md">
+                        <sv-container size="small">
+                            <sv label="总经理">{{ data.chairman_amount_start }}元（不含）以下</sv>
+                            <sv label="董事长">{{ data.chairman_amount_start }} {{ data.chairman_amount_end < 9999999 ? '~ ' + data.chairman_amount_end + '元' : '元（含）以上'}}</sv>
+                            <sv label="总经理办公会">{{ data.meeting_amount_start }} - {{ data.meeting_amount_end }}元（不含）</sv>
+                            <sv label="董事会议审批">{{ data.resolution_amount_start }}元（含）以上</sv>
+                        </sv-container>
+                    </div>
                 </nz-skeleton>
                 <ng-template #actionEdit>
-                    <i nz-icon nzType="edit"></i>
-                </ng-template>
-                <ng-template #actionEllipsis>
-                    <i class="text-danger" nz-icon nzType="stop" nzTheme="outline"></i>
+                    <a (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
                 </ng-template>
             </nz-card>
         </ng-container>

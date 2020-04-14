@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
-import { NzModalService, NzMessageService, NzDrawerRef, NzDrawerService } from 'ng-zorro-antd';
+import { Component, OnInit } from '@angular/core';
+import { NzModalService, NzMessageService, NzDrawerService } from 'ng-zorro-antd';
 import { ApiData } from 'src/app/data/interface.data';
 import { SettingsConfigService } from 'src/app/routes/service/settings-config.service';
 import { CompanyFormComponent } from '../component/company-form/company-form.component';

@@ -29,9 +29,7 @@
             ></th>
             <th>单位</th>
             <th>服务商编码</th>
-            <th>类型</th>
-            <th>法人</th>
-            <th>联系方式</th>
+            <th>基础信息</th>
             <th>状态</th>
             <th>操作</th>
         </tr>
@@ -52,21 +50,19 @@
                     <span [innerHTML]="data.supplier | yn"></span>
                 </ng-template>
             </td>
-            <td>{{ data.nature?.name }}</td>
-            <td>{{ data.represent }}</td>
-            <td>{{ data.tel }}</td>
+            <td>
+                <sv-container col="1" size="small">
+                    <sv label="类型">{{ data.nature?.name }}</sv>
+                    <sv label="法人">{{ data.represent }}</sv>
+                    <sv label="电话">{{ data.tel }}</sv>
+                    <sv label="地址">{{ data.address }}</sv>
+                </sv-container>
+            </td>
             <td>
                 <span [innerHTML]="data.active | yn"></span>
             </td>
             <td>
                 <a (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
-                <!-- <nz-divider nzType="vertical"></nz-divider>
-                <ng-container *ngIf="data.active; else activeFalse">
-                    <a (click)="disabled(data.id)">禁用</a>
-                </ng-container>
-                <ng-template #activeFalse>
-                    <a (click)="enabled(data.id)">启用</a>
-                </ng-template> -->
                 <nz-divider nzType="vertical"></nz-divider>
                 <a (click)="view(data)"><i nz-icon nzType="eye" nzTheme="outline"></i></a>
             </td>
@@ -86,10 +82,24 @@
                         <div>供应商： <span class="text-primary" [class.text-error]="!data.supplier">{{ data.supplier ? data.supplier_code : '否' }}</span></div>
                         <div>企业法人： {{ data.represent || '未完善' }}</div>
                         <div>联系电话： {{ data.tel || '未完善' }}</div>
+                        <sv-container col="1" size="small">
+                            <sv label="编码">
+                                <span *ngIf="data.supplier; else notSupplier">
+                                    {{ data.supplier_code }}
+                                </span>
+                                <ng-template #notSupplier>
+                                    <span [innerHTML]="data.supplier | yn"></span>
+                                </ng-template>
+                            </sv>
+                            <sv label="类型">{{ data.nature?.name }}</sv>
+                            <sv label="法人">{{ data.represent }}</sv>
+                            <sv label="电话">{{ data.tel }}</sv>
+                            <sv label="地址">{{ data.address }}</sv>
+                        </sv-container>
                     </div>
                 </nz-skeleton>
                 <ng-template #actionEdit>
-                    <i nz-icon nzType="edit" (click)="edit(data)"></i>
+                    <a (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
                 </ng-template>
                 <ng-template #actionEllipsis>
                     <a (click)="view(data)"><i nz-icon nzType="eye" nzTheme="outline"></i></a>

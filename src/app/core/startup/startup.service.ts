@@ -56,7 +56,7 @@ export class StartupService {
               link: '/project/my',
               children: [
                 {
-                  text: '草稿列表',
+                  text: '草稿',
                   link: '/project/my/draft'
                 },
                 {
@@ -103,7 +103,7 @@ export class StartupService {
               link: '/approve/contract/apply',
               children: [
                 {
-                  text: '草稿',
+                  text: '项目列表',
                   link: '/approve/contract/apply/draft'
                 },
                 {
@@ -147,7 +147,7 @@ export class StartupService {
               link: '/approve/no-contract/apply',
               children: [
                 {
-                  text: '支付草稿',
+                  text: '项目列表',
                   link: '/approve/no-contract/apply/draft'
                 },
                 {

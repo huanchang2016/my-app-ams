@@ -41,23 +41,29 @@
       </tbody>
     </nz-table>
 
-
+<!-- 移动端 不做流程节点配置 -->
 <div class="hidden-pc mt-md">
     <div *ngIf="loading && listOfData.length === 0" class="p-md text-center">
         <nz-spin nzSimple></nz-spin>
     </div>
     <div *ngIf="!loading && listOfData.length !== 0">
         <ng-container *ngFor="let data of listOfData">
-            <nz-card [nzActions]="[actionEdit, actionEllipsis]">
-                <nz-skeleton [nzActive]="true" [nzLoading]="false" [nzAvatar]="{ size: 'large' }">
-                    <nz-card-meta [nzTitle]="data.name" [nzDescription]="data.address">
-                    </nz-card-meta>
+            <nz-card [nzActions]="[actionEdit]">
+                <nz-skeleton [nzActive]="true" [nzLoading]="loading">
+                    <nz-card-meta [nzTitle]="data.name"></nz-card-meta>
+                    <div class="mt-md">
+                      <sv-container size="small">
+                        <sv label="类型">{{ data.workflow_category.name }}</sv>
+                        <sv label="金额"><span class="text-primary" [class.text-error]="!data.is_large">{{ data.is_large ? '大金额' : '小金额' }}</span></sv>
+                        <sv label="部门">{{ data.department.name }}</sv>
+                      </sv-container>
+                    </div>
+                    <div *ngIf="showExpand[data.id]">
+                      <app-node-list [workflowInfo]="data"></app-node-list>
+                    </div>
                 </nz-skeleton>
                 <ng-template #actionEdit>
-                    <i nz-icon nzType="edit"></i>
-                </ng-template>
-                <ng-template #actionEllipsis>
-                    <i class="text-danger" nz-icon nzType="stop" nzTheme="outline"></i>
+                  <a (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
                 </ng-template>
             </nz-card>
         </ng-container>

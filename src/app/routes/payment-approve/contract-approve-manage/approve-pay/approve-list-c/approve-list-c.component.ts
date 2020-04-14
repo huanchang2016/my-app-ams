@@ -1,19 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { CommonFunctionService } from 'src/app/routes/service/common-function.service';
 import { ApiData } from 'src/app/data/interface.data';
 import { SettingsConfigService } from 'src/app/routes/service/settings-config.service';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-approve-not-started',
-  templateUrl: './approve-not-started.component.html',
+  selector: 'app-approve-list-c',
+  templateUrl: './approve-list-c.component.html',
   styles: []
 })
-export class ApproveNotStartedComponent implements OnInit {
+export class ApproveListCComponent implements OnInit {
+  @Input() postUrl:string;
+
+  // 单位id
+  companyId:number = null;
+  companyArray:any[] = [];
 
   list: any[] = [];
   listOfData:any[] = [];
-  loading: boolean = false;
+  loading: boolean = true;
   searchOption:any = {};
 
   total = 0;
@@ -23,20 +28,21 @@ export class ApproveNotStartedComponent implements OnInit {
     page_size: 10
   };
 
-  // TODO: checkbox
-  isAllDisplayDataChecked = false;
-  isOperating = false;
-  isIndeterminate = false;
-  listOfDisplayData: any[] = [];
-  // listOfData: any[] = [];
-  mapOfCheckedId: { [key: string]: boolean } = {};
-  selectedMemberIds: number[] = []; // 已选成员
-  // TODO: checkbox
+  
   constructor(
     private commonFn: CommonFunctionService,
     private settingConfigService: SettingsConfigService,
     private router: Router
-  ) {}
+  ) {
+    this.settingConfigService.get('/api/company/user/all').subscribe((res:ApiData) => {
+      if(res.code === 200) {
+        let data:any[] = res.data.company;
+        this.companyArray = data.map( v => {
+          return { id: v.id, name: v.name };
+        });
+      }
+    })
+  }
 
   ngOnInit() {
     this.getDataList();
@@ -44,19 +50,23 @@ export class ApproveNotStartedComponent implements OnInit {
 
   getDataList() { // 获取单位下的数据
     this.loading = true;
-    this.settingConfigService.get('/api/my/pay/project', this.pageOption).subscribe((res:ApiData) => {
-      console.log(res);
+    this.settingConfigService.get(this.postUrl, this.pageOption).subscribe((res:ApiData) => {
+      console.log(res, '该我审批的合同支付');
       this.loading = false;
       if(res.code === 200) {
-        let data:any[] = res.data.project;
+        let data:any[] = res.data.contract_pay;
         this.total = res.data.count;
+        
         this.list = data;
-        this.listOfDisplayData = this.list;
         this.searchOptionsChange();
       }
     });
   }
 
+  
+  view(data:any) {
+    this.router.navigateByUrl(`/approve/contract/apply/pay/edit/${data.project.id}?contract_pay_id=${data.id}`);
+  }
   pageIndexChange($event:number) {
     this.pageOption.page = $event;
     this.getDataList();
@@ -66,23 +76,7 @@ export class ApproveNotStartedComponent implements OnInit {
     this.getDataList();
   }
 
-  refreshStatus(): void {
-    if(this.listOfDisplayData.length !== 0) {
-      this.isAllDisplayDataChecked = this.listOfDisplayData.every(item => this.mapOfCheckedId[item.id]);
-      this.isIndeterminate =
-        this.listOfDisplayData.some(item => this.mapOfCheckedId[item.id]) &&
-        !this.isAllDisplayDataChecked;
-    }else {
-      this.isIndeterminate = false;
-    }
-  }
-
-  checkAll(value: boolean): void {
-    // this.listOfDisplayData.forEach(item => (this.mapOfCheckedId[item.id] = value));
-    this.listOfDisplayData.forEach(item => (this.mapOfCheckedId[item.id] = value));
-    this.refreshStatus();
-  }
-
+  
   // 搜索条件发生变化
   searchOptionsChange(option?:any) {
     
@@ -91,18 +85,19 @@ export class ApproveNotStartedComponent implements OnInit {
     option = option || this.searchOption;
 
     if(this.list.length !== 0) {
-      this.isIndeterminate = false;
       let object:any = {};
       for (const key in option) {
         if (option.hasOwnProperty(key)) {
           const element = option[key];
-          object[key] = element;
+          if(key === 'code') {
+            object['supplier_code'] = element;
+          }else {
+            object[key] = element;
+          }
         }
       }
 
       this.listOfData = this.commonFn.filterListOfData(this.list, object);
-      console.log('项目支付草稿: ', this.listOfData);
     }
   }
-
 }

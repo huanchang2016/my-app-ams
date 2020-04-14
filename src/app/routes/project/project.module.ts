@@ -25,6 +25,8 @@ import { MyInApprovalListComponent } from './approval-project/my-in-approval-lis
 import { RefuseProjectListComponent } from './my-project/refuse-project-list/refuse-project-list.component';
 import { MyApprovaledListComponent } from './approval-project/my-approvaled-list/my-approvaled-list.component';
 import { MyForApprovaledListComponent } from './approval-project/my-for-approvaled-list/my-for-approvaled-list.component';
+import { ProjectListCComponent } from './my-project/project-list-c/project-list-c.component';
+import { ApprovalProjectListCComponent } from './approval-project/approval-project-list-c/approval-project-list-c.component';
 
 const COMPONENTS = [
   DraftListComponent,
@@ -34,7 +36,8 @@ const COMPONENTS = [
   ProjectViewComponent,
   MyInApprovalListComponent,
   RefuseProjectListComponent,
-  MyApprovaledListComponent
+  MyApprovaledListComponent,
+  MyForApprovaledListComponent
 ];
 const COMPONENTS_NOROUNT = [
   ProductSearchOptionComponent,
@@ -51,7 +54,8 @@ const COMPONENTS_NOROUNT = [
   ProjectContractFormComponent,
   SupplierContractListComponent,
   SupplierContractListComponent,
-  ProjectEditSuccessComponent
+  ProjectEditSuccessComponent,
+  ProjectListCComponent
 ];
 
 @NgModule({
@@ -62,7 +66,7 @@ const COMPONENTS_NOROUNT = [
   declarations: [
     ...COMPONENTS,
     ...COMPONENTS_NOROUNT,
-    MyForApprovaledListComponent
+    ApprovalProjectListCComponent
   ],
   entryComponents: COMPONENTS_NOROUNT
 })

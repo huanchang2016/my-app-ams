@@ -1,19 +1,25 @@
-import { Component, OnInit } from '@angular/core';
+/*****
+ *  1. 所有列表数据基本结构完全相同；
+ *  2. 传入不同参数： 数据请求地址
+ * *******/
+
+import { Component, OnInit, Input } from '@angular/core';
 import { CommonFunctionService } from 'src/app/routes/service/common-function.service';
 import { ApiData } from 'src/app/data/interface.data';
 import { SettingsConfigService } from 'src/app/routes/service/settings-config.service';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-approve-not-started',
-  templateUrl: './approve-not-started.component.html',
+  selector: 'app-apply-list-c',
+  templateUrl: './apply-list-c.component.html',
   styles: []
 })
-export class ApproveNotStartedComponent implements OnInit {
+export class ApplyListCComponent implements OnInit {
+  @Input() postUrl:string;
 
   list: any[] = [];
   listOfData:any[] = [];
-  loading: boolean = false;
+  loading: boolean = true;
   searchOption:any = {};
 
   total = 0;
@@ -44,11 +50,11 @@ export class ApproveNotStartedComponent implements OnInit {
 
   getDataList() { // 获取单位下的数据
     this.loading = true;
-    this.settingConfigService.get('/api/my/pay/project', this.pageOption).subscribe((res:ApiData) => {
+    this.settingConfigService.get(this.postUrl, this.pageOption).subscribe((res:ApiData) => {
       console.log(res);
       this.loading = false;
       if(res.code === 200) {
-        let data:any[] = res.data.project;
+        let data:any[] = res.data.contract_pay;
         this.total = res.data.count;
         this.list = data;
         this.listOfDisplayData = this.list;
@@ -57,6 +63,10 @@ export class ApproveNotStartedComponent implements OnInit {
     });
   }
 
+  
+  view(data:any) {
+    this.router.navigateByUrl(`/approve/contract/apply/pay/edit/${data.project.id}?contract_pay_id=${data.id}`);
+  }
   pageIndexChange($event:number) {
     this.pageOption.page = $event;
     this.getDataList();
@@ -101,8 +111,7 @@ export class ApproveNotStartedComponent implements OnInit {
       }
 
       this.listOfData = this.commonFn.filterListOfData(this.list, object);
-      console.log('项目支付草稿: ', this.listOfData);
+      console.log('数据列表 ', this.listOfData);
     }
   }
-
 }

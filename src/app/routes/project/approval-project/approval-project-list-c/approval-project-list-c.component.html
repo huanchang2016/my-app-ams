@@ -1,0 +1,93 @@
+<div class="hidden-pc search-btn-mobile rounded-sm bg-primary text-white text-lg text-center">
+    <i nz-icon nzType="menu-{{ isCollapsed ? 'unfold' : 'fold' }}" nzTheme="outline" (click)="openComponent()"></i>
+</div>
+
+<div class="hidden-mobile">
+    <app-product-search-option [COMPANY]="companyArray" [isAdd]="false" (searchOptionsEmit)="searchOptionsChange($event)"></app-product-search-option>
+</div>
+<nz-table
+    #ajaxTable
+    nzShowSizeChanger
+    [nzFrontPagination]="false"
+    [nzData]="listOfData"
+    [nzLoading]="loading"
+    [nzTotal]="total"
+    [(nzPageIndex)]="pageOption.page"
+    [(nzPageSize)]="pageOption.page_size"
+    (nzPageIndexChange)="pageIndexChange($event)"
+    (nzPageSizeChange)="pageSizeChange($event)"
+    class="mt-md hidden-mobile">
+    <thead>
+        <tr>
+            <th>序号</th>
+            <th>项目</th>
+            <th>基础信息</th>
+            <th>创建人信息</th>
+            <th>状态</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let data of ajaxTable.data; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ data.name }}</td>
+            <td>
+                <sv-container size="small" col="1">
+                    <sv label="项目编号"><span class="font-weight-bold">{{ data.number }}</span></sv>
+                    <sv label="项目类型">{{ data.category?.name }}</sv>
+                    <sv label="项目来源">{{ data.origin?.code.code_name + data.origin?.name }}</sv>
+                </sv-container>
+            </td>
+            <td>
+                <sv-container size="small" col="1">
+                    <sv label="创&nbsp;&nbsp;建&nbsp;&nbsp;人"><span class="font-weight-bold">{{ data.user?.name }}</span></sv>
+                    <sv label="部&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;门">{{ data.department?.name }}</sv>
+                    <sv label="单&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;位">{{ data.company?.name }}</sv>
+                </sv-container>
+            </td>
+            <td>
+                <span class="text-primary text-xs ml-md" [class.text-error]="data.project_status?.name === '未通过'" [class.text-success]="data.project_status?.name === '已通过'">{{ data.project_status?.name }}</span>
+            </td>
+            <td>
+                <a (click)="view(data)"><i nz-icon nzType="eye" nzTheme="outline"></i></a>
+            </td>
+        </tr>
+    </tbody>
+</nz-table>
+<div class="hidden-pc mt-md">
+    <div *ngIf="loading && listOfData.length === 0" class="p-md text-center">
+        <nz-spin nzSimple></nz-spin>
+    </div>
+    <div *ngIf="!loading && listOfData.length === 0" class="p-md text-center">
+        无数据
+    </div>
+    <div *ngIf="!loading && listOfData.length !== 0">
+        <ng-container *ngFor="let data of listOfData">
+            <nz-card [nzActions]="[actionView]" class="mt-md">
+                <nz-skeleton [nzActive]="true" [nzLoading]="false">
+                    <nz-card-meta [nzTitle]="cardMetaTitleTpl"></nz-card-meta>
+                    <ng-template #cardMetaTitleTpl>
+                        <span>{{ data.name }}</span>
+                        <span class="text-primary text-xs ml-md" [class.text-error]="data.project_status?.name === '已提交，未通过'" [class.text-success]="data.project_status?.name === '已通过'">{{ data.project_status?.name }}</span>
+                    </ng-template>
+                    <div class="pt-md">
+                        <sv-container size="small">
+                            <sv label="项目编号"><span class="font-weight-bold">{{ data.number }}</span></sv>
+                            <sv label="项目类型">{{ data.category?.name }}</sv>
+                            <sv label="项目来源">{{ data.origin?.code.code_name + data.origin?.name }}</sv>
+                            <sv label="创&nbsp;&nbsp;建&nbsp;&nbsp;人"><span class="font-weight-bold">{{ data.user?.name }}</span></sv>
+                            <sv label="部&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;门">{{ data.department?.name }}</sv>
+                            <sv label="单&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;位">{{ data.company?.name }}</sv>
+                        </sv-container>
+                    </div>
+                </nz-skeleton>
+                <ng-template #actionView>
+                    <a (click)="view(data)"><i nz-icon nzType="eye" nzTheme="outline"></i></a>
+                </ng-template>
+            </nz-card>
+        </ng-container>
+        <div class="mt-md text-center">
+            <nz-pagination [nzSize]="'small'" nzShowSizeChanger [(nzPageSize)]="pageOption.page_size" [nzPageIndex]="pageOption.page" [nzTotal]="total" (nzPageIndexChange)="pageIndexChange($event)" (nzPageSizeChange)="pageSizeChange($event)"></nz-pagination>
+        </div>
+    </div>
+</div>

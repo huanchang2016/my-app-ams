@@ -38,6 +38,10 @@ import { NoContractForApproveListComponent } from './no-contract-approve-manage/
 import { NoContractApprovedFinishedListComponent } from './no-contract-approve-manage/approve-pay/no-contract-approved-finished-list/no-contract-approved-finished-list.component';
 import { NoContractApprovedWithoutListComponent } from './no-contract-approve-manage/approve-pay/no-contract-approved-without-list/no-contract-approved-without-list.component';
 import { NoContractApproveViewComponent } from './no-contract-approve-manage/approve-pay/no-contract-approve-view/no-contract-approve-view.component';
+import { ApplyListCComponent } from './contract-approve-manage/apply-for/apply-list-c/apply-list-c.component';
+import { ApproveListCComponent } from './contract-approve-manage/approve-pay/approve-list-c/approve-list-c.component';
+import { NoContractPayListCComponent } from './no-contract-approve-manage/approve-pay/no-contract-pay-list-c/no-contract-pay-list-c.component';
+import { NoContractApplyListCComponent } from './no-contract-approve-manage/apply-for/no-contract-apply-list-c/no-contract-apply-list-c.component';
 
 const COMPONENTS = [
   // 有合约  合约审批管理
@@ -73,7 +77,11 @@ const COMPONENTS = [
 ];
 const COMPONENTS_NOROUNT = [
   ApproveSearchOptionComponent,
-  PaymentContractFormComponent
+  PaymentContractFormComponent,
+  ApplyListCComponent,
+  ApproveListCComponent,
+  NoContractPayListCComponent,
+  NoContractApplyListCComponent
 ];
 
 @NgModule({

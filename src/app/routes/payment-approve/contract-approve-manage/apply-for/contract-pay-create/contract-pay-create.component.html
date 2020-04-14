@@ -10,21 +10,21 @@
 
   <ng-template #actionBtn>
     <ng-container *ngIf="selectedContract && listOfData.length !== 0 ">
-      <button *ngIf="!contractInfo || contractInfo.draft" nz-button [nzType]="'dashed'" (click)="submitPayAmount()" [nzLoading]="submitLoading" class="mt-lg">保存合同支付</button>
+      <button *ngIf="!contractInfo || contractInfo.draft" nz-button [nzType]="'dashed'" (click)="submitPayAmount()" [nzLoading]="submitLoading" class="ml-xs">保存合同支付</button>
 
-      <a *ngIf="!contractInfo || contractInfo.draft" nz-popconfirm nz-button [nzType]="'primary'" class="mx-sm"
+      <button *ngIf="!contractInfo || contractInfo.draft" nz-popconfirm nz-button [nzType]="'primary'" class="ml-xs"
           nzPopconfirmTitle="请确认合同支付信息填写完整，无误后继续提交！！！"
           (nzOnConfirm)="submitContractPay()"
           (nzOnCancel)="cancel()">
           提交支付申请
-      </a>
+      </button>
     </ng-container>
    
   </ng-template>
 
   <sv-container size="small" col="2">
     <sv label="项目名称"><strong>{{ projectInfo?.name }}</strong></sv>
-    <sv label="客户"><strong>{{ projectInfo?.customer?.name }}</strong></sv>
+    <sv label="客&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;户"><strong>{{ projectInfo?.customer?.name }}</strong></sv>
     <sv label="负责部门">{{ projectInfo?.department?.name }}</sv>
     <sv label="创建时间">{{ projectInfo?.create_time | date: 'yyyy/MM/dd HH:mm:ss' }}</sv>
     <sv label="项目创建人">{{ projectInfo?.user.name }}</sv>

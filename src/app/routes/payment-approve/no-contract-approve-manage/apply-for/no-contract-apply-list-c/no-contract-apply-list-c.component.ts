@@ -1,15 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { CommonFunctionService } from 'src/app/routes/service/common-function.service';
 import { ApiData } from 'src/app/data/interface.data';
 import { SettingsConfigService } from 'src/app/routes/service/settings-config.service';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-approve-not-started',
-  templateUrl: './approve-not-started.component.html',
+  selector: 'app-no-contract-apply-list-c',
+  templateUrl: './no-contract-apply-list-c.component.html',
   styles: []
 })
-export class ApproveNotStartedComponent implements OnInit {
+export class NoContractApplyListCComponent implements OnInit {
+
+  @Input() postUrl:string;
 
   list: any[] = [];
   listOfData:any[] = [];
@@ -23,13 +25,7 @@ export class ApproveNotStartedComponent implements OnInit {
     page_size: 10
   };
 
-  // TODO: checkbox
-  isAllDisplayDataChecked = false;
-  isOperating = false;
-  isIndeterminate = false;
-  listOfDisplayData: any[] = [];
   // listOfData: any[] = [];
-  mapOfCheckedId: { [key: string]: boolean } = {};
   selectedMemberIds: number[] = []; // 已选成员
   // TODO: checkbox
   constructor(
@@ -42,19 +38,23 @@ export class ApproveNotStartedComponent implements OnInit {
     this.getDataList();
   }
 
-  getDataList() { // 获取单位下的数据
+  getDataList() {
     this.loading = true;
-    this.settingConfigService.get('/api/my/pay/project', this.pageOption).subscribe((res:ApiData) => {
-      console.log(res);
+    this.settingConfigService.get(this.postUrl, this.pageOption).subscribe((res:ApiData) => {
+      console.log('协议支付信息，进行中。。。', res);
+
       this.loading = false;
       if(res.code === 200) {
-        let data:any[] = res.data.project;
+        let data:any[] = res.data.treaty_pay;
         this.total = res.data.count;
         this.list = data;
-        this.listOfDisplayData = this.list;
         this.searchOptionsChange();
       }
     });
+  }
+
+  view(data:any) {
+    this.router.navigateByUrl(`/approve/no-contract/apply/pay/edit/${data.project.id}?treaty_pay_id=${data.id}`);
   }
 
   pageIndexChange($event:number) {
@@ -66,23 +66,6 @@ export class ApproveNotStartedComponent implements OnInit {
     this.getDataList();
   }
 
-  refreshStatus(): void {
-    if(this.listOfDisplayData.length !== 0) {
-      this.isAllDisplayDataChecked = this.listOfDisplayData.every(item => this.mapOfCheckedId[item.id]);
-      this.isIndeterminate =
-        this.listOfDisplayData.some(item => this.mapOfCheckedId[item.id]) &&
-        !this.isAllDisplayDataChecked;
-    }else {
-      this.isIndeterminate = false;
-    }
-  }
-
-  checkAll(value: boolean): void {
-    // this.listOfDisplayData.forEach(item => (this.mapOfCheckedId[item.id] = value));
-    this.listOfDisplayData.forEach(item => (this.mapOfCheckedId[item.id] = value));
-    this.refreshStatus();
-  }
-
   // 搜索条件发生变化
   searchOptionsChange(option?:any) {
     
@@ -91,7 +74,6 @@ export class ApproveNotStartedComponent implements OnInit {
     option = option || this.searchOption;
 
     if(this.list.length !== 0) {
-      this.isIndeterminate = false;
       let object:any = {};
       for (const key in option) {
         if (option.hasOwnProperty(key)) {
@@ -104,5 +86,4 @@ export class ApproveNotStartedComponent implements OnInit {
       console.log('项目支付草稿: ', this.listOfData);
     }
   }
-
 }

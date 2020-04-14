@@ -82,6 +82,9 @@
     <div *ngIf="loading && listOfData.length === 0" class="p-md text-center">
         <nz-spin nzSimple></nz-spin>
     </div>
+    <div *ngIf="!loading && listOfData.length === 0" class="p-md text-center">
+        无数据
+    </div>
     <div *ngIf="!loading && listOfData.length !== 0">
         <ng-container *ngFor="let data of listOfData">
             <nz-card [nzActions]="[ actionEdit, actionView, actionDelete, actionSubmit ]" class="mt-md">

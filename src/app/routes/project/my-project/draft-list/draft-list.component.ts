@@ -29,7 +29,7 @@ export class DraftListComponent implements OnInit {
 
   list: any[] = [];
   listOfData:any[] = [];
-  loading: boolean = false;
+  loading: boolean = true;
   searchOption:any = {};
 
   total = 0;

@@ -15,38 +15,51 @@
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let data of basicTable.data; let i = index">
-            <td>{{ i + 1 }}</td>
-            <td>{{ data.name }}</td>
-            <td>
-                <sv-container size="small" col="1">
-                    <sv label="方式">{{ data.invoice.name }}</sv>
-                    <sv label="税率"><span class="text-error">{{ data.rate }}</span></sv>
-                </sv-container>
-            </td>
-            <td>
-                <sv-container size="small" col="1">
-                    <sv label="部门">{{ data.department.name }}</sv>
-                    <sv label="单位">{{ data.company.name }}</sv>
-                </sv-container>
-            </td>
-            <td>
-                <span [innerHtml]="data.remark | showTextareaContent"></span>
-            </td>
-            <td>
-                <span [innerHTML]="data.active | yn"></span>
-            </td>
-            <td>
-                <a (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
-                <nz-divider nzType="vertical"></nz-divider>
-                <ng-container *ngIf="data.active; else activeFalse">
-                    <a (click)="disabled(data.id)">禁用</a>
-                </ng-container>
-                <ng-template #activeFalse>
-                    <a (click)="enabled(data.id)">启用</a>
-                </ng-template>
-            </td>
-        </tr>
+        <ng-container *ngFor="let data of basicTable.data;let i = index">
+            <tr>
+                <td>{{ i + 1 }}</td>
+                <td>{{ data.name }}</td>
+                <td>
+                    <sv-container size="small" col="1">
+                        <sv label="方式">{{ data.invoice.name }}</sv>
+                        <sv label="税率"><span class="text-error">{{ data.rate }}</span></sv>
+                    </sv-container>
+                </td>
+                <td>
+                    <sv-container size="small" col="1">
+                        <sv label="部门">{{ data.department.name }}</sv>
+                        <sv label="单位">{{ data.company.name }}</sv>
+                    </sv-container>
+                </td>
+                <td>
+                    <span [innerHtml]="data.remark | showTextareaContent"></span>
+                </td>
+                <td>
+                    <span [innerHTML]="data.active | yn"></span>
+                </td>
+                <td>
+                    <a (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
+                    
+                    <nz-divider nzType="vertical"></nz-divider>
+
+                    <a (click)="showNodeList(data.id)">税目明细<i nz-icon
+                        nzType="{{ showExpand[data.id] ? 'caret-up' : 'caret-down' }}" nzTheme="outline"></i></a>
+
+                    <nz-divider nzType="vertical"></nz-divider>
+                    <ng-container *ngIf="data.active; else activeFalse">
+                        <a (click)="disabled(data.id)">禁用</a>
+                    </ng-container>
+                    <ng-template #activeFalse>
+                        <a (click)="enabled(data.id)">启用</a>
+                    </ng-template>
+                </td>
+            </tr>
+            <tr *ngIf="showExpand[data.id]" style="background-color: #f1f1f1;">
+                <td colspan="7">
+                <app-pro-subincome-list-c [tax]="data"></app-pro-subincome-list-c>
+                </td>
+            </tr>
+        </ng-container>
     </tbody>
 </nz-table>
 <div class="hidden-pc mt-md">

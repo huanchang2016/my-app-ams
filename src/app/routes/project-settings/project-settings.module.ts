@@ -10,6 +10,8 @@ import { IncomeSearchComponentComponent } from './project-income-list/income-sea
 import { ProjectServiceCategoryListComponent } from './project-service-category-list/project-service-category-list.component';
 import { ServiceCategoryFormComponent } from './project-service-category-list/service-category-form/service-category-form.component';
 import { ServiceCategorySearchComponent } from './project-service-category-list/service-category-search/service-category-search.component';
+import { ProSubincomeListCComponent } from './project-income-list/pro-subincome-list-c/pro-subincome-list-c.component';
+import { SubincomeFormCComponent } from './project-income-list/pro-subincome-list-c/subincome-form-c/subincome-form-c.component';
 
 const COMPONENTS = [
   ProjectCostListComponent,
@@ -22,7 +24,9 @@ const COMPONENTS_NOROUNT = [
   IncomeFormComponentComponent,
   IncomeSearchComponentComponent,
   ServiceCategoryFormComponent,
-  ServiceCategorySearchComponent
+  ServiceCategorySearchComponent,
+  ProSubincomeListCComponent,
+  SubincomeFormCComponent
 ];
 
 @NgModule({

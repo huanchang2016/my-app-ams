@@ -1,0 +1,41 @@
+<nz-card>
+    <nz-radio-group [(ngModel)]="status" (ngModelChange)="statusChange()" [nzButtonStyle]="'solid'">
+        <label nz-radio-button [nzValue]="true">有效</label>
+        <label nz-radio-button [nzValue]="false">无效</label>
+    </nz-radio-group>
+    <button nz-button nzType="primary" (click)="add()" class="mb-sm ml-md">创建税目类别</button>
+    <nz-table #basicTable [nzData]="listOfData" [nzLoading]="loading" [nzFrontPagination]="false"
+        class="mt-md hidden-mobile">
+        <thead>
+            <tr>
+                <th>序号</th>
+                <th>类别名称</th>
+                <th>状态</th>
+                <th>操作（拖动排序）</th>
+            </tr>
+        </thead>
+        <tbody cdkDropList (cdkDropListDropped)="drop($event)">
+            <tr *ngFor="let data of listOfData; let i = index" cdkDrag>
+                <td>{{ i + 1 }}</td>
+                <td>{{ data.name }}</td>
+                <td><span [innerHTML]="data.active | yn"></span></td>
+                <td>
+                    <a (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
+
+                    <nz-divider nzType="vertical"></nz-divider>
+
+                    <a *ngIf="data.active" nz-popconfirm nzPopconfirmTitle="确认是否需要禁用当前税目类型" class="text-error"
+                        (nzOnConfirm)="disabled(data.id)" (nzOnCancel)="cancel()">
+                        禁用
+                    </a>
+                    <a *ngIf="!data.active" nz-popconfirm nzPopconfirmTitle="确认是否需要启用当前税目类型"
+                        (nzOnConfirm)="enabled(data.id)" (nzOnCancel)="cancel()">
+                        启用
+                    </a>
+
+                </td>
+            </tr>
+        </tbody>
+    </nz-table>
+
+</nz-card>

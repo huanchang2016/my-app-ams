@@ -18,6 +18,9 @@ export class ProjectIncomeListComponent implements OnInit {
   list: any[] = [];
   listOfData:any[] = [];
   loading: boolean = false;
+
+  showExpand:{ [key: string]: boolean } = {};
+
   constructor(
     private modalService: NzModalService,
     private commonFn: CommonFunctionService,
@@ -71,6 +74,10 @@ export class ProjectIncomeListComponent implements OnInit {
       }
     });
 
+  }
+  
+  showNodeList(id:number):void {
+    this.showExpand[id] = !this.showExpand[id];
   }
   
   disabled(id:number):void {

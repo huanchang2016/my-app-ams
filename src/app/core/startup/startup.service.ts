@@ -190,6 +190,17 @@ export class StartupService {
           ]
         },
         {
+          text: '账务管理',
+          link: '/bill',
+          icon: { type: 'icon', value: 'transaction' },
+          children: [
+            {
+              text: '发票管理',
+              link: '/bill/invoices'
+            }
+          ]
+        },
+        {
           text: '项目配置管理',
           link: '/pro-settings',
           icon: { type: 'icon', value: 'control' },

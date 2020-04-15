@@ -4,11 +4,11 @@ import { List, ApiData } from 'src/app/data/interface.data';
 import { SettingsConfigService } from 'src/app/routes/service/settings-config.service';
 
 @Component({
-  selector: 'app-user-search-option',
-  templateUrl: './user-search-option.component.html',
-  styleUrls: ['./user-search-option.component.less']
+  selector: 'app-bill-reminder-invoices-search',
+  templateUrl: './invoices-search.component.html',
+  styleUrls: ['./invoices-search.component.less']
 })
-export class UserSearchOptionComponent implements OnInit {
+export class BillReminderInvoicesSearchComponent implements OnInit {
   validateForm: FormGroup;
 
   @Input() COMPANY:List[];

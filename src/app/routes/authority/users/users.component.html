@@ -22,13 +22,17 @@
                     <div>{{ data.name }}</div>
                 </td>
                 <td>
-                    <div>{{ data.tel }}</div>
-                    <div>{{ data.mail }}</div>
+                    <sv-container size="small" col="1">
+                        <sv label="电话">{{ data.tel }}</sv>
+                        <sv label="邮箱">{{ data.mail }}</sv>
+                    </sv-container>
                 </td>
                 <td>
-                    <div>{{ data.company.name }}</div>
-                    <div>{{ data.department.name }}</div>
-                    <div>{{ data.position.name }}</div>
+                    <sv-container size="small" col="1">
+                        <sv label="职位">{{ data.position.name }}</sv>
+                        <sv label="部门">{{ data.department.name }}</sv>
+                        <sv label="单位">{{ data.company.name }}</sv>
+                    </sv-container>
                 </td>
                 <!-- <td>
                     <a (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>

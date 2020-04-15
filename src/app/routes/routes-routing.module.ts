@@ -23,7 +23,7 @@ const routes: Routes = [
     canActivate: [SimpleGuard],
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-      { path: 'dashboard', component: DashboardComponent, data: { title: '仪表盘', titleI18n: 'dashboard' } },
+      { path: 'dashboard', component: DashboardComponent, data: { title: '数据中心', titleI18n: '数据中心' } },
       { path: 'exception', loadChildren: () => import('./exception/exception.module').then(m => m.ExceptionModule) },
       // 业务子模块
       // { path: 'widgets', loadChildren: () => import('./widgets/widgets.module').then(m => m.WidgetsModule) },
@@ -33,6 +33,8 @@ const routes: Routes = [
       { path: 'pro-settings', loadChildren: () => import('./project-settings/project-settings.module').then( m => m.ProjectSettingsModule ) },
       // 支付审批管理
       { path: 'approve', loadChildren: () => import('./payment-approve/payment-approve.module').then( m => m.PaymentApproveModule ) },
+      // 账务管理 （发票、账务处理）
+      { path: 'bill', loadChildren: () => import('./bill-reminder/bill-reminder.module').then( m => m.BillReminderModule ) },
       // 项目流程管理
       { path: 'workflow', loadChildren: () => import('./workflow/workflow.module').then( m => m.WorkflowModule ) },
       // 基础配置

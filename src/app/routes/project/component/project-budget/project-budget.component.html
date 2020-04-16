@@ -1,45 +1,11 @@
 <div class="steps-content-box">
 
-    <nz-card class="mb-md">
-        <div class="project-info">
-            <div nz-row [nzGutter]="24" nzType="flex" *ngIf="projectInfo">
-                <div class="pro-info-list" nz-col nzSpan="24">
-                    <span class="label-title">项目名称</span>： <span class="font-weight-bold">{{ projectInfo.name }}</span>
-                </div>
-                <div class="pro-info-list" nz-col nzSpan="24">
-                    <span class="label-title">项目业主</span>： <span
-                        class="font-weight-bold">{{ projectInfo.customer?.name }}</span>
-                </div>
-                <div class="pro-info-list" nz-col [nzSm]="{span:24}" [nzMd]="{span: 12}">
-                    <span class="label-title">负责部门</span>： <span
-                        class="font-weight-bold">{{ projectInfo.department?.name }}</span>
-                </div>
-                <div class="pro-info-list" nz-col [nzSm]="{span:24}" [nzMd]="{span: 12}">
-                    <span class="label-title">项目类型</span>： <span
-                        class="font-weight-bold">{{ projectInfo.category?.name }}</span>
-                </div>
-                <div class="pro-info-list" nz-col [nzSm]="{span:24}" [nzMd]="{span: 12}">
-                    <span class="label-title">计划执行时间</span>： <span
-                        class="font-weight-bold">{{ projectInfo.plan_execution_start_time }} 至
-                        {{ projectInfo.plan_execution_end_time }}</span>
-                </div>
-                <div class="pro-info-list" nz-col [nzSm]="{span:24}" [nzMd]="{span: 12}">
-                    <span class="label-title">项目来源</span>： <span
-                        class="font-weight-bold">{{ projectInfo.origin.code.code_name + projectInfo.origin.name }}</span>
-                </div>
-                <div class="pro-info-list" nz-col [nzSm]="{span:24}" [nzMd]="{span: 12}">
-                    <span class="label-title">实际执行时间</span>： <span
-                        class="font-weight-bold">{{ projectInfo.actual_execution_start_time }} 至
-                        {{ projectInfo.actual_execution_end_time }}</span>
-                </div>
-            </div>
-        </div>
-    </nz-card>
+    <app-project-info-show-c [projectInfo]="projectInfo"></app-project-info-show-c>
+
     <nz-card>
         <form nz-form [formGroup]="validateForm">
-
             <div nz-row [nzGutter]="24" nzType="flex">
-                <div nz-col [nzSm]="{span:24}" [nzMd]="{span: 12}" class="border-right">
+                <div nz-col [nzSm]="24" [nzMd]="12" class="border-right">
                     <div nz-row>
                         <div nz-col [nzSpan]="24" class="font-weight-bold text-md mb-sm">预算收入</div>
                         <div nz-col [nzSpan]="24">
@@ -67,31 +33,25 @@
                             </nz-form-item>
                         </div>
                         <div nz-col [nzSpan]="24">
-                            <div class="text-right">
-                                <span class="label-title">不含税收入</span>:
-                                <strong
-                                    class="label-value text-right text-md ml-md text-primary">{{ currentCountResult.no_tax_income || 0 | number: '1.2-2' }}</strong>
-                            </div>
-                            <div class="text-right">
-                                <span class="label-title">税率</span>:
-                                <strong
-                                    class="label-value text-right text-md ml-md text-error">{{ currentCountResult.rate || 0 }} %</strong>
-                            </div>
-                            <div class="text-right">
-                                <span class="label-title">税金</span>:
-                                <strong
-                                    class="label-value text-right text-md ml-md text-error">{{ currentCountResult.tax_income || 0 | number: '1.2-2' }}</strong>
-                            </div>
-                            <div class="text-right">
-                                <span class="label-title">价税合计</span>:
-                                <strong
-                                    class="label-value text-right text-md ml-md">{{ currentCountResult.income || 0 | number: '1.2-2' }}</strong>
-                            </div>
+                            <sv-container col="1" class="float-right text-right">
+                                <sv label="不含税收入">
+                                    <strong class="text-primary">{{ currentCountResult.no_tax_income || 0 | currency: 'CNY' }}</strong>
+                                </sv>
+                                <sv label="税&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;率">
+                                    <strong class="text-error">{{ currentCountResult.rate || 0 }} %</strong>
+                                </sv>
+                                <sv label="税&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;金">
+                                    <strong class="text-error">{{ currentCountResult.tax_income || 0 | currency: 'CNY' }}</strong>
+                                </sv>
+                                <sv label="价税合计">
+                                    <strong class="">{{ currentCountResult.income || 0 | currency: 'CNY' }}</strong>
+                                </sv>
+                            </sv-container>
                         </div>
 
                     </div>
                 </div>
-                <div nz-col [nzSm]="{span:24}" [nzMd]="{span: 12}">
+                <div nz-col [nzSm]="24" [nzXs]="24" [nzMd]="12">
                     <div nz-row>
                         <div nz-col [nzSpan]="24" class="cost-title font-weight-bold text-md mb-sm">
                             <span>预算成本</span>
@@ -107,11 +67,15 @@
                 </div>
 
 
-                <div nz-col [nzSpan]="24" class="m-lg">
-                    <span class="font-weight-bold text-md mr-lg">项目毛利润： <span
-                            class="text-primary">{{ currentCountResult.gross_profit }}</span></span>
-                    <span class="ml-lg font-weight-bold text-md">项目毛利率： <span
-                            class="text-primary">{{ currentCountResult.gross_profit_percent }}</span></span>
+                <div nz-col [nzSpan]="24" class="my-lg">
+                    <sv-container class="profit-count" col="2">
+                        <sv label="毛利润">
+                            <span class="text-primary font-weight-bold">{{ currentCountResult.gross_profit | currency: 'CNY' }}</span>
+                        </sv>
+                        <sv label="毛利率">
+                            <span class="text-primary font-weight-bold">{{ currentCountResult.gross_profit_percent }}</span>
+                        </sv>
+                    </sv-container>
                 </div>
 
 

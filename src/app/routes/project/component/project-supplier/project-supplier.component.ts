@@ -19,13 +19,13 @@ export class ProjectSupplierComponent implements OnChanges, OnInit {
 
   dataList:any[] = [];
 
-  isAllDisplayDataChecked = false;
-  isOperating = false;
-  isIndeterminate = false;
-  listOfDisplayData: any[] = [];
+  // isAllDisplayDataChecked = false;
+  // isOperating = false;
+  // isIndeterminate = false;
+  // listOfDisplayData: any[] = [];
   listOfAllData: any[] = [];
   mapOfCheckedId: { [key: string]: boolean } = {};
-  numberOfChecked = 0;
+  // numberOfChecked = 0;
 
 
   constructor(
@@ -87,29 +87,29 @@ export class ProjectSupplierComponent implements OnChanges, OnInit {
   
   
   
-  refreshStatus(): void {
-    this.isAllDisplayDataChecked = this.listOfDisplayData
-      .every(item => this.mapOfCheckedId[item.id]);
-    this.isIndeterminate =
-      this.listOfDisplayData.some(item => this.mapOfCheckedId[item.id]) &&
-      !this.isAllDisplayDataChecked;
-    this.numberOfChecked = this.listOfAllData.filter(item => this.mapOfCheckedId[item.id]).length;
-  }
+  // refreshStatus(): void {
+  //   this.isAllDisplayDataChecked = this.listOfDisplayData
+  //     .every(item => this.mapOfCheckedId[item.id]);
+  //   this.isIndeterminate =
+  //     this.listOfDisplayData.some(item => this.mapOfCheckedId[item.id]) &&
+  //     !this.isAllDisplayDataChecked;
+  //   this.numberOfChecked = this.listOfAllData.filter(item => this.mapOfCheckedId[item.id]).length;
+  // }
 
-  checkAll(value: boolean): void {
-    this.listOfDisplayData.filter(item => !item.disabled).forEach(item => (this.mapOfCheckedId[item.id] = value));
-    this.refreshStatus();
-  }
+  // checkAll(value: boolean): void {
+  //   this.listOfDisplayData.filter(item => !item.disabled).forEach(item => (this.mapOfCheckedId[item.id] = value));
+  //   this.refreshStatus();
+  // }
 
   // 删除所有选择的 供应商 数据
-  deletedSelectList(): void {
-    this.isOperating = true;
-    setTimeout(() => {
-      this.listOfAllData.forEach(item => (this.mapOfCheckedId[item.id] = false));
-      this.refreshStatus();
-      this.isOperating = false;
-    }, 1000);
-  }
+  // deletedSelectList(): void {
+  //   this.isOperating = true;
+  //   setTimeout(() => {
+  //     this.listOfAllData.forEach(item => (this.mapOfCheckedId[item.id] = false));
+  //     this.refreshStatus();
+  //     this.isOperating = false;
+  //   }, 1000);
+  // }
 
 
   showExpand:{ [key: string]: boolean } = {};
@@ -119,7 +119,8 @@ export class ProjectSupplierComponent implements OnChanges, OnInit {
     this.settingConfigService.get(`/api/supplier/project/${this.projectInfo.id}`).subscribe((res:ApiData) => {
       // console.log(res, 'get supplier info!');
       if(res.code === 200) {
-        this.listOfDisplayData = this.listOfAllData = res.data.supplier;
+        // this.listOfDisplayData = this.listOfAllData = res.data.supplier;
+        this.listOfAllData = res.data.supplier;
         // 是否默认展示供应商下 合约列表数据
         this.listOfAllData.forEach(item => (this.showExpand[item.id] = false));
       }
@@ -153,7 +154,8 @@ export class ProjectSupplierComponent implements OnChanges, OnInit {
     this.settingConfigService.post(`/api/supplier/project/delete`, opt).subscribe((res:ApiData) => {
       if(res.code === 200) {
         this.msg.success('供应商删除成功');
-        this.listOfDisplayData = this.listOfAllData = this.listOfAllData.filter( v => v.id !== id);
+        // this.listOfDisplayData = this.listOfAllData = this.listOfAllData.filter( v => v.id !== id);
+        this.listOfAllData = this.listOfAllData.filter( v => v.id !== id);
       }else {
         this.msg.error(res.error || '删除失败');
       }

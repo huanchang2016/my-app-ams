@@ -1,3 +1,5 @@
+@import '~@delon/theme/styles/default';
+
 .info-form {
     max-width: 1000px;
     margin: 0 auto;
@@ -7,4 +9,14 @@ nz-form-label {
 }
 nz-form-control {
     flex-grow: 1;
+}
+:host {
+  ::ng-deep {
+    @media screen and (max-width: @screen-sm) {
+        nz-form-label {
+            width: 80px;
+            min-width: 80px;
+        }
+    }
+  }
 }

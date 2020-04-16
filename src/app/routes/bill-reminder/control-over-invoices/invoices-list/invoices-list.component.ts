@@ -49,7 +49,7 @@ export class BillReminderInvoicesListComponent implements OnInit {
   createComponentModal(data:any = null): void {
     console.log(data);
     const modal = this.modalService.create({
-      nzTitle: (!data ? '新增' : '编辑') + '用户',
+      nzTitle: !data ? '新增' : '编辑',
       nzContent: BillReminderInvoicesFormComponent,
       nzWrapClassName: 'modal-lg',
       nzMaskClosable: false,

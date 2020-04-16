@@ -1,6 +1,18 @@
+@import '~@delon/theme/styles/default';
 .steps-content {
     min-height: 400px;
     width: 100%;
     margin: 24px auto 0;
-    background-color: #fafafa;
+    // background-color: #fafafa;
+}
+
+:host {
+  ::ng-deep {
+    @media screen and (max-width: @screen-sm) {
+        .steps-content {
+            // background-color: #fff;
+            margin: 0;
+        }
+    }
+  }
 }

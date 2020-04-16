@@ -15,6 +15,7 @@ import { ApiData } from 'src/app/data/interface.data';
 /**
  * Used for application startup
  * Generally used to get the basic data of the application, like: Menu Data, User Data, etc.
+ * 初始基础数据信息
  */
 @Injectable()
 export class StartupService {

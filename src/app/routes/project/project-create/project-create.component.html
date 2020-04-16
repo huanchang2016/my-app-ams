@@ -9,14 +9,20 @@
 </page-header>
 
 <nz-card>
-    <nz-steps [nzCurrent]="currentSteps">
+    <nz-steps [nzCurrent]="currentSteps" class="hidden-mobile">
+        <nz-step nzTitle="基础信息" nzIcon="profile"></nz-step>
+        <nz-step nzTitle="项目预算" nzIcon="dollar"></nz-step>
+        <nz-step nzTitle="服务供应商" nzIcon="control"></nz-step>
+        <nz-step nzTitle="完成" nzIcon="check"></nz-step>
+    </nz-steps>
+    <nz-steps [nzCurrent]="currentSteps" class="hidden-pc" nzDirection="vertical" nzProgressDot>
         <nz-step nzTitle="基础信息" nzIcon="profile"></nz-step>
         <nz-step nzTitle="项目预算" nzIcon="dollar"></nz-step>
         <nz-step nzTitle="服务供应商" nzIcon="control"></nz-step>
         <nz-step nzTitle="完成" nzIcon="check"></nz-step>
     </nz-steps>
 
-    <div class="steps-content pt-lg pb-lg">
+    <div class="steps-content pt-lg">
         <ng-container [ngSwitch]="currentSteps">
             <div *ngSwitchCase="0">
                 <app-project-info [data]="project.info" (submitChangeSuccess)="submitChangeSuccess($event)">

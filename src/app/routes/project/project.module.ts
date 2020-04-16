@@ -27,6 +27,7 @@ import { MyApprovaledListComponent } from './approval-project/my-approvaled-list
 import { MyForApprovaledListComponent } from './approval-project/my-for-approvaled-list/my-for-approvaled-list.component';
 import { ProjectListCComponent } from './my-project/project-list-c/project-list-c.component';
 import { ApprovalProjectListCComponent } from './approval-project/approval-project-list-c/approval-project-list-c.component';
+import { ProjectInfoShowCComponent } from './component/project-info-show-c/project-info-show-c.component';
 
 const COMPONENTS = [
   DraftListComponent,
@@ -55,7 +56,9 @@ const COMPONENTS_NOROUNT = [
   SupplierContractListComponent,
   SupplierContractListComponent,
   ProjectEditSuccessComponent,
-  ProjectListCComponent
+  ProjectListCComponent,
+  ApprovalProjectListCComponent,
+  ProjectInfoShowCComponent
 ];
 
 @NgModule({
@@ -65,8 +68,7 @@ const COMPONENTS_NOROUNT = [
   ],
   declarations: [
     ...COMPONENTS,
-    ...COMPONENTS_NOROUNT,
-    ApprovalProjectListCComponent
+    ...COMPONENTS_NOROUNT
   ],
   entryComponents: COMPONENTS_NOROUNT
 })

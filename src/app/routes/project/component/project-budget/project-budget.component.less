@@ -17,6 +17,12 @@ nz-form-label {
 nz-form-control {
     flex-grow: 1;
 }
+sv-container {
+    max-width: 300px;
+    &.profit-count {
+        max-width: 600px;
+    }
+}
 .cost-title {
     position: relative;
     .cost-add {
@@ -27,23 +33,30 @@ nz-form-control {
     
 }
 
-.label-title {
-    display: inline-block;
-    height: 100%;
-    max-height: 32px;
-    overflow: hidden;
-    width: 100px;
-    min-width: 100px;
-    text-align: justify;
-    vertical-align: top;
-    &::after {
-        display: inline-block;
-        width: 100%;
-        content: '';
-        height: 0;
+
+// 修改 移动端 样式
+@import '~@delon/theme/styles/default';
+:host ::ng-deep {
+    @media screen and (max-width: @screen-sm) {
+        .steps-content-box {
+            padding: 0;
+            .border-right {
+                border-right: 0!important;
+            }
+        }
+        .ant-card {
+            border: 0!important;
+            .ant-card-body {
+                padding: 24px 0!important;
+            }
+        }
+        nz-form-label {
+            width: 80px;
+            min-width: 80px;
+        }
+        sv-container {
+            margin-bottom: 16px;
+        }
     }
-}
-.label-value {
-    display: inline-block;
-    min-width: 200px;
+    
 }

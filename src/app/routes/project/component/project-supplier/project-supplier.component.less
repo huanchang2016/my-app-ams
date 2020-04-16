@@ -26,3 +26,20 @@
         height: 0;
     }
 }
+
+
+// 修改 移动端 样式
+@import '~@delon/theme/styles/default';
+:host ::ng-deep {
+    @media screen and (max-width: @screen-sm) {
+        .steps-content-box {
+            padding: 0;
+            .ant-card {
+                border: 0!important;
+                .ant-card-body {
+                    padding: 24px 0!important;
+                }
+            }
+        }
+    }
+}

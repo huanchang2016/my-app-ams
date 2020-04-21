@@ -1,9 +1,8 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
-import { NzMessageService, NzModalService, NzModalRef, NzNotificationService } from 'ng-zorro-antd';
+import { Component, OnInit } from '@angular/core';
+import { NzMessageService, NzNotificationService } from 'ng-zorro-antd';
 import { SettingsConfigService } from 'src/app/routes/service/settings-config.service';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { ApiData } from 'src/app/data/interface.data';
-import { FormGroup, Validators, FormBuilder, FormControl } from '@angular/forms';
 import { SettingsService } from '@delon/theme';
 
 @Component({
@@ -26,8 +25,7 @@ export class NoContractApproveViewComponent implements OnInit {
     private settingsConfigService: SettingsConfigService,
     private activatedRoute: ActivatedRoute,
     public notice: NzNotificationService,
-    private settings: SettingsService,
-    private router: Router
+    private settings: SettingsService
   ) {
     this.activatedRoute.params.subscribe((params:Params) => {
       if(params && params['id']) {

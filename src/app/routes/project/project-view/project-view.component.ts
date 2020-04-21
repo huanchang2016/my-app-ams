@@ -158,7 +158,7 @@ export class ProjectViewComponent implements OnInit {
         .subscribe((res:ApiData) => {
           if(res.code === 200) {
             this.msg.success('项目已提交');
-            this.router.navigateByUrl('/project/draft');
+            this.router.navigateByUrl('/project/my/progress');
           }else {
             this.msg.error(res.error || '提交失败，请重试');
           }

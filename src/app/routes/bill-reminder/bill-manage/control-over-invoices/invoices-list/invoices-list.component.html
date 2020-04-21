@@ -1,0 +1,71 @@
+<page-header [title]="'项目发票'" [breadcrumb]="breadcrumb">
+
+    <ng-template #breadcrumb>
+        <nz-breadcrumb>
+        <nz-breadcrumb-item><a [routerLink]="['/dashboard']">首页</a></nz-breadcrumb-item>
+        <nz-breadcrumb-item>账务管理</nz-breadcrumb-item>
+        <nz-breadcrumb-item>开票管理</nz-breadcrumb-item>
+        <nz-breadcrumb-item><a [routerLink]="['/bill/apply/projects']">开票项目</a></nz-breadcrumb-item>
+        <nz-breadcrumb-item>项目发票</nz-breadcrumb-item>
+        </nz-breadcrumb>
+    </ng-template>
+
+    <sv-container>
+        <sv label="项目名称"><strong>{{ projectDetailInfo?.name }}</strong></sv>
+        <sv label="项目编号"><strong>{{ projectDetailInfo?.number }}</strong></sv>
+        <sv label="项目类型">{{ projectDetailInfo?.category?.name }}</sv>
+
+        <sv label="负 责 人 ">{{ projectDetailInfo?.user.name }}</sv>
+        <sv label="负责部门">{{ projectDetailInfo?.department?.name }}</sv>
+
+        <sv label="客户来源">{{ projectDetailInfo?.origin?.code.code_name + projectDetailInfo?.origin.name }}</sv>
+        <sv label="预计执行时间">{{ projectDetailInfo?.plan_execution_start_time }} - {{ projectDetailInfo?.plan_execution_end_time }}</sv>
+        <sv label="实际执行时间">{{ projectDetailInfo?.actual_execution_start_time }} - {{ projectDetailInfo?.actual_execution_end_time }}
+        </sv>
+    </sv-container>
+
+</page-header>
+
+<nz-card>
+    <app-bill-reminder-invoices-search (searchOptionsEmit)="searchOptionsChange($event)" (addContentEmit)="add()"></app-bill-reminder-invoices-search>
+
+    <nz-table #basicTable [nzData]="listOfData" [nzLoading]="loading" class="mt-md">
+        <thead>
+            <tr>
+                <th>序号</th>
+                <th>发票类型</th>
+                <th>金额</th>
+                <th>备注</th>
+                <th>申请人</th>
+                <th>状态</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let data of listOfData; let i = index">
+                <td>{{ i + 1 }}</td>
+                <td>{{ data.bill_category.name }}</td>
+                <td>{{ data.amount | currency: 'CNY' }}</td>
+                <td>
+                    <span [innerHtml]="data.remark | showTextareaContent"></span>
+                </td>
+                <td>
+                    <sv-container size="small" col="1">
+                        <sv label="申请人">{{ data.user.name }}</sv>
+                        <sv label="部&nbsp;&nbsp;&nbsp;门">{{ data.department.name }}</sv>
+                        <sv label="公&nbsp;&nbsp;&nbsp;司">{{ data.company.name }}</sv>
+                    </sv-container>
+                </td>
+                <td class="text-primary">{{ data.bill_status.name }}</td>
+                <td>
+                    <a (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
+                    <nz-divider nzType="vertical"></nz-divider>
+                    <a nz-popconfirm nzPopconfirmTitle="请确认发票开具信息填写完整，无误后继续提交！！！" (nzOnConfirm)="disabled(data.id)" (nzOnCancel)="cancel()" class="text-error">提交</a>
+                    <nz-divider nzType="vertical"></nz-divider>
+                    <a nz-popconfirm nzPopconfirmTitle="请确认是否禁用当前发票，确认继续提交" (nzOnConfirm)="submitBillInfo(data.id)" (nzOnCancel)="cancel()" class="text-error">禁用</a>
+                </td>
+            </tr>
+        </tbody>
+    </nz-table>
+
+</nz-card>

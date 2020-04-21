@@ -18,8 +18,7 @@ import { SettingsConfigService } from 'src/app/routes/service/settings-config.se
 })
 export class BillReminderInvoicesFormComponent implements OnInit {
   @Input() data:any;
-  @Input() COMPANY:List[];
-  @Input() companyId:number;
+  @Input() projetId:number;
 
   departmentArray:List[] = [];
   departmentLoading:boolean = false;
@@ -45,15 +44,11 @@ export class BillReminderInvoicesFormComponent implements OnInit {
       username: [ null, [Validators.required]],
       tel: [null, [Validators.required, Validators.minLength(8), Validators.maxLength(11)]],
       mail: [null, [Validators.email]],
-      company_id: [ this.companyId, [Validators.required] ],
+      // company_id: [ this.companyId, [Validators.required] ],
       department_id: [ null, [Validators.required] ],
       position_id: [ null, [Validators.required] ]
     });
 
-    // 获取当前单位下的 部门
-    if(this.companyId) {
-      this.getDepartment(this.companyId);
-    }
 
 
 

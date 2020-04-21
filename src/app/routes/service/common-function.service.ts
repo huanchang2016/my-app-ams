@@ -22,6 +22,7 @@ export class CommonFunctionService {
         if (option.hasOwnProperty(key)) {
           list = list.filter(v => {
             // 如果需要查询到下一层 如  nature.id 
+            console.log(v[key])
             if(typeof(v[key]) !== 'object') {
               if(typeof(v[key]) === 'string') {
                 if(option[key] == null) return v; 

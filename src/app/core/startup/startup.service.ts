@@ -196,8 +196,26 @@ export class StartupService {
           icon: { type: 'icon', value: 'transaction' },
           children: [
             {
-              text: '发票管理',
-              link: '/bill/invoices'
+              text: '开票管理',
+              link: '/bill/apply',
+              children: [
+                {
+                  text: '开票项目',
+                  link: '/bill/apply/projects'
+                },
+                {
+                  text: '进行中',
+                  link: '/bill/apply/in_progress'
+                },
+                {
+                  text: '已通过',
+                  link: '/bill/apply/pass'
+                },
+                {
+                  text: '已拒绝',
+                  link: '/bill/apply/refused'
+                }
+              ]
             }
           ]
         },

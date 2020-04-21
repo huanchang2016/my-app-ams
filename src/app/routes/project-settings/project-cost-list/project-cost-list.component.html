@@ -28,7 +28,7 @@
                 <a (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
                 <nz-divider nzType="vertical"></nz-divider>
                 <ng-container *ngIf="data.active; else activeFalse">
-                    <a (click)="disabled(data.id)">禁用</a>
+                    <a (click)="disabled(data.id)" class="text-error">禁用</a>
                 </ng-container>
                 <ng-template #activeFalse>
                     <a (click)="enabled(data.id)">启用</a>
@@ -58,7 +58,7 @@
                 </ng-template>
                 <ng-template #actionEllipsis>
                     <ng-container *ngIf="data.active; else activeFalse">
-                        <a (click)="disabled(data.id)">禁用</a>
+                        <a (click)="disabled(data.id)" class="text-error">禁用</a>
                     </ng-container>
                     <ng-template #activeFalse>
                         <a (click)="enabled(data.id)">启用</a>

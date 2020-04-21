@@ -107,6 +107,7 @@ export class ApplyContractViewComponent implements OnInit {
             this.contractInfo = res.data;
             this.contract_id = res.data.contract.id;
             [this.selectedContract] = this.contractList.filter( v => v.id === this.contract_id);
+            this.transferAmount(this.selectedContract.amount)
             if(!res.data.draft) { // 非草稿时 获取流程
               this.getWorkflow();
             }
@@ -132,26 +133,18 @@ export class ApplyContractViewComponent implements OnInit {
       }
     })
   }
-
-  // getBudgetInfo() { // 获取预算信息， 然后获取当前项目下的成本
-  //   this.settingsConfigService.get(`/api/budget/project/${this.projectId}`).subscribe((res:ApiData) => {
-  //     // console.log(res);
-  //     if(res.code === 200) {
-  //       // this.setFormValue(res.data);
-  //       const budget:any = res.data;
-  //       this.getCostArrByBudgetId(budget.id);
-  //     }
-  //   })
-  // }
-  // getCostArrByBudgetId(id:number):void {
-  //   this.settingsConfigService.get(`/api/cost/budget/${id}`).subscribe((res:ApiData) => {
-  //     if(res.code === 200) {
-  //       const cost:any[] = res.data.cost;
-  //       this.costlist = cost;
-  //     }
-  //   })
-  // }
-  // cancel(): void {}
+  
+  // 金额大写
+  transferNumber:string = '';
+  transferAmount(num:number) {
+    console.log(num, 'sldkjfslkjdf');
+    
+    this.settingsConfigService.post(`/api/finance/transfer`, { num }).subscribe((res: ApiData) => {
+      if (res.code === 200) {
+        this.transferNumber = res.data.number;
+      }
+    });
+  }
 
   // 流程进程信息
   progressInfo:any = null;

@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 export class BillApplyListCComponent implements OnInit {
 
   @Input() postUrl:string;
+  @Input() isApprove?:boolean = false;
 
   list: any[] = [];
   listOfData:any[] = [];

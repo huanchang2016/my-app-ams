@@ -50,7 +50,7 @@
                 <span [innerHtml]="data.remark | showTextareaContent"></span>
             </td>
             <td>
-                <a [routerLink]="['/bill/apply/invoices/view', data.id]" [queryParams]="{ project_id: data.project.id }"><i nz-icon nzType="eye" nzTheme="outline"></i></a>
+                <a [routerLink]=" !isApprove ? ['/bill/apply/invoices/view', data.id] : ['/bill/approve/view', data.id]" [queryParams]="{ project_id: data.project.id }"><i nz-icon nzType="eye" nzTheme="outline"></i></a>
             </td>
         </tr>
     </tbody>
@@ -80,7 +80,7 @@
                     </div>
                 </nz-skeleton>
                 <ng-template #actionEdit>
-                    <a [routerLink]="['/bill/apply/invoices/view', data.id]" [queryParams]="{ project_id: data.project.id }"><i nz-icon nzType="eye" nzTheme="outline"></i></a>
+                    <a [routerLink]=" !isApprove ? ['/bill/apply/invoices/view', data.id] : ['/bill/approve/view', data.id]" [queryParams]="{ project_id: data.project.id }"><i nz-icon nzType="eye" nzTheme="outline"></i></a>
                 </ng-template>
             </nz-card>
         </ng-container>

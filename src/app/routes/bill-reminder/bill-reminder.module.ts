@@ -17,6 +17,10 @@ import { BillApplyProjectSearchComponent } from './bill-manage/component/bill-ap
 import { InvoicesTaxFeesCComponent } from './bill-manage/control-over-invoices/invoices-form-manage/invoices-tax-fees-c/invoices-tax-fees-c.component';
 import { ViewTaxFeesListComponent } from './bill-manage/control-over-invoices/invoices-info-view/view-tax-fees-list/view-tax-fees-list.component';
 import { BillApplyListCComponent } from './bill-manage/component/bill-apply-list-c/bill-apply-list-c.component';
+import { BillApproveBemyComponent } from './bill-manage/bill-approve/bill-approve-bemy/bill-approve-bemy.component';
+import { BillApproveFormyComponent } from './bill-manage/bill-approve/bill-approve-formy/bill-approve-formy.component';
+import { BillApproveFinishedComponent } from './bill-manage/bill-approve/bill-approve-finished/bill-approve-finished.component';
+import { BillApproveWithoutComponent } from './bill-manage/bill-approve/bill-approve-without/bill-approve-without.component';
 
 const COMPONENTS = [
   BillApplyProjectsComponent,
@@ -26,7 +30,12 @@ const COMPONENTS = [
   BillReminderBillApplyInProgressComponent,
   BillApplyListCComponent,
   BillApplyPassComponent,
-  BillApplyRefusedComponent
+  BillApplyRefusedComponent,
+  // 审批 开票
+  BillApproveBemyComponent,
+  BillApproveFormyComponent,
+  BillApproveFinishedComponent,
+  BillApproveWithoutComponent
 ];
 const COMPONENTS_NOROUNT = [
   BillReminderInvoicesFormComponent,

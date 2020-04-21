@@ -196,7 +196,7 @@ export class StartupService {
           icon: { type: 'icon', value: 'transaction' },
           children: [
             {
-              text: '开票管理',
+              text: '开票申请',
               link: '/bill/apply',
               children: [
                 {
@@ -214,6 +214,28 @@ export class StartupService {
                 {
                   text: '已拒绝',
                   link: '/bill/apply/refused'
+                }
+              ]
+            },
+            {
+              text: '开票审批',
+              link: '/bill/approve',
+              children: [
+                {
+                  text: '我审批的',
+                  link: '/bill/approve/my'
+                },
+                {
+                  text: '待审批（我的）',
+                  link: '/bill/approve/forApprove'
+                },
+                {
+                  text: '已审批',
+                  link: '/bill/approve/finished'
+                },
+                {
+                  text: '未审批未通过',
+                  link: '/bill/approve/without'
                 }
               ]
             }

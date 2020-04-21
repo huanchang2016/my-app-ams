@@ -94,6 +94,7 @@ export class ContractPayCreateComponent implements OnInit {
 
   contractValueChange() {
     [this.selectedContract] = this.contractList.filter( v => v.id === this.contract_id);
+    this.transferAmount(this.selectedContract.amount);
   }
 
   getContractList():void { // 通过项目获取合约
@@ -120,6 +121,7 @@ export class ContractPayCreateComponent implements OnInit {
             this.contractInfo = res.data;
             this.contract_id = res.data.contract.id;
             [this.selectedContract] = this.contractList.filter( v => v.id === this.contract_id);
+            this.transferAmount(this.selectedContract.amount);
           }
         })
   }
@@ -360,6 +362,17 @@ export class ContractPayCreateComponent implements OnInit {
       if(res.code === 200) {
         this.msg.success('支付信息提交成功');
         this.router.navigateByUrl(`/approve/contract/apply/pay/${this.projectId}`);
+      }
+    });
+  }
+  // 金额大写
+  transferNumber:string = '';
+  transferAmount(num:number) {
+    console.log(num, 'sldkjfslkjdf');
+    
+    this.settingsConfigService.post(`/api/finance/transfer`, { num }).subscribe((res: ApiData) => {
+      if (res.code === 200) {
+        this.transferNumber = res.data.number;
       }
     });
   }

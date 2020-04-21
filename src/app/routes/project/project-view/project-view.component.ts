@@ -129,6 +129,7 @@ export class ProjectViewComponent implements OnInit {
           if(costRes.code === 200) {
             this.project.budget = Object.assign(budget, { cost: costRes.data.cost });
             console.log(this.project);
+            this.transferAmount(this.project.budget.income)
           }
         })
       }
@@ -163,6 +164,18 @@ export class ProjectViewComponent implements OnInit {
             this.msg.error(res.error || '提交失败，请重试');
           }
     })
+  }
+
+  // 金额大写
+  transferNumber:string = '';
+  transferAmount(num:number) {
+    console.log(1, { num: num });
+    
+    this.settingsConfigService.post(`/api/finance/transfer`, { num }).subscribe((res: ApiData) => {
+      if (res.code === 200) {
+        this.transferNumber = res.data.number;
+      }
+    });
   }
 
   // 流程进程信息

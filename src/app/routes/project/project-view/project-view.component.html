@@ -185,7 +185,10 @@
 
     <sv-container class="mb-md" title="收入" *ngIf="project.budget">
       <sv label="收入类型"><span class="text-primary">{{ project.budget.tax.name }} 元</span></sv>
-      <sv label="收入金额"><span class="text-primary font-weight-bold" [class.text-success]="project.budget.income > project.info.quota.chairman_amount_start">{{ project.budget.income }} 元</span></sv>
+      <sv label="收入金额">
+        <span class="text-primary font-weight-bold mr-md" [class.text-success]="project.budget.income > project.info.quota.chairman_amount_start">{{ project.budget.income }} 元</span>
+        大写：<span class="font-weight-bold">{{ transferNumber }}</span>
+      </sv>
     </sv-container>
 
     <sv-container class="mb-md" title="成本" *ngIf="project.budget">

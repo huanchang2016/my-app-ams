@@ -28,7 +28,7 @@
 
 </page-header>
 
-<!-- 支付流程进展： 草稿 不显示 -->
+<!-- 开票 审批流程进展： 草稿 不显示 -->
 <nz-card [nzBordered]="false" class="mb-md" [nzTitle]="workflowStatusTitle">
   <ng-template #workflowStatusTitle>
     <span>审批进展</span>
@@ -88,7 +88,7 @@
 
       <nz-step [nzTitle]="'完成'"
         [nzStatus]=" !progressInfo.finished ? 'wait' : ( progressInfo.agree ? 'finish' : 'error' ) "
-        [nzDescription]="'合同支付审批完成'"></nz-step>
+        [nzDescription]="'开票审批完成'"></nz-step>
     </nz-steps>
 
   </ng-container>
@@ -107,7 +107,7 @@
       <textarea nz-input placeholder="请填写审核备注" [(ngModel)]="checkOption.remark"
         [nzAutosize]="{ minRows: 3, maxRows: 6 }" class="my-sm"></textarea>
       <div class="text-right">
-        <a nz-popconfirm nz-button [nzType]="'primary'" nzPopconfirmTitle="请确认支付信息已全部查看，且审核无误后确认提交！！！"
+        <a nz-popconfirm nz-button [nzType]="'primary'" nzPopconfirmTitle="请确认开票信息已全部查看，且审核无误后确认提交！！！"
           (nzOnConfirm)="submitCheckCurrentProcess()" (nzOnCancel)="cancel()">
           审批
         </a>
@@ -118,7 +118,7 @@
 
 
 <nz-card nzTitle="发票确认单" class="bill-info">
-  <div class="bill-info-box">
+  <div class="bill-info-box" *ngIf="projectDetailInfo && billInfo">
     <nz-table #borderedTable nzBordered nzData="[1]" [nzFrontPagination]="false" [nzTitle]="tableTitle" [nzFooter]="tableFooter">
       <ng-template #tableTitle>
         <div class="text-center">成都天府新区房屋租赁服务有限公司</div>
@@ -142,7 +142,10 @@
               <span class="mr-lg"
                 [class.text-primary]="billCate.id === billInfo?.bill_category.id"
                 [class.text-grey]="billCate.id !== billInfo?.bill_category.id"
-                >{{ billCate.name }}</span>
+                >
+                <span>sssssss</span>
+                {{ billCate.name }}
+              </span>
             </ng-container>
           </td>
         </tr>
@@ -187,6 +190,11 @@
         <tr>
           <td class="font-weight-bold">合计</td>
           <td colspan="4" class="text-error font-weight-bold">{{ billInfo?.amount | currency: 'CNY' }}</td>
+        </tr>
+        <tr>
+          <td class="font-weight-bold">大写</td>
+          <!-- transferAmount(billInfo?.amount)billInfo.amount  | transferMoney -->
+          <td colspan="4" class="font-weight-bold">{{ transferNumber }}</td>
         </tr>
         <tr>
           <td class="font-weight-bold">备注信息</td>

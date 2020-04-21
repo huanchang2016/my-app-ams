@@ -76,6 +76,7 @@ export class BillReminderInvoicesInfoViewComponent implements OnInit {
       console.log('billInfo, ', res.data);
       if (res.code === 200) {
         this.billInfo = res.data;
+        this.transferAmount(this.billInfo.amount);
       }
     });
 
@@ -117,6 +118,16 @@ export class BillReminderInvoicesInfoViewComponent implements OnInit {
         if (data.length !== 0) {
           this.taxFeeArray = data.filter(v => v.active).sort((a: any, b: any) => a.sequence - b.sequence);
         }
+      }
+    });
+  }
+
+  // 金额大写
+  transferNumber:string = '';
+  transferAmount(num:number) {
+    this.settingConfigService.post(`/api/finance/transfer`, { num: num }).subscribe((res: ApiData) => {
+      if (res.code === 200) {
+        this.transferNumber = res.data.number;
       }
     });
   }
@@ -175,7 +186,7 @@ export class BillReminderInvoicesInfoViewComponent implements OnInit {
       node_process_id: this.currentNodeProcess.id
     }
     this.settingConfigService
-        .post(`/api/pay/node_process/approval`, obj)
+        .post(`/api/bill/approval`, obj)
         .subscribe((res:ApiData) => {
           console.log(res, 'approval');
           if(res.code === 200) {

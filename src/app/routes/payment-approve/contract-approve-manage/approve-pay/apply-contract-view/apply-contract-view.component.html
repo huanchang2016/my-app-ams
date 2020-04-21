@@ -112,7 +112,7 @@
     <sv-container size="small" col="2" *ngIf="selectedContract">
       <sv label="合同名称">{{ selectedContract.name }}</sv>
       <sv label="收款单位">{{ selectedContract.pay_company }}</sv>
-      <sv label="合同金额"><span class="text-error">{{ selectedContract.amount }} 元</span></sv>
+      <sv label="合同金额"><span class="text-error mr-md">{{ selectedContract.amount }} 元</span> 大写：<span class="font-weight-bold">{{ transferNumber }}</span></sv>
       <sv label="开户银行">{{ selectedContract.bank_name }}</sv>
       <sv label="合同单位"><strong>{{ selectedContract.supplier?.name }}</strong></sv>
       <sv label="银行账号">{{ selectedContract.bank_account }}</sv>

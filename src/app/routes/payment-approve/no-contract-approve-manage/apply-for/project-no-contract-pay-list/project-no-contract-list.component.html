@@ -1,4 +1,4 @@
-<page-header [title]="'项目合同支付管理'" [breadcrumb]="breadcrumb" [action]="actionBtn">
+<page-header [title]="'项目合约支付管理'" [breadcrumb]="breadcrumb" [action]="actionBtn">
 
   <ng-template #breadcrumb>
     <nz-breadcrumb>
@@ -9,7 +9,7 @@
   </ng-template>
 
   <ng-template #actionBtn>
-    <!-- <button nz-button [nzType]="'primary'" (click)="addPayConstract()">新增合同支付</button> -->
+    <!-- <button nz-button [nzType]="'primary'" (click)="addPayConstract()">新增合约支付</button> -->
   </ng-template>
 
   <sv-container size="small" col="2">
@@ -21,7 +21,7 @@
   </sv-container>
 
   <a nz-button [nzType]="'primary'" [routerLink]="['/approve/no-contract/apply/pay/create', projectId]"
-    class="my-md">新增非合同（协议）支付</a>
+    class="my-md">新增非合约支付</a>
 
 </page-header>
 
@@ -30,8 +30,8 @@
     <thead>
       <tr>
         <th>序号</th>
-        <th>协议名称</th>
-        <th>协议编号</th>
+        <th>非合约名称</th>
+        <th>非合约编号</th>
         <th>收款单位</th>
         <th>支付金额（元）</th>
         <th>冲抵情况</th>
@@ -56,7 +56,7 @@
           <a [routerLink]="['/approve/no-contract/apply/pay/edit', projectId]"
             [queryParams]="{treaty_pay_id: data.id }"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
           <nz-divider nzType="vertical"></nz-divider>
-          <a nz-popconfirm nzPopconfirmTitle="确认禁用当前合同支付?" (nzOnConfirm)="disabled(data.id)" (nzOnCancel)="cancel()"
+          <a nz-popconfirm nzPopconfirmTitle="确认禁用当前合约支付?" (nzOnConfirm)="disabled(data.id)" (nzOnCancel)="cancel()"
             class="text-error">禁用</a>
         </td>
       </tr>
@@ -74,7 +74,7 @@
         </ng-template>
         <div class="pt-md">
           <sv-container size="small">
-            <sv label="协议编号">{{data.number }}</sv>
+            <sv label="非合约编号">{{data.number }}</sv>
             <sv label="收款单位">{{ data.pay_company }}</sv>
             <sv label="冲抵情况">
               <span *ngIf="data.if_write_off;else notWriteOff">{{ data.write_off_amount | currency: 'CNY' }} 元</span>
@@ -87,12 +87,12 @@
         </div>
       </nz-skeleton>
       <ng-template #actionEdit>
-        <a [routerLink]="['/approve/no-contract/apply/pay/edit', projectId]"
+        <a [routerLink]="['/approve/no-contract/apply/pay/edit', projectId]" class="text-nowrap"
             [queryParams]="{treaty_pay_id: data.id }"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
       </ng-template>
       <ng-template #actionEllipsis>
-        <a nz-popconfirm nzPopconfirmTitle="确认禁用当前合同支付?" (nzOnConfirm)="disabled(data.id)" (nzOnCancel)="cancel()"
-            class="text-error">禁用</a>
+        <a nz-popconfirm nzPopconfirmTitle="确认禁用当前合约支付?" (nzOnConfirm)="disabled(data.id)" (nzOnCancel)="cancel()"
+            class="text-error text-nowrap">禁用</a>
       </ng-template>
     </nz-card>
   </ng-container>

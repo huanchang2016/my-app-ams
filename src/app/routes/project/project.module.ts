@@ -20,6 +20,8 @@ import { NoContractSupplierComponent } from './component/project-supplier/compon
 import { ProjectSupplierFormComponent } from './component/project-supplier/component/project-supplier-form/project-supplier-form.component';
 import { ProjectContractFormComponent } from './component/project-supplier/component/project-contract-form/project-contract-form.component';
 import { SupplierContractListComponent } from './component/project-supplier/component/supplier-contract-list/supplier-contract-list.component';
+import { SupplierNoContractListComponent } from './component/project-supplier/component/supplier-no-contract-list/supplier-no-contract-list.component';
+
 import { ProjectEditSuccessComponent } from './component/project-edit-success/project-edit-success.component';
 import { MyInApprovalListComponent } from './approval-project/my-in-approval-list/my-in-approval-list.component';
 import { RefuseProjectListComponent } from './my-project/refuse-project-list/refuse-project-list.component';
@@ -54,7 +56,7 @@ const COMPONENTS_NOROUNT = [
   ProjectSupplierFormComponent,
   ProjectContractFormComponent,
   SupplierContractListComponent,
-  SupplierContractListComponent,
+  SupplierNoContractListComponent,
   ProjectEditSuccessComponent,
   ProjectListCComponent,
   ApprovalProjectListCComponent,
@@ -68,7 +70,8 @@ const COMPONENTS_NOROUNT = [
   ],
   declarations: [
     ...COMPONENTS,
-    ...COMPONENTS_NOROUNT
+    ...COMPONENTS_NOROUNT,
+    SupplierNoContractListComponent
   ],
   entryComponents: COMPONENTS_NOROUNT
 })

@@ -51,7 +51,7 @@ export class ApproveListCComponent implements OnInit {
   getDataList() { // 获取单位下的数据
     this.loading = true;
     this.settingConfigService.get(this.postUrl, this.pageOption).subscribe((res:ApiData) => {
-      console.log(res, '该我审批的合同支付');
+      console.log(res, '该我审批的合约支付');
       this.loading = false;
       if(res.code === 200) {
         let data:any[] = res.data.contract_pay;

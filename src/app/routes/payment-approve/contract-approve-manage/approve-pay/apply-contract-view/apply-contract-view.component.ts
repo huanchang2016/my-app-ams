@@ -87,7 +87,7 @@ export class ApplyContractViewComponent implements OnInit {
     this.settingsConfigService.get(`/api/contract/project/${this.projectId}`).subscribe((res:ApiData) => {
       if(res.code === 200) {
         this.contractList = res.data.contract;
-        // 如果有 contract_pay_id 参数， 则表示为编辑 合同支付
+        // 如果有 contract_pay_id 参数， 则表示为编辑 合约支付
         this.activatedRoute.queryParams.subscribe(params=> {
           if(params && params['contract_pay_id']) {
             this.contract_pay_id = +(params['contract_pay_id']);
@@ -102,7 +102,7 @@ export class ApplyContractViewComponent implements OnInit {
   getContractPayDetail():void {
     this.settingsConfigService.get(`/api/contract/pay/detail/${this.contract_pay_id}`)
         .subscribe((res:ApiData) => {
-          console.log(res, '合同支付信息');
+          console.log(res, '合约支付信息');
           if(res.code === 200) {
             this.contractInfo = res.data;
             this.contract_id = res.data.contract.id;
@@ -117,7 +117,7 @@ export class ApplyContractViewComponent implements OnInit {
   getContractPayment() {
     this.settingsConfigService.get(`/api/contract/payment/${this.contract_pay_id}`)
         .subscribe((res:ApiData) => {
-          console.log(res, '合同支付详情列表');
+          console.log(res, '合约支付详情列表');
           if(res.code === 200) {
             const contractPayment:any[] = res.data.contract_payment;
             this.listOfData = contractPayment;

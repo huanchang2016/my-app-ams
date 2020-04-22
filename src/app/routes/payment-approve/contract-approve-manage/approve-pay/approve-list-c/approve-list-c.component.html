@@ -38,9 +38,9 @@
                     <sv label="所属单位">{{ data.user.company?.name }}</sv>
                 </sv-container>
             </td>
-            <td class="text-primary">{{ data.pay_status?.name }}</td>
+            <td class="text-primary text-nowrap">{{ data.pay_status?.name }}</td>
             <td>
-                <a [routerLink]="['/approve/contract/pay/view', data.project.id ]" [queryParams]="{ contract_pay_id: data.id }" target="_blank"><i nz-icon nzType="eye" nzTheme="outline"></i></a>
+                <a class="text-nowrap" [routerLink]="['/approve/contract/pay/view', data.project.id ]" [queryParams]="{ contract_pay_id: data.id }" target="_blank"><i nz-icon nzType="eye" nzTheme="outline"></i></a>
             </td>
         </tr>
     </tbody>

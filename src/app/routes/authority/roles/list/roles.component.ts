@@ -3,7 +3,10 @@ import { CommonFunctionService } from 'src/app/routes/service/common-function.se
 import { NzModalService, NzMessageService } from 'ng-zorro-antd';
 import { List, ApiData } from 'src/app/data/interface.data';
 import { SettingsConfigService } from 'src/app/routes/service/settings-config.service';
-import { RolesFormComponent } from './roles-form/roles-form.component';
+import { RolesFormComponent } from '../component/roles-form/roles-form.component';
+import { RolesUserFormComponent } from '../component/roles-user-form/roles-user-form.component';
+import { RolesPermissionFormComponent } from '../component/roles-permission-form/roles-permission-form.component';
+
 
 @Component({
   selector: 'app-authority-roles',
@@ -49,7 +52,7 @@ export class AuthorityRolesComponent implements OnInit {
   createComponentModal(data:any = null): void {
     console.log(data);
     const modal = this.modalService.create({
-      nzTitle: (!data ? '新增' : '编辑') + '用户',
+      nzTitle: (!data ? '新增' : '编辑') + '角色',
       nzContent: RolesFormComponent,
       nzWrapClassName: 'modal-lg',
       nzMaskClosable: false,
@@ -72,37 +75,20 @@ export class AuthorityRolesComponent implements OnInit {
 
   }
   
+  cancel() {}
+
   disabled(id:number):void {
-    this.settingConfigService.post('/api/position/disable', { position_ids: [id] })
+    this.settingConfigService.post('/api/role/disable', { ids: [id] })
         .subscribe((res:ApiData) => {
           if(res.code === 200) {
             this.msg.success('禁用成功');
             this.listOfData = this.listOfData.filter( v => v.id !== id);
-            this.list = this.list.map( v => {
-              if(v.id === id ) v.active = false;
-              return v;
-            });
+            this.list = this.list.filter( v => v.id !== id);
           }else {
             this.msg.error(res.error || '禁用失败');
           }
     });
   }
-  enabled(id:number):void {
-    this.settingConfigService.post('/api/position/enable', { position_ids: [id] })
-        .subscribe((res:ApiData) => {
-          if(res.code === 200) {
-            this.msg.success('启用成功');
-            this.listOfData = this.listOfData.filter( v => v.id !== id);
-            this.list = this.list.map( v => {
-              if(v.id === id ) v.active = true;
-              return v;
-            });
-          }else {
-            this.msg.error(res.error || '启用失败')
-          }
-    })
-  }
-
 
   // 搜索条件发生变化
   searchOptionsChange(option?:any) {
@@ -132,10 +118,53 @@ export class AuthorityRolesComponent implements OnInit {
       console.log(res);
       this.loading = false;
       if(res.code === 200) {
-        // let data:any[] = res.data.user;
+        let data:any[] = res.data.role;
+        this.list = data;
         // this.list = data.sort((a:any, b:any) => a.sequence - b.sequence);
-        // this.searchOptionsChange();
+        this.searchOptionsChange();
       }
     });
+  }
+
+  // 角色 - 用户 绑定
+  
+  createRoleUserComponentModal(data:any): void {
+    console.log(data);
+    const modal = this.modalService.create({
+      nzTitle: '绑定用户',
+      nzContent: RolesUserFormComponent,
+      nzWrapClassName: 'modal-lg',
+      nzMaskClosable: false,
+      nzComponentParams: {
+        data: data
+      },
+      nzFooter: null
+    });
+
+    // modal.afterOpen.subscribe(() => console.log('[afterOpen] emitted!'));
+
+    // Return a result when closed
+    modal.afterClose.subscribe(result => { });
+
+  }
+  // 角色 - 权限 绑定
+  createRolePermissionComponentModal(data:any = null): void {
+    console.log(data);
+    const modal = this.modalService.create({
+      nzTitle: '角色权限管理',
+      nzContent: RolesPermissionFormComponent,
+      nzWrapClassName: 'modal-lg',
+      nzMaskClosable: false,
+      nzComponentParams: {
+        data: data
+      },
+      nzFooter: null
+    });
+
+    // modal.afterOpen.subscribe(() => console.log('[afterOpen] emitted!'));
+
+    // Return a result when closed
+    modal.afterClose.subscribe(result => {});
+
   }
 }

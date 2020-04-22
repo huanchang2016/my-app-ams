@@ -49,7 +49,7 @@ export class NoContractApproveViewComponent implements OnInit {
   getTreatyPayDetail():void {
     this.settingsConfigService.get(`/api/treaty/pay/detail/${this.treaty_pay_id}`)
         .subscribe((res:ApiData) => {
-          console.log(res, '协议支付信息1111');
+          console.log(res, '非合约支付信息1111');
           if(res.code === 200) {
             this.treaty_id = res.data.id;
             this.treatypayInfo = res.data;
@@ -61,7 +61,7 @@ export class NoContractApproveViewComponent implements OnInit {
   getTreatyPayment() {
     this.settingsConfigService.get(`/api/treaty/payment/${this.treaty_id}`)
         .subscribe((res:ApiData) => {
-          console.log(res, '协议支付详情列表2222');
+          console.log(res, '非合约支付详情列表2222');
           if(res.code === 200) {
             const treatyPayment:any[] = res.data.treaty_payment;
             this.listOfData = treatyPayment;

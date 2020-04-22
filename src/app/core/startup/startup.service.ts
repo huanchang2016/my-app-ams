@@ -79,15 +79,15 @@ export class StartupService {
               link: '/project/approve',
               children: [
                 {
-                  text: '我审批的项目',
+                  text: '我的审批',
                   link: '/project/approve'
                 },
                 {
-                  text: '待审批项目（我的）',
+                  text: '待审批',
                   link: '/project/forApproved'
                 },
                 {
-                  text: '已审批（我的）',
+                  text: '已审批',
                   link: '/project/approved'
                 }
               ]
@@ -144,7 +144,7 @@ export class StartupService {
               ]
             },
             {
-              text: '协议支付申请',
+              text: '非合约支付申请',
               link: '/approve/no-contract/apply',
               children: [
                 {
@@ -166,7 +166,7 @@ export class StartupService {
               ]
             },
             {
-              text: '协议支付审批',
+              text: '非合约支付审批',
               link: '/approve/no-contract/pay',
               children: [
                 {

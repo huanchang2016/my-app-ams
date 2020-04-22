@@ -22,7 +22,8 @@ export class ProjectViewComponent implements OnInit {
     supplier: []
   };
 
-  showExpand:{ [key: string]: boolean } = {}; // 供应商 合约展示
+  showContractExpand:{ [key: string]: boolean } = {}; // 供应商 合约展示
+  showNoContractExpand:{ [key: string]: boolean } = {}; // 供应商 合约展示
   
 
   constructor(
@@ -142,13 +143,17 @@ export class ProjectViewComponent implements OnInit {
       if(res.code === 200) {
         this.project.supplier = res.data.supplier;
         // 是否默认展示供应商下 合约列表数据
-        this.project.supplier.forEach(item => (this.showExpand[item.id] = true));
+        this.project.supplier.forEach(item => (this.showContractExpand[item.id] = true));
+        this.project.supplier.forEach(item => (this.showNoContractExpand[item.id] = true));
       }
     })
   }
 
   showContract(id:number):void { // 切换供应商合约展示 与否 ？
-    this.showExpand[id] = !this.showExpand[id];
+    this.showContractExpand[id] = !this.showContractExpand[id];
+  }
+  showNoContract(id:number):void { // 切换供应商合约展示 与否 ？
+    this.showNoContractExpand[id] = !this.showNoContractExpand[id];
   }
 
   cancel(): void {}

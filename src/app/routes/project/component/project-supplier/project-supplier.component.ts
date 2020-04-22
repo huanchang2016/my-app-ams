@@ -50,7 +50,10 @@ export class ProjectSupplierComponent implements OnChanges, OnInit {
   }
   
   showContract(id:number):void {
-    this.showExpand[id] = !this.showExpand[id];
+    this.showContractExpand[id] = !this.showContractExpand[id];
+  }
+  showNoContract(id:number):void {
+    this.showNoContractExpand[id] = !this.showNoContractExpand[id];
   }
   
   addSupplier():void {
@@ -84,8 +87,7 @@ export class ProjectSupplierComponent implements OnChanges, OnInit {
       }
     });
   }
-  
-  
+
   
   // refreshStatus(): void {
   //   this.isAllDisplayDataChecked = this.listOfDisplayData
@@ -112,7 +114,8 @@ export class ProjectSupplierComponent implements OnChanges, OnInit {
   // }
 
 
-  showExpand:{ [key: string]: boolean } = {};
+  showContractExpand:{ [key: string]: boolean } = {};
+  showNoContractExpand:{ [key: string]: boolean } = {};
 
   getSupplierInfo() {
 
@@ -122,7 +125,8 @@ export class ProjectSupplierComponent implements OnChanges, OnInit {
         // this.listOfDisplayData = this.listOfAllData = res.data.supplier;
         this.listOfAllData = res.data.supplier;
         // 是否默认展示供应商下 合约列表数据
-        this.listOfAllData.forEach(item => (this.showExpand[item.id] = false));
+        this.listOfAllData.forEach(item => (this.showContractExpand[item.id] = false));
+        this.listOfAllData.forEach(item => (this.showNoContractExpand[item.id] = false));
       }
     })
   }

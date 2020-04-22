@@ -41,7 +41,7 @@ export class NoContractApplyListCComponent implements OnInit {
   getDataList() {
     this.loading = true;
     this.settingConfigService.get(this.postUrl, this.pageOption).subscribe((res:ApiData) => {
-      console.log('协议支付信息，进行中。。。', res);
+      console.log('非合约支付信息，进行中。。。', res);
 
       this.loading = false;
       if(res.code === 200) {

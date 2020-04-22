@@ -1,5 +1,5 @@
 <div class="contract-box hidden-pc">
-    <div class="clearfix">
+    <!-- <div class="clearfix">
         <span class="float-left text-primary">签订合约</span>
         <a (click)="addContract(true)" *ngIf="!isView" class="float-right">新增合约</a>
     </div>
@@ -28,13 +28,13 @@
     </ng-container>
     <ng-template #noDataContractMobile>
         <p>无数据</p>
-    </ng-template>
-    
-    <!-- <div class="clearfix">
+    </ng-template> -->
+
+    <div class="clearfix">
         <span class="float-left text-primary">未签订合约</span>
-        <a (click)="addContract(false)" *ngIf="!isView" class="float-right">新增（非合约）</a>
+        <a (click)="addContract(false)" *ngIf="!isView" class="float-right">新增非合约</a>
     </div>
-    
+
     <ng-container *ngIf="treatyList.length !== 0;else noDataTreatyMobile">
         <ng-container *ngFor="let data of treatyList">
             <nz-card [nzActions]="!isView ? [actionEdit, actionDisabled] : []" class="mb-sm">
@@ -43,11 +43,12 @@
                     <sv label="金额（元）"><span class="text-error">{{ data.amount | number: '.2-2' }}</span></sv>
                 </sv-container>
                 <ng-template #actionEdit>
-                    <a *ngIf="!isView" (click)="editContract(data, false)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
+                    <a *ngIf="!isView" (click)="editContract(data, false)"><i nz-icon nzType="edit"
+                            nzTheme="outline"></i></a>
                 </ng-template>
                 <ng-template #actionDisabled>
-                    <a *ngIf="!isView" nz-popconfirm nzPopconfirmTitle="确定禁用当前预算？" (nzOnConfirm)="disabled(data.id, false)" (nzOnCancel)="cancel()"
-                        class="text-error">
+                    <a *ngIf="!isView" nz-popconfirm nzPopconfirmTitle="确定禁用当前预算？"
+                        (nzOnConfirm)="disabled(data.id, false)" (nzOnCancel)="cancel()" class="text-error">
                         禁用
                     </a>
                 </ng-template>
@@ -56,12 +57,12 @@
     </ng-container>
     <ng-template #noDataTreatyMobile>
         <p>无数据</p>
-    </ng-template> -->
-    
+    </ng-template>
+
 </div>
 
 <div class="contract-box hidden-mobile">
-    <ng-template #contractAddTemplate>
+    <!-- <ng-template #contractAddTemplate>
         <button *ngIf="!isView"
             class="mr-lg"
             nz-button
@@ -108,20 +109,16 @@
         <ng-template #noDataContract>
             无数据
         </ng-template>
-    </nz-card>
+    </nz-card> -->
 
-    <!-- <ng-template #treatyAddTemplate>
-        <button *ngIf="!isView"
-            class="mr-lg"
-            nz-button
-            [nzType]="'primary'"
-            (click)="addContract(false)"
-        >新增无合约</button>
-      </ng-template>
+    <ng-template #treatyAddTemplate>
+        <button *ngIf="!isView" class="mr-lg" nz-button [nzType]="'primary'" (click)="addContract(false)">新增无合约</button>
+    </ng-template>
     <nz-card nzTitle="未签订合约" [nzExtra]="treatyAddTemplate">
 
         <ng-container *ngIf="treatyList.length !== 0;else noDataTreaty">
-            <nz-table #treatyTable [nzData]="treatyList" nzSize="small" [nzLoading]="loadingTreaty" [nzFrontPagination]="false">
+            <nz-table #treatyTable [nzData]="treatyList" nzSize="small" [nzLoading]="loadingTreaty"
+                [nzFrontPagination]="false">
                 <thead>
                     <tr>
                         <th>序号</th>
@@ -140,8 +137,8 @@
                         <td *ngIf="!isView">
                             <a (click)="editContract(data, false)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
                             <nz-divider nzType="vertical"></nz-divider>
-                            <a nz-popconfirm nzPopconfirmTitle="确定禁用当前预算？" (nzOnConfirm)="disabled(data.id, false)" (nzOnCancel)="cancel()"
-                                class="text-error">
+                            <a nz-popconfirm nzPopconfirmTitle="确定禁用当前预算？" (nzOnConfirm)="disabled(data.id, false)"
+                                (nzOnCancel)="cancel()" class="text-error">
                                 禁用
                             </a>
                         </td>
@@ -152,5 +149,5 @@
         <ng-template #noDataTreaty>
             无数据
         </ng-template>
-    </nz-card> -->
+    </nz-card>
 </div>

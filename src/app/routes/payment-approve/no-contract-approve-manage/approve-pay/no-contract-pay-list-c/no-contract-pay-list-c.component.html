@@ -17,10 +17,10 @@
     <thead>
         <tr>
             <th>序号</th>
-            <th>协议信息</th>
+            <th>非合约信息</th>
             <th>项目信息</th>
             <th>支付信息</th>
-            <th width="120">审批状态</th>
+            <th>审批状态</th>
             <th>操作</th>
         </tr>
     </thead>
@@ -29,9 +29,9 @@
             <td>{{ i + 1 }}</td>
             <td>
                 <sv-container size="small" col="1">
-                    <sv label="协议名称"><span class="font-weight-bold">{{ data.treaty.name }}</span></sv>
-                    <sv label="协议单位"><span class="font-weight-bold">{{ data.treaty.company.name }}</span></sv>
-                    <sv label="协议金额"><span class="text-primary">{{ data.treaty.amount | number: '1.2-2' }} 元</span></sv>
+                    <sv label="非合约名称"><span class="font-weight-bold">{{ data.treaty.name }}</span></sv>
+                    <sv label="非合约单位"><span class="font-weight-bold">{{ data.treaty.company.name }}</span></sv>
+                    <sv label="非合约金额"><span class="text-primary">{{ data.treaty.amount | number: '1.2-2' }} 元</span></sv>
                     <sv label="抵扣金额">
                         <span *ngIf="data.if_write_off;else notWriteOff">{{ data.write_off_amount | number: '1.2-2' }} 元</span>
                         <ng-template #notWriteOff>
@@ -51,7 +51,7 @@
                 </sv-container>
             </td>
             <td>
-                <span class="text-primary" [class.text-error]="data.pay_status?.name === '未通过'" [class.text-success]="data.pay_status?.name === '已通过'">{{ data.pay_status?.name }}</span>
+                <span class="text-primary text-nowrap" [class.text-error]="data.pay_status?.name === '未通过'" [class.text-success]="data.pay_status?.name === '已通过'">{{ data.pay_status?.name }}</span>
             </td>
             <td>
                 <!-- <nz-divider nzType="vertical"></nz-divider> -->
@@ -79,8 +79,8 @@
                     <div class="pt-md">
                         <sv-container size="small">
                             <sv label="项目名称">{{ data.project?.name }}</sv>
-                            <sv label="协议单位">{{ data.treaty.company.name }}</sv>
-                            <sv label="协议金额"><span class="text-primary">{{ data.treaty.amount | currency: 'CNY' }} 元</span></sv>
+                            <sv label="非合约单位">{{ data.treaty.company.name }}</sv>
+                            <sv label="非合约金额"><span class="text-primary">{{ data.treaty.amount | currency: 'CNY' }} 元</span></sv>
                             <sv label="抵扣金额">
                                 <span *ngIf="data.if_write_off;else notWriteOff">{{ data.write_off_amount | currency: 'CNY' }} 元</span>
                                 <ng-template #notWriteOff>

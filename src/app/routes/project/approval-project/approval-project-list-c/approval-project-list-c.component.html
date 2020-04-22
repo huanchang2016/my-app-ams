@@ -46,7 +46,7 @@
                 </sv-container>
             </td>
             <td>
-                <span class="text-primary text-xs ml-md" [class.text-error]="data.project_status?.name === '未通过'" [class.text-success]="data.project_status?.name === '已通过'">{{ data.project_status?.name }}</span>
+                <span class="text-primary text-nowrap text-xs" [class.text-error]="data.project_status?.name === '未通过'" [class.text-success]="data.project_status?.name === '已通过'">{{ data.project_status?.name }}</span>
             </td>
             <td>
                 <a (click)="view(data)"><i nz-icon nzType="eye" nzTheme="outline"></i></a>

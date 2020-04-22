@@ -18,6 +18,8 @@ export class ProjectInfoComponent implements OnChanges, OnInit {
   validateForm: FormGroup;
 
   customerCompanyArray: any[] = [];
+  projectCategoryArray: any[] = [];
+  projectOriginArray: any[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -32,9 +34,21 @@ export class ProjectInfoComponent implements OnChanges, OnInit {
           .filter(v => v.active);
       }
     });
-    if(this.settingConfigService.configs.projectCateArray.length === 0) {
-      this.settingConfigService.getConfigs();
+    this.settingConfigService.get('/api/project/origin/list').subscribe((res: ApiData) => {
+      if (res.code === 200) {
+        let data: any[] = res.data.project_origin;
+        this.projectOriginArray = data.sort( (a:any, b:any) => a.sequence - b.sequence);
+      }
+    });
+    // 获取当前用户所在部门 的 项目类型
+    if(!this.settings.user.department) {
+      return;
     }
+    this.settingConfigService.get(`/api/project_category/department/${this.settings.user.department.id}`).subscribe((res:ApiData) => {
+      if(res.code === 200) {
+        this.projectCategoryArray = res.data.project_category.sort( (a:any, b:any) => a.sequence - b.sequence);
+      }
+    })
   }
 
   ngOnChanges() {

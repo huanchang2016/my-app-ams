@@ -5,7 +5,7 @@ import { List } from 'src/app/data/interface.data';
 @Component({
   selector: 'app-roles-search-c',
   templateUrl: './roles-search-c.component.html',
-  styles: []
+  styleUrls: ['./roles-search-c.component.less']
 })
 export class RolesSearchCComponent implements OnInit {
   validateForm: FormGroup;
@@ -34,8 +34,7 @@ export class RolesSearchCComponent implements OnInit {
   ngOnInit(): void {
     this.validateForm = this.fb.group({
       company_id: [ null ], // 单位
-      name: [ null ], // 名称
-      active: [ true ] // 是否有效
+      name: [ null ]
     });
 
     this.validateForm.get('company_id').valueChanges.subscribe( id => {
@@ -52,8 +51,7 @@ export class RolesSearchCComponent implements OnInit {
      * *****/
     this.companyValueChange.emit({company_id: id});
     this.validateForm.patchValue({
-      name: '',
-      active: true
+      name: ''
     });
   }
 
@@ -68,8 +66,7 @@ export class RolesSearchCComponent implements OnInit {
 
   resetForm(): void {
     this.validateForm.patchValue({
-      name: '',
-      active: true
+      name: ''
     });
     this.submit();
   }

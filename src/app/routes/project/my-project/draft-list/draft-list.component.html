@@ -56,19 +56,19 @@
             <td>{{ data.department?.name }}</td>
             <td>{{ data.company?.name }}</td>
             <td>
-                <a (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
+                <a (click)="edit(data)" class="text-nowrap"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
                 <nz-divider nzType="vertical"></nz-divider>
                 <a (click)="view(data)"><i nz-icon nzType="eye" nzTheme="outline"></i></a>
                 
                 <nz-divider nzType="vertical"></nz-divider>
-                <a nz-popconfirm class="text-error"
+                <a nz-popconfirm class="text-error text-nowrap"
                     nzPopconfirmTitle="是否确认删除当前项目信息？"
                     (nzOnConfirm)="deletedProject(data.id)"
                     (nzOnCancel)="cancel()">
                     删除
                 </a>
                 <nz-divider nzType="vertical"></nz-divider>
-                <a nz-popconfirm nz-button [nzType]="'primary'"
+                <a nz-popconfirm nz-button [nzType]="'primary'" class="text-nowrap"
                     nzPopconfirmTitle="请确认项目信息全部填写完整，无误后确认提交！！！"
                     (nzOnConfirm)="submitProject(data.id)"
                     (nzOnCancel)="cancel()">

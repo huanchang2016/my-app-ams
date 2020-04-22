@@ -1,0 +1,20 @@
+<form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="user_ids" nzRequired>用户选择</nz-form-label>
+        <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请选择用户">
+            <nz-select style="width: 100%;"
+                nzMode="multiple"
+                [nzLoading]="nzUsersLoading"
+                nzPlaceHolder="请选择用户"
+                formControlName="user_ids">
+                <nz-option *ngFor="let item of users" [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
+            </nz-select>
+        </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item nz-row class="register-area">
+        <nz-form-control [nzSpan]="18" [nzOffset]="6">
+            <button nz-button nzType="primary">{{ data ? '保存' : '新增' }}</button>
+        </nz-form-control>
+    </nz-form-item>
+</form>

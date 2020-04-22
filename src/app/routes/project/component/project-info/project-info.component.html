@@ -37,7 +37,7 @@
                 <nz-form-control>
                     <nz-select style="width: 100%;" id="category_id" nzShowSearch
                         nzPlaceHolder="请选择项目类型" formControlName="category_id">
-                        <ng-container *ngFor="let item of settingConfigService.configs.projectCateArray">
+                        <ng-container *ngFor="let item of projectCategoryArray">
                             <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
                         </ng-container>
                     </nz-select>
@@ -60,7 +60,7 @@
                 <nz-form-control>
                     <nz-select style="width: 100%;" id="origin_id" nzShowSearch
                         nzPlaceHolder="请选择项目来源" formControlName="origin_id">
-                        <ng-container *ngFor="let item of settingConfigService.configs.originArray">
+                        <ng-container *ngFor="let item of projectOriginArray">
                             <nz-option [nzLabel]="item.code.code_name + item.name" [nzValue]="item.id"></nz-option>
                         </ng-container>
                     </nz-select>

@@ -41,7 +41,7 @@ export class NoContractPayListCComponent implements OnInit {
   getDataList() {
     this.loading = true;
     this.settingConfigService.get(this.postUrl, this.pageOption).subscribe((res:ApiData) => {
-      console.log('协议支付信息，已审批完成：', res);
+      console.log('非合约支付信息，已审批完成：', res);
 
       this.loading = false;
       if(res.code === 200) {

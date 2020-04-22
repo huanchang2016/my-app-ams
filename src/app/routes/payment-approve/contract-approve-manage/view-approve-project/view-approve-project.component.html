@@ -52,39 +52,6 @@
   
   <div class="print-box" id="print-box" #printBox>
   
-  
-    
-    <!-- 项目流程进展： 草稿 不显示 -->
-    <nz-card [nzBordered]="false" class="mb-md" nzTitle="流程进度" *ngIf="projectInfo && !projectInfo.draft">
-      <nz-steps [nzCurrent]="1" nzProgressDot>
-        <nz-step [nzTitle]="'创建项目'" [nzDescription]="createDesc">
-          <ng-template #createDesc>
-            <div class="desc">
-              <div class="my-sm">
-                曲丽丽
-                <i nz-icon nzType="dingding" class="ml-sm"></i>
-              </div>
-              <div>2016-12-12 12:32</div>
-            </div>
-          </ng-template>
-        </nz-step>
-        <nz-step [nzTitle]="'部门初审'" [nzDescription]="checkedDesc">
-          <ng-template #checkedDesc>
-            <div class="desc">
-              <div class="my-sm">
-                周毛毛
-                <i nz-icon nzType="dingding" class="ml-sm" style="color: #00a0e9;"></i>
-              </div>
-              <a (click)="msg.success('click')">催一下</a>
-            </div>
-          </ng-template>
-        </nz-step>
-        <nz-step [nzTitle]="'财务复核'"></nz-step>
-        <nz-step [nzTitle]="'完成'"></nz-step>
-      </nz-steps>
-      <div class="steps-content"></div>
-    </nz-card>
-  
     <!-- 项目信息 -->
     <nz-card [nzTitle]="'项目信息'" [nzBordered]="false" class="mb-md">
       
@@ -106,12 +73,12 @@
   
     </nz-card>
   
-    <!-- 项目合同支付审批 -->
-    <nz-card [nzBordered]="false" nzTitle="合同支付审批" [nzExtra]="addContractTemplate">
+    <!-- 项目合约支付审批 -->
+    <nz-card [nzBordered]="false" nzTitle="合约支付审批" [nzExtra]="addContractTemplate">
         <ng-template #addContractTemplate>
             <a (click)="addContract()">添加</a>
         </ng-template>
-        合同支付审批数据展示
+        合约支付审批数据展示
         <!-- <nz-table #basicTable [nzFrontPagination]="false" [nzData]="project.supplier">
           <thead>
             <tr>
@@ -168,6 +135,36 @@
     </nz-card>
   
   
+    <!-- 项目流程进展： 草稿 不显示 -->
+    <nz-card [nzBordered]="false" class="mb-md" nzTitle="流程进度" *ngIf="projectInfo && !projectInfo.draft">
+      <nz-steps [nzCurrent]="1" nzProgressDot>
+        <nz-step [nzTitle]="'创建项目'" [nzDescription]="createDesc">
+          <ng-template #createDesc>
+            <div class="desc">
+              <div class="my-sm">
+                曲丽丽
+                <i nz-icon nzType="dingding" class="ml-sm"></i>
+              </div>
+              <div>2016-12-12 12:32</div>
+            </div>
+          </ng-template>
+        </nz-step>
+        <nz-step [nzTitle]="'部门初审'" [nzDescription]="checkedDesc">
+          <ng-template #checkedDesc>
+            <div class="desc">
+              <div class="my-sm">
+                周毛毛
+                <i nz-icon nzType="dingding" class="ml-sm" style="color: #00a0e9;"></i>
+              </div>
+              <a (click)="msg.success('click')">催一下</a>
+            </div>
+          </ng-template>
+        </nz-step>
+        <nz-step [nzTitle]="'财务复核'"></nz-step>
+        <nz-step [nzTitle]="'完成'"></nz-step>
+      </nz-steps>
+      <div class="steps-content"></div>
+    </nz-card>
   
   </div>
   <!-- 操作日志， *ngIf="!draft" -->

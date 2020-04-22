@@ -50,7 +50,7 @@
             <td>{{ data.department?.name }}</td>
             <td>{{ data.customer?.name }}</td>
             <td>
-                <a [routerLink]="['/approve/no-contract/apply/pay', data.id]">协议支付</a>
+                <a class="text-nowrap" [routerLink]="['/approve/no-contract/apply/pay', data.id]">非合约支付</a>
             </td>
         </tr>
     </tbody>
@@ -74,7 +74,7 @@
                     </div>
                 </nz-skeleton>
                 <ng-template #actionEdit>
-                    <a [routerLink]="['/approve/no-contract/apply/pay', data.id]">协议支付</a>
+                    <a [routerLink]="['/approve/no-contract/apply/pay', data.id]">非合约支付</a>
                 </ng-template>
             </nz-card>
         </ng-container>

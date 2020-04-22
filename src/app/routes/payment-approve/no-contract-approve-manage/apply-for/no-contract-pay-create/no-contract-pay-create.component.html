@@ -1,4 +1,4 @@
-<page-header [title]="'项目协议支付管理'" [breadcrumb]="breadcrumb" [action]="actionBtn">
+<page-header [title]="'项目非合约支付管理'" [breadcrumb]="breadcrumb" [action]="actionBtn">
 
   <ng-template #breadcrumb>
     <nz-breadcrumb>
@@ -10,15 +10,15 @@
     
 <!-- <ng-container *ngIf="validateTreatyForm.valid && listOfData.length !== 0;else InvalidReferTpl">
   <button nz-button [nzType]="'primary'" (click)="submitTreatyForm()" [nzLoading]="submitLoading"
-    class="mt-lg">保存协议支付</button>
+    class="mt-lg">保存非合约支付</button>
 </ng-container> -->
   <ng-template #actionBtn>
     <ng-container *ngIf="listOfData.length !== 0 ">
-      <button *ngIf="!treatypayInfo || treatypayInfo.draft" nz-button [nzType]="'dashed'" (click)="submitTreatyForm()" [nzLoading]="submitLoading">保存协议支付</button>
+      <button *ngIf="!treatypayInfo || treatypayInfo.draft" nz-button [nzType]="'dashed'" (click)="submitTreatyForm()" [nzLoading]="submitLoading">保存非合约支付</button>
       
       <ng-container *ngIf="treaty_pay_id">
         <a *ngIf="!treatypayInfo || treatypayInfo.draft" nz-popconfirm nz-button [nzType]="'primary'" class="mx-sm"
-            nzPopconfirmTitle="请确认协议支付信息填写完整，无误后继续提交！！！"
+            nzPopconfirmTitle="请确认非合约支付信息填写完整，无误后继续提交！！！"
             (nzOnConfirm)="submitContractPay()"
             (nzOnCancel)="cancel()">
             提交支付申请
@@ -40,16 +40,16 @@
 
 </page-header>
 
-<nz-card nzTitle="协议支付资料">
+<nz-card nzTitle="非合约支付资料">
   <form nz-form [formGroup]="validateTreatyForm">
 
     <div nz-row [nzGutter]="24">
       <div nz-col [nzMd]="12" [nzSm]="24">
         <nz-form-item nzFlex>
-          <nz-form-label nzFor="treaty_id" nzRequired>协议名称</nz-form-label>
-          <nz-form-control nzErrorTip="请选择协议名称">
+          <nz-form-label nzFor="treaty_id" nzRequired>非合约名称</nz-form-label>
+          <nz-form-control nzErrorTip="请选择非合约名称">
             <nz-select style="width: 100%;" id="treaty_id" nzShowSearch [nzDisabled]="isEditCost"
-              nzPlaceHolder="请选择协议名称" formControlName="treaty_id">
+              nzPlaceHolder="请选择非合约名称" formControlName="treaty_id">
               <ng-container *ngFor="let item of treatyListArr">
                 <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
               </ng-container>
@@ -111,7 +111,7 @@
 
 </nz-card>
 
-<nz-card nzTitle="协议成本支付" [nzExtra]="costTpl" class="mt-md">
+<nz-card nzTitle="非合约成本支付" [nzExtra]="costTpl" class="mt-md">
   <ng-template #costTpl>
     <button nz-button [nzType]="'primary'" *ngIf="!treatypayInfo || treatypayInfo.draft"
       (click)="addPaymentCost(tplTitle, tplContent, tplFooter, $event)">新增成本支付</button>
@@ -207,14 +207,14 @@
   </div>
 </nz-card>
 <ng-container *ngIf="!treatypayInfo || treatypayInfo.draft">
-  <div class="my-md p-md bg-warning text-md"><span class="text-error">*</span>以上信息需全部填写，才可以保存非合同支付信息</div>
+  <div class="my-md p-md bg-warning text-md"><span class="text-error">*</span>以上信息需全部填写，才可以保存非合约支付信息</div>
 </ng-container>
   
 
 <!-- 成本支付新增 modal -->
 
 <ng-template #tplTitle>
-  <span>添加协议支付账单</span>
+  <span>添加非合约支付账单</span>
 </ng-template>
 <ng-template #tplContent>
   <div class="modal-form">

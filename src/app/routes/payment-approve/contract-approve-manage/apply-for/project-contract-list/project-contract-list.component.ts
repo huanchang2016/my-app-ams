@@ -65,7 +65,7 @@ export class ProjectContractListComponent implements OnInit {
   disabled(id:number): void {
     this.settingsConfigService.post(`/api/contract/pay/disable`, { contract_pay_id: id }).subscribe((res:ApiData) => {
       if(res.code === 200) {
-        this.msg.success('合同支付禁用成功!');
+        this.msg.success('合约支付禁用成功!');
         this.getDataList();
       }
     })

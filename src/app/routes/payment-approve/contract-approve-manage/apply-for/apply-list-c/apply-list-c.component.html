@@ -49,7 +49,7 @@
                 </sv-container>
             </td>
             <td>
-                <span class="text-primary text-xs ml-md" [class.text-error]="data.pay_status?.name === '未通过'" [class.text-success]="data.pay_status?.name === '已通过'">{{ data.pay_status?.name }}</span>
+                <span class="text-primary text-xs text-nowrap" [class.text-error]="data.pay_status?.name === '未通过'" [class.text-success]="data.pay_status?.name === '已通过'">{{ data.pay_status?.name }}</span>
             </td>
             <td>
                 <a (click)="view(data)"><i nz-icon nzType="eye" nzTheme="outline"></i></a>

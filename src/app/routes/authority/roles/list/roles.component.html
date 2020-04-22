@@ -1,0 +1,46 @@
+<page-header></page-header>
+
+
+<app-roles-search-c [COMPANY]="companyArray" (companyValueChange)="companyValueChange($event)"
+  (searchOptionsEmit)="searchOptionsChange($event)" (addContentEmit)="add()"></app-roles-search-c>
+
+<nz-table #basicTable [nzData]="listOfData" [nzLoading]="loading" class="mt-md">
+  <thead>
+    <tr>
+      <th>序号</th>
+      <th>角色名称</th>
+      <th>所属单位</th>
+      <th>描述</th>
+      <th>操作</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of listOfData; let i = index">
+      <td>{{ i + 1 }}</td>
+      <td>
+        {{ data.name }}
+      </td>
+      <td>
+        {{ data.company.name }}
+      </td>
+      <td>
+        <span [innerHtml]="data.description | showTextareaContent"></span>
+      </td>
+      <td>
+        <a (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
+        
+        <nz-divider nzType="vertical"></nz-divider>
+        <a (click)="createRoleUserComponentModal(data)">用户</a>
+
+        <nz-divider nzType="vertical"></nz-divider>
+        <a (click)="createRolePermissionComponentModal(data)">权限</a>
+
+        <nz-divider nzType="vertical"></nz-divider>
+        <a nz-popconfirm nzPopconfirmTitle="确认是否废弃当前角色，确认请继续！！！"
+          (nzOnConfirm)="disabled(data.id)" (nzOnCancel)="cancel()" class="text-error">
+          废弃
+        </a>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>

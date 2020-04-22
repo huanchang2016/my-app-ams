@@ -34,18 +34,27 @@
             <td>{{ data.supplier_code }}</td>
             <td>
               <a (click)="showContract(data.id)">合约<i nz-icon
-                  nzType="{{ showExpand[data.id] ? 'caret-up' : 'caret-down' }}" nzTheme="outline"></i></a>
+                  nzType="{{ showContractExpand[data.id] ? 'caret-up' : 'caret-down' }}" nzTheme="outline"></i></a>
+              <nz-divider nzType="vertical"></nz-divider>
+              <a (click)="showNoContract(data.id)">非合约<i nz-icon
+                  nzType="{{ showNoContractExpand[data.id] ? 'caret-up' : 'caret-down' }}" nzTheme="outline"></i></a>
               <nz-divider nzType="vertical"></nz-divider>
               <a (click)="editSupplier(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
               <nz-divider nzType="vertical"></nz-divider>
-              <a nz-popconfirm nzPopconfirmTitle="确定删除当前供应商？" (nzOnConfirm)="delete(data.id)" (nzOnCancel)="cancel()"
+              <a nz-popconfirm nzPopconfirmTitle="确定删除当前供应商？" (nzOnConfirm)="deleted(data.id)" (nzOnCancel)="cancel()"
                 class="text-error"><i nz-icon nzType="delete" nzTheme="outline"></i></a>
             </td>
           </tr>
-          <tr *ngIf="showExpand[data.id]" style="background-color: #f1f1f1;">
+          <tr *ngIf="showContractExpand[data.id]" style="background-color: #f1f1f1;">
             <td colspan="4">
               <app-supplier-contract-list [projectInfo]="projectInfo" [supplierInfo]="data"
                 [serviceCategory]="serviceCategory"></app-supplier-contract-list>
+            </td>
+          </tr>
+          <tr *ngIf="showNoContractExpand[data.id]" style="background-color: #f1f1f1;">
+            <td colspan="4">
+              <app-supplier-no-contract-list [projectInfo]="projectInfo" [supplierInfo]="data"
+                [serviceCategory]="serviceCategory"></app-supplier-no-contract-list>
             </td>
           </tr>
         </ng-container>

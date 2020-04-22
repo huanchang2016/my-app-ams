@@ -5,7 +5,7 @@
 export const environment = {
   // SERVER_URL: `http://192.168.1.100:5000`, // 信息技术部_5G
   SERVER_URL: `http://172.16.71.192:5000`, // cdtfhr
-  // SERVER_URL: `http://10.1.80.101:5000`,
+  // SERVER_URL: `http://172.16.3.95:5000`,
   production: false,
   useHash: true,
   hmr: false,

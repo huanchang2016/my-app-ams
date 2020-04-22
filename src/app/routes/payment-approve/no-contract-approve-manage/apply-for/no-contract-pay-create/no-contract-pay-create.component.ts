@@ -136,7 +136,7 @@ export class NoContractPayCreateComponent implements OnInit {
       console.log(res, '非合约 协议列表')
       if(res.code === 200) {
         this.treatyListArr = res.data.treaty;
-        // 如果有 treaty_pay_id 参数， 则表示为编辑 协议支付
+        // 如果有 treaty_pay_id 参数， 则表示为编辑 非合约支付
         if(this.treaty_pay_id) {
           this.getTreatyPayDetail();
         }
@@ -147,7 +147,7 @@ export class NoContractPayCreateComponent implements OnInit {
   getTreatyPayDetail():void {
     this.settingsConfigService.get(`/api/treaty/pay/detail/${this.treaty_pay_id}`)
         .subscribe((res:ApiData) => {
-          console.log(res, '协议支付信息1111');
+          console.log(res, '非合约支付信息1111');
           if(res.code === 200) {
             this.treaty_id = res.data.id;
             this.treatypayInfo = res.data;
@@ -159,7 +159,7 @@ export class NoContractPayCreateComponent implements OnInit {
   getTreatyPayment() {
     this.settingsConfigService.get(`/api/treaty/payment/${this.treaty_id}`)
         .subscribe((res:ApiData) => {
-          console.log(res, '协议支付详情列表2222');
+          console.log(res, '非合约支付详情列表2222');
           if(res.code === 200) {
             const treatyPayment:any[] = res.data.treaty_payment;
             this.listOfData = treatyPayment;
@@ -332,13 +332,13 @@ export class NoContractPayCreateComponent implements OnInit {
       payment: paymentArr
     };
     this.settingsConfigService.post(`/api/treaty/pay/create`, obj).subscribe((res:ApiData) => {
-      console.log(res, '新增无合约协议支付')
+      console.log(res, '新增无合约非合约支付')
       this.submitLoading = false;
       if(res.code === 200) {
-        this.msg.success('协议支付提交成功');
+        this.msg.success('非合约支付提交成功');
         this.router.navigateByUrl(`/approve/no-contract/apply/pay/${this.projectId}`);
       }else {
-        this.msg.error(res.error || '协议支付提交失败');
+        this.msg.error(res.error || '非合约支付提交失败');
       }
     })
 
@@ -368,13 +368,13 @@ export class NoContractPayCreateComponent implements OnInit {
     };
 
     this.settingsConfigService.post(`/api/treaty/pay/update`, obj).subscribe((res:ApiData) => {
-      console.log(res, '编辑无合约协议支付审批单')
+      console.log(res, '编辑无合约非合约支付审批单')
       this.submitLoading = false;
       if(res.code === 200) {
-        this.msg.success('协议支付提交成功');
+        this.msg.success('非合约支付提交成功');
         this.router.navigateByUrl(`/approve/no-contract/apply/pay/${this.projectId}`);
       }else {
-        this.msg.error(res.error || '协议支付提交失败');
+        this.msg.error(res.error || '非合约支付提交失败');
       }
     })
   }
@@ -421,7 +421,7 @@ export class NoContractPayCreateComponent implements OnInit {
   }
   
   submitContractPay():void {
-    console.log(this.treaty_pay_id, '协议支付信息提交')
+    console.log(this.treaty_pay_id, '非合约支付信息提交')
     this.settingsConfigService.post('/api/treaty_pay/submit', { treaty_pay_id: this.treaty_pay_id }).subscribe((res:ApiData) => {
       console.log(res);
       this.submitLoading = false;

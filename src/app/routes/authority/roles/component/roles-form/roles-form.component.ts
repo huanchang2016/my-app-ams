@@ -21,14 +21,7 @@ export class RolesFormComponent implements OnInit {
   @Input() COMPANY:List[];
   @Input() companyId:number;
 
-  departmentArray:List[] = [];
-  departmentLoading:boolean = false;
-  positionArray:List[] = [];
-  positionLoading:boolean = false;
-
   validateForm: FormGroup;
-  isEditUsername: boolean = true;
-
   submitLoading: boolean = false;
 
   constructor(
@@ -61,7 +54,7 @@ export class RolesFormComponent implements OnInit {
       // this.destroyModal(this.validateForm.value);
       if(this.data) {
         //  请求编辑 接口
-        // this.edit();
+        this.edit();
       }else {
         //  请求 新增接口
         this.create();
@@ -83,27 +76,24 @@ export class RolesFormComponent implements OnInit {
     });
   }
 
-  // edit() {  /api/role/update
-  //   let opt:any = {
-  //     name: this.validateForm.value.name,
-  //     is_leader: this.validateForm.value.is_leader,
-  //     sequence: this.validateForm.value.sequence,
-  //     description: this.validateForm.value.description
-  //   };
+  edit() {
+    const opt:any = {
+      name: this.validateForm.value.name,
+      role_id: this.data.id,
+      description: this.validateForm.value.description
+    };
     
-  //   let obj:any = Object.assign({ position_id: this.data.id }, opt);
-
-  //   this.settingConfigService.post('/api/user/update', obj).subscribe((res:ApiData) => {
-  //     console.log(res);
-  //     this.submitLoading = false;
-  //     if(res.code === 200) {
-  //       this.msg.success('更新成功');
-  //       this.destroyModal(obj, true);
-  //     }else {
-  //       this.msg.error(res.error || '更新失败');
-  //     }
-  //   });
-  // }
+    this.settingConfigService.post('/api/role/update', opt).subscribe((res:ApiData) => {
+      console.log(res);
+      this.submitLoading = false;
+      if(res.code === 200) {
+        this.msg.success('更新成功');
+        this.destroyModal(opt, true);
+      }else {
+        this.msg.error(res.error || '更新失败');
+      }
+    });
+  }
 
   setFormValue(data:any) :void {
     console.log(data);

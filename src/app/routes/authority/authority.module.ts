@@ -2,17 +2,18 @@ import { NgModule } from '@angular/core';
 import { SharedModule } from '@shared';
 import { AuthorityRoutingModule } from './authority-routing.module';
 import { AuthorityComponent } from './auth-settings/authority.component';
-import { UsersManageComponent } from './users/users.component';
-import { UserFormsComponent } from './users/user-forms/user-forms.component';
-import { UserSearchOptionComponent } from './users/user-search-option/user-search-option.component';
+import { AuthorityRolesComponent } from './roles/roles.component';
+import { RolesSearchCComponent } from './roles/roles-search-c/roles-search-c.component';
+import { RolesFormComponent } from './roles/roles-form/roles-form.component';
 
 const COMPONENTS = [
   AuthorityComponent,
-  UsersManageComponent
+  AuthorityRolesComponent
 ];
 const COMPONENTS_NOROUNT = [
-  UserFormsComponent,
-  UserSearchOptionComponent
+  RolesSearchCComponent,
+  RolesFormComponent,
+  
 ];
 
 @NgModule({

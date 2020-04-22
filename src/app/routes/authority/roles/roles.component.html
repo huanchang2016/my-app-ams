@@ -1,0 +1,50 @@
+<page-header></page-header>
+
+<nz-card>
+
+    <app-roles-search-c [COMPANY]="companyArray" (companyValueChange)="companyValueChange($event)"
+        (searchOptionsEmit)="searchOptionsChange($event)" (addContentEmit)="add()"></app-roles-search-c>
+
+    <nz-table #basicTable [nzData]="listOfData" [nzLoading]="loading" class="mt-md">
+        <thead>
+            <tr>
+                <th>序号</th>
+                <th>姓名</th>
+                <th>联系方式</th>
+                <th>部门/职级</th>
+                <!-- <th>操作</th> -->
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let data of listOfData; let i = index">
+                <td>{{ i + 1 }}</td>
+                <td>
+                    <div>{{ data.name }}</div>
+                </td>
+                <td>
+                    <sv-container size="small" col="1">
+                        <sv label="电话">{{ data.tel }}</sv>
+                        <sv label="邮箱">{{ data.mail }}</sv>
+                    </sv-container>
+                </td>
+                <td>
+                    <sv-container size="small" col="1">
+                        <sv label="职位">{{ data.position.name }}</sv>
+                        <sv label="部门">{{ data.department.name }}</sv>
+                        <sv label="单位">{{ data.company.name }}</sv>
+                    </sv-container>
+                </td>
+                <!-- <td>
+                    <a (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
+                    <nz-divider nzType="vertical"></nz-divider>
+                <ng-container *ngIf="data.active; else activeFalse">
+                    <a (click)="disabled(data.id)">禁用</a>
+                </ng-container>
+                <ng-template #activeFalse>
+                    <a (click)="enabled(data.id)">启用</a>
+                </ng-template>
+                </td> -->
+            </tr>
+        </tbody>
+    </nz-table>
+</nz-card>

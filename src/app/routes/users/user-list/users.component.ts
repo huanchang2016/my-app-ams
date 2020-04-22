@@ -3,7 +3,7 @@ import { CommonFunctionService } from 'src/app/routes/service/common-function.se
 import { NzModalService, NzMessageService } from 'ng-zorro-antd';
 import { List, ApiData } from 'src/app/data/interface.data';
 import { SettingsConfigService } from 'src/app/routes/service/settings-config.service';
-import { UserFormsComponent } from './user-forms/user-forms.component';
+import { UserFormsComponent } from '../user-forms/user-forms.component';
 
 @Component({
   selector: 'app-users',

@@ -42,7 +42,9 @@ const routes: Routes = [
       { path: 'department', loadChildren: () => import('./settings/department/department.module').then(m => m.DepartmentModule) },
       { path: 'position', loadChildren: () => import('./settings/positions/positions.module').then(m => m.PositionsModule) },
       // 权限配置
-      { path: 'authority', loadChildren: () => import('./authority/authority.module').then(m => m.AuthorityModule) }
+      { path: 'authority', loadChildren: () => import('./authority/authority.module').then(m => m.AuthorityModule) },
+      // 用户管理
+      { path: 'users', loadChildren: () => import('./users/users.module').then(m => m.UsersModule) }
     ]
   },
   // 全屏布局

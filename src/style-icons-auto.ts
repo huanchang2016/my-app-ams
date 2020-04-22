@@ -57,7 +57,8 @@ import {
   FileExcelOutline,
   SortAscendingOutline,
   ToTopOutline,
-  TransactionOutline
+  TransactionOutline,
+  UsergroupAddOutline
 } from '@ant-design/icons-angular/icons';
 
 export const ICONS_AUTO = [
@@ -115,5 +116,6 @@ export const ICONS_AUTO = [
   FileExcelOutline,
   SortAscendingOutline,
   ToTopOutline,
-  TransactionOutline
+  TransactionOutline,
+  UsergroupAddOutline
 ];

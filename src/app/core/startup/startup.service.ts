@@ -326,12 +326,22 @@ export class StartupService {
           icon: { type: 'icon', value: 'key' },
           children: [
             {
-              text: '权限设置',
-              link: '/authority/home'
+              text: '角色管理',
+              link: '/authority/roles'
             },
             {
-              text: '用户管理',
-              link: '/authority/users'
+              text: '权限设置',
+              link: '/authority/home'
+            }
+          ]
+        },
+        {
+          text: '用户管理',
+          icon: { type: 'icon', value: 'usergroup-add' },
+          children: [
+            {
+              text: '用户列表',
+              link: '/users/list'
             }
           ]
         }

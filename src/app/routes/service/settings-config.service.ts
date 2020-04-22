@@ -42,8 +42,6 @@ export class SettingsConfigService {
         this.configs.invoiceArray = invoice.data.invoice;
       }
 
-      
-      
     });
     // 获取当前用户所在部门 的 项目类型
     if(!this.settings.user.department) {
@@ -56,9 +54,6 @@ export class SettingsConfigService {
     })
   }
   
-
-
-
   get(api:string, opt?:any): Observable<ApiData> {
     return this.httpClient.get(api, opt);
   }

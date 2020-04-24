@@ -1,16 +1,47 @@
-<div class="mb-md">
-    <sv-container title="基础信息" class="mb-lg" *ngIf="projectInfo">
+<div class="mb-md" *ngIf="projectInfo">
+    <sv-container title="基础信息" class="mb-lg">
         <sv label="项目名称"><strong>{{ projectInfo.name }}</strong></sv>
         <sv label="项目编号"><strong>{{ projectInfo.number }}</strong></sv>
         <sv label="项目类型">{{ projectInfo.category?.name }}</sv>
 
         <sv label="负 责 人 ">{{ projectInfo.user.name }}</sv>
         <sv label="负责部门">{{ projectInfo.department?.name }}</sv>
-        <sv label="客户单位">{{ projectInfo.customer?.name }}</sv>
 
         <sv label="客户来源">{{ projectInfo.origin?.code.code_name + projectInfo.origin.name }}</sv>
         <sv label="预计执行时间">{{ projectInfo.plan_execution_start_time }} - {{ projectInfo.plan_execution_end_time }}</sv>
-        <sv label="实际执行时间">{{ projectInfo.actual_execution_start_time }} - {{ projectInfo.actual_execution_end_time }}
-        </sv>
+        <sv label="实际执行时间">{{ projectInfo.actual_execution_start_time }} - {{ projectInfo.actual_execution_end_time }}</sv>
     </sv-container>
+    
+    <nz-table #basicTable nzBordered [nzData]="projectInfo.customer" [nzFrontPagination]="false">
+        <thead>
+          <tr>
+            <th>客户单位</th>
+            <th>联系信息</th>
+            <th>银行信息</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of basicTable.data">
+            <td>
+                <sv-container col="1">
+                    <sv label="单位名称">{{ data.name }}</sv>
+                    <sv label="统一社会信用代码">{{ data.code }}</sv>
+                </sv-container>
+            </td>
+            <td>
+                <sv-container col="1">
+                    <sv label="电话">{{ data.tel }}</sv>
+                    <sv label="地址">{{ data.address }}</sv>
+                </sv-container>
+            </td>
+            <td>
+                <sv-container col="1">
+                    <sv label="支行名称">{{ data.bank_name }}</sv>
+                    <sv label="银行账号">{{ data.bank_account }}</sv>
+                </sv-container>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+
 </div>

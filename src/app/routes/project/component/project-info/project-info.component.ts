@@ -62,7 +62,7 @@ export class ProjectInfoComponent implements OnChanges, OnInit {
 
     this.validateForm = this.fb.group({
       name: [null, [Validators.required]],
-      customer_id: [null, [Validators.required]],
+      customer_ids: [null, [Validators.required]],
       category_id: [null],
       origin_id: [null],
       plan_time: [null],
@@ -132,9 +132,10 @@ export class ProjectInfoComponent implements OnChanges, OnInit {
 
   setFormValue(opt: any): void {
     if (this.validateForm && opt) {
+      const customer_ids:number[] = opt.customer ? (opt.customer.map( v => v.id)) : []
       this.validateForm.patchValue({
         name: opt.name,
-        customer_id: opt.customer ? opt.customer.id : null,
+        customer_ids: customer_ids,
         category_id: opt.category ? opt.category.id : null,
         origin_id: opt.origin.id,
         plan_time: {

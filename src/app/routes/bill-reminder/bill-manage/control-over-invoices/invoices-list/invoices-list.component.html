@@ -60,9 +60,9 @@
                 <td>
                     <a (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
                     <nz-divider nzType="vertical"></nz-divider>
-                    <a nz-popconfirm nzPopconfirmTitle="请确认发票开具信息填写完整，无误后继续提交！！！" (nzOnConfirm)="disabled(data.id)" (nzOnCancel)="cancel()" class="text-error">提交</a>
+                    <a nz-popconfirm nzPopconfirmTitle="请确认发票开具信息填写完整，无误后继续提交！！！" (nzOnConfirm)="disabled(data.id)" (nzOnCancel)="cancel()" class="text-error">禁用</a>
                     <nz-divider nzType="vertical"></nz-divider>
-                    <a nz-popconfirm nzPopconfirmTitle="请确认是否禁用当前发票，确认继续提交" (nzOnConfirm)="submitBillInfo(data.id)" (nzOnCancel)="cancel()" class="text-error">禁用</a>
+                    <a nz-popconfirm nzPopconfirmTitle="请确认是否禁用当前发票，确认继续提交" (nzOnConfirm)="submitBillInfo(data.id)" (nzOnCancel)="cancel()" class="text-error">提交</a>
                 </td>
             </tr>
         </tbody>

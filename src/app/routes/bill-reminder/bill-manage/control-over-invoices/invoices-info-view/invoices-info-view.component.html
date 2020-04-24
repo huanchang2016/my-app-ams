@@ -33,7 +33,7 @@
   <div class="bill-info-box" *ngIf="projectDetailInfo && billInfo">
     <nz-table #borderedTable nzBordered nzData="[1]" [nzFrontPagination]="false" [nzTitle]="tableTitle" [nzFooter]="tableFooter">
       <ng-template #tableTitle>
-        <div class="text-center">成都天府新区房屋租赁服务有限公司</div>
+        <div class="text-center">{{ billInfo?.company.name }}</div>
       </ng-template>
       <tbody>
         <!-- <tr>
@@ -41,7 +41,7 @@
         </tr> -->
         <tr>
           <td class="font-weight-bold td-left">项目类型</td>
-          <td colspan="4">{{ projectDetailInfo?.category?.name }}</td>
+          <td colspan="4">{{ billInfo?.project.category?.name }}</td>
         </tr>
         <tr>
           <td class="font-weight-bold">协议号</td>
@@ -51,35 +51,30 @@
           <td class="font-weight-bold">发票类型</td>
           <td colspan="4">
             <ng-container *ngFor="let billCate of billCategoryArray">
-              <span class="mr-lg"
-                [class.text-primary]="billCate.id === billInfo?.bill_category.id"
-                [class.text-grey]="billCate.id !== billInfo?.bill_category.id"
-                >
-                <span>sssssss</span>
-                {{ billCate.name }}
-              </span>
+              <label class="mr-lg bill-category-box" nzDisabled nz-checkbox [ngModel]="billCate.id === billInfo?.bill_category.id">{{ billCate.name }}</label>
             </ng-container>
+
           </td>
         </tr>
         <tr>
           <td class="font-weight-bold">开票单位</td>
-          <td colspan="4">{{ projectDetailInfo?.customer.name }}</td>
+          <td colspan="4">{{ billInfo?.customer.name }}</td>
         </tr>
         <tr>
-          <td class="font-weight-bold">纳税人识别号</td>
-          <td colspan="4">{{ projectDetailInfo?.customer.code }}</td>
+          <td class="font-weight-bold">统一社会信用代码</td>
+          <td colspan="4">{{ billInfo?.customer.code }}</td>
         </tr>
         <tr>
           <td class="font-weight-bold">地址</td>
-          <td colspan="4">{{ projectDetailInfo?.customer.address }}</td>
+          <td colspan="4">{{ billInfo?.customer.address }}</td>
         </tr>
         <tr>
           <td class="font-weight-bold">联系电话</td>
-          <td colspan="4">{{ projectDetailInfo?.customer.tel }}</td>
+          <td colspan="4">{{ billInfo?.customer.tel }}</td>
         </tr>
         <tr>
           <td class="font-weight-bold">开户行及账号</td>
-          <td colspan="4">{{ projectDetailInfo?.customer.bank_name }} / {{ projectDetailInfo?.customer.bank_account }}
+          <td colspan="4">{{ billInfo?.customer.bank_name }} / {{ billInfo?.customer.bank_account }}
           </td>
         </tr>
         <tr *ngIf="billFees.length !== 0">
@@ -105,8 +100,11 @@
         </tr>
         <tr>
           <td class="font-weight-bold">大写</td>
-          <!-- transferAmount(billInfo?.amount)billInfo.amount  | transferMoney -->
           <td colspan="4" class="font-weight-bold">{{ transferNumber }}</td>
+        </tr>
+        <tr>
+          <td class="font-weight-bold">开票所属日期</td>
+          <td colspan="4">{{ billInfo?.bill_period_start_time + ' - ' + billInfo?.bill_period_end_time }}</td>
         </tr>
         <tr>
           <td class="font-weight-bold">备注信息</td>
@@ -123,7 +121,7 @@
 
 
 <!-- 开票 审批流程进展： 草稿 不显示 -->
-<nz-card [nzBordered]="false" class="mb-md" [nzTitle]="workflowStatusTitle">
+<nz-card [nzBordered]="false" class="mt-md" [nzTitle]="workflowStatusTitle">
   <ng-template #workflowStatusTitle>
     <span>审批进展</span>
     <span class="text-primary ml-md text-sm">{{ progressInfo?.workflow_status.name }}</span>

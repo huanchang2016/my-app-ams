@@ -11,10 +11,12 @@
         </div>
         <div nz-col [nzSpan]="24">
             <nz-form-item nzFlex>
-                <nz-form-label nzFor="customer_id" nzRequired>业主单位</nz-form-label>
+                <nz-form-label nzFor="customer_ids" nzRequired>业主单位</nz-form-label>
                 <nz-form-control nzErrorTip="请选择业主单位">
-                    <nz-select style="width: 100%;" id="customer_id" nzShowSearch
-                        nzPlaceHolder="请选择业主单位" formControlName="customer_id">
+                    <nz-select style="width: 100%;"
+                        nzMode="multiple"
+                        nzPlaceHolder="请选择用户"
+                        formControlName="customer_ids">
                         <ng-container *ngFor="let item of customerCompanyArray">
                             <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
                         </ng-container>

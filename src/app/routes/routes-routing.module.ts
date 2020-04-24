@@ -59,8 +59,8 @@ const routes: Routes = [
     path: 'passport',
     component: LayoutPassportComponent,
     children: [
-      { path: 'login', component: UserLoginComponent, data: { title: '登录', titleI18n: 'login' } },
-      { path: 'auth', component: QrAuthComponent, data: { title: '扫码登录', titleI18n: 'qrCode' } }
+      { path: 'login', component: UserLoginComponent, data: { title: '登录' } },
+      { path: 'auth', component: QrAuthComponent, data: { title: '扫码登录' } }
       // { path: 'register', component: UserRegisterComponent, data: { title: '注册', titleI18n: 'pro-register' } },
       // { path: 'register-result', component: UserRegisterResultComponent, data: { title: '注册结果', titleI18n: 'pro-register-result' } },
       // { path: 'lock', component: UserLockComponent, data: { title: '锁屏', titleI18n: 'lock' } },

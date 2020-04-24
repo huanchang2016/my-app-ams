@@ -21,6 +21,19 @@ import { SettingsService } from '@delon/theme';
     .td-left {
       min-width: 120px;
     }
+    :host ::ng-deep .bill-category-box span {
+      color: #595959 !important;
+    }
+    :host ::ng-deep .bill-category-box .ant-checkbox-checked {
+      color: #1890ff !important;
+    }
+    :host ::ng-deep .bill-category-box .ant-checkbox-checked .ant-checkbox-inner {
+      background-color: #1890ff !important;
+    }
+    :host ::ng-deep .bill-category-box .ant-checkbox-checked .ant-checkbox-inner::after {
+      border-color: #f5f5f5 !important;
+    }
+    
     @media (max-width: 575px) {
       :host ::ng-deep .bill-info {
         border: 0;

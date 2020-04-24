@@ -19,8 +19,8 @@ export class BillReminderInvoicesSearchComponent implements OnInit {
 
   ngOnInit(): void {
     this.validateForm = this.fb.group({
-      name: [ null ], // 名称
-      active: [ true ] // 是否有效
+      name: [ null ] // 名称
+      // active: [ true ] // 是否有效
     });
 
   }
@@ -33,8 +33,8 @@ export class BillReminderInvoicesSearchComponent implements OnInit {
      *    2. 根据单位获取单位下的部门
      * *****/
     this.validateForm.patchValue({
-      name: '',
-      active: true
+      name: ''
+      // active: true
     });
 
   }
@@ -50,8 +50,7 @@ export class BillReminderInvoicesSearchComponent implements OnInit {
 
   resetForm(): void {
     this.validateForm.patchValue({
-      name: '',
-      active: true
+      name: ''
     });
     this.submit();
   }

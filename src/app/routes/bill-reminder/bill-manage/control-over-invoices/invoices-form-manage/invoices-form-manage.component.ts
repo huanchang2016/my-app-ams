@@ -10,7 +10,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   selector: 'app-invoices-form-manage',
   templateUrl: './invoices-form-manage.component.html',
   styles: [`
-    :host ::ng-deep nz-form-label {
+    :host ::ng-deep .form-item-box > nz-form-label {
       min-width: 100px;
     }
     :host ::ng-deep nz-form-control {
@@ -19,6 +19,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   `]
 })
 export class InvoicesFormManageComponent implements OnInit {
+
+  customer_id:any = null;
+  customer:any = null;
 
   projectId: number = null;
   billId: number = null;
@@ -64,6 +67,7 @@ export class InvoicesFormManageComponent implements OnInit {
       bill_category_id: [null, [Validators.required]],
       // tax_id: [null, [Validators.required]],
       amount: [null, [Validators.required, Validators.pattern(/^(([1-9]\d*|0)(\.\d{1,})?)$|(0\.0?([1-9]\d?))$/)]],
+      bill_period_time: [null, [Validators.required]],
       fees: [null],
       remark: [null]
       // tel: [null, [Validators.required, Validators.minLength(8), Validators.maxLength(11)]],
@@ -79,11 +83,13 @@ export class InvoicesFormManageComponent implements OnInit {
           }, 0)
           this.validateForm.get('amount').setValue(this.taxFeeCount);
         }
-
       }
     })
   }
 
+  customerValueChange():void {
+    [this.customer] = this.projectDetailInfo.customer.filter( v => v.id === this.customer_id);
+  }
 
   submitForm(): void {
     // for (const i in this.validateForm.controls) {
@@ -93,7 +99,7 @@ export class InvoicesFormManageComponent implements OnInit {
 
     console.log(this.validateForm, 'count', this.taxFeeCount);
 
-    if (this.validateForm.valid) {
+    if (this.validateForm.valid && this.customer) {
       this.submitLoading = true;
       // this.destroyModal(this.validateForm.value);
       if (this.billId) {
@@ -123,7 +129,10 @@ export class InvoicesFormManageComponent implements OnInit {
 
     let option: any = {
       project_id: this.projectId,
+      customer_id: this.customer.id,
       bill_category_id: opt.bill_category_id,
+      bill_period_start_time: opt.bill_period_time.start,
+      bill_period_end_time: opt.bill_period_time.end,
       amount: opt.fees.length !== 0 ? this.taxFeeCount : +opt.amount,
       fees: opt.fees,
       remark: opt.remark
@@ -145,7 +154,10 @@ export class InvoicesFormManageComponent implements OnInit {
 
     let option: any = {
       bill_id: this.billId,
+      customer_id: this.customer_id,
       bill_category_id: opt.bill_category_id,
+      bill_period_start_time: opt.bill_period_time.start,
+      bill_period_end_time: opt.bill_period_time.end,
       amount: opt.fees.length !== 0 ? this.taxFeeCount : +opt.amount,
       fees: opt.fees,
       remark: opt.remark
@@ -168,6 +180,10 @@ export class InvoicesFormManageComponent implements OnInit {
       bill_category_id: data.bill_category.id,
       amount: data.amount,
       // fees: data.fees ? data.fees : null,
+      bill_period_time: {
+        start: data.bill_period_start_time,
+        end: data.bill_period_end_time
+      },
       remark: data.remark
     });
   }
@@ -178,6 +194,8 @@ export class InvoicesFormManageComponent implements OnInit {
       if (res.code === 200) {
         this.billInfo = res.data;
         this.setFormValue(this.billInfo);
+        this.customer_id = this.billInfo.customer.id;
+        this.customerValueChange();
       }
     })
   }
@@ -241,5 +259,4 @@ export class InvoicesFormManageComponent implements OnInit {
       }
     });
   }
-
 }

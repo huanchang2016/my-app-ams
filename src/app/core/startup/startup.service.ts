@@ -61,15 +61,15 @@ export class StartupService {
                   link: '/project/my/draft'
                 },
                 {
-                  text: '已提交 待审核',
+                  text: '待审核',
                   link: '/project/my/progress'
                 },
                 {
-                  text: '提交未通过',
+                  text: '未通过',
                   link: '/project/my/refuse'
                 },
                 {
-                  text: '提交已通过',
+                  text: '已通过',
                   link: '/project/my/finished'
                 }
               ]
@@ -95,12 +95,12 @@ export class StartupService {
           ]
         },
         {
-          text: '支付审批管理',
-          link: '/approve',
+          text: '合约支付管理',
+          link: '/approve/contract',
           icon: { type: 'icon', value: 'audit' },
           children: [
             {
-              text: '合同支付申请',
+              text: '合约支付申请',
               link: '/approve/contract/apply',
               children: [
                 {
@@ -122,7 +122,7 @@ export class StartupService {
               ]
             },
             {
-              text: '合同支付审批',
+              text: '合约支付审批',
               link: '/approve/contract/pay',
               children: [
                 {
@@ -134,15 +134,24 @@ export class StartupService {
                   link: '/approve/contract/pay/forApproval'
                 },
                 {
-                  text: '审批完成',
+                  text: '已审批',
                   link: '/approve/contract/pay/finished'
-                },
-                {
-                  text: '未审批未通过',
-                  link: '/approve/contract/pay/without-pass'
                 }
+                // {
+                //   text: '未审批未通过',
+                //   link: '/approve/contract/pay/without-pass'
+                // }
               ]
             },
+            
+            
+          ]
+        },
+        {
+          text: '非合约支付管理',
+          link: '/approve/no-contract',
+          icon: { type: 'icon', value: 'exception' },
+          children: [
             {
               text: '非合约支付申请',
               link: '/approve/no-contract/apply',
@@ -178,18 +187,20 @@ export class StartupService {
                   link: '/approve/no-contract/pay/forApproval'
                 },
                 {
-                  text: '审批完成',
+                  text: '已审批',
                   link: '/approve/no-contract/pay/finished'
-                },
-                {
-                  text: '未审批未通过',
-                  link: '/approve/no-contract/pay/without-pass'
                 }
+                // {
+                //   text: '未审批未通过',
+                //   link: '/approve/no-contract/pay/without-pass'
+                // }
               ]
-            },
+            }
+            
             
           ]
         },
+
         {
           text: '账务管理',
           link: '/bill',
@@ -226,17 +237,17 @@ export class StartupService {
                   link: '/bill/approve/my'
                 },
                 {
-                  text: '待审批（我的）',
+                  text: '待审批',
                   link: '/bill/approve/forApprove'
                 },
                 {
                   text: '已审批',
                   link: '/bill/approve/finished'
-                },
-                {
-                  text: '未审批未通过',
-                  link: '/bill/approve/without'
                 }
+                // {
+                //   text: '未审批未通过',
+                //   link: '/bill/approve/without'
+                // }
               ]
             }
           ]
@@ -322,6 +333,16 @@ export class StartupService {
           ]
         },
         {
+          text: '用户管理',
+          icon: { type: 'icon', value: 'usergroup-add' },
+          children: [
+            {
+              text: '用户列表',
+              link: '/users/list'
+            }
+          ]
+        },
+        {
           text: '权限管理',
           icon: { type: 'icon', value: 'key' },
           children: [
@@ -332,16 +353,6 @@ export class StartupService {
             {
               text: '权限设置',
               link: '/authority/home'
-            }
-          ]
-        },
-        {
-          text: '用户管理',
-          icon: { type: 'icon', value: 'usergroup-add' },
-          children: [
-            {
-              text: '用户列表',
-              link: '/users/list'
             }
           ]
         }

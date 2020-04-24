@@ -26,7 +26,6 @@ export class BillReminderInvoicesListComponent implements OnInit {
     this.activatedRoute.params.subscribe((params:Params) => {
       if(params && params['id']) {
         this.projectId = +params['id'];
-        console.log(this.projectId);
         this.getDataList();
         this.getConfig();
       }
@@ -69,6 +68,8 @@ export class BillReminderInvoicesListComponent implements OnInit {
       if(res.code === 200) {
         this.msg.success('提交成功');
         this.listOfData = this.listOfData.filter( v => v.id !== id);
+      }else {
+        this.msg.error(res.error || '发票开具申请提交失败');
       }
     })
   }
@@ -78,7 +79,7 @@ export class BillReminderInvoicesListComponent implements OnInit {
     if(this.list.length !== 0) {
       let list:any[] = this.list;
       if(option && option.name) list = list.filter( v => (v.bill_category.name).indexOf(option.name) !== -1);
-      if(option) list = list.filter( v => v.active === option.active);
+      // if(option) list = list.filter( v => v.active === option.active);
       this.listOfData = list;
     }
   }

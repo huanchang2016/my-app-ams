@@ -1,0 +1,38 @@
+<nz-table #basicTable [nzData]="logs" [nzFrontPagination]="false">
+    <thead>
+      <tr>
+        <th>序号</th>
+        <th>操作记录</th>
+        <th>操作人员</th>
+        <th>操作流程</th>
+        <th>操作时间</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of basicTable.data; let i = index">
+        <td>{{ i + 1}}</td>
+        <td>
+            <sv-container size="small" col="1">
+                <sv label="名称">{{ data.action }}</sv>
+                <sv label="结果">{{ data.result }}</sv>
+            </sv-container>
+        </td>
+        <td>
+            <sv-container size="small" col="1">
+                <sv label="姓名">{{ data.user.name }}</sv>
+                <sv label="部门">{{ data.user.department?.name }}</sv>
+                <sv label="单位">{{ data.user.company?.name }}</sv>
+            </sv-container>
+        </td>
+        <td>
+            <sv-container size="small" col="1">
+                <sv label="流程">{{ data.process.workflow.name }}</sv>
+                <sv label="节点">{{ data.node_process?.node.name }}</sv>
+            </sv-container>
+        </td>
+        <td>
+          <span class="text-nowrap">{{ data.create_time }}</span>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>

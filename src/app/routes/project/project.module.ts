@@ -30,6 +30,7 @@ import { MyForApprovaledListComponent } from './approval-project/my-for-approval
 import { ProjectListCComponent } from './my-project/project-list-c/project-list-c.component';
 import { ApprovalProjectListCComponent } from './approval-project/approval-project-list-c/approval-project-list-c.component';
 import { ProjectInfoShowCComponent } from './component/project-info-show-c/project-info-show-c.component';
+import { ProjectLogsComponent } from './component/project-logs/project-logs.component';
 
 const COMPONENTS = [
   DraftListComponent,
@@ -71,7 +72,8 @@ const COMPONENTS_NOROUNT = [
   declarations: [
     ...COMPONENTS,
     ...COMPONENTS_NOROUNT,
-    SupplierNoContractListComponent
+    SupplierNoContractListComponent,
+    ProjectLogsComponent
   ],
   entryComponents: COMPONENTS_NOROUNT
 })

@@ -33,12 +33,12 @@ export class SupplierNoContractListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getHasContractDataList();
+    // this.getHasContractDataList();
     this.getNoContractDataList();
   }
 
   addContract(isContract: boolean): void {
-    console.log(isContract, '新增有无合约');
+    // console.log(isContract, '新增有无合约');
     if (isContract) {
       this.creatHasContractComponent();
     } else {
@@ -102,7 +102,7 @@ export class SupplierNoContractListComponent implements OnInit {
     };
     this.loadingContract = true;
     this.settingsConfigService.post(`/api/contract/supplier`, opt).subscribe((res: ApiData) => {
-      console.log(res, 'get contract list  by supplier info!');
+      // console.log(res, 'get contract list  by supplier info!');
       this.loadingContract = false;
       if (res.code === 200) {
         const conList:any[] = res.data.contract;
@@ -117,7 +117,7 @@ export class SupplierNoContractListComponent implements OnInit {
     };
     this.loadingTreaty = true;
     this.settingsConfigService.post(`/api/treaty/supplier`, opt).subscribe((res: ApiData) => {
-      console.log(res, 'get treaty list  by supplier info!');
+      // console.log(res, 'get treaty list  by supplier info!');
       this.loadingTreaty = false;
       if (res.code === 200) {
         const treatyList:any[] = res.data.treaty;

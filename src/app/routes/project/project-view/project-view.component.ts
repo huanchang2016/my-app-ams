@@ -50,9 +50,8 @@ export class ProjectViewComponent implements OnInit {
   printCurrentModal(idname:string) {
     let newWindow=window.open("打印窗口","_blank");
     let obj = document.querySelector('#' + idname);
-    console.log(obj);
     let head = document.querySelector('head').innerHTML;
-    let style = `<style>body {-webkit-print-color-adjust: exact;}</style>`;
+    let style = `<style>body {-webkit-print-color-adjust: exact; padding: 12px!important;}</style>`;
     
     let docStr = head + style + obj.innerHTML;
     newWindow.document.write(docStr);
@@ -73,32 +72,52 @@ export class ProjectViewComponent implements OnInit {
       html2canvas(data).then(canvas => {
         this.isPrinter = false;
         // Few necessary setting options  
-        const imgWidth:number = 208;   
-        const pageHeight:number = 295;    
-        const imgHeight:number = canvas.height * imgWidth / canvas.width;  
-        const heightLeft:number = imgHeight;  
+        const imgWidth:number = 208;
+        const imgHeight:number = canvas.height * imgWidth / canvas.width;
+        console.log(canvas, imgWidth, imgHeight); 
+        const pageHeight:number = 295;
+        const leftHeight:number = imgHeight;
     
-        const contentDataURL = canvas.toDataURL('image/png')
+        const contentDataURL = canvas.toDataURL('image/png', 1.0)
         if(type === 'pdf') {
-          this.exportPdf(contentDataURL, imgWidth, imgHeight);
+          this.exportPdf(contentDataURL, imgWidth, imgHeight, pageHeight, leftHeight);
         }
         if(type === 'image') {
-          this.exportImage(contentDataURL, imgWidth, imgHeight)
+          this.exportImage(contentDataURL);
         }
         
       });
     }, 500);
     
   }
-  exportPdf(contentDataURL:any, imgWidth:number, imgHeight:number) {
+  pdfPosition:number = 0;
+  exportPdf(contentDataURL:any, imgWidth:number, imgHeight:number, pageHeight:number, leftHeight:number) {
+    // let pdf = new jspdf('p', 'mm', 'a4'); // A4 size page of PDF  
+    // const position:number = 0;
+    // pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
+    // const pdf_name:string = this.project.info.name + "_" + (new Date().getTime()) + '.pdf';
+    // pdf.save(pdf_name); // Generated PDF 
+
     let pdf = new jspdf('p', 'mm', 'a4'); // A4 size page of PDF  
-    const position:number = 0;
-    pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
+    if (leftHeight + 10 < pageHeight) {
+      pdf.addImage(contentDataURL, 'PNG', 0, 0, imgWidth, imgHeight)
+    } else {
+        while (leftHeight > 0) {
+          pdf.addImage(contentDataURL, 'PNG', 0, this.pdfPosition, imgWidth, imgHeight);
+          leftHeight -= pageHeight;
+          this.pdfPosition -= 295;
+            // 避免添加空白页
+            if (leftHeight > 0) {
+                pdf.addPage()
+            }
+        }
+    }
+    
     const pdf_name:string = this.project.info.name + "_" + (new Date().getTime()) + '.pdf';
-    pdf.save(pdf_name); // Generated PDF  
+    pdf.save(pdf_name); // Generated PDF 
   }
   // TODO: 图片和 pdf 下载 功能
-  exportImage(contentDataURL:any, imgWidth:number, imgHeight:number) {
+  exportImage(contentDataURL:any) {
       var base64Img = contentDataURL;
       let oA:any = document.createElement('a');
       oA.href = base64Img;
@@ -115,9 +134,24 @@ export class ProjectViewComponent implements OnInit {
         this.project['info'] = res.data;
         this.getBudgetInfo(this.project.info.id);
         this.getSupplierInfo(this.project.info.id);
-        if(!res.data.draft) { // 非草稿时 获取流程
+        if(!res.data.draft) { // 非草稿时 获取流程  获取项目操作日志
           this.getWorkflow(res.data.id);
+          this.getProjectLog(this.projectId);
         }
+      }
+    })
+  }
+
+  logLoading:boolean = true;
+  logs:any[] = [];
+  getProjectLog(id:number):void {
+    this.settingsConfigService.get(`/api/project/log/${id}`).subscribe((res:ApiData) => {
+      console.log('log ....', res.data);
+      this.logLoading = false;
+      if(res.code === 200) {
+        this.logs = res.data.project_log;
+      }else {
+        this.logs = [];
       }
     })
   }
@@ -239,8 +273,10 @@ export class ProjectViewComponent implements OnInit {
           console.log(res, 'approval');
           if(res.code === 200) {
            this.msg.success('审核提交成功');
-           this.settingsConfigService.resetGlobalTasks();
            this.getWorkflow(this.projectId);
+           // 刷新任务栏  日志信息
+           this.settingsConfigService.resetGlobalTasks();
+           this.getProjectLog(this.projectId);
           }
     })
   }

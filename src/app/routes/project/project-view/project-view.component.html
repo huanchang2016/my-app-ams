@@ -47,7 +47,7 @@
 
 </page-header>
 
-<div class="print-box" id="print-box" #printBox>
+<div class="print-box" [class.p-lg]="isPrinter" id="print-box" #printBox>
   <!-- 项目信息 -->
   <nz-card [nzTitle]="proTitle" [nzBordered]="false" class="mb-md">
     <ng-template #proTitle>
@@ -294,6 +294,12 @@
 
     </div>
   </nz-card>
+  <!-- 操作日志， *ngIf="!draft" -->
+  <ng-container *ngIf="project.info && !project.info.draft">
+
+    <nz-card nzTitle="日志" class="mt-lg ant-card__body-nopadding" [nzLoading]="logLoading">
+      <app-project-logs [logs]="logs"></app-project-logs>
+    </nz-card>
+  </ng-container>
 
 </div>
-<!-- 操作日志， *ngIf="!draft" -->

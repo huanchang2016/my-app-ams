@@ -25,9 +25,9 @@ export class WorkflowListComponent implements OnInit {
     private modalService: NzModalService,
     private commonFn: CommonFunctionService,
     private msg: NzMessageService,
-    private settingConfigService: SettingsConfigService
+    private settingsConfigService: SettingsConfigService
   ) {
-    this.settingConfigService.get('/api/company/user/all').subscribe((res:ApiData) => {
+    this.settingsConfigService.get('/api/company/user/all').subscribe((res:ApiData) => {
       if(res.code === 200) {
         let data:any[] = res.data.company;
         this.companyArray = data.map( v => {
@@ -107,7 +107,7 @@ export class WorkflowListComponent implements OnInit {
       return;
     }
     this.loading = true;
-    this.settingConfigService.get(`/api/workflow/company/${id}`).subscribe((res:ApiData) => {
+    this.settingsConfigService.get(`/api/workflow/company/${id}`).subscribe((res:ApiData) => {
       console.log(res, 'workflow/company');
       this.loading = false;
       if(res.code === 200) {

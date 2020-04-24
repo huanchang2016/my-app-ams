@@ -23,7 +23,7 @@ export class RolesUserFormComponent implements OnInit {
     private modal: NzModalRef,
     private fb: FormBuilder,
     private msg: NzMessageService,
-    private settingConfigService: SettingsConfigService
+    private settingsConfigService: SettingsConfigService
   ) {}
 
 
@@ -40,14 +40,14 @@ export class RolesUserFormComponent implements OnInit {
   }
   getUsers():void {
     this.nzUsersLoading = true;
-    this.settingConfigService.get(`/api/user/company/${this.data.company.id}`).subscribe((res:ApiData) => {
+    this.settingsConfigService.get(`/api/user/company/${this.data.company.id}`).subscribe((res:ApiData) => {
       console.log(res, 'user list ');
       if(res.code === 200) {
         let users:any[] = res.data.user;
         this.users = users.filter( v => v.active );
       }
     });
-    this.settingConfigService.get(`/api/role/user/${this.data.id}`).subscribe((res:ApiData) => {
+    this.settingsConfigService.get(`/api/role/user/${this.data.id}`).subscribe((res:ApiData) => {
       console.log(res, 'current roles selected users');
       this.nzUsersLoading = false;
       if(res.code === 200) {
@@ -74,7 +74,7 @@ export class RolesUserFormComponent implements OnInit {
       user_ids: this.validateForm.value.user_ids,
       role_id: this.data.id
     };
-    this.settingConfigService.post('/api/role/user/handle', opt).subscribe((res:ApiData) => {
+    this.settingsConfigService.post('/api/role/user/handle', opt).subscribe((res:ApiData) => {
       this.submitLoading = false;
       if(res.code === 200) {
         this.msg.success('绑定用户成功');

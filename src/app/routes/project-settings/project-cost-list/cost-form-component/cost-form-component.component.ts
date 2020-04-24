@@ -29,7 +29,7 @@ export class CostFormComponentComponent implements OnInit {
     private modal: NzModalRef,
     private fb: FormBuilder,
     private msg: NzMessageService,
-    private settingConfigService: SettingsConfigService
+    private settingsConfigService: SettingsConfigService
   ) { }
 
 
@@ -71,7 +71,7 @@ export class CostFormComponentComponent implements OnInit {
   create() {
     let opt:any = this.validateForm.value;
     console.log(opt);
-    this.settingConfigService.post('/api/cost/category/create', opt).subscribe((res:ApiData) => {
+    this.settingsConfigService.post('/api/cost/category/create', opt).subscribe((res:ApiData) => {
       console.log(res);
       this.submitLoading = false;
       if(res.code === 200) {
@@ -91,7 +91,7 @@ export class CostFormComponentComponent implements OnInit {
     
     let obj:any = Object.assign({ category_id: this.data.id }, opt);
 
-    this.settingConfigService.post('/api/cost/category/update', obj).subscribe((res:ApiData) => {
+    this.settingsConfigService.post('/api/cost/category/update', obj).subscribe((res:ApiData) => {
       console.log(res);
       this.submitLoading = false;
       if(res.code === 200) {

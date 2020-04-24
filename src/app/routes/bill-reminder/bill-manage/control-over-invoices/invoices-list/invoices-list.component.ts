@@ -19,7 +19,7 @@ export class BillReminderInvoicesListComponent implements OnInit {
 
   constructor(
     private msg: NzMessageService,
-    private settingConfigService: SettingsConfigService,
+    private settingsConfigService: SettingsConfigService,
     private activatedRoute: ActivatedRoute,
     private router: Router
   ) {
@@ -46,7 +46,7 @@ export class BillReminderInvoicesListComponent implements OnInit {
 
   
   disabled(id:number):void {
-    this.settingConfigService.post('/api/bill/disable', { bill_id: id })
+    this.settingsConfigService.post('/api/bill/disable', { bill_id: id })
         .subscribe((res:ApiData) => {
           if(res.code === 200) {
             this.msg.success('禁用成功');
@@ -64,7 +64,7 @@ export class BillReminderInvoicesListComponent implements OnInit {
 
   submitBillInfo(id:number): void {
     console.log('提交发票 开具申请');
-    this.settingConfigService.post('/api/bill/submit', { bill_id: id }).subscribe((res:ApiData) => {
+    this.settingsConfigService.post('/api/bill/submit', { bill_id: id }).subscribe((res:ApiData) => {
       if(res.code === 200) {
         this.msg.success('提交成功');
         this.listOfData = this.listOfData.filter( v => v.id !== id);
@@ -88,7 +88,7 @@ export class BillReminderInvoicesListComponent implements OnInit {
     this.loading = true;
     console.log(this.projectId);
     
-    this.settingConfigService.get(`/api/bill/draft/${this.projectId}`).subscribe((res:ApiData) => {
+    this.settingsConfigService.get(`/api/bill/draft/${this.projectId}`).subscribe((res:ApiData) => {
       console.log(res);
       this.loading = false;
       if(res.code === 200) {
@@ -101,7 +101,7 @@ export class BillReminderInvoicesListComponent implements OnInit {
 
   getConfig() {
     // 获取客户单位 信息详情
-    this.settingConfigService.get(`/api/project/detail/${this.projectId}`).subscribe((res:ApiData) => {
+    this.settingsConfigService.get(`/api/project/detail/${this.projectId}`).subscribe((res:ApiData) => {
       console.log('projectDetailInfo, ', res.data);
       if(res.code === 200) {
         this.projectDetailInfo = res.data;

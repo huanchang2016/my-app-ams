@@ -36,7 +36,7 @@ export class CompanyFormComponent implements OnInit {
     private modal: NzModalRef,
     private fb: FormBuilder,
     private msg: NzMessageService,
-    public settingConfigService: SettingsConfigService
+    public settingsConfigService: SettingsConfigService
   ) { }
 
 
@@ -179,7 +179,7 @@ export class CompanyFormComponent implements OnInit {
       url = '/api/company/supplier/add';
     }
 
-    this.settingConfigService.post(url, opt).subscribe((res:ApiData) => {
+    this.settingsConfigService.post(url, opt).subscribe((res:ApiData) => {
       console.log(res);
       this.submitBasicLoading = false;
       if(res.code === 200) {
@@ -206,7 +206,7 @@ export class CompanyFormComponent implements OnInit {
     }
     console.log(url, opt);
 
-    this.settingConfigService.post(url, opt).subscribe((res:ApiData) => {
+    this.settingsConfigService.post(url, opt).subscribe((res:ApiData) => {
       console.log(res);
       this.submitBasicLoading = false;
       if(res.code === 200) {
@@ -221,7 +221,7 @@ export class CompanyFormComponent implements OnInit {
 
   
   updateOtherInfo(opt:any) {
-    this.settingConfigService.post('/api/company/update', opt).subscribe((res:ApiData) => {
+    this.settingsConfigService.post('/api/company/update', opt).subscribe((res:ApiData) => {
       console.log(res);
       this.submitOtherLoading = false;
       if(res.code === 200) {

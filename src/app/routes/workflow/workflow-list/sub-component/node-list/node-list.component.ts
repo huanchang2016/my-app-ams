@@ -27,7 +27,7 @@ export class NodeListComponent implements OnInit {
     private modalService: NzModalService,
     private commonFn: CommonFunctionService,
     private msg: NzMessageService,
-    private settingConfigService: SettingsConfigService
+    private settingsConfigService: SettingsConfigService
   ) {
     // 获取当前单位下的用户信息
     
@@ -41,7 +41,7 @@ export class NodeListComponent implements OnInit {
     }
   }
   getUserList() {
-    this.settingConfigService.get(`/api/user/company/${this.workflowInfo.company.id}`).subscribe((res:ApiData) => {
+    this.settingsConfigService.get(`/api/user/company/${this.workflowInfo.company.id}`).subscribe((res:ApiData) => {
       console.log(res, 'users')
       if(res.code === 200) {
         let data:any[] = res.data.user;
@@ -99,7 +99,7 @@ export class NodeListComponent implements OnInit {
       node_ids: [id],
       workflow_id: this.workflowInfo.id
     };
-    this.settingConfigService
+    this.settingsConfigService
         .post('/api/node/disable', option)
         .subscribe((res:ApiData) => {
           if(res.code === 200) {
@@ -116,7 +116,7 @@ export class NodeListComponent implements OnInit {
       return;
     }
     this.loading = true;
-    this.settingConfigService.get(`/api/node/workflow/${id}`).subscribe((res:ApiData) => {
+    this.settingsConfigService.get(`/api/node/workflow/${id}`).subscribe((res:ApiData) => {
       console.log(res, 'node list');
       this.loading = false;
       if(res.code === 200) {
@@ -149,7 +149,7 @@ export class NodeListComponent implements OnInit {
       workflow_id: this.workflowInfo.id,
       nodes: nodes
     };
-    this.settingConfigService.post('/api/node/sort', option).subscribe( _ => this.getDataList());
+    this.settingsConfigService.post('/api/node/sort', option).subscribe( _ => this.getDataList());
   }
 
 }

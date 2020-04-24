@@ -35,7 +35,7 @@ export class WorkflowFormComponent implements OnInit {
     private modal: NzModalRef,
     private fb: FormBuilder,
     private msg: NzMessageService,
-    private settingConfigService: SettingsConfigService
+    private settingsConfigService: SettingsConfigService
   ) { }
 
 
@@ -89,7 +89,7 @@ export class WorkflowFormComponent implements OnInit {
   }
   create() {
     const opt:any = this.validateForm.value;
-    this.settingConfigService.post('/api/workflow/create', opt).subscribe((res:ApiData) => {
+    this.settingsConfigService.post('/api/workflow/create', opt).subscribe((res:ApiData) => {
       console.log(res);
       this.submitLoading = false;
       if(res.code === 200) {
@@ -107,7 +107,7 @@ export class WorkflowFormComponent implements OnInit {
       workflow_id: this.data.id
     };
 
-    this.settingConfigService.post('/api/workflow/update', opt).subscribe((res:ApiData) => {
+    this.settingsConfigService.post('/api/workflow/update', opt).subscribe((res:ApiData) => {
       console.log(res);
       this.submitLoading = false;
       if(res.code === 200) {
@@ -138,7 +138,7 @@ export class WorkflowFormComponent implements OnInit {
 
   getDepartmentAndWorkflowCategory(id:number): void {
     this.departmentLoading = true;
-    this.settingConfigService.get(`/api/department/${id}`).subscribe((res:ApiData) => {
+    this.settingsConfigService.get(`/api/department/${id}`).subscribe((res:ApiData) => {
       this.departmentLoading = false;
       if(res.code === 200) {
         let data:any[] = res.data.department;
@@ -150,7 +150,7 @@ export class WorkflowFormComponent implements OnInit {
       }
     });
     this.workflowCategoryLoading = true;
-    this.settingConfigService.get(`/api/workflow/category/${id}`).subscribe((res:ApiData) => {
+    this.settingsConfigService.get(`/api/workflow/category/${id}`).subscribe((res:ApiData) => {
       this.workflowCategoryLoading = false;
       if(res.code === 200) {
         let data:any[] = res.data.workflow_category;

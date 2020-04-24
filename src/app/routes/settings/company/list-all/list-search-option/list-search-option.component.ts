@@ -18,7 +18,7 @@ export class ListSearchOptionComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    public settingConfigService: SettingsConfigService
+    public settingsConfigService: SettingsConfigService
   ) { }
 
   ngOnInit(): void {

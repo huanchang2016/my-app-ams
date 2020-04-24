@@ -26,9 +26,9 @@ export class ProjectSupplierFormComponent implements OnInit {
     private modal: NzModalRef,
     private fb: FormBuilder,
     private msg: NzMessageService,
-    public settingConfigService: SettingsConfigService
+    public settingsConfigService: SettingsConfigService
   ) {
-    this.settingConfigService.get('/api/company/supplier/all').subscribe((res:ApiData) => {
+    this.settingsConfigService.get('/api/company/supplier/all').subscribe((res:ApiData) => {
       if(res.code === 200) {
         let data:any[] = res.data.company;
         this.companyArray = data.filter(v => v.active).sort((a:any, b:any) => a.sequence - b.sequence);
@@ -85,7 +85,7 @@ export class ProjectSupplierFormComponent implements OnInit {
 
   
   createBasicInfo(opt:any) {
-    this.settingConfigService.post('/api/supplier/project/create', opt).subscribe((res:ApiData) => {
+    this.settingsConfigService.post('/api/supplier/project/create', opt).subscribe((res:ApiData) => {
       console.log(res);
       this.submitBasicLoading = false;
       if(res.code === 200) {
@@ -98,7 +98,7 @@ export class ProjectSupplierFormComponent implements OnInit {
   }
   editBasicInfo(opt:any) {
 
-    this.settingConfigService.post('/api/supplier/project/update', opt).subscribe((res:ApiData) => {
+    this.settingsConfigService.post('/api/supplier/project/update', opt).subscribe((res:ApiData) => {
       console.log(res);
       this.submitBasicLoading = false;
       if(res.code === 200) {

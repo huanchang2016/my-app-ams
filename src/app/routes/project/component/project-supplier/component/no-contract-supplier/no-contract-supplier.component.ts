@@ -37,7 +37,7 @@ export class NoContractSupplierComponent implements OnInit {
     private modal: NzModalRef,
     private fb: FormBuilder,
     private msg: NzMessageService,
-    public settingConfigService: SettingsConfigService
+    public settingsConfigService: SettingsConfigService
   ) {
     
   }
@@ -91,7 +91,7 @@ export class NoContractSupplierComponent implements OnInit {
 
   
   addNoContract(opt:any) {
-    this.settingConfigService.post('/api/treaty/create', opt).subscribe((res:ApiData) => {
+    this.settingsConfigService.post('/api/treaty/create', opt).subscribe((res:ApiData) => {
       console.log(res);
       this.submitLoading = false;
       if(res.code === 200) {
@@ -104,7 +104,7 @@ export class NoContractSupplierComponent implements OnInit {
   }
   editNoContract(opt:any) {
 
-    this.settingConfigService.post('/api/treaty/update', opt).subscribe((res:ApiData) => {
+    this.settingsConfigService.post('/api/treaty/update', opt).subscribe((res:ApiData) => {
       console.log(res);
       this.submitLoading = false;
       if(res.code === 200) {

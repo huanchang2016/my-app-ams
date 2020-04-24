@@ -34,7 +34,7 @@ export class ApproveNotStartedComponent implements OnInit {
   // TODO: checkbox
   constructor(
     private commonFn: CommonFunctionService,
-    private settingConfigService: SettingsConfigService,
+    private settingsConfigService: SettingsConfigService,
     private router: Router
   ) {}
 
@@ -44,7 +44,7 @@ export class ApproveNotStartedComponent implements OnInit {
 
   getDataList() { // 获取单位下的数据
     this.loading = true;
-    this.settingConfigService.get('/api/my/pay/project', this.pageOption).subscribe((res:ApiData) => {
+    this.settingsConfigService.get('/api/my/pay/project', this.pageOption).subscribe((res:ApiData) => {
       console.log(res);
       this.loading = false;
       if(res.code === 200) {

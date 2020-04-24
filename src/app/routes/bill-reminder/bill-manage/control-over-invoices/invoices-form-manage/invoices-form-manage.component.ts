@@ -39,7 +39,7 @@ export class InvoicesFormManageComponent implements OnInit {
 
   constructor(
     private msg: NzMessageService,
-    private settingConfigService: SettingsConfigService,
+    private settingsConfigService: SettingsConfigService,
     private activatedRoute: ActivatedRoute,
     private fb: FormBuilder,
     private router: Router
@@ -116,7 +116,7 @@ export class InvoicesFormManageComponent implements OnInit {
 
   submitBillInfo(): void {
     console.log('提交发票 开具申请');
-    this.settingConfigService.post('/api/bill/submit', { bill_id: this.billId }).subscribe((res:ApiData) => {
+    this.settingsConfigService.post('/api/bill/submit', { bill_id: this.billId }).subscribe((res:ApiData) => {
       if(res.code === 200) {
         this.msg.success('提交成功');
         this.router.navigateByUrl('/bill/apply/in_progress');
@@ -138,7 +138,7 @@ export class InvoicesFormManageComponent implements OnInit {
       remark: opt.remark
     };
 
-    this.settingConfigService.post('/api/bill/create', option).subscribe((res: ApiData) => {
+    this.settingsConfigService.post('/api/bill/create', option).subscribe((res: ApiData) => {
       this.submitLoading = false;
       if (res.code === 200) {
         this.msg.success('创建成功');
@@ -163,7 +163,7 @@ export class InvoicesFormManageComponent implements OnInit {
       remark: opt.remark
     };
 
-    this.settingConfigService.post('/api/bill/update', option).subscribe((res: ApiData) => {
+    this.settingsConfigService.post('/api/bill/update', option).subscribe((res: ApiData) => {
       this.submitLoading = false;
       if (res.code === 200) {
         this.msg.success('更新成功');
@@ -189,7 +189,7 @@ export class InvoicesFormManageComponent implements OnInit {
   }
 
   getBillInfo(): void {
-    this.settingConfigService.get(`/api/bill/${this.billId}`).subscribe((res: ApiData) => {
+    this.settingsConfigService.get(`/api/bill/${this.billId}`).subscribe((res: ApiData) => {
       console.log('billInfo, ', res.data);
       if (res.code === 200) {
         this.billInfo = res.data;
@@ -200,7 +200,7 @@ export class InvoicesFormManageComponent implements OnInit {
     })
   }
   getBillFees(): void {
-    this.settingConfigService.get(`/api/bill/fee/${this.billId}`).subscribe((res: ApiData) => {
+    this.settingsConfigService.get(`/api/bill/fee/${this.billId}`).subscribe((res: ApiData) => {
       console.log('bill fee, ', res.data);
       if (res.code === 200) {
         this.validateForm.patchValue({
@@ -212,7 +212,7 @@ export class InvoicesFormManageComponent implements OnInit {
 
   getConfigs(): void {
     // 获取客户单位 信息详情
-    this.settingConfigService.get(`/api/project/detail/${this.projectId}`).subscribe((res: ApiData) => {
+    this.settingsConfigService.get(`/api/project/detail/${this.projectId}`).subscribe((res: ApiData) => {
       console.log('projectDetailInfo, ', res.data);
       if (res.code === 200) {
         this.projectDetailInfo = res.data;
@@ -223,7 +223,7 @@ export class InvoicesFormManageComponent implements OnInit {
     })
 
     // 获取开票类型
-    this.settingConfigService.get(`/api/bill/category/all`).subscribe((res: ApiData) => {
+    this.settingsConfigService.get(`/api/bill/category/all`).subscribe((res: ApiData) => {
       console.log('bill/category, ', res.data);
       if (res.code === 200) {
         this.billCategoryArray = res.data.bill_category;
@@ -232,7 +232,7 @@ export class InvoicesFormManageComponent implements OnInit {
   }
 
   getTaxInCompany(id: number): void {
-    this.settingConfigService.get(`/api/tax/company/${id}`).subscribe((res: ApiData) => {
+    this.settingsConfigService.get(`/api/tax/company/${id}`).subscribe((res: ApiData) => {
       console.log(res.data);
       if (res.code === 200) {
         this.taxArray = res.data.tax;
@@ -242,7 +242,7 @@ export class InvoicesFormManageComponent implements OnInit {
 
   getSubTaxFees(id: number) {
 
-    this.settingConfigService.get(`/api/tax/fee/${id}`).subscribe((res: ApiData) => {
+    this.settingsConfigService.get(`/api/tax/fee/${id}`).subscribe((res: ApiData) => {
       console.log(res.data);
       if (res.code === 200) {
         let data: any[] = res.data.tax_fee;

@@ -25,9 +25,9 @@ listOfData:any[] = [];
 loading: boolean = false;
 constructor(
   private modalService: NzModalService,
-  private settingConfigService: SettingsConfigService
+  private settingsConfigService: SettingsConfigService
 ) {
-  this.settingConfigService.get('/api/company/user/all').subscribe((res:ApiData) => {
+  this.settingsConfigService.get('/api/company/user/all').subscribe((res:ApiData) => {
     console.log(res, 'user company');
     if(res.code === 200) {
       this.company = res.data.company;
@@ -41,7 +41,7 @@ ngOnInit() {
 
 // view(data:any) {
 //   console.log(data);
-//   this.settingConfigService.get(`/api/quota/${data.id}`).subscribe((res:ApiData) => {
+//   this.settingsConfigService.get(`/api/quota/${data.id}`).subscribe((res:ApiData) => {
 //     console.log(res);
 //   })
 // }
@@ -94,7 +94,7 @@ searchOptionsChange(option?:any) {
 
 getDataList() { // 获取单位下的数据
   this.loading = true;
-  this.settingConfigService.get(`/api/quota/all`).subscribe((res:ApiData) => {
+  this.settingsConfigService.get(`/api/quota/all`).subscribe((res:ApiData) => {
     console.log(res);
     this.loading = false;
     if(res.code === 200) {

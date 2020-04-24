@@ -135,6 +135,7 @@ export class NoContractApproveViewComponent implements OnInit {
           console.log(res, 'approval');
           if(res.code === 200) {
            this.msg.success('审核提交成功');
+           this.settingsConfigService.resetGlobalTasks();
            this.getWorkflow();
           }
     })

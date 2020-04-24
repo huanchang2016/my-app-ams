@@ -18,3 +18,12 @@
     display: inline-block;
     vertical-align: middle;
 }
+
+// 修改 移动端 样式
+@import '~@delon/theme/styles/default';
+@media screen and (max-width: @screen-sm) {
+    .head-task-box {
+        width: 28px;
+        height: 28px;
+    }
+}

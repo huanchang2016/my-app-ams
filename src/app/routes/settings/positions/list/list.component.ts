@@ -22,9 +22,9 @@ export class PositionListComponent implements OnInit {
     private modalService: NzModalService,
     private commonFn: CommonFunctionService,
     private msg: NzMessageService,
-    private settingConfigService: SettingsConfigService
+    private settingsConfigService: SettingsConfigService
   ) {
-    this.settingConfigService.get('/api/company/user/all').subscribe((res:ApiData) => {
+    this.settingsConfigService.get('/api/company/user/all').subscribe((res:ApiData) => {
       if(res.code === 200) {
         let data:any[] = res.data.company;
         this.companyArray = data.map( v => {
@@ -74,7 +74,7 @@ export class PositionListComponent implements OnInit {
   }
   
   disabled(id:number):void {
-    this.settingConfigService.post('/api/position/disable', { position_ids: [id] })
+    this.settingsConfigService.post('/api/position/disable', { position_ids: [id] })
         .subscribe((res:ApiData) => {
           if(res.code === 200) {
             this.msg.success('禁用成功');
@@ -89,7 +89,7 @@ export class PositionListComponent implements OnInit {
     });
   }
   enabled(id:number):void {
-    this.settingConfigService.post('/api/position/enable', { position_ids: [id] })
+    this.settingsConfigService.post('/api/position/enable', { position_ids: [id] })
         .subscribe((res:ApiData) => {
           if(res.code === 200) {
             this.msg.success('启用成功');
@@ -128,7 +128,7 @@ export class PositionListComponent implements OnInit {
   }
   getDataList(id:number = this.companyId) { // 获取单位下的数据
     this.loading = true;
-    this.settingConfigService.post(`/api/position/list`, { company_id: id }).subscribe((res:ApiData) => {
+    this.settingsConfigService.post(`/api/position/list`, { company_id: id }).subscribe((res:ApiData) => {
       this.loading = false;
       if(res.code === 200) {
         let data:any[] = res.data.position;

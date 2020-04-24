@@ -38,10 +38,10 @@ export class ProjectBudgetComponent implements OnInit {
     private fb: FormBuilder,
     private msg: NzMessageService,
     public settings: SettingsService, // 通过个人 所在部门 获取项目类型等信息
-    public settingConfigService: SettingsConfigService
+    public settingsConfigService: SettingsConfigService
   ) {
     if(this.settings.user.department) {
-      this.settingConfigService.get(`/api/tax/department/${this.settings.user.department.id}`).subscribe((res:ApiData) => {
+      this.settingsConfigService.get(`/api/tax/department/${this.settings.user.department.id}`).subscribe((res:ApiData) => {
         if(res.code === 200) {
           this.taxArray = res.data.tax;
         }
@@ -72,7 +72,7 @@ export class ProjectBudgetComponent implements OnInit {
   }
 
   getBudgetData() {
-    this.settingConfigService.get(`/api/budget/project/${this.projectInfo.id}`).subscribe((res:ApiData) => {
+    this.settingsConfigService.get(`/api/budget/project/${this.projectInfo.id}`).subscribe((res:ApiData) => {
       // console.log(res);
       if(res.code === 200) {
         this.setFormValue(res.data);
@@ -123,7 +123,7 @@ export class ProjectBudgetComponent implements OnInit {
 
   updateBudget(data:any):void {
     this.submitLoading = true;
-    this.settingConfigService.post('/api/budget/update', data).subscribe((res:ApiData) => {
+    this.settingsConfigService.post('/api/budget/update', data).subscribe((res:ApiData) => {
       // console.log('budget : ', res);
       this.submitLoading = false;
       if(res.code === 200) {
@@ -138,7 +138,7 @@ export class ProjectBudgetComponent implements OnInit {
   }
 
   addBudget(data:any): void {
-    this.settingConfigService.post('/api/project/create', data).subscribe((res:ApiData) => {
+    this.settingsConfigService.post('/api/project/create', data).subscribe((res:ApiData) => {
       // console.log(res);
       if(res.code === 200) {
         this.submitChangeSuccess.emit({
@@ -157,7 +157,7 @@ export class ProjectBudgetComponent implements OnInit {
       income: opt.income === 0 ? null : opt.income
     });
 
-    this.settingConfigService.get(`/api/cost/budget/${opt.id}`).subscribe((res:ApiData) => {
+    this.settingsConfigService.get(`/api/cost/budget/${opt.id}`).subscribe((res:ApiData) => {
       if(res.code === 200) {
         this.validateForm.patchValue({
           cost: res.data.cost

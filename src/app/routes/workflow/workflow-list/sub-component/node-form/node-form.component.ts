@@ -29,7 +29,7 @@ export class NodeFormComponent implements OnInit {
     private modal: NzModalRef,
     private fb: FormBuilder,
     private msg: NzMessageService,
-    private settingConfigService: SettingsConfigService
+    private settingsConfigService: SettingsConfigService
   ) { }
 
 
@@ -70,7 +70,7 @@ export class NodeFormComponent implements OnInit {
       ...this.validateForm.value,
       workflow_id: this.workflow_id
     };
-    this.settingConfigService.post('/api/node/create', obj).subscribe((res:ApiData) => {
+    this.settingsConfigService.post('/api/node/create', obj).subscribe((res:ApiData) => {
       console.log(res);
       this.submitLoading = false;
       if(res.code === 200) {
@@ -88,7 +88,7 @@ export class NodeFormComponent implements OnInit {
       node_id: this.data.id
     };
 
-    this.settingConfigService.post('/api/node/update', opt).subscribe((res:ApiData) => {
+    this.settingsConfigService.post('/api/node/update', opt).subscribe((res:ApiData) => {
       console.log(res);
       this.submitLoading = false;
       if(res.code === 200) {

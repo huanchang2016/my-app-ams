@@ -24,9 +24,9 @@ export class AuthorityRolesComponent implements OnInit {
     private modalService: NzModalService,
     private commonFn: CommonFunctionService,
     private msg: NzMessageService,
-    private settingConfigService: SettingsConfigService
+    private settingsConfigService: SettingsConfigService
   ) {
-    this.settingConfigService.get('/api/company/user/all').subscribe((res:ApiData) => {
+    this.settingsConfigService.get('/api/company/user/all').subscribe((res:ApiData) => {
       if(res.code === 200) {
         let data:any[] = res.data.company;
         this.companyArray = data.map( v => {
@@ -78,7 +78,7 @@ export class AuthorityRolesComponent implements OnInit {
   cancel() {}
 
   disabled(id:number):void {
-    this.settingConfigService.post('/api/role/disable', { ids: [id] })
+    this.settingsConfigService.post('/api/role/disable', { ids: [id] })
         .subscribe((res:ApiData) => {
           if(res.code === 200) {
             this.msg.success('禁用成功');
@@ -114,7 +114,7 @@ export class AuthorityRolesComponent implements OnInit {
 
   getDataList(id:number = this.companyId) { // 获取单位下的数据
     this.loading = true;
-    this.settingConfigService.get(`/api/company/role/${id}`).subscribe((res:ApiData) => {
+    this.settingsConfigService.get(`/api/company/role/${id}`).subscribe((res:ApiData) => {
       console.log(res);
       this.loading = false;
       if(res.code === 200) {

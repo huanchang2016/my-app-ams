@@ -29,7 +29,7 @@ export class QuotaFormComponentComponent implements OnInit {
     private modal: NzModalRef,
     private fb: FormBuilder,
     private msg: NzMessageService,
-    private settingConfigService: SettingsConfigService
+    private settingsConfigService: SettingsConfigService
   ) { }
 
 
@@ -83,7 +83,7 @@ export class QuotaFormComponentComponent implements OnInit {
       resolution_amount_end: +value.resolution_amount_end
     };
     console.log(opt);
-    this.settingConfigService.post('/api/quota/create', opt).subscribe((res:ApiData) => {
+    this.settingsConfigService.post('/api/quota/create', opt).subscribe((res:ApiData) => {
       console.log(res);
       this.submitLoading = false;
       if(res.code === 200) {
@@ -108,7 +108,7 @@ export class QuotaFormComponentComponent implements OnInit {
       resolution_amount_end: +value.resolution_amount_end
     };
 
-    this.settingConfigService.post('/api/quota/update', opt).subscribe((res:ApiData) => {
+    this.settingsConfigService.post('/api/quota/update', opt).subscribe((res:ApiData) => {
       console.log(res);
       this.submitLoading = false;
       if(res.code === 200) {

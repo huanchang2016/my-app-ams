@@ -32,7 +32,7 @@ export class ProjectSupplierComponent implements OnChanges, OnInit {
     private fb: FormBuilder,
     private msg: NzMessageService,
     private modalService: NzModalService,
-    public settingConfigService: SettingsConfigService
+    public settingsConfigService: SettingsConfigService
   ) { }
 
   serviceCategory:any[] = [];
@@ -119,7 +119,7 @@ export class ProjectSupplierComponent implements OnChanges, OnInit {
 
   getSupplierInfo() {
 
-    this.settingConfigService.get(`/api/supplier/project/${this.projectInfo.id}`).subscribe((res:ApiData) => {
+    this.settingsConfigService.get(`/api/supplier/project/${this.projectInfo.id}`).subscribe((res:ApiData) => {
       // console.log(res, 'get supplier info!');
       if(res.code === 200) {
         // this.listOfDisplayData = this.listOfAllData = res.data.supplier;
@@ -132,7 +132,7 @@ export class ProjectSupplierComponent implements OnChanges, OnInit {
   }
 
   getServiceCategory():void {
-    this.settingConfigService.get(`/api/service/category/${this.projectInfo.company.id}`).subscribe((res:ApiData) => {
+    this.settingsConfigService.get(`/api/service/category/${this.projectInfo.company.id}`).subscribe((res:ApiData) => {
       // console.log(res);
       if(res.code === 200) {
         const list:any[] = res.data.service_category;
@@ -155,7 +155,7 @@ export class ProjectSupplierComponent implements OnChanges, OnInit {
       project_id: this.projectInfo.id
     };
     
-    this.settingConfigService.post(`/api/supplier/project/delete`, opt).subscribe((res:ApiData) => {
+    this.settingsConfigService.post(`/api/supplier/project/delete`, opt).subscribe((res:ApiData) => {
       if(res.code === 200) {
         this.msg.success('供应商删除成功');
         // this.listOfDisplayData = this.listOfAllData = this.listOfAllData.filter( v => v.id !== id);

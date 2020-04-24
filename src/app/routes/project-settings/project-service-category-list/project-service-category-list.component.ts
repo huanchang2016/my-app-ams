@@ -23,9 +23,9 @@ export class ProjectServiceCategoryListComponent implements OnInit {
     private modalService: NzModalService,
     private commonFn: CommonFunctionService,
     private msg: NzMessageService,
-    private settingConfigService: SettingsConfigService
+    private settingsConfigService: SettingsConfigService
   ) {
-    this.settingConfigService.get('/api/company/user/all').subscribe((res:ApiData) => {
+    this.settingsConfigService.get('/api/company/user/all').subscribe((res:ApiData) => {
       if(res.code === 200) {
         let data:any[] = res.data.company;
         this.companyArray = data.map( v => {
@@ -78,7 +78,7 @@ export class ProjectServiceCategoryListComponent implements OnInit {
   }
   
   disabled(id:number):void {
-    this.settingConfigService.post('/api/service/category/disable', { category_ids: [id] })
+    this.settingsConfigService.post('/api/service/category/disable', { category_ids: [id] })
         .subscribe((res:ApiData) => {
           if(res.code === 200) {
             this.msg.success('禁用成功');
@@ -93,7 +93,7 @@ export class ProjectServiceCategoryListComponent implements OnInit {
     });
   }
   enabled(id:number):void {
-    this.settingConfigService.post('/api/service/category/enable', { category_ids: [id] })
+    this.settingsConfigService.post('/api/service/category/enable', { category_ids: [id] })
         .subscribe((res:ApiData) => {
           if(res.code === 200) {
             this.msg.success('启用成功');
@@ -132,7 +132,7 @@ export class ProjectServiceCategoryListComponent implements OnInit {
   }
   getDataList(id:number = this.companyId) { // 获取单位下的数据
     this.loading = true;
-    this.settingConfigService.get(`/api/service/category/${id}`).subscribe((res:ApiData) => {
+    this.settingsConfigService.get(`/api/service/category/${id}`).subscribe((res:ApiData) => {
       console.log(res);
       this.loading = false;
       if(res.code === 200) {

@@ -23,9 +23,9 @@ export class BillApplyProjectsComponent implements OnInit {
   };
 
   constructor(
-    private settingConfigService: SettingsConfigService
+    private settingsConfigService: SettingsConfigService
   ) {
-    this.settingConfigService.get('/api/company/user/all').subscribe((res:ApiData) => {
+    this.settingsConfigService.get('/api/company/user/all').subscribe((res:ApiData) => {
       if(res.code === 200) {
         let data:any[] = res.data.company;
         this.companyArray = data.map( v => {
@@ -41,7 +41,7 @@ export class BillApplyProjectsComponent implements OnInit {
 
   getDataList() { // 获取单位下的数据
     this.loading = true;
-    this.settingConfigService.get('/api/my/pay/project', this.pageOption).subscribe((res:ApiData) => {
+    this.settingsConfigService.get('/api/my/pay/project', this.pageOption).subscribe((res:ApiData) => {
       console.log(res, '我的审批项目， 发票管理');
       this.loading = false;
       if(res.code === 200) {

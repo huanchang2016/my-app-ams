@@ -23,7 +23,7 @@ export class ProjectViewDraftComponent implements OnChanges, OnInit {
   constructor(
     private msg: NzMessageService,
     public settings: SettingsService, // 通过个人 所在部门 获取项目类型等信息
-    public settingConfigService: SettingsConfigService
+    public settingsConfigService: SettingsConfigService
   ) { }
 
   ngOnChanges() {
@@ -38,7 +38,7 @@ export class ProjectViewDraftComponent implements OnChanges, OnInit {
   }
 
   getDataInfo(projetId:number):void {
-    this.settingConfigService.get(`/api/budget/project/${this.projectInfo.id}`).subscribe((res:ApiData) => {
+    this.settingsConfigService.get(`/api/budget/project/${this.projectInfo.id}`).subscribe((res:ApiData) => {
       console.log(res, 'project budget info!');
       if(res.code === 200) {
         this.budgetInfo = res.data;
@@ -51,7 +51,7 @@ export class ProjectViewDraftComponent implements OnChanges, OnInit {
   // 获取成本预算
   getCostInfo():void {
     
-    this.settingConfigService.get(`/api/cost/budget/${this.budgetInfo.id}`).subscribe((res:ApiData) => {
+    this.settingsConfigService.get(`/api/cost/budget/${this.budgetInfo.id}`).subscribe((res:ApiData) => {
       console.log(res, 'cost 成本预算');
       if(res.code === 200) {
         this.costInfo = res.data.cost;
@@ -65,7 +65,7 @@ export class ProjectViewDraftComponent implements OnChanges, OnInit {
 
   // 获取供应服务商
   getSupplierInfo():void {
-    this.settingConfigService.get(`/api/supplier/project/${this.projectInfo.id}`).subscribe((res:ApiData) => {
+    this.settingsConfigService.get(`/api/supplier/project/${this.projectInfo.id}`).subscribe((res:ApiData) => {
       console.log(res, 'get supplier info!');
       if(res.code === 200) {
         this.supplierList = res.data.supplier;

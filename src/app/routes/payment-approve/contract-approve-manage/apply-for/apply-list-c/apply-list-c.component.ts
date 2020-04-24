@@ -40,7 +40,7 @@ export class ApplyListCComponent implements OnInit {
   // TODO: checkbox
   constructor(
     private commonFn: CommonFunctionService,
-    private settingConfigService: SettingsConfigService,
+    private settingsConfigService: SettingsConfigService,
     private router: Router
   ) {}
 
@@ -50,7 +50,7 @@ export class ApplyListCComponent implements OnInit {
 
   getDataList() { // 获取单位下的数据
     this.loading = true;
-    this.settingConfigService.get(this.postUrl, this.pageOption).subscribe((res:ApiData) => {
+    this.settingsConfigService.get(this.postUrl, this.pageOption).subscribe((res:ApiData) => {
       console.log(res);
       this.loading = false;
       if(res.code === 200) {

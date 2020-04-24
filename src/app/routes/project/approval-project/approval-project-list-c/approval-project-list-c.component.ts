@@ -44,11 +44,11 @@ export class ApprovalProjectListCComponent implements OnInit {
   // TODO: checkbox
   constructor(
     private commonFn: CommonFunctionService,
-    private settingConfigService: SettingsConfigService,
+    private settingsConfigService: SettingsConfigService,
     private drawerService: NzDrawerService,
     private router: Router
   ) {
-    this.settingConfigService.get('/api/company/user/all').subscribe((res: ApiData) => {
+    this.settingsConfigService.get('/api/company/user/all').subscribe((res: ApiData) => {
       if (res.code === 200) {
         let data: any[] = res.data.company;
         this.companyArray = data.map(v => {
@@ -64,7 +64,7 @@ export class ApprovalProjectListCComponent implements OnInit {
 
   getDataList() { // 获取单位下的数据
     this.loading = true;
-    this.settingConfigService.get(this.postUrl, this.pageOption).subscribe((res: ApiData) => {
+    this.settingsConfigService.get(this.postUrl, this.pageOption).subscribe((res: ApiData) => {
       console.log(res);
       this.loading = false;
       if (res.code === 200) {

@@ -28,7 +28,7 @@ export class SubincomeFormCComponent implements OnInit {
     private modal: NzModalRef,
     private fb: FormBuilder,
     private msg: NzMessageService,
-    private settingConfigService: SettingsConfigService
+    private settingsConfigService: SettingsConfigService
   ) { }
 
 
@@ -68,7 +68,7 @@ export class SubincomeFormCComponent implements OnInit {
       ...this.validateForm.value,
       tax_id: this.tax_id
     };
-    this.settingConfigService.post('/api/tax/fee/create', obj).subscribe((res:ApiData) => {
+    this.settingsConfigService.post('/api/tax/fee/create', obj).subscribe((res:ApiData) => {
       console.log(res);
       this.submitLoading = false;
       if(res.code === 200) {
@@ -86,7 +86,7 @@ export class SubincomeFormCComponent implements OnInit {
       tax_fee_id: this.data.id
     };
 
-    this.settingConfigService.post('/api/tax/fee/update', opt).subscribe((res:ApiData) => {
+    this.settingsConfigService.post('/api/tax/fee/update', opt).subscribe((res:ApiData) => {
       console.log(res);
       this.submitLoading = false;
       if(res.code === 200) {

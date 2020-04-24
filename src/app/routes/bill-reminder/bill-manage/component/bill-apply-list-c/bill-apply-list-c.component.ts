@@ -30,10 +30,10 @@ export class BillApplyListCComponent implements OnInit {
 
   constructor(
     private commonFn: CommonFunctionService,
-    private settingConfigService: SettingsConfigService,
+    private settingsConfigService: SettingsConfigService,
     private router: Router
   ) {
-    this.settingConfigService.get('/api/company/user/all').subscribe((res:ApiData) => {
+    this.settingsConfigService.get('/api/company/user/all').subscribe((res:ApiData) => {
       if(res.code === 200) {
         let data:any[] = res.data.company;
         this.companyArray = data.map( v => {
@@ -49,7 +49,7 @@ export class BillApplyListCComponent implements OnInit {
 
   getDataList() {
     this.loading = true;
-    this.settingConfigService.get(this.postUrl, this.pageOption).subscribe((res:ApiData) => {
+    this.settingsConfigService.get(this.postUrl, this.pageOption).subscribe((res:ApiData) => {
       console.log('发票列表', res);
 
       this.loading = false;

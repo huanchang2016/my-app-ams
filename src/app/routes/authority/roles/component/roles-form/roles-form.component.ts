@@ -28,7 +28,7 @@ export class RolesFormComponent implements OnInit {
     private modal: NzModalRef,
     private fb: FormBuilder,
     private msg: NzMessageService,
-    private settingConfigService: SettingsConfigService
+    private settingsConfigService: SettingsConfigService
   ) { }
 
 
@@ -65,7 +65,7 @@ export class RolesFormComponent implements OnInit {
   }
   create() {
     let opt:any = this.validateForm.value;
-    this.settingConfigService.post('/api/role/create', opt).subscribe((res:ApiData) => {
+    this.settingsConfigService.post('/api/role/create', opt).subscribe((res:ApiData) => {
       this.submitLoading = false;
       if(res.code === 200) {
         this.msg.success('创建成功');
@@ -83,7 +83,7 @@ export class RolesFormComponent implements OnInit {
       description: this.validateForm.value.description
     };
     
-    this.settingConfigService.post('/api/role/update', opt).subscribe((res:ApiData) => {
+    this.settingsConfigService.post('/api/role/update', opt).subscribe((res:ApiData) => {
       console.log(res);
       this.submitLoading = false;
       if(res.code === 200) {

@@ -32,7 +32,7 @@ export class IncomeFormComponentComponent implements OnInit {
     private modal: NzModalRef,
     private fb: FormBuilder,
     private msg: NzMessageService,
-    public settingConfigService: SettingsConfigService
+    public settingsConfigService: SettingsConfigService
   ) { }
 
 
@@ -86,7 +86,7 @@ export class IncomeFormComponentComponent implements OnInit {
   }
   create() {
     let opt:any = this.validateForm.value;
-    this.settingConfigService.post('/api/tax/create', opt).subscribe((res:ApiData) => {
+    this.settingsConfigService.post('/api/tax/create', opt).subscribe((res:ApiData) => {
       console.log(res);
       this.submitLoading = false;
       if(res.code === 200) {
@@ -103,7 +103,7 @@ export class IncomeFormComponentComponent implements OnInit {
     
     let obj:any = Object.assign({ tax_id: this.data.id }, opt);
 
-    this.settingConfigService.post('/api/tax/update', obj).subscribe((res:ApiData) => {
+    this.settingsConfigService.post('/api/tax/update', obj).subscribe((res:ApiData) => {
       console.log(res);
       this.submitLoading = false;
       if(res.code === 200) {
@@ -130,7 +130,7 @@ export class IncomeFormComponentComponent implements OnInit {
 
   getDepartment(id:number): void {
     this.departmentLoading = true;
-    this.settingConfigService.get(`/api/department/${id}`).subscribe((res:ApiData) => {
+    this.settingsConfigService.get(`/api/department/${id}`).subscribe((res:ApiData) => {
       this.departmentLoading = false;
       if(res.code === 200) {
         let data:any[] = res.data.department;

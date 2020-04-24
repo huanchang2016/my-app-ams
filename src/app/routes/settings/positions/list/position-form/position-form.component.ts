@@ -33,7 +33,7 @@ export class PositionFormComponent implements OnInit {
     private modal: NzModalRef,
     private fb: FormBuilder,
     private msg: NzMessageService,
-    private settingConfigService: SettingsConfigService
+    private settingsConfigService: SettingsConfigService
   ) { }
 
 
@@ -87,7 +87,7 @@ export class PositionFormComponent implements OnInit {
   }
   create() {
     let opt:any = this.validateForm.value;
-    this.settingConfigService.post('/api/position/create', opt).subscribe((res:ApiData) => {
+    this.settingsConfigService.post('/api/position/create', opt).subscribe((res:ApiData) => {
       console.log(res);
       this.submitLoading = false;
       if(res.code === 200) {
@@ -109,7 +109,7 @@ export class PositionFormComponent implements OnInit {
     
     let obj:any = Object.assign({ position_id: this.data.id }, opt);
 
-    this.settingConfigService.post('/api/position/update', obj).subscribe((res:ApiData) => {
+    this.settingsConfigService.post('/api/position/update', obj).subscribe((res:ApiData) => {
       console.log(res);
       this.submitLoading = false;
       if(res.code === 200) {
@@ -136,7 +136,7 @@ export class PositionFormComponent implements OnInit {
 
   getDepartment(id:number): void {
     this.departmentLoading = true;
-    this.settingConfigService.get(`/api/department/${id}`).subscribe((res:ApiData) => {
+    this.settingsConfigService.get(`/api/department/${id}`).subscribe((res:ApiData) => {
       this.departmentLoading = false;
       if(res.code === 200) {
         let data:any[] = res.data.department;

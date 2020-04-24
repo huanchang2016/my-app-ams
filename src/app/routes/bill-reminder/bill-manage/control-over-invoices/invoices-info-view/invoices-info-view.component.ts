@@ -59,7 +59,7 @@ export class BillReminderInvoicesInfoViewComponent implements OnInit {
   billCategoryArray:any[] = [];
 
   constructor(
-    private settingConfigService: SettingsConfigService,
+    private settingsConfigService: SettingsConfigService,
     private activatedRoute: ActivatedRoute,
     public notice: NzNotificationService,
     public msg: NzMessageService,
@@ -85,7 +85,7 @@ export class BillReminderInvoicesInfoViewComponent implements OnInit {
     
   }
   getBillInfo(): void {
-    this.settingConfigService.get(`/api/bill/${this.billId}`).subscribe((res: ApiData) => {
+    this.settingsConfigService.get(`/api/bill/${this.billId}`).subscribe((res: ApiData) => {
       console.log('billInfo, ', res.data);
       if (res.code === 200) {
         this.billInfo = res.data;
@@ -93,7 +93,7 @@ export class BillReminderInvoicesInfoViewComponent implements OnInit {
       }
     });
 
-    this.settingConfigService.get(`/api/bill/fee/${this.billId}`).subscribe((res: ApiData) => {
+    this.settingsConfigService.get(`/api/bill/fee/${this.billId}`).subscribe((res: ApiData) => {
       console.log('bill fee, ', res.data);
       if (res.code === 200) {
         this.billFees = res.data.bill_fee;
@@ -103,7 +103,7 @@ export class BillReminderInvoicesInfoViewComponent implements OnInit {
   
   getConfig() {
     // 获取客户单位 信息详情
-    this.settingConfigService.get(`/api/project/detail/${this.projectId}`).subscribe((res:ApiData) => {
+    this.settingsConfigService.get(`/api/project/detail/${this.projectId}`).subscribe((res:ApiData) => {
       console.log('projectDetailInfo, ', res.data);
       if(res.code === 200) {
         this.projectDetailInfo = res.data;
@@ -112,7 +112,7 @@ export class BillReminderInvoicesInfoViewComponent implements OnInit {
       }
     });
     // 获取开票类型
-    this.settingConfigService.get(`/api/bill/category/all`).subscribe((res: ApiData) => {
+    this.settingsConfigService.get(`/api/bill/category/all`).subscribe((res: ApiData) => {
       console.log('bill/category, ', res.data);
       if (res.code === 200) {
         this.billCategoryArray = res.data.bill_category;
@@ -124,7 +124,7 @@ export class BillReminderInvoicesInfoViewComponent implements OnInit {
   
   getSubTaxFees(id: number) {
 
-    this.settingConfigService.get(`/api/tax/fee/${id}`).subscribe((res: ApiData) => {
+    this.settingsConfigService.get(`/api/tax/fee/${id}`).subscribe((res: ApiData) => {
       console.log(res.data);
       if (res.code === 200) {
         let data: any[] = res.data.tax_fee;
@@ -138,7 +138,7 @@ export class BillReminderInvoicesInfoViewComponent implements OnInit {
   // 金额大写
   transferNumber:string = '';
   transferAmount(num:number) {
-    this.settingConfigService.post(`/api/finance/transfer`, { num: num }).subscribe((res: ApiData) => {
+    this.settingsConfigService.post(`/api/finance/transfer`, { num: num }).subscribe((res: ApiData) => {
       if (res.code === 200) {
         this.transferNumber = res.data.number;
       }
@@ -158,7 +158,7 @@ export class BillReminderInvoicesInfoViewComponent implements OnInit {
   }
 
   getWorkflow() {
-    this.settingConfigService
+    this.settingsConfigService
         .get(`/api/bill/process/${this.billId}`)
         .subscribe((res:ApiData) => {
           console.log(res, 'workflow bill info');
@@ -173,7 +173,7 @@ export class BillReminderInvoicesInfoViewComponent implements OnInit {
 
   getNodeProcess():void {
     this.isCurrentCheck = false;
-    this.settingConfigService
+    this.settingsConfigService
         .get(`/api/node/process/${this.progressInfo.id}`)
         .subscribe((res:ApiData) => {
           console.log(res, 'node_process');
@@ -198,14 +198,16 @@ export class BillReminderInvoicesInfoViewComponent implements OnInit {
       ...this.checkOption,
       node_process_id: this.currentNodeProcess.id
     }
-    this.settingConfigService
+    this.settingsConfigService
         .post(`/api/bill/approval`, obj)
         .subscribe((res:ApiData) => {
           console.log(res, 'approval');
           if(res.code === 200) {
            this.msg.success('审核提交成功');
+           this.settingsConfigService.resetGlobalTasks();
            this.getWorkflow();
           }
     })
   }
+  cancel() { }
 }

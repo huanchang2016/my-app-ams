@@ -25,16 +25,16 @@ export class ProjectInfoComponent implements OnChanges, OnInit {
     private fb: FormBuilder,
     private msg: NzMessageService,
     public settings: SettingsService, // 通过个人 所在部门 获取项目类型等信息
-    public settingConfigService: SettingsConfigService
+    public settingsConfigService: SettingsConfigService
   ) {
-    this.settingConfigService.get('/api/company/customer/all').subscribe((res: ApiData) => {
+    this.settingsConfigService.get('/api/company/customer/all').subscribe((res: ApiData) => {
       if (res.code === 200) {
         let data: any[] = res.data.company;
         this.customerCompanyArray = data.sort((a: any, b: any) => a.sequence - b.sequence)
           .filter(v => v.active);
       }
     });
-    this.settingConfigService.get('/api/project/origin/list').subscribe((res: ApiData) => {
+    this.settingsConfigService.get('/api/project/origin/list').subscribe((res: ApiData) => {
       if (res.code === 200) {
         let data: any[] = res.data.project_origin;
         this.projectOriginArray = data.sort( (a:any, b:any) => a.sequence - b.sequence);
@@ -44,7 +44,7 @@ export class ProjectInfoComponent implements OnChanges, OnInit {
     if(!this.settings.user.department) {
       return;
     }
-    this.settingConfigService.get(`/api/project_category/department/${this.settings.user.department.id}`).subscribe((res:ApiData) => {
+    this.settingsConfigService.get(`/api/project_category/department/${this.settings.user.department.id}`).subscribe((res:ApiData) => {
       if(res.code === 200) {
         this.projectCategoryArray = res.data.project_category.sort( (a:any, b:any) => a.sequence - b.sequence);
       }
@@ -103,7 +103,7 @@ export class ProjectInfoComponent implements OnChanges, OnInit {
   }
 
   edit(data: any): void {
-    this.settingConfigService.post('/api/project/update', data).subscribe((res: ApiData) => {
+    this.settingsConfigService.post('/api/project/update', data).subscribe((res: ApiData) => {
       console.log(res);
       if (res.code === 200) {
         this.submitChangeSuccess.emit({
@@ -117,7 +117,7 @@ export class ProjectInfoComponent implements OnChanges, OnInit {
   }
 
   add(data: any): void {
-    this.settingConfigService.post('/api/project/create', data).subscribe((res: ApiData) => {
+    this.settingsConfigService.post('/api/project/create', data).subscribe((res: ApiData) => {
       console.log(res);
       if (res.code === 200) {
         this.submitChangeSuccess.emit({

@@ -27,7 +27,7 @@ export class SupplierContractListComponent implements OnInit {
     private fb: FormBuilder,
     private msg: NzMessageService,
     private modalService: NzModalService,
-    public settingConfigService: SettingsConfigService
+    public settingsConfigService: SettingsConfigService
   ) {
 
   }
@@ -101,7 +101,7 @@ export class SupplierContractListComponent implements OnInit {
       supplier_id: this.supplierInfo.id
     };
     this.loadingContract = true;
-    this.settingConfigService.post(`/api/contract/supplier`, opt).subscribe((res: ApiData) => {
+    this.settingsConfigService.post(`/api/contract/supplier`, opt).subscribe((res: ApiData) => {
       console.log(res, 'get contract list  by supplier info!');
       this.loadingContract = false;
       if (res.code === 200) {
@@ -116,7 +116,7 @@ export class SupplierContractListComponent implements OnInit {
       supplier_id: this.supplierInfo.id
     };
     this.loadingTreaty = true;
-    this.settingConfigService.post(`/api/treaty/supplier`, opt).subscribe((res: ApiData) => {
+    this.settingsConfigService.post(`/api/treaty/supplier`, opt).subscribe((res: ApiData) => {
       console.log(res, 'get treaty list  by supplier info!');
       this.loadingTreaty = false;
       if (res.code === 200) {
@@ -139,7 +139,7 @@ export class SupplierContractListComponent implements OnInit {
       const obj: any = {
         contract_ids: [id]
       };
-      this.settingConfigService.post(`/api/contract/disable`, obj).subscribe((res: ApiData) => {
+      this.settingsConfigService.post(`/api/contract/disable`, obj).subscribe((res: ApiData) => {
         if (res.code === 200) {
           this.msg.success('合约禁用成功');
           this.contractList = this.contractList.filter(v => v.id !== id);
@@ -151,7 +151,7 @@ export class SupplierContractListComponent implements OnInit {
       const opt: any = {
         treaty_ids: [id]
       };
-      this.settingConfigService.post(`/api/treaty/disable`, opt).subscribe((res: ApiData) => {
+      this.settingsConfigService.post(`/api/treaty/disable`, opt).subscribe((res: ApiData) => {
         if (res.code === 200) {
           this.msg.success('合约禁用成功');
           this.treatyList = this.treatyList.filter(v => v.id !== id);

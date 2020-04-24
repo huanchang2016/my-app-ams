@@ -22,7 +22,7 @@ export class SearchOptionComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private settingConfigService: SettingsConfigService
+    private settingsConfigService: SettingsConfigService
   ) {}
 
   ngOnChanges(changes: SimpleChanges) {
@@ -63,7 +63,7 @@ export class SearchOptionComponent implements OnInit {
       active: true
     });
 
-    this.settingConfigService.get(`/api/department/${id}`).subscribe((res:ApiData) => {
+    this.settingsConfigService.get(`/api/department/${id}`).subscribe((res:ApiData) => {
       if(res.code === 200) {
         let data:any[] = res.data.department;
         this.departmentArray = data.sort((a:any, b:any) => a.sequence - b.sequence)

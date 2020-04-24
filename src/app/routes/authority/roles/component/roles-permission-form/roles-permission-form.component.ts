@@ -24,7 +24,7 @@ export class RolesPermissionFormComponent implements OnInit {
     private modal: NzModalRef,
     private fb: FormBuilder,
     private msg: NzMessageService,
-    private settingConfigService: SettingsConfigService
+    private settingsConfigService: SettingsConfigService
   ) {}
 
 
@@ -41,14 +41,14 @@ export class RolesPermissionFormComponent implements OnInit {
   }
   getPermissions():void {
     this.nzPermissionLoading = true;
-    // this.settingConfigService.get(`/api/user/company/${this.data.company.id}`).subscribe((res:ApiData) => {
+    // this.settingsConfigService.get(`/api/user/company/${this.data.company.id}`).subscribe((res:ApiData) => {
     //   console.log(res, 'user list ');
     //   if(res.code === 200) {
     //     let permissions:any[] = res.data.permission;
     //     this.listOfData = permissions.filter( v => v.active );
     //   }
     // });
-    this.settingConfigService.get(`/api/role/permission/${this.data.id}`).subscribe((res:ApiData) => {
+    this.settingsConfigService.get(`/api/role/permission/${this.data.id}`).subscribe((res:ApiData) => {
       console.log(res, 'current roles selected permission');
       this.nzPermissionLoading = false;
       if(res.code === 200) {
@@ -75,7 +75,7 @@ export class RolesPermissionFormComponent implements OnInit {
       permission_ids: this.validateForm.value.permission_ids,
       role_id: this.data.id
     };
-    this.settingConfigService.post('/api/role/user/handle', opt).subscribe((res:ApiData) => {
+    this.settingsConfigService.post('/api/role/user/handle', opt).subscribe((res:ApiData) => {
       this.submitLoading = false;
       if(res.code === 200) {
         this.msg.success('绑定用户成功');

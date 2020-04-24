@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { _HttpClient, SettingsService } from '@delon/theme';
 import { Observable, zip } from 'rxjs';
 import { ApiData } from 'src/app/data/interface.data';
+import { GlobalSettingsService } from '@core/global-service/global-settings.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,8 @@ export class SettingsConfigService {
 
   constructor(
     public settings: SettingsService,
-    private httpClient: _HttpClient
+    private httpClient: _HttpClient,
+    private globalService: GlobalSettingsService
   ) {
     this.getConfigs();
   }
@@ -37,6 +39,10 @@ export class SettingsConfigService {
 
     });
     
+  }
+
+  resetGlobalTasks() {
+    this.globalService.getTaskList();
   }
   
   get(api:string, opt?:any): Observable<ApiData> {

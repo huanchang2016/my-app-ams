@@ -26,7 +26,7 @@ export class ProSubincomeListCComponent implements OnInit {
     private modalService: NzModalService,
     private commonFn: CommonFunctionService,
     private msg: NzMessageService,
-    private settingConfigService: SettingsConfigService
+    private settingsConfigService: SettingsConfigService
   ) {
     // 获取当前单位下的用户信息
     
@@ -87,7 +87,7 @@ export class ProSubincomeListCComponent implements OnInit {
       tax_fee_ids: [id],
       tax_id: this.tax.id
     };
-    this.settingConfigService
+    this.settingsConfigService
         .post('/api/tax/fee/disable', option)
         .subscribe((res:ApiData) => {
           if(res.code === 200) {
@@ -104,7 +104,7 @@ export class ProSubincomeListCComponent implements OnInit {
       tax_fee_ids: [id],
       tax_id: this.tax.id
     };
-    this.settingConfigService
+    this.settingsConfigService
         .post('/api/tax/fee/enable', option)
         .subscribe((res:ApiData) => {
           if(res.code === 200) {
@@ -126,7 +126,7 @@ export class ProSubincomeListCComponent implements OnInit {
       url =`/api/tax/fee/disable/${id}`;
     }
     this.loading = true;
-    this.settingConfigService.get(url).subscribe((res:ApiData) => {
+    this.settingsConfigService.get(url).subscribe((res:ApiData) => {
       console.log(res, 'tax_fee list');
       this.loading = false;
       if(res.code === 200) {
@@ -158,6 +158,6 @@ export class ProSubincomeListCComponent implements OnInit {
       tax_id: this.tax.id,
       fees: fees
     };
-    this.settingConfigService.post('/api/tax/fee/sort', option).subscribe( _ => this.getDataList());
+    this.settingsConfigService.post('/api/tax/fee/sort', option).subscribe( _ => this.getDataList());
   }
 }

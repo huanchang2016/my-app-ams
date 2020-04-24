@@ -46,7 +46,7 @@ export class SupplierCompanyComponent implements OnInit {
   constructor(
     private modalService: NzModalService,
     private commonFn: CommonFunctionService,
-    private settingConfigService: SettingsConfigService,
+    private settingsConfigService: SettingsConfigService,
     private msg: NzMessageService,
     private drawerService: NzDrawerService
   ) { }
@@ -57,7 +57,7 @@ export class SupplierCompanyComponent implements OnInit {
 
   getDataList() { // 获取单位下的数据
     this.loading = true;
-    this.settingConfigService.get('/api/company/supplier/all').subscribe((res:ApiData) => {
+    this.settingsConfigService.get('/api/company/supplier/all').subscribe((res:ApiData) => {
       console.log(res);
       this.loading = false;
       if(res.code === 200) {
@@ -270,7 +270,7 @@ export class SupplierCompanyComponent implements OnInit {
   
   // disabled(id:number):void {
   //   console.log('禁用 ', id);
-  //   this.settingConfigService.post('/api/company/disable', { company_ids: [id]}).subscribe((res:ApiData) => {
+  //   this.settingsConfigService.post('/api/company/disable', { company_ids: [id]}).subscribe((res:ApiData) => {
   //     if(res.code === 200) {
   //       this.list = this.list.map( v => {
   //         if(v.id === id) {

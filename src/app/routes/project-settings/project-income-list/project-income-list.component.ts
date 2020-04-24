@@ -25,9 +25,9 @@ export class ProjectIncomeListComponent implements OnInit {
     private modalService: NzModalService,
     private commonFn: CommonFunctionService,
     private msg: NzMessageService,
-    private settingConfigService: SettingsConfigService
+    private settingsConfigService: SettingsConfigService
   ) {
-    this.settingConfigService.get('/api/company/user/all').subscribe((res:ApiData) => {
+    this.settingsConfigService.get('/api/company/user/all').subscribe((res:ApiData) => {
       if(res.code === 200) {
         let data:any[] = res.data.company;
         this.companyArray = data.map( v => {
@@ -81,7 +81,7 @@ export class ProjectIncomeListComponent implements OnInit {
   }
   
   disabled(id:number):void {
-    this.settingConfigService.post('/api/tax/disable', { tax_ids: [id] })
+    this.settingsConfigService.post('/api/tax/disable', { tax_ids: [id] })
         .subscribe((res:ApiData) => {
           if(res.code === 200) {
             this.msg.success('禁用成功');
@@ -96,7 +96,7 @@ export class ProjectIncomeListComponent implements OnInit {
     });
   }
   enabled(id:number):void {
-    this.settingConfigService.post('/api/tax/enable', { tax_ids: [id] })
+    this.settingsConfigService.post('/api/tax/enable', { tax_ids: [id] })
         .subscribe((res:ApiData) => {
           if(res.code === 200) {
             this.msg.success('启用成功');
@@ -134,7 +134,7 @@ export class ProjectIncomeListComponent implements OnInit {
   }
   getDataList(id:number = this.companyId) { // 获取单位下的数据
     this.loading = true;
-    this.settingConfigService.get(`/api/tax/company/${id}`).subscribe((res:ApiData) => {
+    this.settingsConfigService.get(`/api/tax/company/${id}`).subscribe((res:ApiData) => {
       console.log(res);
       this.loading = false;
       if(res.code === 200) {

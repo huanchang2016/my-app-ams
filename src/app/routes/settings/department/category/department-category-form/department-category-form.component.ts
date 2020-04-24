@@ -41,7 +41,7 @@ export class DepartmentCategoryFormComponent implements OnInit {
     private modal: NzModalRef,
     private fb: FormBuilder,
     private msg: NzMessageService,
-    public settingConfigService: SettingsConfigService
+    public settingsConfigService: SettingsConfigService
   ) { }
 
 
@@ -82,7 +82,7 @@ export class DepartmentCategoryFormComponent implements OnInit {
 
   create() {
     let opt:any = this.validateForm.value;
-    this.settingConfigService.post('/api/department_category/create', opt).subscribe((res:ApiData) => {
+    this.settingsConfigService.post('/api/department_category/create', opt).subscribe((res:ApiData) => {
       console.log(res);
       this.submitLoading = false;
       if(res.code === 200) {
@@ -101,7 +101,7 @@ export class DepartmentCategoryFormComponent implements OnInit {
       department_category_id: this.data.id,
       name: opt.name
     };
-    this.settingConfigService.post('/api/department_category/update', obj).subscribe((res:ApiData) => {
+    this.settingsConfigService.post('/api/department_category/update', obj).subscribe((res:ApiData) => {
       console.log(res);
       this.submitLoading = false;
       if(res.code === 200) {

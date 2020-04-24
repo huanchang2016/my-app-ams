@@ -34,7 +34,7 @@ export class BillReminderInvoicesFormComponent implements OnInit {
     private modal: NzModalRef,
     private fb: FormBuilder,
     private msg: NzMessageService,
-    private settingConfigService: SettingsConfigService
+    private settingsConfigService: SettingsConfigService
   ) { }
 
 
@@ -71,7 +71,7 @@ export class BillReminderInvoicesFormComponent implements OnInit {
   nameChange(val:string):void {
     this.isEditUsername = true;
     if(val.trim()) {
-      this.settingConfigService.post('/api/user/username/generate', { name: val }).subscribe((res:ApiData) => {
+      this.settingsConfigService.post('/api/user/username/generate', { name: val }).subscribe((res:ApiData) => {
         if(res.code === 200) {
           this.isEditUsername = false;
           this.validateForm.patchValue({
@@ -129,7 +129,7 @@ export class BillReminderInvoicesFormComponent implements OnInit {
   }
   create() {
     let opt:any = this.validateForm.value;
-    this.settingConfigService.post('/api/user/create', opt).subscribe((res:ApiData) => {
+    this.settingsConfigService.post('/api/user/create', opt).subscribe((res:ApiData) => {
       this.submitLoading = false;
       if(res.code === 200) {
         this.msg.success('创建成功');
@@ -150,7 +150,7 @@ export class BillReminderInvoicesFormComponent implements OnInit {
     
   //   let obj:any = Object.assign({ position_id: this.data.id }, opt);
 
-  //   this.settingConfigService.post('/api/user/update', obj).subscribe((res:ApiData) => {
+  //   this.settingsConfigService.post('/api/user/update', obj).subscribe((res:ApiData) => {
   //     console.log(res);
   //     this.submitLoading = false;
   //     if(res.code === 200) {
@@ -180,7 +180,7 @@ export class BillReminderInvoicesFormComponent implements OnInit {
   getDepartment(id:number): void {
     this.departmentLoading = true;
     this.departmentArray = [];
-    this.settingConfigService.get(`/api/department/${id}`).subscribe((res:ApiData) => {
+    this.settingsConfigService.get(`/api/department/${id}`).subscribe((res:ApiData) => {
       this.departmentLoading = false;
       if(res.code === 200) {
         let data:any[] = res.data.department;
@@ -195,7 +195,7 @@ export class BillReminderInvoicesFormComponent implements OnInit {
   getPosition(id:number): void {
     this.positionLoading = true;
     this.positionArray = [];
-    this.settingConfigService.get(`/api/position/department/${id}`).subscribe((res:ApiData) => {
+    this.settingsConfigService.get(`/api/position/department/${id}`).subscribe((res:ApiData) => {
       this.positionLoading = false;
       if(res.code === 200) {
         let data:any[] = res.data.position;

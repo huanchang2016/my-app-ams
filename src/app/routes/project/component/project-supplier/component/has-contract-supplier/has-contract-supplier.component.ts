@@ -38,7 +38,7 @@ export class HasContractSupplierComponent implements OnInit {
     private modal: NzModalRef,
     private fb: FormBuilder,
     private msg: NzMessageService,
-    public settingConfigService: SettingsConfigService
+    public settingsConfigService: SettingsConfigService
   ) {
     
   }
@@ -124,7 +124,7 @@ export class HasContractSupplierComponent implements OnInit {
 
   
   addContract(opt:any) {
-    this.settingConfigService.post('/api/contract/create', opt).subscribe((res:ApiData) => {
+    this.settingsConfigService.post('/api/contract/create', opt).subscribe((res:ApiData) => {
       console.log(res);
       this.submitLoading = false;
       if(res.code === 200) {
@@ -137,7 +137,7 @@ export class HasContractSupplierComponent implements OnInit {
   }
   editContract(opt:any) {
 
-    this.settingConfigService.post('/api/contract/update', opt).subscribe((res:ApiData) => {
+    this.settingsConfigService.post('/api/contract/update', opt).subscribe((res:ApiData) => {
       console.log(res);
       this.submitLoading = false;
       if(res.code === 200) {

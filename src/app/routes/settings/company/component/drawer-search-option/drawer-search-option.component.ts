@@ -14,7 +14,7 @@ export class DrawerSearchOptionComponent implements OnInit {
   constructor(
     private drawerRef: NzDrawerRef<string>,
     private fb: FormBuilder,
-    public settingConfigService: SettingsConfigService
+    public settingsConfigService: SettingsConfigService
   ) {}
 
   validateForm: FormGroup;

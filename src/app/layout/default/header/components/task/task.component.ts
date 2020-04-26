@@ -50,30 +50,4 @@ export class HeaderTaskComponent {
   // change() {
   //   this.getDataList();
   // }
-  // 任务
-  
-  /***
-   * 
-   * 
-   * 
-                {
-                  text: '项目待审批',
-                  link: '/project/forApproved'
-                },
-                {
-                  text: '合约待审批',
-                  link: '/approve/contract/pay/forApproval'
-                },
-   * 
-                {
-                  text: '非合约待审批',
-                  link: '/approve/no-contract/pay/forApproval'
-                },
-
-   * {
-      text: '开票待审批',
-      link: '/bill/approve/forApprove'
-    },
-
-   */ 
 }

@@ -36,9 +36,9 @@ import { NzMessageService } from 'ng-zorro-antd';
             {{ clock | async }}
           </p>
         </div>
-        <div nz-menu-item routerLink="/pro/account/center">
-          <i nz-icon nzType="user" class="mr-sm"></i>
-          个人中心
+        <div nz-menu-item routerLink="/person-center/edit-password">
+          <i nz-icon nzType="unlock" nzTheme="outline" class="mr-sm"></i>
+          修改密码
         </div>
         <div nz-menu-item (click)="logout()">
           <i nz-icon nzType="logout" class="mr-sm"></i>
@@ -50,7 +50,6 @@ import { NzMessageService } from 'ng-zorro-antd';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderUserComponent implements OnInit {
-  currentDate: Date = new Date();
 
   clock: Observable<string>;
   update$ = new Subject(); // 事件发生器

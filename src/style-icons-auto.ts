@@ -58,7 +58,8 @@ import {
   SortAscendingOutline,
   ToTopOutline,
   TransactionOutline,
-  UsergroupAddOutline
+  UsergroupAddOutline,
+  UnlockOutline
 } from '@ant-design/icons-angular/icons';
 
 export const ICONS_AUTO = [
@@ -117,5 +118,6 @@ export const ICONS_AUTO = [
   SortAscendingOutline,
   ToTopOutline,
   TransactionOutline,
-  UsergroupAddOutline
+  UsergroupAddOutline,
+  UnlockOutline
 ];

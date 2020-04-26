@@ -56,7 +56,7 @@ export function fnDelonAuthConfig(): DelonAuthConfig {
       store_key: 'ams_auth_token',
       token_send_key: 'Authorization',
       token_send_template: 'Bearer ${token}',
-      ignores: [ /\/user\/login/, /\/get_verification_code/, /assets\//, /\/auth/ ]
+      ignores: [ /\/user\/login/, /\/get_verification_code/, /assets\//, /\/auth/, /\/change_password_by_message/, /\/verification\/code\/get/ ]
     } as DelonAuthConfig
   };
 }

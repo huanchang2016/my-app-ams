@@ -10,6 +10,7 @@ import { LayoutPassportComponent } from '../layout/passport/passport.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 // passport pages
 import { UserLoginComponent } from './passport/login/login.component';
+import { RoutesResetPasswordComponent } from './passport/reset-password/reset-password.component';
 import { QrAuthComponent } from './passport/qr-auth/qr-auth.component';
 
 // single pages
@@ -44,7 +45,9 @@ const routes: Routes = [
       // 权限配置
       { path: 'authority', loadChildren: () => import('./authority/authority.module').then(m => m.AuthorityModule) },
       // 用户管理
-      { path: 'users', loadChildren: () => import('./users/users.module').then(m => m.UsersModule) }
+      { path: 'users', loadChildren: () => import('./users/users.module').then(m => m.UsersModule) },
+      // 个人中心
+      { path: 'person-center', loadChildren: () => import('./person-center/person-center.module').then(m => m.PersonCenterModule) }
     ]
   },
   // 全屏布局
@@ -60,6 +63,7 @@ const routes: Routes = [
     component: LayoutPassportComponent,
     children: [
       { path: 'login', component: UserLoginComponent, data: { title: '登录' } },
+      { path: 'reset', component: RoutesResetPasswordComponent, data: { title: '找回密码' } },
       { path: 'auth', component: QrAuthComponent, data: { title: '扫码登录' } }
       // { path: 'register', component: UserRegisterComponent, data: { title: '注册', titleI18n: 'pro-register' } },
       // { path: 'register-result', component: UserRegisterResultComponent, data: { title: '注册结果', titleI18n: 'pro-register-result' } },
@@ -68,7 +72,7 @@ const routes: Routes = [
   },
   // 单页不包裹Layout
   { path: 'callback/:type', component: CallbackComponent },
-  { path: '**', redirectTo: 'exception/404' },
+  { path: '**', redirectTo: 'exception/404' }
 ];
 
 @NgModule({

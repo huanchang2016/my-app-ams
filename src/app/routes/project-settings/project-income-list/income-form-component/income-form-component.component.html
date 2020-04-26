@@ -29,7 +29,7 @@
         <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="invoice_id" nzRequired>开票方式</nz-form-label>
         <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请选择开票方式">
             <nz-select style="width: 100%;" id="invoice_id" nzShowSearch nzPlaceHolder="请选择开票方式" formControlName="invoice_id">
-                <ng-container *ngFor="let item of settingConfigService.configs.invoiceArray">
+                <ng-container *ngFor="let item of settingsConfigService.configs.invoiceArray">
                     <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
                 </ng-container>
             </nz-select>

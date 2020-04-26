@@ -18,7 +18,7 @@
             <nz-form-item>
                 <nz-form-control>
                     <nz-select style="width: 100%;" nzShowSearch nzAllowClear nzPlaceHolder="请选择性质" formControlName="nature" id="nature">
-                        <ng-container *ngFor="let item of settingConfigService.configs.companyNature">
+                        <ng-container *ngFor="let item of settingsConfigService.configs.companyNature">
                             <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
                         </ng-container>
                     </nz-select>

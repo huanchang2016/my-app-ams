@@ -16,7 +16,7 @@
             <nz-form-item nzFlex>
                 <nz-form-label nzFor="department">部门</nz-form-label>
                 <nz-form-control>
-                    <nz-select style="width: 100%;" nzShowSearch nzPlaceHolder="请选择部门" formControlName="department" (ngModelChange)="searchValueChange()" id="department">
+                    <nz-select style="width: 100%;" nzAllowClear nzShowSearch nzPlaceHolder="请选择部门" formControlName="department" (ngModelChange)="searchValueChange()" id="department">
                         <ng-container *ngFor="let item of DEPARTMENT">
                             <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
                         </ng-container>

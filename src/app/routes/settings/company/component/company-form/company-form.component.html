@@ -77,7 +77,7 @@
                 <nz-form-control nzErrorTip="请选择单位类型">
                     <nz-select style="width: 100%;" id="company_nature_id" nzShowSearch nzAllowClear nzPlaceHolder="请选择单位类型"
                         formControlName="company_nature_id">
-                        <ng-container *ngFor="let item of settingConfigService.configs.companyNature">
+                        <ng-container *ngFor="let item of settingsConfigService.configs.companyNature">
                             <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
                         </ng-container>
                     </nz-select>

@@ -1,6 +1,6 @@
 <page-header></page-header>
 
-<app-project-category-search-option [COMPANY]="companyArray" [DEPARTMENT]="departmentArray" (companyValueChange)="companyValueChange($event)" (departmentValueChange)="departmentValueChange($event)" (searchOptionsEmit)="searchOptionsChange($event)" (addContentEmit)="add()"></app-project-category-search-option>
+<app-project-category-search-option [COMPANY]="companyArray" [DEPARTMENT]="departmentArray" (companyValueChange)="companyValueChange($event)" (searchOptionsEmit)="searchOptionsChange($event)" (addContentEmit)="add()"></app-project-category-search-option>
 
 <nz-table #basicTable [nzData]="listOfData" [nzLoading]="loading" [nzShowPagination]="false" class="mt-md">
     <thead>

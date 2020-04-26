@@ -134,6 +134,7 @@ export class ProjectCategoryComponent implements OnInit {
   // 单位筛选发生变化
   companyValueChange({company_id}):void {
     this.companyId = company_id;
+    this.getDataList();
     this.settingsConfigService.get(`/api/department/${company_id}`).subscribe((res:ApiData) => {
       if(res.code === 200) {
         let data:any[] = res.data.department;
@@ -147,18 +148,13 @@ export class ProjectCategoryComponent implements OnInit {
     
   }
 
-  departmentValueChange({department_id}):void {
-    this.departmentId = department_id;
-    this.getDataList();
-  }
   
   getDataList() { // 获取单位下的数据
     this.loading = true;
-    this.settingsConfigService.get(`/api/project_category/department/${this.departmentId}`).subscribe((res:ApiData) => {
+    this.settingsConfigService.get(`/api/project_category/company/${this.companyId}`).subscribe((res:ApiData) => {
       this.loading = false;
       if(res.code === 200) {
         let data:any[] = res.data.project_category;
-        // this.list = data.sort((a:any, b:any) => a.sequence - b.sequence);
         this.list = data;
         this.searchOptionsChange();
       }

@@ -16,7 +16,6 @@ export class SearchOptionComponent implements OnInit {
 
   @Output() searchOptionsEmit: EventEmitter<any> = new EventEmitter();
   @Output() companyValueChange: EventEmitter<any> = new EventEmitter();
-  @Output() departmentValueChange: EventEmitter<any> = new EventEmitter();
   @Output() addContentEmit: EventEmitter<any> = new EventEmitter();
 
   constructor(
@@ -48,11 +47,6 @@ export class SearchOptionComponent implements OnInit {
       }
     });
 
-    this.validateForm.get('department').valueChanges.subscribe( id => {
-      if(id) {
-        this.departmentValueChange.emit( { department_id: id });
-      }
-    });
   }
 
   companyChanged(id:number) {

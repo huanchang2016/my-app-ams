@@ -64,7 +64,7 @@
                 <span [innerHTML]="data.active | yn"></span>
             </td>
             <td>
-                <a (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
+                <a acl [acl-ability]="'modify_user_company'" (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
                 <nz-divider nzType="vertical"></nz-divider>
                 <a (click)="view(data)"><i nz-icon nzType="eye" nzTheme="outline"></i></a>
             </td>
@@ -107,7 +107,7 @@
                 </nz-skeleton>
                 
                 <ng-template #actionEdit>
-                    <a (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
+                    <a acl [acl-ability]="'modify_user_company'" (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
                 </ng-template>
                 <ng-template #actionEllipsis>
                     <a (click)="view(data)"><i nz-icon nzType="eye" nzTheme="outline"></i></a>

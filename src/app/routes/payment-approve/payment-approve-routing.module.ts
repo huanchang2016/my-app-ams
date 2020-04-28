@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { ViewApproveProjectComponent } from './contract-approve-manage/view-approve-project/view-approve-project.component';
 
   // 有合约  合约审批管理
 import { ApproveNotStartedComponent } from './contract-approve-manage/apply-for/approve-not-started/approve-not-started.component';
@@ -56,11 +55,6 @@ const routes: Routes = [
   // 查看合约支付信息  及 流程处理
   { path: 'contract/pay/view/:id', component: ApplyContractViewComponent, data: { title: '合约支付详情查看' } },
     
-  // 项目信息查看
-  { path: 'contract/view/:id', component: ViewApproveProjectComponent, data: { title: '项目审批详情' } },
-  
-  { path: 'no-contract/view/:id', component: ViewApproveProjectComponent, data: { title: '项目审批详情' } },
-  
   // 无合约  支付申请管理
   { path: 'no-contract/apply/draft', component: NoContractNotStartedComponent },
   { path: 'no-contract/apply/in_progress', component: NoContractProjectProgressComponent },

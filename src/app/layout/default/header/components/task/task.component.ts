@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { zip, interval } from 'rxjs';
+import { interval } from 'rxjs';
 import { Router } from '@angular/router';
 import { GlobalSettingsService } from '@core';
 
@@ -7,7 +7,6 @@ import { GlobalSettingsService } from '@core';
   selector: 'header-task',
   templateUrl: './task.component.html',
   styleUrls: ['./task.component.less'],
-  // changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderTaskComponent {
   loading = true;
@@ -21,12 +20,12 @@ export class HeaderTaskComponent {
   timer$:any = null;
 
   constructor(
-    // private cdr: ChangeDetectorRef,
     public globalService: GlobalSettingsService,
     private router: Router
   ) {
     this.getDataList();
     this.intervalFn();
+    
   }
 
   index:number = 0;

@@ -1,0 +1,270 @@
+{
+  "data": [
+    {
+      "name": "查询",
+      "description": "",
+      "group": "单位管理",
+      "sequence": 1,
+      "code": "company_list"
+    },
+    {
+      "name": "创建",
+      "description": "",
+      "group": "单位管理",
+      "sequence": 2,
+      "code": "create_company"
+    },
+    {
+      "name": "编辑",
+      "description": "",
+      "group": "单位管理",
+      "sequence": 3,
+      "code": "edit_company"
+    },
+    {
+      "name": "禁用/启用",
+      "description": "",
+      "group": "单位管理",
+      "sequence": 4,
+      "code": "disable_company"
+    },
+
+    {
+      "name": "查询",
+      "description": "",
+      "group": "部门类型管理",
+      "sequence": 1,
+      "code": "department_type_list"
+    },
+    {
+      "name": "创建",
+      "description": "",
+      "group": "部门类型管理",
+      "sequence": 2,
+      "code": "create_department_type"
+    },
+    {
+      "name": "编辑",
+      "description": "",
+      "group": "部门类型管理",
+      "sequence": 3,
+      "code": "edit_department_type"
+    },
+    {
+      "name": "禁用",
+      "description": "",
+      "group": "部门类型管理",
+      "sequence": 4,
+      "code": "disable_department_type"
+    },
+
+    {
+      "name": "查询",
+      "description": "",
+      "group": "部门管理",
+      "sequence": 1,
+      "code": "department_list"
+    },
+    {
+      "name": "创建",
+      "description": "",
+      "group": "部门管理",
+      "sequence": 2,
+      "code": "create_department"
+    },
+    {
+      "name": "编辑",
+      "description": "",
+      "group": "部门管理",
+      "sequence": 3,
+      "code": "edit_department"
+    },
+    {
+      "name": "禁用/启用",
+      "description": "",
+      "group": "部门管理",
+      "sequence": 4,
+      "code": "disable_department"
+    },
+
+    {
+      "name": "查询",
+      "description": "",
+      "group": "职位层级管理",
+      "sequence": 1,
+      "code": "position_category_list"
+    },
+    {
+      "name": "创建",
+      "description": "",
+      "group": "职位层级管理",
+      "sequence": 2,
+      "code": "create_position_category"
+    },
+    {
+      "name": "编辑",
+      "description": "",
+      "group": "职位层级管理",
+      "sequence": 3,
+      "code": "edit_position_category"
+    },
+    {
+      "name": "禁用",
+      "description": "",
+      "group": "职位层级管理",
+      "sequence": 4,
+      "code": "disable_position_category"
+    },
+
+    {
+      "name": "查询",
+      "description": "",
+      "group": "职位管理",
+      "sequence": 1,
+      "code": "position_list"
+    },
+    {
+      "name": "创建",
+      "description": "",
+      "group": "职位管理",
+      "sequence": 2,
+      "code": "create_position"
+    },
+    {
+      "name": "编辑",
+      "description": "",
+      "group": "职位管理",
+      "sequence": 3,
+      "code": "edit_position"
+    },
+    {
+      "name": "禁用",
+      "description": "",
+      "group": "职位管理",
+      "sequence": 4,
+      "code": "disable_position"
+    },
+
+    {
+      "name": "查询",
+      "description": "",
+      "group": "人员管理",
+      "sequence": 1,
+      "code": "person_list"
+    },
+    {
+      "name": "创建",
+      "description": "",
+      "group": "人员管理",
+      "sequence": 2,
+      "code": "create_person"
+    },
+    {
+      "name": "编辑",
+      "description": "",
+      "group": "人员管理",
+      "sequence": 3,
+      "code": "edit_person"
+    },
+    {
+      "name": "禁用",
+      "description": "",
+      "group": "人员管理",
+      "sequence": 4,
+      "code": "disable_person"
+    },
+
+    {
+      "name": "考核组管理权限",
+      "description": "",
+      "group": "考核配置",
+      "sequence": 1,
+      "code": "assessment_team_permission"
+    },
+    {
+      "name": "审核组管理权限",
+      "description": "",
+      "group": "考核配置",
+      "sequence": 2,
+      "code": "examine_team_permission"
+    },
+    {
+      "name": "考核流程管理权限",
+      "description": "",
+      "group": "考核配置",
+      "sequence": 3,
+      "code": "assessment_workflow_permission"
+    },
+    {
+      "name": "人员考核表管理权限",
+      "description": "",
+      "group": "考核配置",
+      "sequence": 4,
+      "code": "person_assessment_permission"
+    },
+    {
+      "name": "公用考核模板表管理权限",
+      "description": "",
+      "group": "考核配置",
+      "sequence": 5,
+      "code": "common_assessment_permission"
+    },
+
+    {
+      "name": "执行考核",
+      "description": "",
+      "group": "考核评分管理",
+      "sequence": 1,
+      "code": "execute_assess"
+    },
+    {
+      "name": "考核员工",
+      "description": "",
+      "group": "考核评分管理",
+      "sequence": 2,
+      "code": "staff_assess"
+    },
+    {
+      "name": "考核中层",
+      "description": "",
+      "group": "考核评分管理",
+      "sequence": 3,
+      "code": "management_assess"
+    },
+    {
+      "name": "审核评分",
+      "description": "",
+      "group": "考核评分管理",
+      "sequence": 4,
+      "code": "examine_and_score"
+    },
+    {
+      "name": "历史考核评分",
+      "description": "",
+      "group": "考核评分管理",
+      "sequence": 5,
+      "code": "assessment_history_score"
+    },
+    {
+      "name": "单位历史考核评分",
+      "description": "",
+      "group": "考核评分管理",
+      "sequence": 6,
+      "code": "company_assessment_history_score"
+    },
+    {
+      "name": "角色管理",
+      "description": "",
+      "group": "权限管理",
+      "sequence": 1,
+      "code": "role"
+    },
+    {
+      "name": "角色权限管理",
+      "description": "",
+      "group": "权限管理",
+      "sequence": 2,
+      "code": "role_permission"
+    }
+  ]
+}

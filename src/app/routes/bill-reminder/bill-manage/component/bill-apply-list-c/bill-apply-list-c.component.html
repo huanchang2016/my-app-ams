@@ -47,7 +47,7 @@
             </td>
             <td class="text-primary text-nowrap">{{ data.bill_status.name }}</td>
             <td>
-                <span [innerHtml]="data.remark | showTextareaContent"></span>
+                <span [innerHTML]="data.remark | showTextareaContent"></span>
             </td>
             <td>
                 <a [routerLink]=" !isApprove ? ['/bill/apply/invoices/view', data.id] : ['/bill/approve/view', data.id]" [queryParams]="{ project_id: data.project.id }"><i nz-icon nzType="eye" nzTheme="outline"></i></a>

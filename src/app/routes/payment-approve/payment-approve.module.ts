@@ -23,8 +23,6 @@ import { WithoutApprovalListComponent } from './contract-approve-manage/approve-
 // 查看详情
 import { ApplyContractViewComponent } from './contract-approve-manage/approve-pay/apply-contract-view/apply-contract-view.component';
 
-import { ViewApproveProjectComponent } from './contract-approve-manage/view-approve-project/view-approve-project.component';
-
 
 // 无合约  协议审批管理
 import { NoContractNotStartedComponent } from './no-contract-approve-manage/apply-for/no-contract-not-started/no-contract-not-started.component';
@@ -51,7 +49,6 @@ const COMPONENTS = [
   MyApplyForRefuseComponent,
   
   ForApprovalListComponent,
-  ViewApproveProjectComponent,
   ProjectContractListComponent,
   ContractPayCreateComponent,
   // 合约审批

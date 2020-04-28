@@ -24,7 +24,7 @@
         {{ data.company.name }}
       </td>
       <td>
-        <span [innerHtml]="data.description | showTextareaContent"></span>
+        <span [innerHTML]="data.description | showTextareaContent"></span>
       </td>
       <td>
         <a (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>

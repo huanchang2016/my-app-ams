@@ -59,7 +59,7 @@
             </sv-container>
           </td>
           <td>
-            <span [innerHtml]="data.remark | showTextareaContent"></span>
+            <span [innerHTML]="data.remark | showTextareaContent"></span>
           </td>
         </tr>
       </tbody>
@@ -75,7 +75,7 @@
         <sv label="累计支付"><span class="text-success">{{ data.cost.pay_amount }}</span> 元</sv>
         <sv label="剩余支付"><span class="text-primary">{{ data.cost.amount - data.cost.pay_amount }}</span> 元</sv>
         <sv label="本期支付"><strong class="text-error">{{ data.amount }}</strong></sv>
-        <sv label="描述"><span [innerHtml]="data.remark | showTextareaContent"></span></sv>
+        <sv label="描述"><span [innerHTML]="data.remark | showTextareaContent"></span></sv>
       </sv-container>
       
     </ng-container>

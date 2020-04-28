@@ -87,7 +87,7 @@
             </sv-container>
           </td>
           <td>
-            <span [innerHtml]="data.remark | showTextareaContent"></span>
+            <span [innerHTML]="data.remark | showTextareaContent"></span>
           </td>
           <td *ngIf="!contractInfo || contractInfo.draft">
             <a (click)="edit(tplTitle, tplContent, tplFooter, data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
@@ -119,7 +119,7 @@
                       <sv label="累计支付"><span class="text-success">{{ data.cost.pay_amount | currency: 'CNY' }}</span> 元</sv>
                       <sv label="剩余支付"><span class="text-primary">{{ (data.cost.amount - data.cost.pay_amount) | currency: 'CNY' }}</span> 元</sv>
                       <sv label="本期支付"><span class="text-error font-weight-bold">{{ data.amount | currency: 'CNY' }}</span></sv>
-                      <sv label="描述"><span [innerHtml]="data.remark | showTextareaContent"></span></sv>
+                      <sv label="描述"><span [innerHTML]="data.remark | showTextareaContent"></span></sv>
                   </sv-container>
               </div>
           </nz-skeleton>

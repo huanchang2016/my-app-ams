@@ -16,6 +16,7 @@ export class ProjectInfoComponent implements OnChanges, OnInit {
   @Output() submitChangeSuccess: EventEmitter<any> = new EventEmitter();
 
   validateForm: FormGroup;
+  submitLoading:boolean = false;
 
   customerCompanyArray: any[] = [];
   projectCategoryArray: any[] = [];
@@ -82,6 +83,7 @@ export class ProjectInfoComponent implements OnChanges, OnInit {
     if (this.validateForm.valid) {
       console.log(this.validateForm.value);
       let opt: any = this.validateForm.value;
+      this.submitLoading = true;
       if (this.data) {
         let _opt: any = Object.assign({ project_id: this.data.id }, opt);
         this.edit(_opt);
@@ -105,6 +107,7 @@ export class ProjectInfoComponent implements OnChanges, OnInit {
   edit(data: any): void {
     this.settingsConfigService.post('/api/project/update', data).subscribe((res: ApiData) => {
       console.log(res);
+      this.submitLoading = false;
       if (res.code === 200) {
         this.submitChangeSuccess.emit({
           data: res.data,
@@ -119,6 +122,7 @@ export class ProjectInfoComponent implements OnChanges, OnInit {
   add(data: any): void {
     this.settingsConfigService.post('/api/project/create', data).subscribe((res: ApiData) => {
       console.log(res);
+      this.submitLoading = false;
       if (res.code === 200) {
         this.submitChangeSuccess.emit({
           data: res.data,

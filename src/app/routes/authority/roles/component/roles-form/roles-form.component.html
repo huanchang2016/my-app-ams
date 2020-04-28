@@ -8,7 +8,7 @@
     <nz-form-item>
         <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="company" nzRequired>所属单位</nz-form-label>
         <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请选择单位">
-            <nz-select (ngModelChange)="companyValueChange()" style="width: 100%;" id="company" nzShowSearch nzPlaceHolder="请选择所属单位" [nzDisabled]="companyId" formControlName="company_id">
+            <nz-select style="width: 100%;" id="company" nzShowSearch nzPlaceHolder="请选择所属单位" [nzDisabled]="companyId" formControlName="company_id">
                 <ng-container *ngFor="let item of COMPANY">
                     <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
                 </ng-container>

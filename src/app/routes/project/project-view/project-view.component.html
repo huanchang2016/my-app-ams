@@ -117,7 +117,7 @@
 
     <sv-container title="项目描述" col="1" class="mt-lg">
       <sv>
-        <span [innerHtml]="project.info?.description | showTextareaContent"></span>
+        <span [innerHTML]="project.info?.description | showTextareaContent"></span>
       </sv>
     </sv-container>
 
@@ -180,13 +180,13 @@
           <tr *ngIf="showContractExpand[data.id]" style="background-color: #f1f1f1;">
             <td colspan="4">
               <app-supplier-contract-list [projectInfo]="project.info" [supplierInfo]="data"
-                [serviceCategory]="serviceCategory" [isView]="true"></app-supplier-contract-list>
+                [isView]="true"></app-supplier-contract-list>
             </td>
           </tr>
           <tr *ngIf="showNoContractExpand[data.id]" style="background-color: #f1f1f1;">
             <td colspan="4">
               <app-supplier-no-contract-list [projectInfo]="project.info" [supplierInfo]="data"
-                [serviceCategory]="serviceCategory" [isView]="true"></app-supplier-no-contract-list>
+                [isView]="true"></app-supplier-no-contract-list>
             </td>
           </tr>
         </ng-container>
@@ -200,7 +200,7 @@
           <div>{{ data.name }} <span class="ml-sm text-sm">{{ data.supplier_code }}</span></div>
         </ng-template>
         <app-supplier-contract-list [projectInfo]="project.info" [supplierInfo]="data"
-              [serviceCategory]="serviceCategory" [isView]="true"></app-supplier-contract-list>
+             [isView]="true"></app-supplier-contract-list>
       </nz-card>
     </ng-container>
   </nz-card>

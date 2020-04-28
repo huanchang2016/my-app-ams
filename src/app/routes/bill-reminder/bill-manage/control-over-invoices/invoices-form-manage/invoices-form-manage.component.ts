@@ -259,4 +259,6 @@ export class InvoicesFormManageComponent implements OnInit {
       }
     });
   }
+
+  cancel() {}
 }

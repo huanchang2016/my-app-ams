@@ -38,7 +38,7 @@
                         {{ projectInfo.actual_execution_end_time }}</span>
                 </div>
                 <div class="pro-info-list d-flex" nz-col [nzSpan]="24">
-                    <span class="label-title">项目描述</span>： <span [innerHtml]="projectInfo.description | showTextareaContent" class="font-weight-bold description"></span>
+                    <span class="label-title">项目描述</span>： <span [innerHTML]="projectInfo.description | showTextareaContent" class="font-weight-bold description"></span>
                 </div>
             </div>
         </div>

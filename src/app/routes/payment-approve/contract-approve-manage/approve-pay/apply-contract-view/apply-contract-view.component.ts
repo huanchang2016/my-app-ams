@@ -207,4 +207,5 @@ export class ApplyContractViewComponent implements OnInit {
           }
     })
   }
+  cancel() {}
 }

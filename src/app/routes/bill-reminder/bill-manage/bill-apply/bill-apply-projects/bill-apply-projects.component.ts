@@ -54,6 +54,15 @@ export class BillApplyProjectsComponent implements OnInit {
     });
   }
   
+  pageIndexChange($event:number) {
+    this.pageOption.page = $event;
+    this.getDataList();
+  }
+  pageSizeChange($event:number) {
+    this.pageOption.page_size = $event;
+    this.getDataList();
+  }
+  
   // 搜索条件发生变化
   searchOptionsChange(option?:any) {
     if(this.list.length !== 0) {

@@ -49,8 +49,8 @@
                             <sv label="别名">{{ data.alias }}</sv>
                             <sv label="类型">{{ data.category?.name}}</sv>
                             <sv label="单位">{{ data.company?.name }}</sv>
-                            <sv label="描述"><span [innerHtml]="data.business | showTextareaContent | html"></span></sv>
-                            <sv label="职责"><span [innerHtml]="data.duty | showTextareaContent | html"></span></sv>
+                            <sv label="描述"><span [innerHTML]="data.business | showTextareaContent | html"></span></sv>
+                            <sv label="职责"><span [innerHTML]="data.duty | showTextareaContent | html"></span></sv>
                         </sv-container>
                     </div>
                 </nz-skeleton>

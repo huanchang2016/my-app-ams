@@ -19,7 +19,7 @@
             <td>{{ data.name }}</td>
             <td>{{ data.company.name }}</td>
             <td>
-                <span [innerHtml]=" data.description | showTextareaContent"></span>
+                <span [innerHTML]=" data.description | showTextareaContent"></span>
             </td>
             <td>
                 <span [innerHTML]="data.active | yn"></span>
@@ -49,7 +49,7 @@
                     <div class="pt-md">
                         <sv-container size="small">
                             <sv label="单位">{{ data.company.name }}</sv>
-                            <sv label="描述"><span [innerHtml]=" data.description | showTextareaContent"></span></sv>
+                            <sv label="描述"><span [innerHTML]=" data.description | showTextareaContent"></span></sv>
                         </sv-container>
                     </div>
                 </nz-skeleton>

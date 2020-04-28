@@ -159,7 +159,7 @@
             </div>
           </td>
           <td>
-            <span [innerHtml]="data.remark | showTextareaContent"></span>
+            <span [innerHTML]="data.remark | showTextareaContent"></span>
           </td>
           <td *ngIf="!treatypayInfo || treatypayInfo.draft">
             <a (click)="edit(tplTitle, tplContent, tplFooter, data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>

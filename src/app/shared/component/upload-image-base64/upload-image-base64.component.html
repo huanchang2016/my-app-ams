@@ -6,7 +6,7 @@
     [nzBeforeUpload]="beforeUpload"
 >
     <ng-container *ngIf="!photoBase64">
-    <i class="upload-icon" nz-icon [nzType]="loading ? 'loading' : 'plus'"></i>
+    <i class="upload-icon" nz-icon [nzType]="'plus'"></i>
     <div class="ant-upload-text">选择图片</div>
     </ng-container>
     <img *ngIf="photoBase64" [src]="photoBase64" class="avatar" />

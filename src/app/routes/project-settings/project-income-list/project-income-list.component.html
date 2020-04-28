@@ -32,7 +32,7 @@
                     </sv-container>
                 </td>
                 <td>
-                    <span [innerHtml]="data.remark | showTextareaContent"></span>
+                    <span [innerHTML]="data.remark | showTextareaContent"></span>
                 </td>
                 <td>
                     <span [innerHTML]="data.active | yn"></span>
@@ -77,7 +77,7 @@
                             <sv label="税率"><span class="text-error">{{ data.rate }}</span></sv>
                             <sv label="部门">{{ data.department.name }}</sv>
                             <sv label="单位">{{ data.company.name }}</sv>
-                            <sv label="描述"><span [innerHtml]="data.remark | showTextareaContent"></span></sv>
+                            <sv label="描述"><span [innerHTML]="data.remark | showTextareaContent"></span></sv>
                         </sv-container>
                     </div>
                 </nz-skeleton>

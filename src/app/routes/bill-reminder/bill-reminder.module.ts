@@ -10,8 +10,6 @@ import { BillReminderBillApplyInProgressComponent } from './bill-manage/bill-app
 import { BillApplyPassComponent } from './bill-manage/bill-apply/bill-apply-pass/bill-apply-pass.component';
 import { BillApplyRefusedComponent } from './bill-manage/bill-apply/bill-apply-refused/bill-apply-refused.component';
 
-
-import { BillReminderInvoicesFormComponent } from './bill-manage/component/invoices-form/invoices-form.component';
 import { BillReminderInvoicesSearchComponent } from './bill-manage/component/invoices-search/invoices-search.component';
 import { BillApplyProjectSearchComponent } from './bill-manage/component/bill-apply-project-search/bill-apply-project-search.component';
 import { InvoicesTaxFeesCComponent } from './bill-manage/control-over-invoices/invoices-form-manage/invoices-tax-fees-c/invoices-tax-fees-c.component';
@@ -38,7 +36,6 @@ const COMPONENTS = [
   BillApproveWithoutComponent
 ];
 const COMPONENTS_NOROUNT = [
-  BillReminderInvoicesFormComponent,
   BillReminderInvoicesSearchComponent,
   BillApplyProjectSearchComponent,
   InvoicesTaxFeesCComponent,

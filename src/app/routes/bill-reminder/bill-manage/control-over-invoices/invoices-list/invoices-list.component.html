@@ -47,7 +47,7 @@
                 <td>{{ data.bill_category.name }}</td>
                 <td>{{ data.amount | currency: 'CNY' }}</td>
                 <td>
-                    <span [innerHtml]="data.remark | showTextareaContent"></span>
+                    <span [innerHTML]="data.remark | showTextareaContent"></span>
                 </td>
                 <td>
                     <sv-container size="small" col="1">

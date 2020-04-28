@@ -109,7 +109,7 @@
         <tr>
           <td class="font-weight-bold">备注信息</td>
           <td colspan="4" class="text-error font-weight-bold"><span
-              [innerHtml]="billInfo?.remark | showTextareaContent"></span></td>
+              [innerHTML]="billInfo?.remark | showTextareaContent"></span></td>
         </tr>
       </tbody>
       <ng-template #tableFooter>
@@ -168,7 +168,7 @@
                 {{ process.finished_time }}
               </div>
               <span class="text-sm text-primary" [class.text-error]="process.finished && !process.agree"
-                [innerHtml]="process.remark | showTextareaContent"></span>
+                [innerHTML]="process.remark | showTextareaContent"></span>
               <ng-template #notFinished>
                 <!-- TODO:暂不开发 -->
                 <!-- <a *ngIf="process.current" (click)="msg.success('click')">催一下</a> -->

@@ -55,25 +55,17 @@ export class UserFormsComponent implements OnInit {
       this.getDepartment(this.companyId);
     }
 
-
-
-    // this.validateForm.get('department_id').valueChanges.subscribe( id => {
-    //   if(id) {
-    //     this.validateForm.patchValue({
-    //       position_id: null
-    //     })
-    //     this.getPosition(id);
-    //   }
-    // });
-    
-
     if(this.data) {
       //  如果存在 data， 那么需要给表单设置
       this.setFormValue(this.data);
+      this.validateForm.get('username').disable();
     }
   }
 
   nameChange(val:string):void {
+    if(this.data) {
+      return;
+    }
     this.isEditUsername = true;
     if(val.trim()) {
       this.settingsConfigService.post('/api/user/username/generate', { name: val }).subscribe((res:ApiData) => {
@@ -109,7 +101,6 @@ export class UserFormsComponent implements OnInit {
       this.validateForm.patchValue({
         position_id: null
       });
-      
       this.getPosition(this.validateForm.value.department_id);
     }
   }
@@ -120,10 +111,11 @@ export class UserFormsComponent implements OnInit {
       this.validateForm.controls[i].updateValueAndValidity();
     }
     if(this.validateForm.valid) {
+      this.submitLoading = true;
       // this.destroyModal(this.validateForm.value);
       if(this.data) {
         //  请求编辑 接口
-        // this.edit();
+        this.edit();
       }else {
         //  请求 新增接口
         this.create();
@@ -145,30 +137,36 @@ export class UserFormsComponent implements OnInit {
     });
   }
 
-  // edit() {
-  //   let opt:any = {
-  //     name: this.validateForm.value.name,
-  //     is_leader: this.validateForm.value.is_leader,
-  //     sequence: this.validateForm.value.sequence,
-  //     description: this.validateForm.value.description
-  //   };
-    
-  //   let obj:any = Object.assign({ position_id: this.data.id }, opt);
+  edit() {
+    let opt:any = this.validateForm.value;
 
-  //   this.settingsConfigService.post('/api/user/update', obj).subscribe((res:ApiData) => {
-  //     console.log(res);
-  //     this.submitLoading = false;
-  //     if(res.code === 200) {
-  //       this.msg.success('更新成功');
-  //       this.destroyModal(obj, true);
-  //     }else {
-  //       this.msg.error(res.error || '更新失败');
-  //     }
-  //   });
-  // }
+    let obj:any = {
+      user_id: this.data.id,
+      name: opt.name,
+      tel: opt.tel,
+      mail: opt.mail,
+      company_id: opt.company_id,
+      department_id: opt.department_id,
+      position_id: opt.position_id,
+    };
+
+    this.settingsConfigService.post('/api/user/update', obj).subscribe((res:ApiData) => {
+      console.log(res);
+      this.submitLoading = false;
+      if(res.code === 200) {
+        this.msg.success('更新成功');
+        this.destroyModal(obj, true);
+      }else {
+        this.msg.error(res.error || '更新失败');
+      }
+    });
+  }
 
   setFormValue(data:any) :void {
     console.log(data);
+    this.getDepartment(this.data.company.id);
+    this.getPosition(this.data.department.id);
+
     this.validateForm.patchValue({
       name: data.name,
       username: data.username,
@@ -178,8 +176,6 @@ export class UserFormsComponent implements OnInit {
       department_id: data.department.id,
       position_id: data.position.id
     });
-
-    // this.getDepartment()
   }
 
   getDepartment(id:number): void {

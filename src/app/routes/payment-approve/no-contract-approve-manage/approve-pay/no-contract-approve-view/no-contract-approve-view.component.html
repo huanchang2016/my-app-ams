@@ -74,7 +74,7 @@
         </td>
         <td>
           <div>
-            <span>商务卡：</span><strong [innerHtml]="data.is_business_card | yn"></strong>
+            <span>商务卡：</span><strong [innerHTML]="data.is_business_card | yn"></strong>
           </div>
           <div>
             <strong>户&nbsp;&nbsp; 主：</strong><span>{{ data.account_name }}</span>
@@ -84,7 +84,7 @@
           </div>
         </td>
         <td>
-          <span [innerHtml]="data.remark | showTextareaContent"></span>
+          <span [innerHTML]="data.remark | showTextareaContent"></span>
         </td>
       </tr>
     </tbody>
@@ -102,10 +102,10 @@
       <sv label="累计支付"><span class="text-success">{{ data.cost.pay_amount | currency: 'CNY' }}</span> 元</sv>
       <sv label="剩余支付"><span class="text-primary">{{ (data.cost.amount - data.cost.pay_amount) | currency: 'CNY' }}</span> 元</sv>
       <sv label="本期支付"><span class="text-primary">{{ data.amount | currency: 'CNY' }}</span> 元</sv>
-      <sv label="商&nbsp;务&nbsp;卡&nbsp;"><strong [innerHtml]="data.is_business_card | yn"></strong></sv>
+      <sv label="商&nbsp;务&nbsp;卡&nbsp;"><strong [innerHTML]="data.is_business_card | yn"></strong></sv>
       <sv label="户&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;主">{{ data.account_name }}</sv>
       <sv label="卡&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号">{{ data.card_number }}</sv>
-      <sv label="描述"><span [innerHtml]="data.remark | showTextareaContent"></span></sv>
+      <sv label="描述"><span [innerHTML]="data.remark | showTextareaContent"></span></sv>
     </sv-container>
   </ng-container>
 </nz-card>

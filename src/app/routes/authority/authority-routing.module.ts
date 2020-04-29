@@ -1,12 +1,19 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { AuthorityComponent } from './auth-settings/authority.component';
 import { AuthorityRolesComponent } from './roles/list/roles.component';
+import { ACLGuard, ACLType } from '@delon/acl';
 
 const routes: Routes = [
-  { path: 'home', component: AuthorityComponent },
-  { path: 'roles', component: AuthorityRolesComponent }];
-
+  { path: 'roles', component: AuthorityRolesComponent,
+    canActivate: [ACLGuard],
+    data: {
+      guard: <ACLType>{
+        ability: ['permission_list']
+      }
+    }
+  }
+];
+  
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]

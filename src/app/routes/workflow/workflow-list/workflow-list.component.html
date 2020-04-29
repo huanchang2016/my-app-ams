@@ -24,11 +24,11 @@
             </td>
             <td>{{ data.department.name }}</td>
             <td>
-                <a (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
+                <a acl [acl-ability]="'modify_workflow'" (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
 
                 <nz-divider nzType="vertical"></nz-divider>
 
-                <a (click)="showNodeList(data.id)">节点<i nz-icon
+                <a acl [acl-ability]="'modify_workflow'" (click)="showNodeList(data.id)">节点<i nz-icon
                     nzType="{{ showExpand[data.id] ? 'caret-up' : 'caret-down' }}" nzTheme="outline"></i></a>
             </td>
           </tr>
@@ -63,7 +63,7 @@
                     </div>
                 </nz-skeleton>
                 <ng-template #actionEdit>
-                  <a (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
+                  <a acl [acl-ability]="'modify_workflow'" (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
                 </ng-template>
             </nz-card>
         </ng-container>

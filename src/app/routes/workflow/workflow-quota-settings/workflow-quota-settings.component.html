@@ -28,7 +28,7 @@
                 </div>
             </td>
             <td>
-                <a (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
+                <a acl [acl-ability]="'quota_list'" (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
             </td>
         </tr>
     </tbody>
@@ -52,7 +52,7 @@
                     </div>
                 </nz-skeleton>
                 <ng-template #actionEdit>
-                    <a (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
+                    <a acl [acl-ability]="'quota_list'" (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
                 </ng-template>
             </nz-card>
         </ng-container>

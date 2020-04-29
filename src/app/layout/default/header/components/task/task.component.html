@@ -24,6 +24,7 @@
             nzGutter="16"
             class="py-sm bg-grey-lighter-h point"
             (click)="navToApproval('/project/forApproved')"
+            acl [acl-ability]="'project_approval'" 
           >
             <div nz-col [nzSpan]="4" class="text-center">
               <i class="text-xl text-primary" nz-icon nzType="bars" nzTheme="outline"></i>
@@ -44,6 +45,7 @@
             nzGutter="16"
             class="py-sm bg-grey-lighter-h point"
             (click)="navToApproval('/approve/contract/pay/forApproval')"
+            acl [acl-ability]="'contract_pay_approval'" 
           >
             <div nz-col [nzSpan]="4" class="text-center">
               <i class="text-xl text-primary" nz-icon nzType="audit" nzTheme="outline"></i>
@@ -64,6 +66,7 @@
             nzGutter="16"
             class="py-sm bg-grey-lighter-h point"
             (click)="navToApproval('/approve/no-contract/pay/forApproval')"
+            acl [acl-ability]="'treaty_pay_approval'" 
           >
             <div nz-col [nzSpan]="4" class="text-center">
               <i class="text-xl text-primary" nz-icon nzType="exception" nzTheme="outline"></i>
@@ -84,6 +87,7 @@
             nzGutter="16"
             class="py-sm bg-grey-lighter-h point"
             (click)="navToApproval('/bill/approve/forApprove')"
+            acl [acl-ability]="'bill_approval'" 
           >
             <div nz-col [nzSpan]="4" class="text-center">
               <i class="text-xl text-primary" nz-icon nzType="transaction" nzTheme="outline"></i>

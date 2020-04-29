@@ -21,15 +21,17 @@
             <td>
                 <span [innerHTML]="data.is_leader | yn"></span>
             </td>
-            <td>{{ data.description }}</td>
             <td>
-                <a (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
+                <span [innerHTML]="data.description | showTextareaContent | html"></span>
+            </td>
+            <td>
+                <a acl [acl-ability]="'modify_position'" (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
                 <nz-divider nzType="vertical"></nz-divider>
                 <ng-container *ngIf="data.active; else activeFalse">
-                    <a (click)="disabled(data.id)">禁用</a>
+                    <a acl [acl-ability]="'delete_position'" (click)="disabled(data.id)">禁用</a>
                 </ng-container>
                 <ng-template #activeFalse>
-                    <a (click)="enabled(data.id)">启用</a>
+                    <a acl [acl-ability]="'delete_position'" (click)="enabled(data.id)">启用</a>
                 </ng-template>
             </td>
         </tr>
@@ -41,16 +43,27 @@
     </div>
     <div *ngIf="!loading && listOfData.length !== 0">
         <ng-container *ngFor="let data of listOfData">
-            <nz-card [nzActions]="[actionEdit, actionEllipsis]">
-                <nz-skeleton [nzActive]="true" [nzLoading]="false" [nzAvatar]="{ size: 'large' }">
-                    <nz-card-meta [nzTitle]="data.name" [nzDescription]="data.address">
-                    </nz-card-meta>
+            <nz-card [nzActions]="[actionEdit, actionEllipsis]" class="mb-md">
+                <nz-skeleton [nzActive]="true" [nzLoading]="false">
+                    <nz-card-meta [nzTitle]="data.name"></nz-card-meta>
+                    <div class="pt-md">
+                        <sv-container col="1" size="small">
+                            <sv label="部门">{{ data.department.name }}</sv>
+                            <sv label="负责人"><span class="font-weight-bold" [innerHTML]="data.is_leader | yn"></span></sv>
+                            <sv label="职位描述"><span [innerHTML]="data.description | showTextareaContent | html"></span></sv>
+                        </sv-container>
+                    </div>
                 </nz-skeleton>
                 <ng-template #actionEdit>
-                    <i nz-icon nzType="edit"></i>
+                    <i acl [acl-ability]="'modify_position'" nz-icon nzType="edit"></i>
                 </ng-template>
                 <ng-template #actionEllipsis>
-                    <i class="text-danger" nz-icon nzType="stop" nzTheme="outline"></i>
+                    <ng-container *ngIf="data.active; else activeFalse">
+                        <a acl [acl-ability]="'delete_position'" (click)="disabled(data.id)">禁用</a>
+                    </ng-container>
+                    <ng-template #activeFalse>
+                        <a acl [acl-ability]="'delete_position'" (click)="enabled(data.id)">启用</a>
+                    </ng-template>
                 </ng-template>
             </nz-card>
         </ng-container>

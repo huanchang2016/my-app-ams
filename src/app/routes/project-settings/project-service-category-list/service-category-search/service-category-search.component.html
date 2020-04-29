@@ -35,8 +35,8 @@
     <div nz-row>
         <div nz-col [nzSpan]="24" class="search-area">
             <button nz-button [nzType]="'primary'" (click)="submit()">查询</button>
-            <button  nz-button (click)="resetForm()" class="ml-sm">清空条件</button >
-            <button  nz-button (click)="add()" class="ml-sm" [nzType]="'primary'">新增</button >
+            <button nz-button (click)="resetForm()" class="ml-sm">清空条件</button >
+            <button acl [acl-ability]="'modify_supplier_service'" nz-button (click)="add()" class="ml-sm" [nzType]="'primary'">新增</button >
         </div>
     </div>
 </form>

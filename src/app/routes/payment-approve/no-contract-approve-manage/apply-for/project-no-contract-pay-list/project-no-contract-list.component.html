@@ -47,7 +47,7 @@
         <td class="text-error">{{ data.amount }}</td>
         <td>
           <sv-container size="small" col="1">
-            <sv label="冲销借款"><span [innerHtml]="data.if_write_off | yn"></span></sv>
+            <sv label="冲销借款"><span [innerHTML]="data.if_write_off | yn"></span></sv>
             <sv label="冲抵金额"><span class="text-error">{{ data.if_write_off ? data.write_off_amount + '元' : '-' }}</span>
             </sv>
           </sv-container>

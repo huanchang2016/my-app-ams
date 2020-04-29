@@ -74,7 +74,7 @@ export class UsersManageComponent implements OnInit {
   }
   
   disabled(id:number):void {
-    this.settingsConfigService.post('/api/position/disable', { position_ids: [id] })
+    this.settingsConfigService.post('/api/user/disable', { user_ids: [id] })
         .subscribe((res:ApiData) => {
           if(res.code === 200) {
             this.msg.success('禁用成功');
@@ -89,7 +89,7 @@ export class UsersManageComponent implements OnInit {
     });
   }
   enabled(id:number):void {
-    this.settingsConfigService.post('/api/position/enable', { position_ids: [id] })
+    this.settingsConfigService.post('/api/user/enable', { user_ids: [id] })
         .subscribe((res:ApiData) => {
           if(res.code === 200) {
             this.msg.success('启用成功');
@@ -107,8 +107,8 @@ export class UsersManageComponent implements OnInit {
 
   // 搜索条件发生变化
   searchOptionsChange(option?:any) {
-    if(this.list.length !== 0) {
-      let object:any = {};
+    let object:any = {};
+    if(this.list.length !== 0 && option) {
       for (const key in option) {
         if (option.hasOwnProperty(key)) {
           const element = option[key];
@@ -117,8 +117,10 @@ export class UsersManageComponent implements OnInit {
           }
         }
       }
-      this.listOfData = this.commonFn.filterListOfData(this.list, object);
+    }else {
+        object = { active: true };
     }
+    this.listOfData = this.commonFn.filterListOfData(this.list, object);
   }
   // 单位筛选发生变化
   companyValueChange({company_id}):void {
@@ -131,8 +133,7 @@ export class UsersManageComponent implements OnInit {
       console.log(res);
       this.loading = false;
       if(res.code === 200) {
-        let data:any[] = res.data.user;
-        this.list = data.sort((a:any, b:any) => a.sequence - b.sequence);
+        this.list = res.data.user;
         this.searchOptionsChange();
       }
     });

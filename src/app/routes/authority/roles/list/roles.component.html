@@ -27,16 +27,16 @@
         <span [innerHTML]="data.description | showTextareaContent"></span>
       </td>
       <td>
-        <a (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
+        <a acl [acl-ability]="'modify_permission'" (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
         
         <nz-divider nzType="vertical"></nz-divider>
-        <a (click)="createRoleUserComponentModal(data)">用户</a>
+        <a acl [acl-ability]="'modify_permission'" (click)="createRoleUserComponentModal(data)">用户</a>
 
         <nz-divider nzType="vertical"></nz-divider>
-        <a (click)="createRolePermissionComponentModal(data)">权限</a>
+        <a acl [acl-ability]="'modify_permission'" (click)="createRolePermissionComponentModal(data)">权限</a>
 
         <nz-divider nzType="vertical"></nz-divider>
-        <a nz-popconfirm nzPopconfirmTitle="确认是否废弃当前角色，确认请继续！！！"
+        <a acl [acl-ability]="'delete_permission'" nz-popconfirm nzPopconfirmTitle="确认是否废弃当前角色，确认请继续！！！"
           (nzOnConfirm)="disabled(data.id)" (nzOnCancel)="cancel()" class="text-error">
           废弃
         </a>

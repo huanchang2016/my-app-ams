@@ -17,6 +17,7 @@ import { BillApproveWithoutComponent } from './bill-manage/bill-approve/bill-app
 // 发票详情
 import { BillReminderInvoicesInfoViewComponent } from './bill-manage/control-over-invoices/invoices-info-view/invoices-info-view.component';
 
+import { ACLGuard, ACLType } from '@delon/acl';
 
 const routes: Routes = [
   { path: 'apply/projects', component: BillApplyProjectsComponent },
@@ -28,10 +29,38 @@ const routes: Routes = [
   { path: 'apply/pass', component: BillApplyPassComponent },
   { path: 'apply/refused', component: BillApplyRefusedComponent },
   // 开票审批
-  { path: 'approve/my', component: BillApproveBemyComponent },
-  { path: 'approve/forApprove', component: BillApproveFormyComponent },
-  { path: 'approve/finished', component: BillApproveFinishedComponent },
-  { path: 'approve/without', component: BillApproveWithoutComponent },
+  { path: 'approve/my', component: BillApproveBemyComponent,
+    canActivate: [ACLGuard],
+    data: {
+      guard: <ACLType>{
+        ability: ['bill_approval']
+      }
+    }
+  },
+  { path: 'approve/forApprove', component: BillApproveFormyComponent,
+    canActivate: [ACLGuard],
+    data: {
+      guard: <ACLType>{
+        ability: ['bill_approval']
+      }
+    }
+  },
+  { path: 'approve/finished', component: BillApproveFinishedComponent,
+    canActivate: [ACLGuard],
+    data: {
+      guard: <ACLType>{
+        ability: ['bill_approval']
+      }
+    }
+  },
+  { path: 'approve/without', component: BillApproveWithoutComponent,
+    canActivate: [ACLGuard],
+    data: {
+      guard: <ACLType>{
+        ability: ['bill_approval']
+      }
+    }
+  },
 
   // 发票开具 详情
   { path: 'apply/invoices/view/:id', component: BillReminderInvoicesInfoViewComponent, data: { title: '开票详情'} },

@@ -82,6 +82,7 @@ export class StartupService {
               {
                 text: '项目审批',
                 link: '/project/approve',
+                hide: this.isHideRouter(['project_approval'], permissionGroup),
                 children: [
                   {
                     text: '我的审批',
@@ -129,6 +130,7 @@ export class StartupService {
               {
                 text: '合约支付审批',
                 link: '/approve/contract/pay',
+                hide: this.isHideRouter(['contract_pay_approval'], permissionGroup),
                 children: [
                   {
                     text: '我的审批',
@@ -182,6 +184,7 @@ export class StartupService {
               {
                 text: '非合约支付审批',
                 link: '/approve/no-contract/pay',
+                hide: this.isHideRouter(['treaty_pay_approval'], permissionGroup),
                 children: [
                   {
                     text: '我的审批',
@@ -236,6 +239,7 @@ export class StartupService {
               {
                 text: '开票审批',
                 link: '/bill/approve',
+                hide: this.isHideRouter(['bill_approval'], permissionGroup),
                 children: [
                   {
                     text: '我审批的',
@@ -249,10 +253,6 @@ export class StartupService {
                     text: '已审批',
                     link: '/bill/approve/finished'
                   }
-                  // {
-                  //   text: '未审批未通过',
-                  //   link: '/bill/approve/without'
-                  // }
                 ]
               }
             ]
@@ -261,18 +261,22 @@ export class StartupService {
             text: '项目配置管理',
             link: '/pro-settings',
             icon: { type: 'icon', value: 'control' },
+            hide: this.isHideRouter(['cost_list', 'tax_list', 'supplier_service_list'], permissionGroup),
             children: [
               {
                 text: '成本类型配置',
-                link: '/pro-settings/cost'
+                link: '/pro-settings/cost',
+                hide: this.isHideRouter(['cost_list'], permissionGroup)
               },
               {
                 text: '税目配置（收入）',
-                link: '/pro-settings/income'
+                link: '/pro-settings/income',
+                hide: this.isHideRouter(['tax_list'], permissionGroup)
               },
               {
                 text: '服务商类型',
-                link: '/pro-settings/service-category'
+                link: '/pro-settings/service-category',
+                hide: this.isHideRouter(['supplier_service_list'], permissionGroup)
               }
             ]
           },
@@ -280,14 +284,17 @@ export class StartupService {
             text: '项目流程管理',
             link: '/workflow',
             icon: { type: 'icon', value: 'sort-ascending' },
+            hide: this.isHideRouter(['workflow_list', 'quota_list'], permissionGroup),
             children: [
               {
                 text: '流程列表',
-                link: '/workflow/list'
+                link: '/workflow/list',
+                hide: this.isHideRouter(['workflow_list'], permissionGroup)
               },
               {
                 text: '流程限额配置',
-                link: '/workflow/quota-settings'
+                link: '/workflow/quota-settings',
+                hide: this.isHideRouter(['quota_list'], permissionGroup)
               }
             ]
           },
@@ -295,6 +302,7 @@ export class StartupService {
             text: '基础配置',
             link: '/company',
             icon: { type: 'icon', value: 'setting' },
+            hide: this.isHideRouter(['user_company_list', 'customer_company_list', 'supplier_company_list', 'department_list', 'department_category_list', 'project_category_list', 'position_list'], permissionGroup),
             children: [
               {
                 text: '单位管理',
@@ -320,48 +328,53 @@ export class StartupService {
               {
                 text: '部门配置',
                 link: '/department',
+                hide: this.isHideRouter(['department_list', 'department_category_list', 'project_category_list'], permissionGroup),
                 children: [
                   {
                     text: '部门管理',
-                    link: '/department/list'
+                    link: '/department/list',
+                    hide: this.isHideRouter(['department_list'], permissionGroup)
                   },
                   {
-                    text: '类型管理',
-                    link: '/department/category'
+                    text: '部门类型',
+                    link: '/department/category',
+                    hide: this.isHideRouter(['department_category_list'], permissionGroup)
                   },
                   {
                     text: '项目类型',
-                    link: '/department/project-category'
+                    link: '/department/project-category',
+                    hide: this.isHideRouter(['project_category_list'], permissionGroup)
                   }
                 ]
               },
               {
                 text: '职位管理',
-                link: '/position/list'
+                link: '/position/list',
+                hide: this.isHideRouter(['position_list'], permissionGroup)
               }
             ]
           },
           {
             text: '用户管理',
             icon: { type: 'icon', value: 'usergroup-add' },
+            hide: this.isHideRouter(['user_list'], permissionGroup),
             children: [
               {
                 text: '用户列表',
-                link: '/users/list'
+                link: '/users/list',
+                hide: this.isHideRouter(['user_list'], permissionGroup)
               }
             ]
           },
           {
             text: '权限管理',
             icon: { type: 'icon', value: 'key' },
+            hide: this.isHideRouter(['permission_list'], permissionGroup),
             children: [
               {
                 text: '角色管理',
-                link: '/authority/roles'
-              },
-              {
-                text: '权限设置',
-                link: '/authority/home'
+                link: '/authority/roles',
+                hide: this.isHideRouter(['permission_list'], permissionGroup)
               }
             ]
           }

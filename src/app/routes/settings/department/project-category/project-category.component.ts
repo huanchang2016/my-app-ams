@@ -45,11 +45,7 @@ export class ProjectCategoryComponent implements OnInit {
   }
 
   add() :void {
-    if(this.departmentId) {
-      this.createComponentModal();
-    }else {
-      this.msg.warning('请先选择所属部门');
-    }
+    this.createComponentModal();
   }
 
   edit(data:any): void {
@@ -77,7 +73,7 @@ export class ProjectCategoryComponent implements OnInit {
 
     // Return a result when closed
     modal.afterClose.subscribe(result => {
-      if(result && this.departmentId) {
+      if(result) {
         this.getDataList();
       }
     });

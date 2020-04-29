@@ -10,14 +10,40 @@ import { MyInApprovalListComponent } from './approval-project/my-in-approval-lis
 import { MyApprovaledListComponent } from './approval-project/my-approvaled-list/my-approvaled-list.component';
 import { MyForApprovaledListComponent } from './approval-project/my-for-approvaled-list/my-for-approvaled-list.component';
 
+import { ACLGuard, ACLType } from '@delon/acl';
+
 const routes: Routes = [
   { path: 'my/draft', component: DraftListComponent, data: { title: '项目草稿'} },
   { path: 'my/progress', component: ProgressListComponent, data: { title: '进行中的项目'} },
   { path: 'my/refuse', component: RefuseProjectListComponent, data: { title: '未通过的项目'} },
   { path: 'my/finished', component: FinishedListComponent, data: { title: '提交通过的项目'} },
-  { path: 'approve', component: MyInApprovalListComponent, data: { title: '该我审批的项目'} },
-  { path: 'forApproved', component: MyForApprovaledListComponent, data: { title: '待审批项目（我的）'} },
-  { path: 'approved', component: MyApprovaledListComponent, data: { title: '已审批的项目'} },
+  { path: 'approve', component: MyInApprovalListComponent,
+    canActivate: [ACLGuard],
+    data: {
+      title: '该我审批的项目',
+      guard: <ACLType>{
+        ability: ['project_approval']
+      }
+    }
+   },
+  { path: 'forApproved', component: MyForApprovaledListComponent,
+    canActivate: [ACLGuard],
+    data: {
+      title: '待审批项目（我的）',
+      guard: <ACLType>{
+        ability: ['project_approval']
+      }
+    }
+  },
+  { path: 'approved', component: MyApprovaledListComponent,
+    canActivate: [ACLGuard],
+    data: {
+      title: '已审批的项目',
+      guard: <ACLType>{
+        ability: ['project_approval']
+      }
+    }
+  },
   { path: 'create', component: ProjectCreateComponent, data: { title: '创建项目'} },
   { path: 'edit/:id', component: ProjectCreateComponent, data: { title: '编辑项目信息'} },
   { path: 'view/:id', component: ProjectViewComponent, data: { title: '预览项目信息'} }

@@ -38,25 +38,25 @@
                     <span [innerHTML]="data.active | yn"></span>
                 </td>
                 <td>
-                    <a (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
+                    <a acl [acl-ability]="'modify_tax'" (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
                     
                     <nz-divider nzType="vertical"></nz-divider>
 
-                    <a (click)="showNodeList(data.id)" class="text-nowrap">税目明细<i nz-icon
+                    <a acl [acl-ability]="'modify_tax'" (click)="showNodeList(data.id)" class="text-nowrap">税目明细<i nz-icon
                         nzType="{{ showExpand[data.id] ? 'caret-up' : 'caret-down' }}" nzTheme="outline"></i></a>
 
                     <nz-divider nzType="vertical"></nz-divider>
                     <ng-container *ngIf="data.active; else activeFalse">
-                        <a (click)="disabled(data.id)" class="text-error text-nowrap">禁用</a>
+                        <a acl [acl-ability]="'delete_tax'" (click)="disabled(data.id)" class="text-error text-nowrap">禁用</a>
                     </ng-container>
                     <ng-template #activeFalse>
-                        <a (click)="enabled(data.id)" class="text-nowrap">启用</a>
+                        <a acl [acl-ability]="'delete_tax'" (click)="enabled(data.id)" class="text-nowrap">启用</a>
                     </ng-template>
                 </td>
             </tr>
             <tr *ngIf="showExpand[data.id]" style="background-color: #f1f1f1;">
                 <td colspan="7">
-                <app-pro-subincome-list-c [tax]="data"></app-pro-subincome-list-c>
+                    <app-pro-subincome-list-c [tax]="data"></app-pro-subincome-list-c>
                 </td>
             </tr>
         </ng-container>
@@ -82,14 +82,14 @@
                     </div>
                 </nz-skeleton>
                 <ng-template #actionEdit>
-                    <a (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
+                    <a acl [acl-ability]="'modify_tax'" (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
                 </ng-template>
                 <ng-template #actionManage>
                     <ng-container *ngIf="data.active; else activeFalse">
-                        <a (click)="disabled(data.id)" class="text-error">禁用</a>
+                        <a acl [acl-ability]="'delete_tax'" (click)="disabled(data.id)" class="text-error">禁用</a>
                     </ng-container>
                     <ng-template #activeFalse>
-                        <a (click)="enabled(data.id)">启用</a>
+                        <a acl [acl-ability]="'delete_tax'" (click)="enabled(data.id)">启用</a>
                     </ng-template>
                 </ng-template>
             </nz-card>

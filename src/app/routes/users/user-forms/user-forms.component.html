@@ -56,7 +56,7 @@
 
     <nz-form-item nz-row class="register-area">
         <nz-form-control [nzSpan]="18" [nzOffset]="6">
-            <button nz-button nzType="primary">{{ data ? '保存' : '新增' }}</button>
+            <button [nzLoading]="submitLoading" nz-button nzType="primary">{{ data ? '保存' : '新增' }}</button>
         </nz-form-control>
     </nz-form-item>
 </form>

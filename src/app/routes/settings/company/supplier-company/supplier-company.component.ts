@@ -7,6 +7,7 @@ import { SettingsConfigService } from 'src/app/routes/service/settings-config.se
 import { CompanyFormComponent } from '../component/company-form/company-form.component';
 import { CompanyViewComponent } from '../component/company-view/company-view.component';
 import { DrawerSearchOptionComponent } from '../component/drawer-search-option/drawer-search-option.component';
+import { CompanyService } from '../service/company.service';
 
 @Component({
   selector: 'app-supplier-company',
@@ -48,7 +49,8 @@ export class SupplierCompanyComponent implements OnInit {
     private commonFn: CommonFunctionService,
     private settingsConfigService: SettingsConfigService,
     private msg: NzMessageService,
-    private drawerService: NzDrawerService
+    private drawerService: NzDrawerService,
+    private companyService: CompanyService
   ) { }
 
   ngOnInit() {
@@ -154,55 +156,41 @@ export class SupplierCompanyComponent implements OnInit {
     this.listOfDisplayData.forEach(item => (this.mapOfCheckedId[item.id] = value));
     this.refreshStatus();
   }
-
-  operateData($event:string): void {
-    console.log(this.mapOfCheckedId);
-
-    if(!this.isOperating) {
+  
+  operateType: string = 'currentPage' || 'allPage';
+  currentSelectItems:any[] = [];
+  operateData($event: string): void {
 
       this.selectedMemberIds = [];
 
       for (const key in this.mapOfCheckedId) {
         if (this.mapOfCheckedId.hasOwnProperty(key)) {
-          if(this.mapOfCheckedId[key] === true) {
+          if (this.mapOfCheckedId[key] === true) {
             this.selectedMemberIds.push(Number(key));
           }
         }
       }
-      console.log(this.selectedMemberIds);
-      if(this.selectedMemberIds.length !== 0) {
-        this.isOperating = true;
-        /***
-         * 根据导出类型 导出相应的文件类型 
-         *    type: string = 'image' || 'pdf' || 'excel';
-         * ***/
-        console.log($event);
-        if($event === 'image') {
-          console.log('downLoad image');
-
-        } else if( $event === 'pdf' ) {
-          console.log('downLoad PDF');
-
-        }else {
-          console.log('downLoad excel ！');
+    console.log('map of checked id' , this.mapOfCheckedId)
+      if ($event === 'allPage') {
+        this.operateType = 'allPage';
+        this.companyService.exportExcel(this.list);
+      } else {
+        if (this.selectedMemberIds.length !== 0) {
+          this.operateType = 'currentPage';
+          this.currentSelectItems = [];
+          this.list.forEach(item => {
+            if(this.mapOfCheckedId[item.id]) {
+              this.currentSelectItems.push(item);
+            }
+          });
           
+          this.companyService.exportExcel(this.currentSelectItems);
+        } else {
+          this.msg.warning('选择列表为空');
         }
-
-        setTimeout(() => {
-          this.listOfData.forEach(item => (this.mapOfCheckedId[item.id] = false));
-          this.refreshStatus();
-          this.isOperating = false;
-        }, 1000);
-
-      }else {
-        this.msg.warning('选择列表为空');
       }
-      
-
-    }else {
-      this.msg.warning('操作中，请稍后....');
-    }
   }
+
 
   // TODO: checkbox
 

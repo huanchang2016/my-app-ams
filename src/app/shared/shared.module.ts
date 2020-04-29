@@ -24,7 +24,6 @@ import { CascaderAreaComponent } from './component/cascader-area/cascader-area.c
 import { UploadImageBase64Component } from './component/upload-image-base64/upload-image-base64.component';
 import { RangeDatepickerComponent } from './component/range-datepicker/range-datepicker.component';
 import { ShowTextareaContentPipe } from './pipe/show-textarea-content.pipe';
-import { WebSocketService } from './socket/web-socket.service';
 
 const COMPONENTS = [
   CascaderAreaComponent,
@@ -68,9 +67,6 @@ const DIRECTIVES = [
     // your components
     ...COMPONENTS,
     ...DIRECTIVES
-  ],
-  providers: [
-    WebSocketService
   ]
 })
 export class SharedModule { }

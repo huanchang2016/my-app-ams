@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { NzModalService, NzMessageService, NzDrawerService } from 'ng-zorro-antd';
+import { NzModalService, NzDrawerService, NzMessageService } from 'ng-zorro-antd';
 import { ApiData } from 'src/app/data/interface.data';
 import { SettingsConfigService } from 'src/app/routes/service/settings-config.service';
 import { CompanyFormComponent } from '../component/company-form/company-form.component';
 
-import html2canvas from 'html2canvas';
 import { CompanyViewComponent } from '../component/company-view/company-view.component';
 import { ListDrawerSearchOptionComponent } from './list-drawer-search-option/list-drawer-search-option.component';
+import { CompanyService } from '../service/company.service';
 
 @Component({
   selector: 'app-list-all',
@@ -38,7 +38,7 @@ export class ListAllComponent implements OnInit {
   listOfData: any[] = [];
   loading: boolean = false;
 
-  searchOption:any = {};
+  searchOption: any = {};
 
   // TODO: checkbox
   isAllDisplayDataChecked = false;
@@ -52,8 +52,9 @@ export class ListAllComponent implements OnInit {
   constructor(
     private modalService: NzModalService,
     private settingsConfigService: SettingsConfigService,
+    private drawerService: NzDrawerService,
     private msg: NzMessageService,
-    private drawerService: NzDrawerService
+    private companyService: CompanyService
   ) { }
 
   ngOnInit() {
@@ -115,7 +116,7 @@ export class ListAllComponent implements OnInit {
     });
   }
 
-  view(data:any) {
+  view(data: any) {
     const viewModal = this.modalService.create({
       nzTitle: '单位详情预览',
       nzWrapClassName: 'modal-lg',
@@ -143,12 +144,12 @@ export class ListAllComponent implements OnInit {
   }
 
   refreshStatus(): void {
-    if(this.listOfDisplayData.length !== 0) {
-      this.isAllDisplayDataChecked = this.listOfDisplayData.every(item => this.mapOfCheckedId[item.id]);
+    if (this.listOfDisplayData.length !== 0) {
+      this.isAllDisplayDataChecked = this.listOfDisplayData.every(item =>  this.mapOfCheckedId[item.id] );
       this.isIndeterminate =
         this.listOfDisplayData.some(item => this.mapOfCheckedId[item.id]) &&
         !this.isAllDisplayDataChecked;
-    }else {
+    } else {
       this.isIndeterminate = false;
     }
   }
@@ -158,13 +159,10 @@ export class ListAllComponent implements OnInit {
     this.refreshStatus();
   }
 
-  isVisibleModalBox: boolean = false; // 预览容器
-  showDownLoadDataList: boolean = false; // 下载数据列表容器： 下载之前展示， 下载后隐藏
-  operateType: string = 'image' || 'pdf' || 'excel';
+  operateType: string = 'currentPage' || 'allPage';
 
+  currentSelectItems:any[] = [];
   operateData($event: string): void {
-
-    if (!this.isOperating) {
 
       this.selectedMemberIds = [];
 
@@ -175,86 +173,36 @@ export class ListAllComponent implements OnInit {
           }
         }
       }
-      if (this.selectedMemberIds.length !== 0) {
-        this.isOperating = true;
-        this.isVisibleModalBox = true;
-        this.showDownLoadDataList = true;
-
-        /***
-         * 根据导出类型 导出相应的文件类型 
-         *    type: string = 'image' || 'pdf' || 'excel';
-         * ***/
-        if ($event === 'image') {
-          console.log('downLoad image');
-          this.operateType = 'image';
-        } else if ($event === 'pdf') {
-          console.log('downLoad PDF');
-          this.operateType = 'pdf';
-        } else {
-          console.log('downLoad excel ！');
-          this.operateType = 'excel';
-        }
-
-        setTimeout(() => {
-          this.listOfData.forEach(item => (this.mapOfCheckedId[item.id] = false));
-          this.refreshStatus();
-          this.isOperating = false;
-        }, 1000);
-
+    console.log('map of checked id' , this.mapOfCheckedId)
+      if ($event === 'allPage') {
+        this.operateType = 'allPage';
+        this.companyService.exportExcel(this.list);
       } else {
-        this.msg.warning('选择列表为空');
+        if (this.selectedMemberIds.length !== 0) {
+          this.operateType = 'currentPage';
+          this.currentSelectItems = [];
+          this.list.forEach(item => {
+            if(this.mapOfCheckedId[item.id]) {
+              this.currentSelectItems.push(item);
+            }
+          });
+          
+          this.companyService.exportExcel(this.currentSelectItems);
+        } else {
+          this.msg.warning('选择列表为空');
+        }
       }
-
-
-    } else {
-      this.msg.warning('操作中，请稍后....');
-    }
-  }
-
-  // TODO: checkbox
-
-  downLoad() {
-    if (this.operateType === 'image') {
-      html2canvas(document.querySelector('#downLoadFileBox .file-box'), { scale: 1 }).then((canvas: any) => {
-
-        this.showDownLoadDataList = false;
-        // document.querySelector('#downLoadFileBox').appendChild(canvas);
-
-        let img: any = canvas.toDataURL("image/jpg");
-
-        this.saveFile(img.replace("image/jpeg", "image/octet-stream"), new Date().getTime() + ".jpeg");
-        this.isVisibleModalBox = false;
-      });
-
-    }
-
-
-
-  }
-
-  saveFile(data: any, filename: string) {
-    let save_link: any = document.createElementNS('http://www.w3.org/1999/xhtml', 'a');
-    save_link.href = data;
-    save_link.download = filename;
-
-    var event = document.createEvent('MouseEvents');
-    event.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
-    save_link.dispatchEvent(event);
-  }
-  handleCancel() {
-    this.isVisibleModalBox = false;
   }
 
   // 搜索条件发生变化
   searchOptionsChange(option?: any) {
 
-    if(option) this.searchOption = option;
+    if (option) this.searchOption = option;
 
     option = option || this.searchOption;
-
     if (this.list.length !== 0) {
       this.isIndeterminate = false;
-      let list:any[] = this.list;
+      let list: any[] = this.list;
       if (option) {
         if (option.name) {
           let name: string = option.name.trim();
@@ -276,9 +224,9 @@ export class ListAllComponent implements OnInit {
           list = list.filter(v => !v.nature ? false : v.nature.id === option.nature);
         }
 
-        if(option.category && option.category !== -1) {
-          let category:string = option.category;
-          list = list.filter( v => {
+        if (option.category && option.category !== -1) {
+          let category: string = option.category;
+          list = list.filter(v => {
             return v[category];
           });
         }
@@ -288,17 +236,17 @@ export class ListAllComponent implements OnInit {
         }
 
       }
-      
+
       this.listOfData = list;
-      if(this.listOfData.length > 10) {
+      if (this.listOfData.length > 10) {
         this.mobilePageList = this.listOfData.slice(0, 10);
-      }else {
+      } else {
         this.mobilePageList = this.listOfData;
       }
     }
   }
   // 移动端搜索框
-  isCollapsed:boolean = false;
+  isCollapsed: boolean = false;
 
   openComponent(): void {
     this.isCollapsed = true;
@@ -321,9 +269,9 @@ export class ListAllComponent implements OnInit {
     });
   }
 
-  currentPage:number = 1;
-  mobilePageList:any[] = [];
-  nzPageIndexChange(page:number):void {
+  currentPage: number = 1;
+  mobilePageList: any[] = [];
+  nzPageIndexChange(page: number): void {
     this.currentPage = page;
     this.mobilePageList = this.listOfData.slice(this.currentPage * 10 - 10, this.currentPage * 10);
   }

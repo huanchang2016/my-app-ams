@@ -80,9 +80,10 @@
             </button>
             <nz-dropdown-menu #operateMenu="nzDropdownMenu">
                 <ul nz-menu>
-                    <li nz-menu-item (click)="operateData('image')">导出图片格式</li>
-                    <li nz-menu-item (click)="operateData('pdf')">导出PDF</li>
-                    <li nz-menu-item (click)="operateData('excel')">导出EXCEL</li>
+                    <!-- <li nz-menu-item (click)="operateData('image')">导出图片格式</li>
+                    <li nz-menu-item (click)="operateData('pdf')">导出PDF</li> -->
+                    <li nz-menu-item (click)="operateData('currentPage')">导出EXCEL（当前页选中数据）</li>
+                    <li nz-menu-item (click)="operateData('allPage')">导出EXCEL（所有数据）</li>
                 </ul>
             </nz-dropdown-menu>
             

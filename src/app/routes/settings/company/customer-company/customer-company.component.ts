@@ -8,6 +8,7 @@ import { CompanyFormComponent } from '../component/company-form/company-form.com
 
 import html2canvas from 'html2canvas';
 import { CompanyViewComponent } from '../component/company-view/company-view.component';
+import { CompanyService } from '../service/company.service';
 
 @Component({
   selector: 'app-customer-company',
@@ -51,7 +52,8 @@ export class CustomerCompanyComponent implements OnInit {
     private commonFn: CommonFunctionService,
     private settingsConfigService: SettingsConfigService,
     private msg: NzMessageService,
-    private drawerService: NzDrawerService
+    private drawerService: NzDrawerService,
+    private companyService: CompanyService
   ) { }
 
   ngOnInit() {
@@ -151,93 +153,41 @@ export class CustomerCompanyComponent implements OnInit {
     this.refreshStatus();
   }
 
-  isVisibleModalBox:boolean = false; // 预览容器
-  showDownLoadDataList:boolean = false; // 下载数据列表容器： 下载之前展示， 下载后隐藏
-  operateType:string = 'image' || 'pdf' || 'excel';
-  operateData($event:string): void {
-    console.log(this.mapOfCheckedId);
-
-    if(!this.isOperating) {
+  
+  operateType: string = 'currentPage' || 'allPage';
+  currentSelectItems:any[] = [];
+  operateData($event: string): void {
 
       this.selectedMemberIds = [];
 
       for (const key in this.mapOfCheckedId) {
         if (this.mapOfCheckedId.hasOwnProperty(key)) {
-          if(this.mapOfCheckedId[key] === true) {
+          if (this.mapOfCheckedId[key] === true) {
             this.selectedMemberIds.push(Number(key));
           }
         }
       }
-      console.log(this.selectedMemberIds);
-      if(this.selectedMemberIds.length !== 0) {
-        this.isOperating = true;
-        this.isVisibleModalBox = true;
-        this.showDownLoadDataList = true;
-        
-        /***
-         * 根据导出类型 导出相应的文件类型 
-         *    type: string = 'image' || 'pdf' || 'excel';
-         * ***/
-        if($event === 'image') {
-          console.log('downLoad image');
-          this.operateType = 'image';
-        } else if( $event === 'pdf' ) {
-          console.log('downLoad PDF');
-          this.operateType = 'pdf';
-        }else {
-          console.log('downLoad excel ！');
-          this.operateType = 'excel';
+    console.log('map of checked id' , this.mapOfCheckedId)
+      if ($event === 'allPage') {
+        this.operateType = 'allPage';
+        this.companyService.exportExcel(this.list);
+      } else {
+        if (this.selectedMemberIds.length !== 0) {
+          this.operateType = 'currentPage';
+          this.currentSelectItems = [];
+          this.list.forEach(item => {
+            if(this.mapOfCheckedId[item.id]) {
+              this.currentSelectItems.push(item);
+            }
+          });
+          
+          this.companyService.exportExcel(this.currentSelectItems);
+        } else {
+          this.msg.warning('选择列表为空');
         }
-
-        setTimeout(() => {
-          this.listOfData.forEach(item => (this.mapOfCheckedId[item.id] = false));
-          this.refreshStatus();
-          this.isOperating = false;
-        }, 1000);
-
-      }else {
-        this.msg.warning('选择列表为空');
       }
-      
-
-    }else {
-      this.msg.warning('操作中，请稍后....');
-    }
   }
 
-  // TODO: checkbox
-
-  downLoad() {
-    if(this.operateType === 'image') {
-      html2canvas(document.querySelector('#downLoadFileBox .file-box'), {scale:1}).then((canvas:any) => {
-        
-        this.showDownLoadDataList = false;
-        // document.querySelector('#downLoadFileBox').appendChild(canvas);
-        
-        let img:any = canvas.toDataURL("image/jpg");
-
-        this.saveFile(img.replace("image/jpeg", "image/octet-stream"),new Date().getTime()+".jpeg");
-        this.isVisibleModalBox = false;
-      });
-      
-    }
-    
-
-    
-  }
-
-  saveFile (data:any, filename:string){
-    let save_link:any = document.createElementNS('http://www.w3.org/1999/xhtml', 'a');
-    save_link.href = data;
-    save_link.download = filename;
-
-    var event = document.createEvent('MouseEvents');
-    event.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
-    save_link.dispatchEvent(event);
-  }
-  handleCancel() {
-    this.isVisibleModalBox = false;
-  }
 
   // 搜索条件发生变化
   searchOptionsChange(option?:any) {

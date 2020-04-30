@@ -9,7 +9,7 @@
             <nz-card [nzActions]="!isView ? [actionEdit, actionDisabled] : []" class="mb-sm">
                 <sv-container>
                     <sv label="合约名称">{{ data.name }}</sv>
-                    <sv label="金额（元）"><span class="text-error">{{ data.amount | number: '.2-2' }}</span></sv>
+                    <sv label="金额（元）"><span class="text-error">{{ data.amount | _currency }}</span></sv>
                     <sv label="合约编号">{{ data.number }}</sv>
                     <sv label="起止日期">{{ data.start_time }} - {{ data.end_time }}</sv>
                     <sv label="服务类型">{{ data.service_category.name }}</sv>
@@ -29,34 +29,6 @@
     <ng-template #noDataContractMobile>
         <p>无数据</p>
     </ng-template>
-    
-    <!-- <div class="clearfix">
-        <span class="float-left text-primary">未签订合约</span>
-        <a (click)="addContract(false)" *ngIf="!isView" class="float-right">新增（非合约）</a>
-    </div>
-    
-    <ng-container *ngIf="treatyList.length !== 0;else noDataTreatyMobile">
-        <ng-container *ngFor="let data of treatyList">
-            <nz-card [nzActions]="!isView ? [actionEdit, actionDisabled] : []" class="mb-sm">
-                <sv-container>
-                    <sv label="服务名称">{{ data.name }}</sv>
-                    <sv label="金额（元）"><span class="text-error">{{ data.amount | number: '.2-2' }}</span></sv>
-                </sv-container>
-                <ng-template #actionEdit>
-                    <a *ngIf="!isView" (click)="editContract(data, false)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
-                </ng-template>
-                <ng-template #actionDisabled>
-                    <a *ngIf="!isView" nz-popconfirm nzPopconfirmTitle="确定禁用当前预算？" (nzOnConfirm)="disabled(data.id, false)" (nzOnCancel)="cancel()"
-                        class="text-error">
-                        禁用
-                    </a>
-                </ng-template>
-            </nz-card>
-        </ng-container>
-    </ng-container>
-    <ng-template #noDataTreatyMobile>
-        <p>无数据</p>
-    </ng-template> -->
     
 </div>
 
@@ -88,7 +60,7 @@
                         <td>{{ i + 1 }}</td>
                         <td>{{ data.name }}</td>
                         <td>
-                            <span class="text-error">{{ data.amount | number: '.2-2' }}</span>
+                            <span class="text-error">{{ data.amount | _currency }}</span>
                         </td>
                         <td>{{ data.number }}</td>
                         <td>{{ data.start_time }} - {{ data.end_time }}</td>
@@ -110,47 +82,4 @@
         </ng-template>
     </nz-card>
 
-    <!-- <ng-template #treatyAddTemplate>
-        <button *ngIf="!isView"
-            class="mr-lg"
-            nz-button
-            [nzType]="'primary'"
-            (click)="addContract(false)"
-        >新增无合约</button>
-      </ng-template>
-    <nz-card nzTitle="未签订合约" [nzExtra]="treatyAddTemplate">
-
-        <ng-container *ngIf="treatyList.length !== 0;else noDataTreaty">
-            <nz-table #treatyTable [nzData]="treatyList" nzSize="small" [nzLoading]="loadingTreaty" [nzFrontPagination]="false">
-                <thead>
-                    <tr>
-                        <th>序号</th>
-                        <th>服务名称</th>
-                        <th>金额（元）</th>
-                        <th *ngIf="!isView">操作</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let data of treatyTable.data;let i = index">
-                        <td>{{ i + 1 }}</td>
-                        <td>{{ data.name }}</td>
-                        <td>
-                            <span class="text-error">{{ data.amount | number: '.2-2' }}</span>
-                        </td>
-                        <td *ngIf="!isView">
-                            <a (click)="editContract(data, false)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
-                            <nz-divider nzType="vertical"></nz-divider>
-                            <a nz-popconfirm nzPopconfirmTitle="确定禁用当前预算？" (nzOnConfirm)="disabled(data.id, false)" (nzOnCancel)="cancel()"
-                                class="text-error">
-                                禁用
-                            </a>
-                        </td>
-                    </tr>
-                </tbody>
-            </nz-table>
-        </ng-container>
-        <ng-template #noDataTreaty>
-            无数据
-        </ng-template>
-    </nz-card> -->
 </div>

@@ -142,9 +142,9 @@
           <td class="text-error">{{ data.amount | currency: 'CNY' }}</td>
           <td>
             <sv-container size="small" col="1">
-              <sv label="总计支付"><span class="text-error">{{ data.cost.amount | currency: 'CNY' }}</span> 元</sv>
-              <sv label="累计支付"><span class="text-success">{{ data.cost.pay_amount | currency: 'CNY' }}</span> 元</sv>
-              <sv label="剩余支付"><span class="text-primary">{{ (data.cost.amount - data.cost.pay_amount) | currency: 'CNY' }}</span> 元</sv>
+              <sv label="总计支付"><span class="text-error">{{ data.cost.amount | currency: 'CNY' }}</span></sv>
+              <sv label="累计支付"><span class="text-success">{{ data.cost.pay_amount | currency: 'CNY' }}</span></sv>
+              <sv label="剩余支付"><span class="text-primary">{{ (data.cost.amount - data.cost.pay_amount) | currency: 'CNY' }}</span></sv>
             </sv-container>
           </td>
           <td>
@@ -183,9 +183,9 @@
               <div class="pt-md">
                   <sv-container size="small">
                       <sv label="费用类型">{{ data.cost.cost_category.name }}</sv>
-                      <sv label="总计支付"><span class="text-error">{{ data.cost.amount | currency: 'CNY' }}</span> 元</sv>
-                      <sv label="累计支付"><span class="text-success">{{ data.cost.pay_amount | currency: 'CNY' }}</span> 元</sv>
-                      <sv label="剩余支付"><span class="text-primary">{{ (data.cost.amount - data.cost.pay_amount) | currency: 'CNY' }}</span> 元</sv>
+                      <sv label="总计支付"><span class="text-error">{{ data.cost.amount | currency: 'CNY' }}</span></sv>
+                      <sv label="累计支付"><span class="text-success">{{ data.cost.pay_amount | currency: 'CNY' }}</span></sv>
+                      <sv label="剩余支付"><span class="text-primary">{{ (data.cost.amount - data.cost.pay_amount) | currency: 'CNY' }}</span></sv>
 
                       <sv label="商务卡"><strong>{{ data.is_business_card ? '是' : '否' }}</strong></sv>
                       <sv label="户&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;主">{{ data.account_name }}</sv>
@@ -248,7 +248,7 @@
               请填写支付成本金额，只需填写数字
             </ng-container>
             <ng-container *ngIf="control.hasError('confirm')">
-              当前成本支付金额不能超过 {{ currentSelectCost.max - currentSelectCost.pay_amount }} 元
+              当前成本支付金额不能超过 {{ currentSelectCost.max - currentSelectCost.pay_amount }}
             </ng-container>
           </ng-template>
         </nz-form-control>

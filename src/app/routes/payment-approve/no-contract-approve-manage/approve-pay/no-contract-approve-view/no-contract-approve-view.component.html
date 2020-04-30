@@ -32,8 +32,7 @@
     <sv label="银行名称">{{ treatypayInfo.bank_name }}</sv>
     <sv label="抵扣金额">
       <span class="text-error font-weight-bold"
-        *ngIf="treatypayInfo.if_write_off;else notWriteOff">{{ treatypayInfo.write_off_amount | currency: 'CNY' }}
-        元</span>
+        *ngIf="treatypayInfo.if_write_off;else notWriteOff">{{ treatypayInfo.write_off_amount | currency: 'CNY' }}</span>
       <ng-template #notWriteOff>
         <span class="text-primary">无抵扣金额</span>
       </ng-template>
@@ -67,9 +66,9 @@
         <td class="text-error">{{ data.amount | currency: 'CNY' }}</td>
         <td>
           <sv-container size="small" col="1">
-            <sv label="总计支付"><span class="text-error">{{ data.cost.amount }}</span> 元</sv>
-            <sv label="累计支付"><span class="text-success">{{ data.cost.pay_amount }}</span> 元</sv>
-            <sv label="剩余支付"><span class="text-primary">{{ data.cost.amount - data.cost.pay_amount }}</span> 元</sv>
+            <sv label="总计支付"><span class="text-error">{{ data.cost.amount | _currency }}</span></sv>
+            <sv label="累计支付"><span class="text-success">{{ data.cost.pay_amount | _currency }}</span></sv>
+            <sv label="剩余支付"><span class="text-primary">{{ (data.cost.amount - data.cost.pay_amount) | _currency }}</span></sv>
           </sv-container>
         </td>
         <td>
@@ -95,13 +94,15 @@
 <nz-card nzTitle="非合约成本支付" class="mt-md hidden-pc" *ngIf="listOfData.length !== 0">
   <ng-container *ngFor="let data of listOfData">
     <sv-container size="small" [title]="svConTpl" class="py-sm">
-      <ng-template #svConTpl><span class="font-weight-bold">{{ data.cost.cost_category.name }}</span></ng-template>
+      <ng-template #svConTpl>
+        <span class="font-weight-bold">{{ data.cost.cost_category.name }}</span>
+      </ng-template>
       <sv label="摘&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;要">{{ data.abstract }}</sv>
       <sv label="费用类型">{{ data.cost.cost_category.name }}</sv>
-      <sv label="总计支付"><span class="text-error">{{ data.cost.amount | currency: 'CNY' }}</span> 元</sv>
-      <sv label="累计支付"><span class="text-success">{{ data.cost.pay_amount | currency: 'CNY' }}</span> 元</sv>
-      <sv label="剩余支付"><span class="text-primary">{{ (data.cost.amount - data.cost.pay_amount) | currency: 'CNY' }}</span> 元</sv>
-      <sv label="本期支付"><span class="text-primary">{{ data.amount | currency: 'CNY' }}</span> 元</sv>
+      <sv label="总计支付"><span class="text-error">{{ data.cost.amount | currency: 'CNY' }}</span></sv>
+      <sv label="累计支付"><span class="text-success">{{ data.cost.pay_amount | currency: 'CNY' }}</span></sv>
+      <sv label="剩余支付"><span class="text-primary">{{ (data.cost.amount - data.cost.pay_amount) | currency: 'CNY' }}</span></sv>
+      <sv label="本期支付"><span class="text-primary">{{ data.amount | currency: 'CNY' }}</span></sv>
       <sv label="商&nbsp;务&nbsp;卡&nbsp;"><strong>{{ data.is_business_card ? '是' : '否' }}</strong></sv>
       <sv label="户&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;主">{{ data.account_name }}</sv>
       <sv label="卡&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号">{{ data.card_number }}</sv>

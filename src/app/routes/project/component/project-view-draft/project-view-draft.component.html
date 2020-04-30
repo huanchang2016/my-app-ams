@@ -53,7 +53,7 @@
                     <span class="label-title">收入预算税率</span>： <span class="font-weight-bold">{{ budgetInfo.tax?.invoice.name + ' ' }} <span class="text-error ml-md">{{ budgetInfo.tax?.rate }}</span></span>
                 </div>
                 <div class="pro-info-list" nz-col [nzSm]="{span:24}" [nzMd]="{span: 12}">
-                    <span class="label-title">收入预算金额</span>： <span class="font-weight-bold text-error">{{ budgetInfo.tax_amount }} 元</span>
+                    <span class="label-title">收入预算金额</span>： <span class="font-weight-bold text-error">{{ budgetInfo.tax_amount | _currency }}</span>
                 </div>
             </div>
             
@@ -61,11 +61,11 @@
             <div nz-row [nzGutter]="24" nzType="flex" *ngIf="costInfo && costInfo.length !== 0;">
                 <ng-container *ngFor="let cost of costInfo">
                     <div class="pro-info-list" nz-col [nzSm]="{span:24}" [nzMd]="{span: 12}">
-                        <span class="cost-label-title">{{ cost.cost_category.name }}</span>： <span class="font-weight-bold text-error">{{ cost.amount }} 元</span>
+                        <span class="cost-label-title">{{ cost.cost_category.name }}</span>： <span class="font-weight-bold text-error">{{ cost.amount | _currency }}</span>
                     </div>
                 </ng-container>
                 <div nz-col nzSpan="24" class="cost-total text-right font-weight-bold mt-sm">
-                    成本预算合计： <span class="text-error font-weight-bold">{{ costTotal }} 元</span>
+                    成本预算合计： <span class="text-error font-weight-bold">{{ costTotal | _currency }}</span>
                 </div>
             </div>
         </div>

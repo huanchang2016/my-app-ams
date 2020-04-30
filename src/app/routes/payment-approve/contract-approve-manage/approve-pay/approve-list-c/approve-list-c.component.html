@@ -29,7 +29,7 @@
         <tr *ngFor="let data of ajaxTable.data; let i = index">
             <td>{{ i + 1 }}</td>
             <td>{{ data.contract.name }}</td>
-            <td class="text-error">{{ data.amount }}</td>
+            <td class="text-error">{{ data.amount | _currency }}</td>
             <td>
                 <sv-container size="small" col="1">
                     <sv label="项目名称"><span class="font-weight-bold">{{ data.project.name }}</span></sv>
@@ -63,7 +63,7 @@
                     </ng-template>
                     <div class="pt-md">
                         <sv-container size="small">
-                            <sv label="支付金额"><span class="font-weight-bold text-error">{{ data.amount | currency: 'CNY' }}</span> 元</sv>
+                            <sv label="支付金额"><span class="font-weight-bold text-error">{{ data.amount | currency: 'CNY' }}</span></sv>
                             <sv label="项目名称"><span class="font-weight-bold">{{ data.project.name }}</span></sv>
                             <sv label="创 建 人 "><span class="text-success">{{ data.user.name }}</span></sv>
                             <sv label="所在部门">{{ data.user.department?.name }}</sv>

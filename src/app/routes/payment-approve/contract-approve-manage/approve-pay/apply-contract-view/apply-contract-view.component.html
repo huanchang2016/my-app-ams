@@ -25,7 +25,7 @@
     <sv-container size="small" col="2" *ngIf="selectedContract">
       <sv label="合同名称">{{ selectedContract.name }}</sv>
       <sv label="收款单位">{{ selectedContract.pay_company }}</sv>
-      <sv label="合同金额"><span class="text-error mr-md">{{ selectedContract.amount }} 元</span> 大写：<span class="font-weight-bold">{{ transferNumber }}</span></sv>
+      <sv label="合同金额"><span class="text-error mr-md">{{ selectedContract.amount | _currency }}</span> 大写：<span class="font-weight-bold">{{ transferNumber }}</span></sv>
       <sv label="开户银行">{{ selectedContract.bank_name }}</sv>
       <sv label="合同单位"><strong>{{ selectedContract.supplier?.name }}</strong></sv>
       <sv label="银行账号">{{ selectedContract.bank_account }}</sv>
@@ -50,12 +50,12 @@
         <tr *ngFor="let data of costSelectTable.data; let i = index">
           <td>{{ i + 1}}</td>
           <td>{{ data.cost.cost_category.name }}</td>
-          <td class="text-success">{{ data.amount }}</td>
+          <td class="text-success">{{ data.amount | _currency }}</td>
           <td>
             <sv-container size="small" col="1">
-              <sv label="总计支付"><span class="text-error">{{ data.cost.amount }}</span> 元</sv>
-              <sv label="累计支付"><span class="text-success">{{ data.cost.pay_amount }}</span> 元</sv>
-              <sv label="剩余支付"><span class="text-primary">{{ data.cost.amount - data.cost.pay_amount }}</span> 元</sv>
+              <sv label="总计支付"><span class="text-error">{{ data.cost.amount | _currency }}</span></sv>
+              <sv label="累计支付"><span class="text-success">{{ data.cost.pay_amount | _currency }}</span></sv>
+              <sv label="剩余支付"><span class="text-primary">{{ (data.cost.amount - data.cost.pay_amount) | _currency }}</span></sv>
             </sv-container>
           </td>
           <td>
@@ -71,10 +71,10 @@
     
     <ng-container *ngFor="let data of listOfData">
       <sv-container size="small" [title]="data.cost.cost_category.name" class="py-sm">
-        <sv label="总计支付"><span class="font-weight-bold">{{ data.cost.amount }}</span> 元</sv>
-        <sv label="累计支付"><span class="text-success">{{ data.cost.pay_amount }}</span> 元</sv>
-        <sv label="剩余支付"><span class="text-primary">{{ data.cost.amount - data.cost.pay_amount }}</span> 元</sv>
-        <sv label="本期支付"><strong class="text-error">{{ data.amount }}</strong></sv>
+        <sv label="总计支付"><span class="font-weight-bold">{{ data.cost.amount | _currency }}</span></sv>
+        <sv label="累计支付"><span class="text-success">{{ data.cost.pay_amount | _currency }}</span></sv>
+        <sv label="剩余支付"><span class="text-primary">{{ (data.cost.amount - data.cost.pay_amount) | _currency }}</span></sv>
+        <sv label="本期支付"><strong class="text-error">{{ data.amount | _currency }}</strong></sv>
         <sv label="描述"><span [innerHTML]="data.remark | showTextareaContent"></span></sv>
       </sv-container>
       

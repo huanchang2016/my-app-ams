@@ -4,7 +4,7 @@
     </div>
     <div nz-col [nzSpan]="24" *ngIf="costArr && costArr.length !== 0" class="mt-md mb-md text-right">
         <span class="text-md font-weight-bold">成本总计：</span>
-        <span class="text-md font-weight-bold text-error">{{ total | number: '0.2-2' }}</span>
+        <span class="text-md font-weight-bold text-error">{{ total | _currency }}</span>
     </div>
     <div nz-col [nzSpan]="24">
         <a nzBlock nz-button nzType="dashed" (click)="createTplModal(tplTitle, tplContent, tplFooter, $event)">

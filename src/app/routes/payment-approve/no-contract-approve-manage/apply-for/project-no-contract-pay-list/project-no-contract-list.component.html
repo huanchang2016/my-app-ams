@@ -77,12 +77,12 @@
             <sv label="非合约编号">{{data.number }}</sv>
             <sv label="收款单位">{{ data.pay_company }}</sv>
             <sv label="冲抵情况">
-              <span *ngIf="data.if_write_off;else notWriteOff">{{ data.write_off_amount | currency: 'CNY' }} 元</span>
+              <span *ngIf="data.if_write_off;else notWriteOff">{{ data.write_off_amount | currency: 'CNY' }}</span>
               <ng-template #notWriteOff>
                 <span class="text-primary">无冲抵金额</span>
               </ng-template>
             </sv>
-            <sv label="支付金额"><span class="text-primary">{{ data.treaty.amount | currency: 'CNY' }} 元</span></sv>
+            <sv label="支付金额"><span class="text-primary">{{ data.treaty.amount | currency: 'CNY' }}</span></sv>
           </sv-container>
         </div>
       </nz-skeleton>

@@ -30,9 +30,9 @@
                 <sv-container size="small" col="1">
                     <sv label="非合约名称"><span class="font-weight-bold">{{ data.treaty.name }}</span></sv>
                     <sv label="非合约单位"><span class="font-weight-bold">{{ data.treaty.company.name }}</span></sv>
-                    <sv label="非合约金额"><span class="text-primary">{{ data.treaty.amount | currency: 'CNY' }} 元</span></sv>
+                    <sv label="非合约金额"><span class="text-primary">{{ data.treaty.amount | currency: 'CNY' }}</span></sv>
                     <sv label="抵扣金额">
-                        <span *ngIf="data.if_write_off;else notWriteOff">{{ data.write_off_amount | currency: 'CNY' }} 元</span>
+                        <span *ngIf="data.if_write_off;else notWriteOff">{{ data.write_off_amount | currency: 'CNY' }}</span>
                         <ng-template #notWriteOff>
                             <span class="text-primary">无冲抵金额</span>
                         </ng-template>
@@ -46,7 +46,7 @@
                     <sv label="收款单位"><span class="font-weight-bold">{{ data.pay_company }}</span></sv>
                     <sv label="银行名称"><span class="font-weight-bold">{{ data.bank_name }}</span></sv>
                     <sv label="银行账号"><span class="text-success">{{ data.bank_account }}</span></sv>
-                    <sv label="支付金额"><span class="text-error font-weight-bold">{{ data.amount | currency: 'CNY' }} 元</span></sv>
+                    <sv label="支付金额"><span class="text-error font-weight-bold">{{ data.amount | currency: 'CNY' }}</span></sv>
                 </sv-container>
             </td>
             <td>
@@ -73,9 +73,9 @@
                         <sv-container size="small">
                             <sv label="非合约名称"><span class="font-weight-bold">{{ data.treaty.name }}</span></sv>
                             <sv label="非合约单位"><span class="font-weight-bold">{{ data.treaty.company.name }}</span></sv>
-                            <sv label="非合约金额"><span class="text-primary">{{ data.treaty.amount | currency: 'CNY' }} 元</span></sv>
+                            <sv label="非合约金额"><span class="text-primary">{{ data.treaty.amount | currency: 'CNY' }}</span></sv>
                             <sv label="抵扣金额">
-                                <span *ngIf="data.if_write_off;else notWriteOff">{{ data.write_off_amount | currency: 'CNY' }} 元</span>
+                                <span *ngIf="data.if_write_off;else notWriteOff">{{ data.write_off_amount | currency: 'CNY' }}</span>
                                 <ng-template #notWriteOff>
                                     <span class="text-primary">无冲抵金额</span>
                                 </ng-template>

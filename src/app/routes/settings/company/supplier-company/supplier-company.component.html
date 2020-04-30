@@ -30,7 +30,6 @@
             <th>单位</th>
             <th>服务商编码</th>
             <th>基础信息</th>
-            <th>状态</th>
             <th>操作</th>
         </tr>
     </thead>
@@ -47,7 +46,7 @@
                     {{ data.supplier_code }}
                 </span>
                 <ng-template #notSupplier>
-                    <span [innerHTML]="data.supplier | yn"></span>
+                    <span class="text-error"><i nz-icon nzType="close" nzTheme="outline"></i></span>
                 </ng-template>
             </td>
             <td>
@@ -57,9 +56,6 @@
                     <sv label="电话">{{ data.tel }}</sv>
                     <sv label="地址">{{ data.address }}</sv>
                 </sv-container>
-            </td>
-            <td>
-                <span [innerHTML]="data.active | yn"></span>
             </td>
             <td>
                 <a acl [acl-ability]="'modify_supplier_company'" (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
@@ -88,7 +84,7 @@
                                     {{ data.supplier_code }}
                                 </span>
                                 <ng-template #notSupplier>
-                                    <span [innerHTML]="data.supplier | yn"></span>
+                                    <span class="text-error"><i nz-icon nzType="close" nzTheme="outline"></i></span>
                                 </ng-template>
                             </sv>
                             <sv label="类型">{{ data.nature?.name }}</sv>

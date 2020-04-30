@@ -24,7 +24,6 @@
             <th>单位</th>
             <th width="250">编码</th>
             <th width="450">基础信息</th>
-            <th>状态</th>
             <th width="120">操作</th>
         </tr>
     </thead>
@@ -39,7 +38,7 @@
                             {{ data.customer_code }}
                         </span>
                         <ng-template #notCustomer>
-                            <span [innerHTML]="data.customer | yn"></span>
+                            <span class="text-error"><i nz-icon nzType="close" nzTheme="outline"></i></span>
                         </ng-template>
                     </sv>
                     <sv label="客&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;户">
@@ -47,7 +46,7 @@
                             {{ data.supplier_code }}
                         </span>
                         <ng-template #notSupplier>
-                            <span [innerHTML]="data.supplier | yn"></span>
+                            <span class="text-error"><i nz-icon nzType="close" nzTheme="outline"></i></span>
                         </ng-template>
                     </sv>
                 </sv-container>
@@ -61,9 +60,7 @@
                     <sv label="统一社会信用代码">{{ data.code }}</sv>
                 </sv-container>
             </td>
-            <td>
-                <span [innerHTML]="data.active | yn"></span>
-            </td>
+            
             <td>
                 <a acl [acl-ability]="'modify_user_company'" (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
                 <nz-divider nzType="vertical"></nz-divider>
@@ -88,7 +85,7 @@
                                     {{ data.customer_code }}
                                 </span>
                                 <ng-template #notCustomer>
-                                    <span [innerHTML]="data.customer | yn"></span>
+                                    <span class="text-error"><i nz-icon nzType="close" nzTheme="outline"></i></span>
                                 </ng-template>
                             </sv>
                             <sv label="客&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;户">
@@ -96,7 +93,7 @@
                                     {{ data.supplier_code }}
                                 </span>
                                 <ng-template #notSupplier>
-                                    <span [innerHTML]="data.supplier | yn"></span>
+                                    <span class="text-error"><i nz-icon nzType="close" nzTheme="outline"></i></span>
                                 </ng-template>
                             </sv>
                             <sv label="法人">{{ data.represent }}</sv>

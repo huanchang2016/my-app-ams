@@ -1,9 +1,4 @@
-<page-header [action]="action">
-
-    <ng-template #action>
-        <button nz-button (click)="add()" [nzType]="'primary'">新增</button >
-    </ng-template>
-</page-header>
+<page-header></page-header>
 
 <div class="hidden-mobile">
     <app-approve-search-option (searchOptionsEmit)="searchOptionsChange($event)"></app-approve-search-option>

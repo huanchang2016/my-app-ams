@@ -10,7 +10,6 @@
             <th>开票</th>
             <th>从属</th>
             <th>备注</th>
-            <th>状态</th>
             <th>操作</th>
         </tr>
     </thead>
@@ -33,9 +32,6 @@
                 </td>
                 <td>
                     <span [innerHTML]="data.remark | showTextareaContent"></span>
-                </td>
-                <td>
-                    <span [innerHTML]="data.active | yn"></span>
                 </td>
                 <td>
                     <a acl [acl-ability]="'modify_tax'" (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>

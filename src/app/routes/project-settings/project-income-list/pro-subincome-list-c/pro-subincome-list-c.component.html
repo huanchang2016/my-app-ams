@@ -10,7 +10,6 @@
             <tr>
                 <th>序号</th>
                 <th>类别名称</th>
-                <th>状态</th>
                 <th>操作（拖动排序）</th>
             </tr>
         </thead>
@@ -18,7 +17,6 @@
             <tr *ngFor="let data of listOfData; let i = index" cdkDrag>
                 <td>{{ i + 1 }}</td>
                 <td>{{ data.name }}</td>
-                <td><span [innerHTML]="data.active | yn"></span></td>
                 <td>
                     <a (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
 

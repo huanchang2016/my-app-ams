@@ -48,7 +48,7 @@
                             {{ data.customer_code }}
                         </span>
                         <ng-template #notCustomer>
-                            <span [innerHTML]="data.customer | yn"></span>
+                            <span class="text-error"><i nz-icon nzType="close" nzTheme="outline"></i></span>
                         </ng-template>
                     </sv>
                     <sv label="统一社会信用代码">{{ data.code }}</sv>
@@ -90,7 +90,7 @@
                                     {{ data.customer_code }}
                                 </span>
                                 <ng-template #notCustomer>
-                                    <span [innerHTML]="data.customer | yn"></span>
+                                    <span class="text-error"><i nz-icon nzType="close" nzTheme="outline"></i></span>
                                 </ng-template>
                             </sv>
                             <sv label="统一社会信用代码">{{ data.code }}</sv>

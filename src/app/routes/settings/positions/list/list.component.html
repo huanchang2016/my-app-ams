@@ -19,7 +19,7 @@
             <td>{{ data.name }}</td>
             <td>{{ data.department.name }}</td>
             <td>
-                <span [innerHTML]="data.is_leader | yn"></span>
+                <span [class.text-success]="data.is_leader" [class.text-error]="!data.is_leader">{{ data.is_leader ? '是' : '否' }}</span>
             </td>
             <td>
                 <span [innerHTML]="data.description | showTextareaContent | html"></span>
@@ -49,7 +49,9 @@
                     <div class="pt-md">
                         <sv-container col="1" size="small">
                             <sv label="部门">{{ data.department.name }}</sv>
-                            <sv label="负责人"><span class="font-weight-bold" [innerHTML]="data.is_leader | yn"></span></sv>
+                            <sv label="负责人">
+                                <span class="font-weight-bold" [class.text-success]="data.is_leader" [class.text-error]="!data.is_leader">{{ data.is_leader ? '是' : '否' }}</span>
+                            </sv>
                             <sv label="职位描述"><span [innerHTML]="data.description | showTextareaContent | html"></span></sv>
                         </sv-container>
                     </div>

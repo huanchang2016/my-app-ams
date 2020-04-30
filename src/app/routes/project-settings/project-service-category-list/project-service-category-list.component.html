@@ -8,7 +8,6 @@
             <th>序号</th>
             <th>名称</th>
             <th>单位</th>
-            <th>状态</th>
             <th>操作</th>
         </tr>
     </thead>
@@ -17,9 +16,6 @@
             <td>{{ i + 1 }}</td>
             <td>{{ data.name }}</td>
             <td>{{ data.company.name }}</td>
-            <td>
-                <span [innerHTML]="data.active | yn"></span>
-            </td>
             <td>
                 <a acl [acl-ability]="'modify_supplier_service'" (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
                 <nz-divider nzType="vertical"></nz-divider>

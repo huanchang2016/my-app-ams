@@ -20,7 +20,9 @@
             <td>{{ data.name }}</td>
             <td>{{ data.workflow_category.name }}</td>
             <td>
-                <span [innerHTML]="data.is_large | yn"></span>
+                <span [class.text-success]="data.is_large" [class.text-error]="!data.is_large">
+                  {{ data.is_large ? '是' : '否' }}
+                </span>
             </td>
             <td>{{ data.department.name }}</td>
             <td>

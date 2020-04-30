@@ -9,7 +9,6 @@
             <th>部门</th>
             <th>类型</th>
             <th>单位</th>
-            <th>状态</th>
             <th>操作</th>
         </tr>
     </thead>
@@ -19,9 +18,6 @@
             <td>{{ data.name }}</td>
             <td>{{ data.category?.name }}</td>
             <td>{{ data.company.name }}</td>
-            <td>
-                <span [innerHTML]="data.active | yn"></span>
-            </td>
             <td>
                 <a acl [acl-ability]="'modify_department'" (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
                 <nz-divider nzType="vertical"></nz-divider>

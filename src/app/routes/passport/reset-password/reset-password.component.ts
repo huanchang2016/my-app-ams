@@ -1,9 +1,9 @@
 import { NzMessageService, NzNotificationService } from 'ng-zorro-antd';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { _HttpClient } from '@delon/theme';
 import { ApiData } from 'src/app/data/interface.data';
-import { interval } from 'rxjs';
+import { interval, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 
 @Component({
@@ -16,7 +16,7 @@ import { Router } from '@angular/router';
     }
   `]
 })
-export class RoutesResetPasswordComponent implements OnInit {
+export class RoutesResetPasswordComponent implements OnInit, OnDestroy {
   validateForm: FormGroup;
   sendCaptcha:boolean = false;
   
@@ -103,18 +103,25 @@ export class RoutesResetPasswordComponent implements OnInit {
     }
   }
 
+  timer:Subscription;
   countdown() {
     this.sendCaptcha = true;
-    interval( 1000).subscribe( _ => {
+    this.timer = interval(1000).subscribe( _ => {
+      this.count--;
       if(this.count > 1) {
         this.captchaText = `${this.count}s 后重新获取`;
       }else {
         this.captchaText = '获取验证码';
         this.sendCaptcha = false;
+        this.timer.unsubscribe();
       }
-      this.count--;
     })
   }
 
+  ngOnDestroy() {
+    if(this.timer) {
+      this.timer.unsubscribe();
+    }
+  }
 
 }

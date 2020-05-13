@@ -7,6 +7,7 @@ import { ITokenService, DA_SERVICE_TOKEN } from '@delon/auth';
 import { ReuseTabService } from '@delon/abc';
 import { StartupService } from '@core';
 import { ApiData } from 'src/app/data/interface.data';
+import { Subscription, interval } from 'rxjs';
 
 @Component({
   selector: 'passport-login',
@@ -60,7 +61,7 @@ export class UserLoginComponent implements OnDestroy {
   // #region get captcha
 
   count = 0;
-  interval$: any;
+  interval$: Subscription;
 
   // #endregion
 
@@ -75,12 +76,12 @@ export class UserLoginComponent implements OnDestroy {
       return;
     }
     this.count = 59;
-    this.interval$ = setInterval(() => {
+    this.interval$ = interval(1000).subscribe( _ => {
       this.count -= 1;
       if (this.count <= 0) {
-        clearInterval(this.interval$);
+        this.interval$.unsubscribe();
       }
-    }, 1000);
+    })
   }
 
   // #endregion
@@ -143,7 +144,7 @@ export class UserLoginComponent implements OnDestroy {
 
   ngOnDestroy(): void {
     if (this.interval$) {
-      clearInterval(this.interval$);
+      this.interval$.unsubscribe();
     }
   }
 }

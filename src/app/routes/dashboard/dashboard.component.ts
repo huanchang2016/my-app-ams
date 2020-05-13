@@ -2,7 +2,8 @@ import { SettingsConfigService } from 'src/app/routes/service/settings-config.se
 import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Observable, of, interval, Subscription, fromEvent } from 'rxjs';
-import { take, switchMap, takeUntil, timeout } from 'rxjs/operators';
+import { take, switchMap, takeUntil, timeout, map, filter } from 'rxjs/operators';
+import { ApiData } from 'src/app/data/interface.data';
 
 @Component({
   selector: 'app-dashboard',
@@ -12,13 +13,20 @@ import { take, switchMap, takeUntil, timeout } from 'rxjs/operators';
 export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   validateForm: FormGroup;
 
+  getDataFn$:Observable<ApiData>;
+
   constructor(
     private fb: FormBuilder,
     private settingsService: SettingsConfigService
-  ) {}
+  ) {
+    this.getDataFn$ = this.settingsService.get('/api/project/submit/forApproval/my');
+  }
 
-text:string = '获取验证码';
+  text:string = '获取验证码';
+
+
   ngOnInit(): void {
+    this.getData();
     // this.validateForm = this.fb.group({
     //   userName: [null, [Validators.required]],
     //   password: [null, [Validators.required]],
@@ -48,6 +56,22 @@ text:string = '获取验证码';
     //   obFn.unsubscribe();
     // }, 2000);
   }
+
+  listData$:Subscription;
+
+  getData() {
+    this.listData$ = this.getDataFn$.pipe(
+      filter( v => v.code === 200),
+      map( d => d.data)
+    ).subscribe(
+      (data:any) => console.log(data),
+      error => console.error(error),
+      () => console.log('request complete!')
+    )
+  }
+  
+  
+  
   loadingCaptcha:boolean = false;
   getCaptcha() {
     

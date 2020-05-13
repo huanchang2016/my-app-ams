@@ -69,8 +69,8 @@ export class InvoicesFormManageComponent implements OnInit {
       amount: [null, [Validators.required, Validators.pattern(/^(([1-9]\d*|0)(\.\d{1,})?)$|(0\.0?([1-9]\d?))$/)]],
       bill_period_time: [null, [Validators.required]],
       fees: [null],
-      remark: [null]
-      // tel: [null, [Validators.required, Validators.minLength(8), Validators.maxLength(11)]],
+      remark: [null],
+      customer_contract_code: [null, [Validators.required]] // 合同编号
       // mail: [null, [Validators.email]],
       // company_id: [ this.companyId, [Validators.required] ]
     });
@@ -135,7 +135,8 @@ export class InvoicesFormManageComponent implements OnInit {
       bill_period_end_time: opt.bill_period_time.end,
       amount: opt.fees.length !== 0 ? this.taxFeeCount : +opt.amount,
       fees: opt.fees,
-      remark: opt.remark
+      remark: opt.remark,
+      customer_contract_code: opt.customer_contract_code
     };
 
     this.settingsConfigService.post('/api/bill/create', option).subscribe((res: ApiData) => {
@@ -160,7 +161,8 @@ export class InvoicesFormManageComponent implements OnInit {
       bill_period_end_time: opt.bill_period_time.end,
       amount: opt.fees.length !== 0 ? this.taxFeeCount : +opt.amount,
       fees: opt.fees,
-      remark: opt.remark
+      remark: opt.remark,
+      customer_contract_code: opt.customer_contract_code
     };
 
     this.settingsConfigService.post('/api/bill/update', option).subscribe((res: ApiData) => {
@@ -184,7 +186,8 @@ export class InvoicesFormManageComponent implements OnInit {
         start: data.bill_period_start_time,
         end: data.bill_period_end_time
       },
-      remark: data.remark
+      remark: data.remark,
+      customer_contract_code: data.customer_contract_code ? data.customer_contract_code : null
     });
   }
 

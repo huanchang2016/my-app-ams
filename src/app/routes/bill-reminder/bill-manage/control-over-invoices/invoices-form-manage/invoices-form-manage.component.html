@@ -113,8 +113,14 @@
                     <app-invoices-tax-fees-c [taxFeeArray]="taxFeeArray" formControlName="fees"></app-invoices-tax-fees-c>
                 </nz-form-control>
             </nz-form-item>
+        </ng-container>
 
-            </ng-container>
+        <nz-form-item nzFlex class="form-item-box">
+            <nz-form-label nzFor="customer_contract_code" nzRequired>合同编号</nz-form-label>
+            <nz-form-control nzErrorTip="请填写开票所属合同编号">
+                <input nz-input id="customer_contract_code" placeholder="填写发票开具的合同编号" formControlName="customer_contract_code" />
+            </nz-form-control>
+          </nz-form-item>
 
         <nz-form-item nzFlex class="form-item-box">
             <nz-form-label nzFor="remark">发票备注</nz-form-label>

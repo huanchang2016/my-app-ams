@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { _HttpClient, SettingsService } from '@delon/theme';
-import { Observable, zip } from 'rxjs';
+import { Observable, zip, interval, of } from 'rxjs';
 import { ApiData } from 'src/app/data/interface.data';
 import { GlobalSettingsService } from '@core/global-service/global-settings.service';
 
@@ -54,4 +54,29 @@ export class SettingsConfigService {
     return this.httpClient.post(api, opt);
   }
 
+  /***** 测试学习
+   * promise 和 Observable 处理请求的区别 
+   * 
+   * ******/
+  count:number = 10;
+  getPromiseIntervalData() {
+    return new Promise((resolve) => {
+      interval(1000).subscribe( () => {
+        resolve(this.count++);
+      })
+    })
+  }
+
+  observaleCount:number = 100;
+  getObservableIntervalData() {
+    return new Observable(
+      observer => {
+        interval(1000).subscribe(
+          () => observer.next(this.observaleCount++)
+        )
+      }
+    )
+  }
+
+  /***** 测试学习 end******/
 }

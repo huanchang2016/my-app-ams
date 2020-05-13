@@ -411,7 +411,9 @@ export class StartupService {
       // ACL: Set the permissions to full, https://ng-alain.com/acl/getting-started
       // this.aclService.setFull(true);
       // Menu data, https://ng-alain.com/theme/menu
-      this.menuService.add(this.menuData(permissionData.data.normal_permission));
+      if(permissionData.code === 200) {
+        this.menuService.add(this.menuData(permissionData.data.normal_permission));
+      }
       // Can be set page suffix title, https://ng-alain.com/theme/title
       this.titleService.suffix = app.name;
     },

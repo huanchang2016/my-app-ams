@@ -35,6 +35,7 @@
                 <th>序号</th>
                 <th>发票类型</th>
                 <th>金额</th>
+                <th>合同信息</th>
                 <th>备注</th>
                 <th>申请人</th>
                 <th>状态</th>
@@ -46,6 +47,12 @@
                 <td>{{ i + 1 }}</td>
                 <td>{{ data.bill_category.name }}</td>
                 <td>{{ data.amount | currency: 'CNY' }}</td>
+                <td>
+                    <sv-container size="small" col="1">
+                        <sv label="编号">{{ data.customer_contract_code }}</sv>
+                        <sv label="附件"><span class="text-primary">附件地址</span></sv>
+                    </sv-container>
+                </td>
                 <td>
                     <span [innerHTML]="data.remark | showTextareaContent"></span>
                 </td>

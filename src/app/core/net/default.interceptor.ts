@@ -10,7 +10,7 @@ import {
   HttpResponse,
 } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
-import { mergeMap, catchError } from 'rxjs/operators';
+import { mergeMap, catchError, retry } from 'rxjs/operators';
 import { NzMessageService, NzNotificationService } from 'ng-zorro-antd';
 import { _HttpClient } from '@delon/theme';
 import { environment } from '@env/environment';
@@ -126,6 +126,7 @@ export class DefaultInterceptor implements HttpInterceptor {
 
     const newReq = req.clone({ url });
     return next.handle(newReq).pipe(
+      retry(3),
       mergeMap((event: any) => {
         // 允许统一对请求错误处理
         if (event instanceof HttpResponseBase) return this.handleData(event);

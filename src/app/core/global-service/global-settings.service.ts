@@ -20,7 +20,7 @@ export class GlobalSettingsService {
   ) { }
   
   getTaskList() {
-    console.log('global settings service works!');
+    console.log('%c global settings service works!', 'color: #f0f;');
     zip(
       this.httpClient.get('/api/project/submit/forApproval/my'), // 待审批项目
       this.httpClient.get('/api/contract/pay/for_approval/my'), // 待审批 合约

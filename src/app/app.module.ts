@@ -42,7 +42,13 @@ const INTERCEPTOR_PROVIDES = [
 // #endregion
 
 // #region global third module
+import { QRModule } from '@delon/abc/qr';
+import { LodopModule } from '@delon/abc/lodop';
+// import { MediaModule } from '@delon/abc/media';
 const GLOBAL_THIRD_MODULES = [
+  QRModule,
+  LodopModule,
+  // MediaModule
 ];
 // #endregion
 

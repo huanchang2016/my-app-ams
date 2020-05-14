@@ -46,6 +46,7 @@
     "jspdf": "^1.5.3",
     "ng-alain": "^8.8.0",
     "ng-zorro-antd": "^8.5.2",
+    "qrious": "^4.0.2",
     "rxjs": "~6.4.0",
     "screenfull": "^5.0.0",
     "tslib": "^1.10.0",

@@ -20,7 +20,7 @@
   <ng-template #tplContent>
     <div class="modal-form">
         <form nz-form [formGroup]="validateCostForm">
-            <nz-form-item nzFlex>
+            <nz-form-item>
                 <nz-form-label nzFor="cost_category" nzRequired>成本类型</nz-form-label>
                 <nz-form-control nzErrorTip="请选择成本类型">
                     <nz-select style="width: 100%;" id="cost_category" nzShowSearch nzAllowClear
@@ -31,7 +31,7 @@
                     </nz-select>
                 </nz-form-control>
             </nz-form-item>
-            <nz-form-item nzFlex>
+            <nz-form-item>
                 <nz-form-label nzFor="amount" nzRequired>金额</nz-form-label>
                 <nz-form-control nzErrorTip="预算成本只能输入数字且最多保留2位小数">
                     <nz-input-group nzSuffix="元" nzPrefix="￥" style="width: 100%">

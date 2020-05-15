@@ -1,7 +1,7 @@
 <form nz-form [formGroup]="validateForm" class="ant-advanced-search-form search-option-form">
     <div nz-row [nzGutter]="24">
         <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="8" *ngIf="COMPANY.length > 1">
-            <nz-form-item nzFlex>
+            <nz-form-item>
                 <nz-form-label nzFor="company_id">单位</nz-form-label>
                 <nz-form-control>
                     <nz-select style="width: 100%;" nzShowSearch nzAllowClear nzPlaceHolder="请选择单位" formControlName="company_id" [nzDisabled]="COMPANY.length < 2" id="company_id">
@@ -13,7 +13,7 @@
             </nz-form-item>
         </div>
         <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="8">
-            <nz-form-item nzFlex>
+            <nz-form-item>
                 <nz-form-label nzFor="department">部门</nz-form-label>
                 <nz-form-control>
                     <nz-select style="width: 100%;" nzAllowClear nzShowSearch nzPlaceHolder="请选择部门" formControlName="department" (ngModelChange)="searchValueChange()" id="department">
@@ -25,7 +25,7 @@
             </nz-form-item>
         </div>
         <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="8">
-            <nz-form-item nzFlex>
+            <nz-form-item>
                 <nz-form-label nzFor="name">名称</nz-form-label>
                 <nz-form-control>
                     <input nz-input placeholder="输入名称查询" formControlName="name" (ngModelChange)="searchValueChange()" id="name" />
@@ -33,7 +33,7 @@
             </nz-form-item>
         </div>
         <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="8">
-            <nz-form-item nzFlex>
+            <nz-form-item>
                 <nz-form-label nzFor="active">状态</nz-form-label>
                 <nz-form-control>
                     <nz-radio-group formControlName="active" (ngModelChange)="searchValueChange()" id="active">

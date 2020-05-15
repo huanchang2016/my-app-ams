@@ -1,18 +1,18 @@
 <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
-    <nz-form-item nzFlex *ngIf="projectInfo" class="mb-0">
+    <nz-form-item *ngIf="projectInfo" class="mb-0">
         <nz-form-label>项目名称</nz-form-label>
         <nz-form-control>
             <strong>{{ projectInfo.name }}</strong>
         </nz-form-control>
     </nz-form-item>
-    <nz-form-item nzFlex *ngIf="supplierInfo" class="mb-0">
+    <nz-form-item *ngIf="supplierInfo" class="mb-0">
         <nz-form-label>供 应 商</nz-form-label>
         <nz-form-control>
             <strong>{{ supplierInfo.name }}</strong>
         </nz-form-control>
     </nz-form-item>
 
-    <nz-form-item nzFlex>
+    <nz-form-item>
         <nz-form-label nzFor="service_category_id" nzRequired>服务商类型</nz-form-label>
         <nz-form-control nzErrorTip="请选择服务商类型">
             <nz-select style="width: 100%;" id="service_category_id" nzShowSearch
@@ -24,27 +24,27 @@
         </nz-form-control>
     </nz-form-item>
     
-    <nz-form-item nzFlex>
+    <nz-form-item>
         <nz-form-label nzFor="name" nzRequired>名称</nz-form-label>
         <nz-form-control nzErrorTip="请填写名称">
             <input id="name" formControlName="name" nz-input placeholder="填写合同名称" />
         </nz-form-control>
     </nz-form-item>
 
-    <nz-form-item nzFlex>
+    <nz-form-item>
         <nz-form-label nzFor="contract_number" nzRequired>合约编号</nz-form-label>
         <nz-form-control nzErrorTip="请填写合约编号">
             <input nz-input id="contract_number" formControlName="contract_number" placeholder="输入合约编号" />
         </nz-form-control>
     </nz-form-item>
-    <nz-form-item nzFlex>
+    <nz-form-item>
         <nz-form-label nzFor="contract_time" nzRequired>合约起止日期</nz-form-label>
         <nz-form-control nzErrorTip="请选择合约起止日期">
             <app-range-datepicker id="contract_time" formControlName="contract_time"></app-range-datepicker>
         </nz-form-control>
     </nz-form-item>
 
-    <nz-form-item nzFlex>
+    <nz-form-item>
         <nz-form-label nzFor="amount" nzRequired>合同金额</nz-form-label>
         <nz-form-control nzErrorTip="请填写合同金额">
             <nz-input-group nzSuffix="元">
@@ -53,21 +53,21 @@
         </nz-form-control>
     </nz-form-item>
     
-    <nz-form-item nzFlex>
+    <nz-form-item>
         <nz-form-label nzFor="pay_company" nzRequired>收款单位</nz-form-label>
         <nz-form-control nzErrorTip="请填写收款单位">
             <input id="pay_company" formControlName="pay_company" nz-input placeholder="填写收款单位" />
         </nz-form-control>
     </nz-form-item>
 
-    <nz-form-item nzFlex>
+    <nz-form-item>
         <nz-form-label nzFor="bank_account" nzRequired>收款账号</nz-form-label>
         <nz-form-control nzErrorTip="请填写收款银行账号">
             <input nz-input id="bank_account" formControlName="bank_account" placeholder="输入收款银行账号" />
         </nz-form-control>
     </nz-form-item>
 
-    <nz-form-item nzFlex>
+    <nz-form-item>
         <nz-form-label nzFor="bank_name" nzRequired>银行名称</nz-form-label>
         <nz-form-control nzErrorTip="请填写收款账号银行名称">
             <input id="bank_name" formControlName="bank_name" nz-input placeholder="填写收款账号银行名称，如： 成都银行" />

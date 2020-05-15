@@ -4,16 +4,18 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 // delon
 import { AlainThemeModule } from '@delon/theme';
-import { DelonABCModule } from '@delon/abc';
 import { DelonACLModule } from '@delon/acl';
 import { DelonFormModule } from '@delon/form';
 
+
+import { SHARED_DELON_MODULES } from './shared-delon.module';
+import { SHARED_ZORRO_MODULES } from './shared-zorro.module';
+
 // #region third libs
-import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { CountdownModule } from 'ngx-countdown';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+
 const THIRDMODULES = [
-  NgZorroAntdModule,
   CountdownModule,
   DragDropModule
 ];
@@ -42,9 +44,10 @@ const DIRECTIVES = [
     RouterModule,
     ReactiveFormsModule,
     AlainThemeModule.forChild(),
-    DelonABCModule,
     DelonACLModule,
     DelonFormModule,
+    ...SHARED_DELON_MODULES,
+    ...SHARED_ZORRO_MODULES,
     // third libs
     ...THIRDMODULES
   ],
@@ -59,9 +62,10 @@ const DIRECTIVES = [
     ReactiveFormsModule,
     RouterModule,
     AlainThemeModule,
-    DelonABCModule,
     DelonACLModule,
     DelonFormModule,
+    ...SHARED_DELON_MODULES,
+    ...SHARED_ZORRO_MODULES,
     // third libs
     ...THIRDMODULES,
     // your components

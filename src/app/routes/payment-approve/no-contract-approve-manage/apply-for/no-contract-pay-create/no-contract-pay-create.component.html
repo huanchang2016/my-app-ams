@@ -45,7 +45,7 @@
 
     <div nz-row [nzGutter]="24">
       <div nz-col [nzMd]="12" [nzSm]="24">
-        <nz-form-item nzFlex>
+        <nz-form-item>
           <nz-form-label nzFor="treaty_id" nzRequired>非合约名称</nz-form-label>
           <nz-form-control nzErrorTip="请选择非合约名称">
             <nz-select style="width: 100%;" id="treaty_id" nzShowSearch [nzDisabled]="isEditCost"
@@ -58,7 +58,7 @@
         </nz-form-item>
       </div>
       <div nz-col [nzMd]="12" [nzSm]="24">
-        <nz-form-item nzFlex>
+        <nz-form-item>
           <nz-form-label nzFor="pay_company" nzRequired>收款单位</nz-form-label>
           <nz-form-control nzErrorTip="请填写收款人或单位名称">
             <input type="text" id="pay_company" formControlName="pay_company" placeHolder="收款单位（个人）名称" nz-input />
@@ -66,7 +66,7 @@
         </nz-form-item>
       </div>
       <div nz-col [nzMd]="12" [nzSm]="24">
-        <nz-form-item nzFlex>
+        <nz-form-item>
           <nz-form-label nzFor="bank_account" nzRequired>银行账号</nz-form-label>
           <nz-form-control nzErrorTip="请填写收款人或单位银行账号">
             <input type="text" id="bank_account" formControlName="bank_account" placeHolder="请填写收款银行账号" nz-input />
@@ -74,7 +74,7 @@
         </nz-form-item>
       </div>
       <div nz-col [nzMd]="12" [nzSm]="24">
-        <nz-form-item nzFlex>
+        <nz-form-item>
           <nz-form-label nzFor="bank_name" nzRequired>银行名称</nz-form-label>
           <nz-form-control nzErrorTip="请填写收款银行名称">
             <input type="text" id="bank_name" formControlName="bank_name" placeHolder="请填写收款银行名称" nz-input />
@@ -85,7 +85,7 @@
 
 
       <div nz-col [nzMd]="12" [nzSm]="24">
-        <nz-form-item nzFlex>
+        <nz-form-item>
           <nz-form-label nzFor="if_write_off" nzRequired>是否冲销借款</nz-form-label>
           <nz-form-control nzErrorTip="请选择是否冲销个人借款">
             <nz-radio-group id="if_write_off" formControlName="if_write_off">
@@ -96,7 +96,7 @@
         </nz-form-item>
       </div>
       <div nz-col [nzMd]="12" [nzSm]="24">
-        <nz-form-item nzFlex>
+        <nz-form-item>
           <nz-form-label nzFor="write_off_amount" [nzRequired]="ifWriteOff">冲抵金额</nz-form-label>
           <nz-form-control nzErrorTip="请填写冲销个人借款金额">
             <nz-input-group nzSuffix="元" nzPrefix="￥" style="width: 100%">
@@ -220,13 +220,13 @@
   <div class="modal-form">
     <form nz-form [formGroup]="validateCostForm">
 
-      <nz-form-item nzFlex>
+      <nz-form-item>
         <nz-form-label nzFor="abstract" nzRequired>摘要</nz-form-label>
         <nz-form-control nzErrorTip="请填写摘要信息">
           <input type="text" id="abstract" formControlName="abstract" placeHolder="填写成本摘要信息" nz-input />
         </nz-form-control>
       </nz-form-item>
-      <nz-form-item nzFlex>
+      <nz-form-item>
         <nz-form-label nzFor="cost_id" nzRequired>成本类型</nz-form-label>
         <nz-form-control nzErrorTip="请选择成本类型">
           <nz-select style="width: 100%;" id="cost_id" nzShowSearch [nzDisabled]="isEditCost" nzPlaceHolder="请选择成本类型"
@@ -237,7 +237,7 @@
           </nz-select>
         </nz-form-control>
       </nz-form-item>
-      <nz-form-item nzFlex>
+      <nz-form-item>
         <nz-form-label nzFor="amount" nzRequired>支付金额</nz-form-label>
         <nz-form-control [nzErrorTip]="errorAmountTpl">
           <nz-input-group nzSuffix="元" nzPrefix="￥" style="width: 100%">
@@ -254,25 +254,25 @@
         </nz-form-control>
       </nz-form-item>
 
-      <nz-form-item nzFlex>
+      <nz-form-item>
         <nz-form-label nzFor="card_number" nzRequired>银行卡号</nz-form-label>
         <nz-form-control nzErrorTip="请填写收款人或单位银行卡号">
           <input type="text" id="card_number" formControlName="card_number" placeHolder="请填写收款银行卡号" nz-input />
         </nz-form-control>
       </nz-form-item>
-      <nz-form-item nzFlex>
+      <nz-form-item>
         <nz-form-label nzFor="account_name" nzRequired>户名</nz-form-label>
         <nz-form-control nzErrorTip="请填写收款账号户名">
           <input type="text" id="account_name" formControlName="account_name" placeHolder="请填写收款账号户名" nz-input />
         </nz-form-control>
       </nz-form-item>
-      <nz-form-item nzFlex>
+      <nz-form-item>
         <nz-form-label nzFor="is_business_card">商务卡</nz-form-label>
         <nz-form-control>
           <label nz-checkbox formControlName="is_business_card"></label>
         </nz-form-control>
       </nz-form-item>
-      <nz-form-item nzFlex>
+      <nz-form-item>
         <nz-form-label nzFor="remark">支付备注</nz-form-label>
         <nz-form-control>
           <textarea nz-input id="remark" placeholder="填写成本支付备注信息，如无则不填" formControlName="remark"

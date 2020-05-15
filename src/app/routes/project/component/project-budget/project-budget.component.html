@@ -9,7 +9,7 @@
                     <div nz-row>
                         <div nz-col [nzSpan]="24" class="font-weight-bold text-md mb-sm">预算收入</div>
                         <div nz-col [nzSpan]="24">
-                            <nz-form-item nzFlex>
+                            <nz-form-item>
                                 <nz-form-label nzFor="tax_id" nzRequired>预算类型</nz-form-label>
                                 <nz-form-control nzErrorTip="请选择预算类型">
                                     <nz-select style="width: 100%;" id="tax_id" nzShowSearch nzPlaceHolder="请选择预算类型"
@@ -22,7 +22,7 @@
                             </nz-form-item>
                         </div>
                         <div nz-col [nzSpan]="24">
-                            <nz-form-item nzFlex>
+                            <nz-form-item>
                                 <nz-form-label nzFor="income" nzRequired>金额</nz-form-label>
                                 <nz-form-control nzErrorTip="预算收入只能输入数字且最多保留2位小数">
                                     <nz-input-group nzSuffix="元" nzPrefix="￥" style="width: 100%">

@@ -18,7 +18,6 @@ import { BudgetCostFormComponent } from './component/project-budget/budget-cost-
 import { HasContractSupplierComponent } from './component/project-supplier/component/has-contract-supplier/has-contract-supplier.component';
 import { NoContractSupplierComponent } from './component/project-supplier/component/no-contract-supplier/no-contract-supplier.component';
 import { ProjectSupplierFormComponent } from './component/project-supplier/component/project-supplier-form/project-supplier-form.component';
-import { ProjectContractFormComponent } from './component/project-supplier/component/project-contract-form/project-contract-form.component';
 import { SupplierContractListComponent } from './component/project-supplier/component/supplier-contract-list/supplier-contract-list.component';
 import { SupplierNoContractListComponent } from './component/project-supplier/component/supplier-no-contract-list/supplier-no-contract-list.component';
 
@@ -55,7 +54,6 @@ const COMPONENTS_NOROUNT = [
   HasContractSupplierComponent,
   NoContractSupplierComponent,
   ProjectSupplierFormComponent,
-  ProjectContractFormComponent,
   SupplierContractListComponent,
   SupplierNoContractListComponent,
   ProjectEditSuccessComponent,

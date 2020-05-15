@@ -1,6 +1,6 @@
-import { format } from 'date-fns';
 import { Component, forwardRef } from '@angular/core';
 import { NG_VALUE_ACCESSOR, NG_VALIDATORS, ControlValueAccessor, AbstractControl, ValidationErrors } from '@angular/forms';
+import { format } from 'date-fns';
 
 
 @Component({
@@ -25,7 +25,7 @@ export class RangeDatepickerComponent implements ControlValueAccessor {
 
   private propagateChange = (_: any) => { };
   
-  rangeDate:any = null;
+  rangeDate:Date[] = [];
 
   writeValue(obj: any): void {
     if(obj) {
@@ -35,8 +35,8 @@ export class RangeDatepickerComponent implements ControlValueAccessor {
 
   modelValueChange():void {
     this.propagateChange({
-      start: format(this.rangeDate[0], 'YYYY/MM/DD'),
-      end: format(this.rangeDate[1], 'YYYY/MM/DD')
+      start: format(this.rangeDate[0], 'yyyy/MM/dd'),
+      end: format(this.rangeDate[1], 'yyyy/MM/dd')
     })
   }
 

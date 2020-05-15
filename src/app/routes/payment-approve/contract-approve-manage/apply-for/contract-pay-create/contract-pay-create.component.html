@@ -151,7 +151,7 @@
 <ng-template #tplContent>
   <div class="modal-form">
       <form nz-form [formGroup]="validateCostForm">
-          <nz-form-item nzFlex>
+          <nz-form-item>
               <nz-form-label nzFor="cost_id" nzRequired>成本类型</nz-form-label>
               <nz-form-control nzErrorTip="请选择成本类型">
                   <nz-select style="width: 100%;" id="cost_id" nzShowSearch [nzDisabled]="isEditCost"
@@ -162,7 +162,7 @@
                   </nz-select>
               </nz-form-control>
           </nz-form-item>
-          <nz-form-item nzFlex>
+          <nz-form-item>
               <nz-form-label nzFor="amount" nzRequired>支付金额</nz-form-label>
               <nz-form-control [nzErrorTip]="errorAmountTpl">
                   <nz-input-group nzSuffix="元" nzPrefix="￥" style="width: 100%">
@@ -178,7 +178,7 @@
                   </ng-template>
               </nz-form-control>
           </nz-form-item>
-          <nz-form-item nzFlex>
+          <nz-form-item>
               <nz-form-label nzFor="remark">成本支付备注</nz-form-label>
               <nz-form-control>
                 <textarea

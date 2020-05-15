@@ -68,7 +68,7 @@ const APPINIT_PROVIDES = [
 ];
 // #endregion
 
-import { DelonModule } from './delon.module';
+import { GlobalConfigModule } from './global-config.module';
 import { CoreModule } from './core/core.module';
 import { SharedModule } from './shared/shared.module';
 import { AppComponent } from './app.component';
@@ -83,7 +83,7 @@ import { LayoutModule } from './layout/layout.module';
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    DelonModule.forRoot(),
+    GlobalConfigModule.forRoot(),
     CoreModule,
     SharedModule,
     LayoutModule,

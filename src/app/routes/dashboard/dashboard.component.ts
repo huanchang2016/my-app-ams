@@ -14,6 +14,7 @@ import { NzMessageService } from 'ng-zorro-antd';
   styleUrls: ['./dashboard.component.less']
 })
 export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
+
   validateForm: FormGroup;
 
   getDataFn$: Observable<ApiData>;
@@ -26,20 +27,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     private settingsService: SettingsConfigService
   ) {
     this.getDataFn$ = this.settingsService.get('/api/project/submit/forApproval/my');
-
-    // 打印功能
-    this.lodopSrv.lodop.subscribe(({ lodop, ok }) => {
-      console.log(lodop, ok)
-      if (!ok) {
-        this.error = true;
-        return;
-      }
-      this.error = false;
-      this.msg.success(`打印机加载成功`);
-      this.lodop = lodop as Lodop;
-      this.pinters = this.lodopSrv.printer;
-    });
-    // 打印功能
   }
 
   text: string = '获取验证码';
@@ -74,9 +61,9 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     console.log(i);
   }
 
-  source:string = `https://blz-videos.nosdn.127.net/1/OverWatch/AnimatedShots/Overwatch_AnimatedShot_Bastion_TheLastBastion.mp4`;
+  source: string = `https://blz-videos.nosdn.127.net/1/OverWatch/AnimatedShots/Overwatch_AnimatedShot_Bastion_TheLastBastion.mp4`;
   ngOnInit(): void {
-    
+
     this.getData();
 
     this.change('url');
@@ -206,55 +193,4 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // }
 
-
-  // 打印功能
-  cog: any = {
-    url: '/assets/plugins/LodopFuncs.js',
-    printer: '',
-    paper: '',
-    html: `
-        <h1>Title</h1>
-        <p>这~！@#￥%……&*（）——sdilfjnvn</p>
-        <p>这~！@#￥%……&*（）——sdilfjnvn</p>
-        <p>这~！@#￥%……&*（）——sdilfjnvn</p>
-        <p>这~！@#￥%……&*（）——sdilfjnvn</p>
-        <p>这~！@#￥%……&*（）——sdilfjnvn</p>
-        `,
-  };
-  error = false;
-  lodop: Lodop | null = null;
-  pinters: any[] = [];
-  papers: string[] = [];
-
-  reload(options: any = { url: '/assets/plugins/LodopFuncs.js' }) {
-    console.log(options, 'reload')
-    this.pinters = [];
-    this.papers = [];
-    this.cog.printer = '';
-    this.cog.paper = '';
-
-    this.lodopSrv.cog = Object.assign({}, this.cog, options);
-    this.error = false;
-    if (options === null) this.lodopSrv.reset();
-  }
-
-  changePinter(name: string) {
-    this.papers = this.lodop!.GET_PAGESIZES_LIST(name, '\n').split('\n');
-  }
-
-  printing = false;
-  print(isPrivew = false) {
-    const LODOP = this.lodop!;
-    LODOP.PRINT_INITA(10, 20, 810, 610, '测试C-Lodop远程打印四步骤');
-    LODOP.SET_PRINTER_INDEXA(this.cog.printer);
-    LODOP.SET_PRINT_PAGESIZE(0, 0, 0, this.cog.paper);
-    LODOP.ADD_PRINT_TEXT(1, 1, 300, 200, '下面输出的是本页源代码及其展现效果：');
-    LODOP.ADD_PRINT_TEXT(20, 10, '90%', '95%', this.cog.html);
-    LODOP.SET_PRINT_STYLEA(0, 'ItemType', 4);
-    LODOP.NewPageA();
-    LODOP.ADD_PRINT_HTM(20, 10, '90%', '95%', this.cog.html);
-    if (isPrivew) LODOP.PREVIEW();
-    else LODOP.PRINT();
-  }
-  // 打印功能
 }

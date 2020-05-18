@@ -78,6 +78,15 @@
                 </nz-form-control>
             </nz-form-item>
         </div>
+        <div nz-col [nzSpan]="24">
+            <nz-form-item>
+                <nz-form-label>项目附件</nz-form-label>
+                <nz-form-control>
+                    <app-upload-file [attachment_category]="'is_project'" (attachmentChange)="attachmentChange($event)"></app-upload-file>
+                </nz-form-control>
+            </nz-form-item>
+            
+        </div>
     </div>
 
     <nz-form-item nz-row class="register-area">

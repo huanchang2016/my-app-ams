@@ -26,12 +26,17 @@ import { CascaderAreaComponent } from './component/cascader-area/cascader-area.c
 import { UploadImageBase64Component } from './component/upload-image-base64/upload-image-base64.component';
 import { RangeDatepickerComponent } from './component/range-datepicker/range-datepicker.component';
 import { ShowTextareaContentPipe } from './pipe/show-textarea-content.pipe';
+import { UploadFileComponent } from './component/upload-file-modal/upload-file.component';
+import { UploadFileTplComponent } from './component/upload-file-modal/upload-file-tpl/upload-file-tpl.component';
 
 const COMPONENTS = [
   CascaderAreaComponent,
   UploadImageBase64Component,
-  RangeDatepickerComponent
+  RangeDatepickerComponent,
+  UploadFileComponent,
+  UploadFileTplComponent,
 ];
+
 const DIRECTIVES = [
     ShowTextareaContentPipe
   ];

@@ -90,15 +90,6 @@ export class ProjectInfoComponent implements OnChanges, OnInit {
       } else {
         this.add(opt);
       }
-
-      // this.destroyModal(this.validateForm.value);
-      // if(this.data) {
-      //  请求编辑 接口
-
-      // }else {
-      //  请求 新增接口
-
-      // }
     } else {
       this.msg.warning('信息填写不完整');
     }
@@ -153,6 +144,13 @@ export class ProjectInfoComponent implements OnChanges, OnInit {
         description: opt.description
       });
     }
+  }
+
+  // 附件上传
+  attachment:any = null;
+  attachmentChange(option:any) {
+    console.log('附件上传后的返回值', option);
+    this.attachment = option.attachment;
   }
 
 }

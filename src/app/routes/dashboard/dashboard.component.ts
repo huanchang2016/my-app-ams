@@ -15,7 +15,6 @@ import { NzMessageService } from 'ng-zorro-antd';
 })
 export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  validateForm: FormGroup;
 
   getDataFn$: Observable<ApiData>;
 
@@ -62,17 +61,18 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   source: string = `https://blz-videos.nosdn.127.net/1/OverWatch/AnimatedShots/Overwatch_AnimatedShot_Bastion_TheLastBastion.mp4`;
+  
+  validateForm: FormGroup;
   ngOnInit(): void {
 
     this.getData();
 
     this.change('url');
 
-    // this.validateForm = this.fb.group({
-    //   userName: [null, [Validators.required]],
-    //   password: [null, [Validators.required]],
-    //   remember: [null]
-    // });
+    this.validateForm = this.fb.group({
+      name: [null, [Validators.required]],
+      file: [null, [Validators.required]]
+    });
 
     // this.validateForm.get('remember').valueChanges.subscribe((res:any) => {
     //   if(res) {
@@ -191,6 +191,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   //     this.validateForm.controls[i].updateValueAndValidity();
   //   }
 
+  //   console.log(this.validateForm.value);
   // }
 
 }

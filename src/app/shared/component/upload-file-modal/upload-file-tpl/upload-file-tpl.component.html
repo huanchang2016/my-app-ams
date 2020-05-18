@@ -1,0 +1,20 @@
+<nz-upload
+    nzType="drag"
+    [nzMultiple]="false"
+    [nzFileList]="fileList"
+    [nzMultiple]="isMultiple"
+    [nzBeforeUpload]="beforeUpload">
+    <p class="ant-upload-drag-icon">
+        <i nz-icon nzType="inbox"></i>
+    </p>
+    <p class="ant-upload-text">点击选择或者拖动文件到该区域</p>
+    <p class="ant-upload-hint">支持上传文件格式为pdf、world、excel、image，<span class="text-error">禁止上传文件夹/压缩包文件等</span>。</p>
+</nz-upload>
+<!-- <ng-container *ngIf="fileList.length !== 0">
+    <p *ngFor="let item of fileList; let i = index" class="clearfix">
+        <span class="float-left">{{ item.name }}</span>
+        <span class="float-right">
+            <i nz-icon nzType="delete" nzTheme="outline" (click)="deletedFile(i)"></i>
+        </span>
+    </p>
+</ng-container> -->

@@ -1,4 +1,4 @@
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, filter, map } from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd';
 import { ApiData, List } from 'src/app/data/interface.data';
@@ -52,6 +52,7 @@ export class InvoicesFormManageComponent implements OnInit {
         console.log(this.billId, 'billId');
         this.getBillInfo();
         this.getBillFees();
+        this.getAttachment();
       }
     })
   }
@@ -59,6 +60,7 @@ export class InvoicesFormManageComponent implements OnInit {
   ngOnInit() {
     this.getConfigs();
     this.initForm();
+    this.getCategoryList();
   }
 
   initForm(): void {
@@ -142,8 +144,7 @@ export class InvoicesFormManageComponent implements OnInit {
     this.settingsConfigService.post('/api/bill/create', option).subscribe((res: ApiData) => {
       this.submitLoading = false;
       if (res.code === 200) {
-        this.msg.success('创建成功');
-        this.router.navigateByUrl(`/bill/apply/invoices/list/${this.projectId}`);
+        this.bindAttachment(res.data.id);
       } else {
         this.msg.error(res.error || '创建失败');
       }
@@ -264,4 +265,73 @@ export class InvoicesFormManageComponent implements OnInit {
   }
 
   cancel() {}
+
+  
+  // 附件上传
+  attachment: any[] = [];
+  isAttachmentChange: boolean = false;
+  attachmentChange(option: any) {
+    this.attachment.push(option);
+    this.isAttachmentChange = !this.isAttachmentChange;
+    if (this.billId) {
+      this.bindAttachment(this.billId, true);
+    }
+  }
+
+  bindAttachment(bill_id: number, isRefer: boolean = false) {
+    const opt: any = {
+      attachment_ids: this.attachment.map(v => v.id),
+      project_id: this.projectId,
+      bill_id: bill_id,
+      is_basic: false
+    };
+    console.log(opt);
+    this.settingsConfigService.post('/api/attachment/bind', opt).subscribe((res: ApiData) => {
+      console.log(res);
+      this.submitLoading = false;
+      if (res.code === 200) {
+        if (this.billId) {
+          if (isRefer) {
+            this.msg.success('附件绑定成功');
+          }
+          this.getAttachment();
+        } else {
+          this.msg.success('保存成功');
+          this.router.navigateByUrl(`/bill/apply/invoices/list/${this.projectId}`);
+        }
+      } else {
+        this.msg.error(res.error || '附件绑定失败')
+      }
+    })
+  }
+
+  getAttachment() {
+    this.settingsConfigService.get(`/api/attachment/bill/${this.billId}`).subscribe((res: ApiData) => {
+      console.log('项目 基础附件：', res);
+      if (res.code === 200) {
+        this.attachment = res.data.attachment;
+      }
+    })
+  }
+
+  attachmentCategory: List[] = [];
+  getCategoryList() {
+    const opt: any = {
+      is_project: false,
+      is_contract: false,
+      is_pay: false,
+      is_bill: true
+    };
+    this.settingsConfigService.post('/api/attachment/category/list', opt).pipe(
+      filter(v => v.code === 200),
+      map(v => v.data)
+    ).subscribe(data => {
+      const cateArrData: any[] = data.attachment_category;
+      this.attachmentCategory = cateArrData.sort((a: any, b: any) => a.sequence - b.sequence).map(v => {
+        return { id: v.id, name: v.name }
+      });
+
+    });
+
+  }
 }

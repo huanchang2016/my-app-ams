@@ -106,6 +106,14 @@
           </nz-form-control>
         </nz-form-item>
       </div>
+      <div nz-col [nzSm]="24">
+        <nz-form-item>
+          <nz-form-label>附件资料</nz-form-label>
+          <nz-form-control>
+            <app-upload-file [Attachment]="attachment" [AttachmentCategory]="attachmentCategory" [isAttachmentChange]="isAttachmentChange" (attachmentChange)="attachmentChange($event)"></app-upload-file>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
     </div>
   </form>
 

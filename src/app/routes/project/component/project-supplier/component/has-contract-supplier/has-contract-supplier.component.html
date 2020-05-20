@@ -73,6 +73,12 @@
             <input id="bank_name" formControlName="bank_name" nz-input placeholder="填写收款账号银行名称，如： 成都银行" />
         </nz-form-control>
     </nz-form-item>
+    <nz-form-item>
+        <nz-form-label>合约附件</nz-form-label>
+        <nz-form-control>
+            <app-upload-file [Attachment]="attachment" [AttachmentCategory]="attachmentCategory" [isAttachmentChange]="isAttachmentChange" (attachmentChange)="attachmentChange($event)"></app-upload-file>
+        </nz-form-control>
+    </nz-form-item>
 
     <nz-form-item nz-row>
         <nz-form-control [nzSpan]="18" [nzOffset]="6">

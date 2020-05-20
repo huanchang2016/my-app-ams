@@ -1,14 +1,15 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges} from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { List, ApiData } from 'src/app/data/interface.data';
 import { SettingsConfigService } from 'src/app/routes/service/settings-config.service';
 import { SettingsService } from '@delon/theme';
+import { filter, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-project-info',
   templateUrl: './project-info.component.html',
-  styleUrls: ['./project-info.component.less']
+  styleUrls: ['./project-info.component.less'],
 })
 export class ProjectInfoComponent implements OnChanges, OnInit {
 
@@ -41,6 +42,8 @@ export class ProjectInfoComponent implements OnChanges, OnInit {
         this.projectOriginArray = data.sort( (a:any, b:any) => a.sequence - b.sequence);
       }
     });
+
+    this.getCategoryList();
     // 获取当前用户所在部门 的 项目类型
     if(!this.settings.user.department) {
       return;
@@ -55,6 +58,7 @@ export class ProjectInfoComponent implements OnChanges, OnInit {
   ngOnChanges() {
     if (this.data) {
       this.setFormValue(this.data);
+      this.getAttachment();
     }
   }
 
@@ -98,13 +102,14 @@ export class ProjectInfoComponent implements OnChanges, OnInit {
   edit(data: any): void {
     this.settingsConfigService.post('/api/project/update', data).subscribe((res: ApiData) => {
       console.log(res);
-      this.submitLoading = false;
+      // this.submitLoading = false;
       if (res.code === 200) {
         this.submitChangeSuccess.emit({
           data: res.data,
           key: 'info'
         });
       } else {
+        this.submitLoading = false;
         this.msg.error(res.error || '提交失败');
       }
     })
@@ -119,7 +124,9 @@ export class ProjectInfoComponent implements OnChanges, OnInit {
           data: res.data,
           key: 'info'
         });
+        this.bindAttachment(res.data);
       } else {
+        this.submitLoading = false;
         this.msg.error(res.error || '提交失败');
       }
     })
@@ -147,10 +154,68 @@ export class ProjectInfoComponent implements OnChanges, OnInit {
   }
 
   // 附件上传
-  attachment:any = null;
+  attachment:any[] = [];
+  isAttachmentChange:boolean = false;
   attachmentChange(option:any) {
-    console.log('附件上传后的返回值', option);
-    this.attachment = option.attachment;
+    this.attachment.push(option);
+    this.isAttachmentChange = !this.isAttachmentChange;
+    if(this.data) {
+      this.bindAttachment(this.data, true);
+    }
+  }
+
+  bindAttachment(projectInfo:any, isRefer:boolean = false) {
+    const opt:any = {
+      attachment_ids: this.attachment.map(v => v.id),
+      project_id: projectInfo.id,
+      is_basic: true
+    };
+    console.log(opt);
+    this.settingsConfigService.post('/api/attachment/bind', opt).subscribe((res:ApiData) => {
+      console.log(res);
+      this.submitLoading = false;
+      if(res.code === 200) {
+        if(this.data) {
+          if(isRefer) {
+            this.msg.success('附件绑定成功');
+          }
+          this.getAttachment();
+        }
+      } else {
+        this.msg.error(res.error || '附件绑定失败')
+      }
+    })
+  }
+
+  getAttachment() {
+    this.settingsConfigService.get(`/api/attachment/project/${this.data.id}`).subscribe((res:ApiData) => {
+      console.log('项目 基础附件：', res);
+      if(res.code === 200) {
+        this.attachment = res.data.attachment;
+      }
+    })
+  }
+
+
+  attachmentCategory:List[] = [];
+  getCategoryList() {
+    const opt:any = {
+      is_project: true,
+      is_contract: false,
+      is_pay: false,
+      is_bill: false
+    };
+    this.settingsConfigService.post('/api/attachment/category/list', opt).pipe(
+      filter(v => v.code === 200),
+      map(v => v.data)
+    ).subscribe( data => {
+      const cateArrData:any[] = data.attachment_category;
+      this.attachmentCategory = cateArrData.sort((a:any, b:any) => a.sequence - b.sequence).map( v => {
+        return { id: v.id, name: v.name }
+      });
+
+    });
+    
   }
 
 }

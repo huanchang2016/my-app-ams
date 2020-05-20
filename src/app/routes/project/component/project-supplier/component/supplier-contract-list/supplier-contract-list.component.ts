@@ -59,7 +59,7 @@ export class SupplierContractListComponent implements OnInit {
         projectInfo: this.projectInfo,
         serviceCategoryArray: this.serviceCategory
       },
-      nzFooter: null
+      nzFooter: []
     });
 
     // modal.afterOpen.subscribe(() => console.log('[afterOpen] emitted!'));
@@ -82,7 +82,7 @@ export class SupplierContractListComponent implements OnInit {
         supplierInfo: this.supplierInfo,
         projectInfo: this.projectInfo
       },
-      nzFooter: null
+      nzFooter: []
     });
 
     // modal.afterOpen.subscribe(() => console.log('[afterOpen] emitted!'));

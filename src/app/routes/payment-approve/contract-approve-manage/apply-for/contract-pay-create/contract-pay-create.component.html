@@ -104,6 +104,7 @@
       </tbody>
     </nz-table>
   </div>
+  
   <!-- new edit -->
   <div class="hidden-pc">
     <ng-container *ngFor="let data of listOfData">
@@ -141,6 +142,10 @@
   </div>
   <!-- edit -->
 
+</nz-card>
+
+<nz-card nzTitle="合约支付附件" class="mt-md">
+  <app-upload-file [Attachment]="attachment" [AttachmentCategory]="attachmentCategory" [isAttachmentChange]="isAttachmentChange" (attachmentChange)="attachmentChange($event)"></app-upload-file>
 </nz-card>
 
 <!-- 成本支付新增 modal -->

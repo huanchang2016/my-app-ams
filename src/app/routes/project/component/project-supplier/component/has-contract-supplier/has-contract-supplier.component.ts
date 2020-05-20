@@ -3,6 +3,7 @@ import { NzModalRef, NzMessageService } from 'ng-zorro-antd';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { List, ApiData } from 'src/app/data/interface.data';
 import { SettingsConfigService } from 'src/app/routes/service/settings-config.service';
+import { filter, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-has-contract-supplier',
@@ -55,6 +56,8 @@ export class HasContractSupplierComponent implements OnInit {
       bank_name: [null, [Validators.required]]
     });
 
+    this.getCategoryList();
+
     if(this.data) {
       console.log(this.data);
       this.validateForm.patchValue({
@@ -69,7 +72,9 @@ export class HasContractSupplierComponent implements OnInit {
         pay_company: this.data.pay_company,
         bank_account: this.data.bank_account,
         bank_name: this.data.bank_name
-      })
+      });
+      
+      this.getAttachment();
     }
   }
 
@@ -126,10 +131,10 @@ export class HasContractSupplierComponent implements OnInit {
   addContract(opt:any) {
     this.settingsConfigService.post('/api/contract/create', opt).subscribe((res:ApiData) => {
       console.log(res);
-      this.submitLoading = false;
+      // this.submitLoading = false;
       if(res.code === 200) {
-        this.msg.success('创建成功');
-        this.destroyModal({});
+        // this.msg.success('创建成功');
+        this.bindAttachment(res.data);
       }else {
         this.msg.error(res.error || '创建失败');
       }
@@ -151,6 +156,75 @@ export class HasContractSupplierComponent implements OnInit {
 
   destroyModal(data:any = null): void {
     this.modal.destroy(data);
+  }
+
+  
+  // 附件上传
+  attachment:any[] = [];
+  isAttachmentChange:boolean = false;
+  attachmentChange(option:any) {
+    this.attachment.push(option);
+    this.isAttachmentChange = !this.isAttachmentChange;
+    if(this.data) {
+      this.bindAttachment(this.data, true);
+    }
+  }
+
+  bindAttachment(contractInfo:any, isRefer:boolean = false) {
+    const opt:any = {
+      attachment_ids: this.attachment.map(v => v.id),
+      project_id: this.projectInfo.id,
+      contract_id: contractInfo.id,
+      is_basic: false
+    };
+    console.log(opt);
+    this.settingsConfigService.post('/api/attachment/bind', opt).subscribe((res:ApiData) => {
+      console.log(res);
+      this.submitLoading = false;
+      if(res.code === 200) {
+        if(this.data) {
+          if(isRefer) {
+            this.msg.success('附件绑定成功');
+          }
+          this.getAttachment();
+        }else {
+         this.destroyModal({});
+        }
+      } else {
+        this.msg.error(res.error || '附件绑定失败')
+      }
+    })
+  }
+
+  getAttachment() {
+    this.settingsConfigService.get(`/api/attachment/contract/${this.data.id}`).subscribe((res:ApiData) => {
+      console.log('项目 基础附件：', res);
+      if(res.code === 200) {
+        this.attachment = res.data.attachment;
+      }
+    })
+  }
+
+
+  attachmentCategory:List[] = [];
+  getCategoryList() {
+    const opt:any = {
+      is_project: false,
+      is_contract: true,
+      is_pay: false,
+      is_bill: false
+    };
+    this.settingsConfigService.post('/api/attachment/category/list', opt).pipe(
+      filter(v => v.code === 200),
+      map(v => v.data)
+    ).subscribe( data => {
+      const cateArrData:any[] = data.attachment_category;
+      this.attachmentCategory = cateArrData.sort((a:any, b:any) => a.sequence - b.sequence).map( v => {
+        return { id: v.id, name: v.name }
+      });
+
+    });
+    
   }
 
 }

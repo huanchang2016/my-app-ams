@@ -2,8 +2,9 @@ import { Component, OnInit, TemplateRef } from '@angular/core';
 import { NzMessageService, NzModalService, NzModalRef } from 'ng-zorro-antd';
 import { SettingsConfigService } from 'src/app/routes/service/settings-config.service';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { ApiData } from 'src/app/data/interface.data';
+import { ApiData, List } from 'src/app/data/interface.data';
 import { FormGroup, Validators, FormBuilder, FormControl } from '@angular/forms';
+import { filter, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-no-contract-pay-create',
@@ -53,6 +54,7 @@ export class NoContractPayCreateComponent implements OnInit {
     this.activatedRoute.queryParams.subscribe(params=> {
       if(params && params['treaty_pay_id']) {
         this.treaty_pay_id = +(params['treaty_pay_id']);
+        this.getAttachment();
       }
     })
     
@@ -71,6 +73,8 @@ export class NoContractPayCreateComponent implements OnInit {
       if_write_off: [ null, [ Validators.required ] ],
       write_off_amount: [ null, [Validators.required] ]
     });
+
+    this.getCategoryList();
     // 是否冲销借款   改版  冲销金额的验证
     this.validateTreatyForm.get('if_write_off').valueChanges.subscribe((if_write_off:boolean) => {
       console.log('if_write_off', if_write_off);
@@ -335,8 +339,7 @@ export class NoContractPayCreateComponent implements OnInit {
       console.log(res, '新增无合约非合约支付')
       this.submitLoading = false;
       if(res.code === 200) {
-        this.msg.success('非合约支付提交成功');
-        this.router.navigateByUrl(`/approve/no-contract/apply/pay/${this.projectId}`);
+        this.bindAttachment(res.data.id);
       }else {
         this.msg.error(res.error || '非合约支付提交失败');
       }
@@ -430,5 +433,75 @@ export class NoContractPayCreateComponent implements OnInit {
         this.router.navigateByUrl(`/approve/no-contract/apply/pay/${this.projectId}`);
       }
     });
+  }
+
+  
+  // 附件上传
+  attachment:any[] = [];
+  isAttachmentChange:boolean = false;
+  attachmentChange(option:any) {
+    this.attachment.push(option);
+    this.isAttachmentChange = !this.isAttachmentChange;
+    if(this.treaty_pay_id) {
+      this.bindAttachment(this.treaty_pay_id, true);
+    }
+  }
+
+  bindAttachment(treaty_pay_id:number, isRefer:boolean = false) {
+    const opt:any = {
+      attachment_ids: this.attachment.map(v => v.id),
+      project_id: this.projectInfo.id,
+      treaty_pay_id: treaty_pay_id,
+      is_basic: false
+    };
+    console.log(opt);
+    this.settingsConfigService.post('/api/attachment/bind', opt).subscribe((res:ApiData) => {
+      console.log(res);
+      this.submitLoading = false;
+      if(res.code === 200) {
+        if(this.treaty_pay_id) {
+          if(isRefer) {
+            this.msg.success('附件绑定成功');
+          }
+          this.getAttachment();
+        }else {
+          this.msg.success('非合约支付提交成功');
+          this.router.navigateByUrl(`/approve/no-contract/apply/pay/${this.projectId}`);
+        }
+      } else {
+        this.msg.error(res.error || '附件绑定失败')
+      }
+    })
+  }
+
+  getAttachment() {
+    this.settingsConfigService.get(`/api/attachment/treaty_pay/${this.treaty_pay_id}`).subscribe((res:ApiData) => {
+      console.log('项目 基础附件：', res);
+      if(res.code === 200) {
+        this.attachment = res.data.attachment;
+      }
+    })
+  }
+
+
+  attachmentCategory:List[] = [];
+  getCategoryList() {
+    const opt:any = {
+      is_project: false,
+      is_contract: false,
+      is_pay: true,
+      is_bill: false
+    };
+    this.settingsConfigService.post('/api/attachment/category/list', opt).pipe(
+      filter(v => v.code === 200),
+      map(v => v.data)
+    ).subscribe( data => {
+      const cateArrData:any[] = data.attachment_category;
+      this.attachmentCategory = cateArrData.sort((a:any, b:any) => a.sequence - b.sequence).map( v => {
+        return { id: v.id, name: v.name }
+      });
+
+    });
+    
   }
 }

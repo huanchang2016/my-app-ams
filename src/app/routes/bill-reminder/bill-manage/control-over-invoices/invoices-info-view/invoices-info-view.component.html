@@ -119,6 +119,9 @@
   </div>
 </nz-card>
 
+<nz-card nzTitle="附件" *ngIf="billId" class="mt-md">
+  <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/bill/' + billId"></app-upload-file-attachment-show-c>
+</nz-card>
 
 <!-- 开票 审批流程进展： 草稿 不显示 -->
 <nz-card [nzBordered]="false" class="mt-md" [nzTitle]="workflowStatusTitle">

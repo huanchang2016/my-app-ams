@@ -7,7 +7,7 @@
       <ng-container *ngIf="attachmentCategory.members.length !== 0; else emptyAttachment">
         <ng-container *ngFor="let attachment of attachmentCategory.members">
           <p class="clearfix bg-grey-light-h mb-sm pointer px-xs" >
-            <a href="{{ environment.SERVER_URL + attachment.path }}" class="float-left"><i nz-icon nzType="link" nzTheme="outline" class="pr-xs"></i> {{ attachment.name }}</a>
+            <a href="{{ environment.SERVER_URL + attachment.path }}" class="float-left" target="_blank"><i nz-icon nzType="link" nzTheme="outline" class="pr-xs"></i> {{ attachment.name }}</a>
             <a nz-popconfirm nzPopconfirmTitle="确定删除当前附件？" (nzOnConfirm)="deletedAttachment(attachment.id, attachmentCategory.id)" (nzOnCancel)="cancel()"
                   class="text-error float-right text-danger-h"><i nz-icon nzType="delete" nzTheme="outline"></i></a>
           </p>

@@ -28,6 +28,7 @@ import { RangeDatepickerComponent } from './component/range-datepicker/range-dat
 import { ShowTextareaContentPipe } from './pipe/show-textarea-content.pipe';
 import { UploadFileComponent } from './component/upload-file-modal/upload-file.component';
 import { UploadFileTplComponent } from './component/upload-file-modal/upload-file-tpl/upload-file-tpl.component';
+import { UploadFileAttachmentShowCComponent } from './component/upload-file-attachment-show-c/upload-file-attachment-show-c.component';
 
 const COMPONENTS = [
   CascaderAreaComponent,
@@ -35,6 +36,7 @@ const COMPONENTS = [
   RangeDatepickerComponent,
   UploadFileComponent,
   UploadFileTplComponent,
+  UploadFileAttachmentShowCComponent,
 ];
 
 const DIRECTIVES = [

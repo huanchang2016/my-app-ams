@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { NzMessageService, NzNotificationService } from 'ng-zorro-antd';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { _HttpClient, SettingsService } from '@delon/theme';
 import { SettingsConfigService } from '../../service/settings-config.service';
 import { ActivatedRoute, Params, Router } from '@angular/router';

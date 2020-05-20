@@ -25,7 +25,7 @@ import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
-import { NzTreeModule, NzStepsModule, NzBreadCrumbModule, NzSkeletonModule, NzBackTopModule, NzUploadModule, NzDatePickerModule } from 'ng-zorro-antd';
+import { NzTreeModule, NzStepsModule, NzBreadCrumbModule, NzSkeletonModule, NzBackTopModule, NzUploadModule, NzDatePickerModule, NzNotificationModule } from 'ng-zorro-antd';
 
 export const SHARED_ZORRO_MODULES = [
   NzFormModule,
@@ -40,6 +40,7 @@ export const SHARED_ZORRO_MODULES = [
   NzCardModule,
   NzDropDownModule,
   NzMessageModule,
+  NzNotificationModule,
   NzSpinModule,
   NzPopconfirmModule,
   NzTableModule,

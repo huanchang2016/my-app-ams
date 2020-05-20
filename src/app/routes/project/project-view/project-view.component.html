@@ -121,6 +121,10 @@
       </sv>
     </sv-container>
 
+    <ng-container *ngIf="project.info">
+      <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/project/' + project.info.id"></app-upload-file-attachment-show-c>
+    </ng-container>
+    
   </nz-card>
 
   <!-- 项目预算信息 -->

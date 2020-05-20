@@ -54,9 +54,6 @@ export class UploadFileComponent implements OnChanges, OnInit, OnDestroy {
       file_type: [null, [Validators.required]],
       file: [null, [Validators.required]]
     });
-
-    
-    
   }
 
 
@@ -144,8 +141,7 @@ export class UploadFileComponent implements OnChanges, OnInit, OnDestroy {
 
   ngOnDestroy() {
     if(this.uploadAttachment$) this.uploadAttachment$.unsubscribe();
-    this.isVisible = false;
-    this.isConfirmLoading = false;
+    this.handleCancel();
   }
 
 }

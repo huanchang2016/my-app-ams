@@ -5,6 +5,7 @@ import { List, ApiData } from 'src/app/data/interface.data';
 import { SettingsConfigService } from 'src/app/routes/service/settings-config.service';
 import { SettingsService } from '@delon/theme';
 import { filter, map } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-project-info',
@@ -27,7 +28,8 @@ export class ProjectInfoComponent implements OnChanges, OnInit {
     private fb: FormBuilder,
     private msg: NzMessageService,
     public settings: SettingsService, // 通过个人 所在部门 获取项目类型等信息
-    public settingsConfigService: SettingsConfigService
+    public settingsConfigService: SettingsConfigService,
+    private router: Router
   ) {
     this.settingsConfigService.get('/api/company/customer/all').subscribe((res: ApiData) => {
       if (res.code === 200) {
@@ -118,12 +120,7 @@ export class ProjectInfoComponent implements OnChanges, OnInit {
   add(data: any): void {
     this.settingsConfigService.post('/api/project/create', data).subscribe((res: ApiData) => {
       console.log(res);
-      this.submitLoading = false;
       if (res.code === 200) {
-        this.submitChangeSuccess.emit({
-          data: res.data,
-          key: 'info'
-        });
         this.bindAttachment(res.data);
       } else {
         this.submitLoading = false;
@@ -180,6 +177,11 @@ export class ProjectInfoComponent implements OnChanges, OnInit {
             this.msg.success('附件绑定成功');
           }
           this.getAttachment();
+        }else {
+          this.submitChangeSuccess.emit({
+            data: projectInfo,
+            key: 'info'
+          });
         }
       } else {
         this.msg.error(res.error || '附件绑定失败')

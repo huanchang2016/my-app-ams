@@ -34,11 +34,7 @@ export class UploadFileTplComponent implements ControlValueAccessor {
   }
 
   writeValue(obj: any): void {
-    
-    if(obj) {
-
-    }
-    
+    this.fileList = [];
   }
 
   registerOnChange(fn: any): void {

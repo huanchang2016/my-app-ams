@@ -110,7 +110,14 @@
         <nz-form-item>
           <nz-form-label>附件资料</nz-form-label>
           <nz-form-control>
-            <app-upload-file [Attachment]="attachment" [AttachmentCategory]="attachmentCategory" [isAttachmentChange]="isAttachmentChange" (attachmentChange)="attachmentChange($event)"></app-upload-file>
+            
+            <ng-container *ngIf="treatypayInfo && !treatypayInfo.draft">
+              <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/treaty_pay/' + treatypayInfo.id"></app-upload-file-attachment-show-c>
+            </ng-container>
+
+            <ng-container *ngIf="!treatypayInfo || treatypayInfo.draft">
+              <app-upload-file [Attachment]="attachment" [AttachmentCategory]="attachmentCategory" [isAttachmentChange]="isAttachmentChange" (attachmentChange)="attachmentChange($event)"></app-upload-file>
+            </ng-container>
           </nz-form-control>
         </nz-form-item>
       </div>

@@ -67,7 +67,7 @@
   
   </nz-card>
   
-  <nz-card [nzTitle]="'成本支付费用'" *ngIf="listOfData.length !== 0" class="mt-md hidden-pc">
+  <nz-card [nzTitle]="'成本支付'" *ngIf="listOfData.length !== 0" class="mt-md hidden-pc">
     
     <ng-container *ngFor="let data of listOfData">
       <sv-container size="small" [title]="data.cost.cost_category.name" class="py-sm">
@@ -79,6 +79,10 @@
       </sv-container>
       
     </ng-container>
+  </nz-card>
+  
+  <nz-card nzTitle="附件" *ngIf="contract_pay_id" class="mt-md">
+    <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/contract_pay/' + contract_pay_id"></app-upload-file-attachment-show-c>
   </nz-card>
   
   <!-- 支付流程进展： 草稿 不显示 -->

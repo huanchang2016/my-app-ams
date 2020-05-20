@@ -431,6 +431,8 @@ export class NoContractPayCreateComponent implements OnInit {
       if(res.code === 200) {
         this.msg.success('支付信息提交成功');
         this.router.navigateByUrl(`/approve/no-contract/apply/pay/${this.projectId}`);
+      }else {
+        this.msg.error(res.error)
       }
     });
   }

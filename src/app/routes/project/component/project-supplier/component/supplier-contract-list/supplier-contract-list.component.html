@@ -52,6 +52,7 @@
                         <th>合约编号</th>
                         <th>起止日期</th>
                         <th>服务类型</th>
+                        <th>附件</th>
                         <th *ngIf="!isView">操作</th>
                     </tr>
                 </thead>
@@ -65,6 +66,9 @@
                         <td>{{ data.number }}</td>
                         <td>{{ data.start_time }} - {{ data.end_time }}</td>
                         <td>{{ data.service_category.name }}</td>
+                        <td>
+                            <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/contract/' + data.id"></app-upload-file-attachment-show-c>
+                        </td>
                         <td *ngIf="!isView">
                             <a (click)="editContract(data, true)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
                             <nz-divider nzType="vertical"></nz-divider>

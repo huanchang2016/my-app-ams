@@ -1,0 +1,25 @@
+<ng-container *ngIf="attachment && attachment.length !== 0; else emptyTpl">
+    <ng-container *ngFor="let attachmentCategory of attachment">
+        <sv-container [title]="attachmentCategory.name" col="1" size="small" class="mt-sm">
+            <ng-container *ngIf="attachmentCategory.members.length !== 0; else emptyAttachment">
+                <ng-container *ngFor="let attachment of attachmentCategory.members; let i = index">
+                    <sv [label]="i + 1 ">
+                        <a href="{{ environment.SERVER_URL + attachment.path }}" class="bg-grey-light-h px-md" target="_blank"><i nz-icon
+                            nzType="link" nzTheme="outline" class="pr-xs"></i> {{ attachment.name }}</a>
+                    </sv>
+                </ng-container>
+            </ng-container>
+            <ng-template #emptyAttachment>
+                <div class="p-md text-center font-lg text-grey">
+                    暂无附件内容
+                </div>
+            </ng-template>
+        </sv-container>
+    </ng-container>
+
+</ng-container>
+<ng-template #emptyTpl>
+    <div class="py-md font-weight-bold font-md">
+        附件 <span class="text-error">（无）</span>
+    </div>
+</ng-template>

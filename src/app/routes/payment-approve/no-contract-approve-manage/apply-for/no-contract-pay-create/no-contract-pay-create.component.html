@@ -7,28 +7,27 @@
       <nz-breadcrumb-item>项目预览</nz-breadcrumb-item>
     </nz-breadcrumb>
   </ng-template>
-    
-<!-- <ng-container *ngIf="validateTreatyForm.valid && listOfData.length !== 0;else InvalidReferTpl">
+
+  <!-- <ng-container *ngIf="validateTreatyForm.valid && listOfData.length !== 0;else InvalidReferTpl">
   <button nz-button [nzType]="'primary'" (click)="submitTreatyForm()" [nzLoading]="submitLoading"
     class="mt-lg">保存非合约支付</button>
 </ng-container> -->
   <ng-template #actionBtn>
     <ng-container *ngIf="listOfData.length !== 0 ">
-      <button *ngIf="!treatypayInfo || treatypayInfo.draft" nz-button [nzType]="'dashed'" (click)="submitTreatyForm()" [nzLoading]="submitLoading">保存非合约支付</button>
-      
+      <button *ngIf="!treatypayInfo || treatypayInfo.draft" nz-button [nzType]="'dashed'" (click)="submitTreatyForm()"
+        [nzLoading]="submitLoading">保存非合约支付</button>
+
       <ng-container *ngIf="treaty_pay_id">
         <a *ngIf="!treatypayInfo || treatypayInfo.draft" nz-popconfirm nz-button [nzType]="'primary'" class="mx-sm"
-            nzPopconfirmTitle="请确认非合约支付信息填写完整，无误后继续提交！！！"
-            (nzOnConfirm)="submitContractPay()"
-            (nzOnCancel)="cancel()">
-            提交支付申请
+          nzPopconfirmTitle="请确认非合约支付信息填写完整，无误后继续提交！！！" (nzOnConfirm)="submitContractPay()" (nzOnCancel)="cancel()">
+          提交支付申请
         </a>
       </ng-container>
 
     </ng-container>
-   
+
   </ng-template>
-  
+
 
   <sv-container size="small" col="2">
     <sv label="项目名称"><strong>{{ projectInfo?.name }}</strong></sv>
@@ -112,13 +111,16 @@
         <nz-form-item>
           <nz-form-label>附件资料</nz-form-label>
           <nz-form-control>
-            
+
             <ng-container *ngIf="treatypayInfo && !treatypayInfo.draft">
-              <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/treaty_pay/' + treatypayInfo.id"></app-upload-file-attachment-show-c>
+              <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/treaty_pay/' + treatypayInfo.id">
+              </app-upload-file-attachment-show-c>
             </ng-container>
 
             <ng-container *ngIf="!treatypayInfo || treatypayInfo.draft">
-              <app-upload-file [Attachment]="attachment" [AttachmentCategory]="attachmentCategory" [isAttachmentChange]="isAttachmentChange" (attachmentChange)="attachmentChange($event)"></app-upload-file>
+              <app-upload-file [Attachment]="attachment" [AttachmentCategory]="attachmentCategory"
+                [isAttachmentChange]="isAttachmentChange" (attachmentChange)="attachmentChange($event)">
+              </app-upload-file>
             </ng-container>
           </nz-form-control>
         </nz-form-item>
@@ -154,14 +156,15 @@
           <td class="text-nowrap">
             <span>{{ data.cost.cost_category.name }}</span>
             <span nz-tooltip [nzTooltipTitle]="data.cost.cost_category.description" class="text-md ml-sm">
-            <i nz-icon nzType="exclamation-circle" nzTheme="outline"></i></span>
+              <i nz-icon nzType="exclamation-circle" nzTheme="outline"></i></span>
           </td>
           <td class="text-error">{{ data.amount | currency: 'CNY' }}</td>
           <td>
             <sv-container size="small" col="1">
               <sv label="总计支付"><span class="text-error">{{ data.cost.amount | currency: 'CNY' }}</span></sv>
               <sv label="累计支付"><span class="text-success">{{ data.cost.pay_amount | currency: 'CNY' }}</span></sv>
-              <sv label="剩余支付"><span class="text-primary">{{ (data.cost.amount - data.cost.pay_amount) | currency: 'CNY' }}</span></sv>
+              <sv label="剩余支付"><span
+                  class="text-primary">{{ (data.cost.amount - data.cost.pay_amount) | currency: 'CNY' }}</span></sv>
             </sv-container>
           </td>
           <td>
@@ -181,44 +184,45 @@
           <td *ngIf="!treatypayInfo || treatypayInfo.draft">
             <a (click)="edit(tplTitle, tplContent, tplFooter, data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
             <nz-divider nzType="vertical"></nz-divider>
-            <a nz-popconfirm nzPopconfirmTitle="确认删除当前成本支付?" (nzOnConfirm)="delete(data.cost.id)" (nzOnCancel)="cancel()"
-              class="text-error">删除</a>
+            <a nz-popconfirm nzPopconfirmTitle="确认删除当前成本支付?" (nzOnConfirm)="delete(data.cost.id)"
+              (nzOnCancel)="cancel()" class="text-error">删除</a>
           </td>
         </tr>
       </tbody>
     </nz-table>
-    
+
   </div>
   <div class="hidden-pc">
     <ng-container *ngFor="let data of listOfData">
       <nz-card [nzActions]=" (!treatypayInfo || treatypayInfo.draft) ? [actionEdit, actionDelete] : [] " class="mt-md">
-          <nz-skeleton [nzActive]="true" [nzLoading]="false">
-              <nz-card-meta [nzTitle]="treatyTitltTpl"></nz-card-meta>
-              <ng-template #treatyTitltTpl>
-                  <span>{{ data.abstract }}</span>
-              </ng-template>
-              <div class="pt-md">
-                  <sv-container size="small">
-                      <sv label="费用类型">{{ data.cost.cost_category.name }}</sv>
-                      <sv label="总计支付"><span class="text-error">{{ data.cost.amount | currency: 'CNY' }}</span></sv>
-                      <sv label="累计支付"><span class="text-success">{{ data.cost.pay_amount | currency: 'CNY' }}</span></sv>
-                      <sv label="剩余支付"><span class="text-primary">{{ (data.cost.amount - data.cost.pay_amount) | currency: 'CNY' }}</span></sv>
+        <nz-skeleton [nzActive]="true" [nzLoading]="false">
+          <nz-card-meta [nzTitle]="treatyTitltTpl"></nz-card-meta>
+          <ng-template #treatyTitltTpl>
+            <span>{{ data.abstract }}</span>
+          </ng-template>
+          <div class="pt-md">
+            <sv-container size="small">
+              <sv label="费用类型">{{ data.cost.cost_category.name }}</sv>
+              <sv label="总计支付"><span class="text-error">{{ data.cost.amount | currency: 'CNY' }}</span></sv>
+              <sv label="累计支付"><span class="text-success">{{ data.cost.pay_amount | currency: 'CNY' }}</span></sv>
+              <sv label="剩余支付"><span
+                  class="text-primary">{{ (data.cost.amount - data.cost.pay_amount) | currency: 'CNY' }}</span></sv>
 
-                      <sv label="商务卡"><strong>{{ data.is_business_card ? '是' : '否' }}</strong></sv>
-                      <sv label="户&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;主">{{ data.account_name }}</sv>
-                      <sv label="卡&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号">{{ data.card_number }}</sv>
-                      <sv label="本期支付"><span class="text-error font-weight-bold">{{ data.amount | currency: 'CNY' }}</span></sv>
-                  </sv-container>
-              </div>
-          </nz-skeleton>
-            
-          <ng-template #actionEdit>
-            <a (click)="edit(tplTitle, tplContent, tplFooter, data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
-          </ng-template>
-          <ng-template #actionDelete>
-            <a nz-popconfirm nzPopconfirmTitle="确认删除当前成本支付?" (nzOnConfirm)="delete(data.cost.id)" (nzOnCancel)="cancel()"
+              <sv label="商务卡"><strong>{{ data.is_business_card ? '是' : '否' }}</strong></sv>
+              <sv label="户&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;主">{{ data.account_name }}</sv>
+              <sv label="卡&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号">{{ data.card_number }}</sv>
+              <sv label="本期支付"><span class="text-error font-weight-bold">{{ data.amount | currency: 'CNY' }}</span></sv>
+            </sv-container>
+          </div>
+        </nz-skeleton>
+
+        <ng-template #actionEdit>
+          <a (click)="edit(tplTitle, tplContent, tplFooter, data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
+        </ng-template>
+        <ng-template #actionDelete>
+          <a nz-popconfirm nzPopconfirmTitle="确认删除当前成本支付?" (nzOnConfirm)="delete(data.cost.id)" (nzOnCancel)="cancel()"
             class="text-error">删除</a>
-          </ng-template>
+        </ng-template>
       </nz-card>
     </ng-container>
   </div>
@@ -226,7 +230,81 @@
 <ng-container *ngIf="!treatypayInfo || treatypayInfo.draft">
   <div class="my-md p-md bg-warning text-md"><span class="text-error">*</span>以上信息需全部填写，才可以保存非合约支付信息</div>
 </ng-container>
-  
+
+
+<!-- 流程进展 -->
+<nz-card [nzBordered]="false" class="mt-md" [nzTitle]="workflowStatusTitle" *ngIf="treatypayInfo && !treatypayInfo.draft">
+  <ng-template #workflowStatusTitle>
+    <span>审批进展</span>
+    <span class="text-primary ml-md text-sm">{{ progressInfo?.workflow_status.name }}</span>
+  </ng-template>
+  <ng-container *ngIf="nodeProcess.length !== 0;else nodeProcessLoadingTpl">
+    <nz-steps nzDirection="vertical" nzProgressDot class="hidden-pc">
+      <ng-container *ngFor="let process of nodeProcess">
+        <nz-step [nzTitle]="process.node.name"
+          [nzStatus]=" process.current ? 'process' : ( !process.finished ? 'wait' : ( !process.agree ?  'error' : 'finish') )"
+          [nzDescription]="createDesc">
+          <ng-template #createDesc>
+            <div class="desc">
+              <div class="my-sm">
+                {{ process.user.name }}
+              </div>
+              <div *ngIf="process.finished; else notFinished">
+                {{ process.finished_time }}
+              </div>
+              <span class="text-sm text-primary"
+                [class.text-error]="process.finished && !process.agree">{{ process.remark }}</span>
+              <ng-template #notFinished>
+                <!-- TODO:暂不开发 -->
+                <!-- <a *ngIf="process.current" (click)="msg.success('click')">催一下</a> -->
+              </ng-template>
+            </div>
+          </ng-template>
+        </nz-step>
+      </ng-container>
+
+      <nz-step [nzTitle]="'完成'"
+        [nzStatus]=" !progressInfo.finished ? 'wait' : ( progressInfo.agree ? 'finish' : 'error' ) "></nz-step>
+    </nz-steps>
+    <nz-steps nzProgressDot class="hidden-mobile">
+      <ng-container *ngFor="let process of nodeProcess">
+        <nz-step [nzTitle]="process.node.name"
+          [nzStatus]=" process.current ? 'process' : ( !process.finished ? 'wait' : ( !process.agree ?  'error' : 'finish') )"
+          [nzDescription]="createDesc">
+          <ng-template #createDesc>
+            <div class="desc">
+              <div class="my-sm">
+                {{ process.user.name }}
+              </div>
+              <div *ngIf="process.finished; else notFinished">
+                {{ process.finished_time }}
+              </div>
+              <span class="text-sm text-primary"
+                [class.text-error]="process.finished && !process.agree">{{ process.remark }}</span>
+              <ng-template #notFinished>
+                <!-- TODO:暂不开发 -->
+                <!-- <a *ngIf="process.current" (click)="msg.success('click')">催一下</a> -->
+              </ng-template>
+            </div>
+          </ng-template>
+        </nz-step>
+      </ng-container>
+
+      <nz-step [nzTitle]="'完成'"
+        [nzStatus]=" !progressInfo.finished ? 'wait' : ( progressInfo.agree ? 'finish' : 'error' ) "
+        [nzDescription]="'合约支付审批完成'"></nz-step>
+    </nz-steps>
+
+  </ng-container>
+  <ng-template #nodeProcessLoadingTpl>
+    <div class="p-xl text-center text-lg text-primary">
+      <nz-spin></nz-spin>
+    </div>
+  </ng-template>
+
+</nz-card>
+
+<!-- 流程进展 -->
 
 <!-- 成本支付新增 modal -->
 
@@ -258,7 +336,9 @@
         <nz-form-label nzFor="amount" nzRequired>支付金额</nz-form-label>
         <nz-form-control [nzErrorTip]="errorAmountTpl">
           <nz-input-group nzSuffix="元" nzPrefix="￥" style="width: 100%">
-            <input type="text" id="amount" [placeholder]="'填写成本支付金额' +  (currentSelectCost ? '，不得超过' + (currentSelectCost.max - currentSelectCost.pay_amount) + '元' : '') " formControlName="amount" nz-input />
+            <input type="text" id="amount"
+              [placeholder]="'填写成本支付金额' +  (currentSelectCost ? '，不得超过' + (currentSelectCost.max - currentSelectCost.pay_amount) + '元' : '') "
+              formControlName="amount" nz-input />
           </nz-input-group>
           <ng-template #errorAmountTpl let-control>
             <ng-container *ngIf="control.hasError('required')">
@@ -296,9 +376,6 @@
             [nzAutosize]="{ minRows: 2, maxRows: 6 }"></textarea>
         </nz-form-control>
       </nz-form-item>
-
-
-
     </form>
   </div>
 </ng-template>

@@ -5,6 +5,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { ApiData, List } from 'src/app/data/interface.data';
 import { FormGroup, Validators, FormBuilder, FormControl } from '@angular/forms';
 import { filter, map } from 'rxjs/operators';
+import { SettingsService } from '@delon/theme';
 
 @Component({
   selector: 'app-contract-pay-create',
@@ -39,6 +40,7 @@ export class ContractPayCreateComponent implements OnInit {
     public msg: NzMessageService,
     private modalService: NzModalService,
     private settingsConfigService: SettingsConfigService,
+    private settings: SettingsService,
     private fb: FormBuilder,
     private activatedRoute: ActivatedRoute,
     private router: Router
@@ -125,6 +127,10 @@ export class ContractPayCreateComponent implements OnInit {
           this.contract_id = res.data.contract.id;
           [this.selectedContract] = this.contractList.filter(v => v.id === this.contract_id);
           this.transferAmount(this.selectedContract.amount);
+
+          if(!this.contractInfo.draft) {
+            this.getWorkflow();
+          }
         }
       })
   }
@@ -448,4 +454,45 @@ export class ContractPayCreateComponent implements OnInit {
     });
 
   }
+
+  
+  // 流程进程信息
+  progressInfo:any = null;
+  nodeProcess:any[] = [];
+  currentNodeProcess:any = null;
+  isCurrentCheck:boolean = false;
+
+  checkOption: any = {
+    agree: null,
+    remark: ''
+  }
+
+  getWorkflow() {
+    this.settingsConfigService
+        .get(`/api/contract/pay/process/${this.contract_pay_id}`)
+        .subscribe((res:ApiData) => {
+          console.log(res, 'workflow');
+          if(res.code === 200) {
+            this.progressInfo = res.data;
+            this.getNodeProcess();
+          }
+    })
+  }
+
+  getNodeProcess():void {
+    this.isCurrentCheck = false;
+    this.settingsConfigService
+        .get(`/api/node/process/${this.progressInfo.id}`)
+        .subscribe((res:ApiData) => {
+          console.log(res, 'node_process');
+          if(res.code === 200) {
+            this.nodeProcess = res.data.node_process;
+            this.currentNodeProcess = this.nodeProcess.filter( v => v.current)[0];
+            if(this.currentNodeProcess) {
+              this.isCurrentCheck = this.currentNodeProcess.user.id === this.settings.user.id;
+            }
+          }
+    })
+  }
+
 }

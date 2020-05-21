@@ -29,6 +29,7 @@ import { ShowTextareaContentPipe } from './pipe/show-textarea-content.pipe';
 import { UploadFileComponent } from './component/upload-file-modal/upload-file.component';
 import { UploadFileTplComponent } from './component/upload-file-modal/upload-file-tpl/upload-file-tpl.component';
 import { UploadFileAttachmentShowCComponent } from './component/upload-file-attachment-show-c/upload-file-attachment-show-c.component';
+import { CustomerCompanyShowListCComponent } from './component/customer-company-show-list-c/customer-company-show-list-c.component';
 
 const COMPONENTS = [
   CascaderAreaComponent,
@@ -37,6 +38,7 @@ const COMPONENTS = [
   UploadFileComponent,
   UploadFileTplComponent,
   UploadFileAttachmentShowCComponent,
+  CustomerCompanyShowListCComponent,
 ];
 
 const DIRECTIVES = [

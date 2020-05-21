@@ -37,21 +37,9 @@
                     (nextStepsChange)="nextStepsChange()"></app-project-supplier>
             </div>
             <div *ngSwitchDefault>
-                <!-- <app-project-view-draft [projectInfo]="project.info" (prevStepsChange)="prevStepsChange()"></app-project-view-draft> -->
                 <app-project-edit-success [projectInfo]="project.info" (prevStepsChange)="prevStepsChange()">
                 </app-project-edit-success>
             </div>
         </ng-container>
     </div>
-    <!-- <div class="steps-action">
-        <button nz-button nzType="default" (click)="pre()" *ngIf="currentSteps > 0">
-            <span>Previous</span>
-        </button>
-        <button nz-button nzType="default" (click)="next()" *ngIf="currentSteps < 4">
-            <span>Next</span>
-        </button>
-        <button nz-button nzType="primary" (click)="done()" *ngIf="currentSteps === 4">
-            <span>Done</span>
-        </button>
-    </div> -->
 </nz-card>

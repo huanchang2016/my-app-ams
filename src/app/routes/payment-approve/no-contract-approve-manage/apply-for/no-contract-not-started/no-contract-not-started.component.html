@@ -43,7 +43,9 @@
             <td>{{ data.category?.name }}</td>
             <td>{{ data.origin?.code.code_name + data.origin?.name }}</td>
             <td>{{ data.department?.name }}</td>
-            <td>{{ data.customer?.name }}</td>
+            <td>
+                <app-customer-company-show-list-c [customer]="data.customer"></app-customer-company-show-list-c>
+            </td>
             <td>
                 <a class="text-nowrap" [routerLink]="['/approve/no-contract/apply/pay', data.id]">非合约支付</a>
             </td>
@@ -64,7 +66,9 @@
                             <sv label="类型">{{ data.category?.name }}</sv>
                             <sv label="来源">{{ data.origin?.code.code_name + data.origin?.name }}</sv>
                             <sv label="部门">{{ data.department?.name }}</sv>
-                            <sv label="客户单位">{{ data.customer?.name }}</sv>
+                            <sv label="客户单位">
+                                <app-customer-company-show-list-c [customer]="data.customer"></app-customer-company-show-list-c>
+                            </sv>
                         </sv-container>
                     </div>
                 </nz-skeleton>

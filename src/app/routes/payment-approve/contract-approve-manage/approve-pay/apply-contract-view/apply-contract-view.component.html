@@ -12,7 +12,9 @@
   
     <sv-container size="small" col="2">
       <sv label="项目名称"><strong>{{ projectInfo?.name }}</strong></sv>
-      <sv label="客户"><strong>{{ projectInfo?.customer?.name }}</strong></sv>
+      <sv label="客户">
+        <app-customer-company-show-list-c [customer]="projectInfo?.customer"></app-customer-company-show-list-c>
+      </sv>
       <sv label="负责部门">{{ projectInfo?.department?.name }}</sv>
       <sv label="创建时间">{{ projectInfo?.create_time | date: 'yyyy/MM/dd HH:mm:ss' }}</sv>
       <sv label="项目创建人">{{ projectInfo?.user.name }}</sv>
@@ -42,7 +44,7 @@
           <th>序号</th>
           <th>成本类型</th>
           <th>本期支付（元）</th>
-          <th>支付统计</th>
+          <th nzWidth="250px">支付统计</th>
           <th>描述</th>
         </tr>
       </thead>

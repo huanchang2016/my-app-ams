@@ -63,4 +63,15 @@ export class ProjectNoContractListComponent implements OnInit {
     })
   }
 
+  submitContractPay(id:number):void {
+    this.settingsConfigService.post('/api/treaty_pay/submit', { treaty_pay_id: id }).subscribe((res:ApiData) => {
+
+      if(res.code === 200) {
+        this.msg.success('支付信息提交成功');
+        this.listOfData = this.listOfData.filter( v => v.id !== id);
+      }else {
+        this.msg.error(res.error)
+      }
+    });
+  }
 }

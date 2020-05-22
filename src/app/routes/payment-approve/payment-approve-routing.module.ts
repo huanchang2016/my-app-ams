@@ -35,6 +35,14 @@ import { NoContractApprovedFinishedListComponent } from './no-contract-approve-m
 import { NoContractApprovedWithoutListComponent } from './no-contract-approve-manage/approve-pay/no-contract-approved-without-list/no-contract-approved-without-list.component';
 import { NoContractApproveViewComponent } from './no-contract-approve-manage/approve-pay/no-contract-approve-view/no-contract-approve-view.component';
 
+// 无合约执行情况
+import { NoContractExcuteNotStartComponent } from './no-contract-approve-manage/excute-pay/no-contract-excute-not-start/no-contract-excute-not-start.component';
+import { NoContractExcuteFinishedComponent } from './no-contract-approve-manage/excute-pay/no-contract-excute-finished/no-contract-excute-finished.component';
+// 合约支付执行情况
+import { ContractExcuteNotStartComponent } from './contract-approve-manage/excute-pay/contract-excute-not-start/contract-excute-not-start.component';
+import { ContractExcuteFinishedComponent } from './contract-approve-manage/excute-pay/contract-excute-finished/contract-excute-finished.component';
+
+
 import { ACLGuard, ACLType } from '@delon/acl';
 
 const routes: Routes = [
@@ -81,7 +89,24 @@ const routes: Routes = [
       }
     }
   },
-  // 查看合约支付信息  及 流程处理
+  // 合约支付 执行情况
+  { path: 'contract/excute/my', component: ContractExcuteNotStartComponent,
+    // canActivate: [ACLGuard],
+    // data: {
+    //   guard: <ACLType>{
+    //     ability: ['contract_pay_approval']
+    //   }
+    // }
+  },
+  { path: 'contract/excute/finished', component: ContractExcuteFinishedComponent,
+    // canActivate: [ACLGuard],
+    // data: {
+    //   guard: <ACLType>{
+    //     ability: ['contract_pay_approval']
+    //   }
+    // }
+  },
+  // 查看合约支付信息  及 流程处理 
   { path: 'contract/pay/view/:id', component: ApplyContractViewComponent, data: { title: '合约支付详情查看' } },
     
   // 无合约  支付申请管理
@@ -125,6 +150,23 @@ const routes: Routes = [
         ability: ['treaty_pay_approval']
       }
     }
+  },
+  // 无合约执行情况
+  { path: 'no-contract/excute/my', component: NoContractExcuteNotStartComponent,
+    // canActivate: [ACLGuard],
+    // data: {
+    //   guard: <ACLType>{
+    //     ability: ['contract_pay_approval']
+    //   }
+    // }
+  },
+  { path: 'no-contract/excute/finished', component: NoContractExcuteFinishedComponent,
+    // canActivate: [ACLGuard],
+    // data: {
+    //   guard: <ACLType>{
+    //     ability: ['contract_pay_approval']
+    //   }
+    // }
   },
 
   // 协议审批  信息查看

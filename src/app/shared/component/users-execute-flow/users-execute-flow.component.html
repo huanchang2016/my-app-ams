@@ -1,0 +1,97 @@
+<nz-card [nzBordered]="false" class="mt-md" [nzTitle]="workflowStatusTitle">
+    <ng-template #workflowStatusTitle>
+      <span>执行进度</span>
+      <span class="text-primary ml-md text-sm" [class.text-error]="progressInfo.workflow_status.name === '无法执行'">{{ progressInfo?.workflow_status.name }}</span>
+    </ng-template>
+    <ng-container *ngIf="nodeProcess.length !== 0;else nodeProcessLoadingTpl">
+      <nz-steps nzDirection="vertical" nzProgressDot class="hidden-pc">
+        <ng-container *ngFor="let process of nodeProcess">
+          <nz-step [nzTitle]="process.name"
+            [nzStatus]="!progressInfo?.complete ? 'process' : 'finish'"
+            [nzDescription]="createDesc">
+            <ng-template #createDesc>
+              <div class="desc">
+                <div class="my-sm">
+                  执行人：{{ process.name }}
+                </div>
+                <div *ngIf="process.complete; else notComplete">
+                  {{ process.complete_time }}
+                </div>
+                <!-- <span class="text-sm text-primary"
+                  [class.text-error]="process.finished && !process.is_execute">{{ process.remark }}</span> -->
+                <ng-template #notComplete>
+                  <!-- TODO:暂不开发 -->
+                  <!-- <a *ngIf="process.current" (click)="msg.success('click')">催一下</a> -->
+                </ng-template>
+              </div>
+            </ng-template>
+          </nz-step>
+        </ng-container>
+        <nz-step [nzTitle]="'已结束'"
+          [nzStatus]=" progressInfo?.complete ? 'finish' : 'wait'" [nzDescription]="finishedTpl">
+          <ng-template #finishedTpl>
+            <div class="my-sm" [class.text-error]="progressInfo.workflow_status.name === '无法执行'">{{progressInfo?.workflow_status.name}}</div>
+            <div *ngIf="progressInfo?.complete">
+              {{ progressInfo.complete_time }}
+            </div>
+          </ng-template>
+        </nz-step>
+      </nz-steps>
+      <nz-steps nzProgressDot class="hidden-mobile">
+        <ng-container *ngFor="let process of nodeProcess">
+          <nz-step [nzTitle]="process.name"
+          [nzStatus]="!progressInfo?.complete ? 'process' : 'finish'"
+            [nzDescription]="createDesc">
+            <ng-template #createDesc>
+              <div class="desc">
+                <div class="my-sm">
+                    执行人：{{ process.name }}
+                  </div>
+                  <div *ngIf="process.complete; else notComplete">
+                    {{ process.complete_time }}
+                  </div>
+                <!-- <span class="text-sm text-primary" [class.text-error]="process.finished && !process.is_execute"
+                  [innerHTML]="process.remark | showTextareaContent"></span> -->
+                <ng-template #notComplete>
+                  <!-- TODO:暂不开发 -->
+                  <!-- <a *ngIf="process.current" (click)="msg.success('click')">催一下</a> -->
+                </ng-template>
+              </div>
+            </ng-template>
+          </nz-step>
+        </ng-container>
+        <nz-step [nzTitle]="'已结束'"
+          [nzStatus]=" progressInfo?.complete ? 'finish' : 'wait'" [nzDescription]="finishedTpl">
+          <ng-template #finishedTpl>
+            <div class="my-sm" [class.text-error]="progressInfo.workflow_status.name === '无法执行'">{{progressInfo?.workflow_status.name}}</div>
+            <div *ngIf="progressInfo?.complete">
+              {{ progressInfo.complete_time }}
+            </div>
+          </ng-template>
+        </nz-step>
+      </nz-steps>
+  
+    </ng-container>
+    <ng-template #nodeProcessLoadingTpl>
+      <div class="p-xl text-center text-lg text-primary">
+        <nz-spin></nz-spin>
+      </div>
+    </ng-template>
+  
+    <div class="steps-content" *ngIf="isExecuteUser && !progressInfo.complete">
+      <div class="check-box mt-md float-right">
+        <nz-radio-group [(ngModel)]="checkOption.is_execute" [nzButtonStyle]="'solid'">
+          <label nz-radio-button [nzValue]="true">已执行</label>
+          <label nz-radio-button [nzValue]="false">无法执行</label>
+        </nz-radio-group>
+        <!-- <textarea nz-input placeholder="请填写备注" [(ngModel)]="checkOption.remark"
+          [nzAutosize]="{ minRows: 3, maxRows: 6 }" class="my-sm"></textarea> -->
+        <div class="text-right mt-md">
+          <a nz-popconfirm nz-button [nzType]="'primary'" nzPopconfirmTitle="请填写执行情况及备注"
+            (nzOnConfirm)="submitCheckCurrentProcess()" (nzOnCancel)="cancel()">
+            提交
+          </a>
+        </div>
+      </div>
+    </div>
+  </nz-card>

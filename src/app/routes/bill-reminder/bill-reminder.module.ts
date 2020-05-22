@@ -19,6 +19,9 @@ import { BillApproveBemyComponent } from './bill-manage/bill-approve/bill-approv
 import { BillApproveFormyComponent } from './bill-manage/bill-approve/bill-approve-formy/bill-approve-formy.component';
 import { BillApproveFinishedComponent } from './bill-manage/bill-approve/bill-approve-finished/bill-approve-finished.component';
 import { BillApproveWithoutComponent } from './bill-manage/bill-approve/bill-approve-without/bill-approve-without.component';
+import { BillExcuteFinishedComponent } from './bill-manage/bill-excute/bill-excute-finished/bill-excute-finished.component';
+import { BillExcuteNotStartComponent } from './bill-manage/bill-excute/bill-excute-not-start/bill-excute-not-start.component';
+import { BillExcuteListCComponent } from './bill-manage/component/bill-excute-list-c/bill-excute-list-c.component';
 
 const COMPONENTS = [
   BillApplyProjectsComponent,
@@ -33,13 +36,17 @@ const COMPONENTS = [
   BillApproveBemyComponent,
   BillApproveFormyComponent,
   BillApproveFinishedComponent,
-  BillApproveWithoutComponent
+  BillApproveWithoutComponent,
+  // 开票执行情况
+  BillExcuteFinishedComponent,
+  BillExcuteNotStartComponent
 ];
 const COMPONENTS_NOROUNT = [
   BillReminderInvoicesSearchComponent,
   BillApplyProjectSearchComponent,
   InvoicesTaxFeesCComponent,
-  ViewTaxFeesListComponent
+  ViewTaxFeesListComponent,
+  BillExcuteListCComponent
 ];
 
 @NgModule({

@@ -494,5 +494,23 @@ export class ContractPayCreateComponent implements OnInit {
           }
     })
   }
+  
+  executeChange(data: any) {
+    console.log('执行情况信息 提交: ', data);
+    const option: any = Object.assign(data, { process_id: this.progressInfo.id });
+    this.settingsConfigService.post('/api/contract/pay/execute', option).subscribe((res: ApiData) => {
+      console.log(res, '执行情况确认');
+      if (res.code === 200) {
+        this.msg.success('执行情况更新成功');
+        this.settingsConfigService
+          .get(`/api/contract/pay/process/${this.contract_pay_id}`)
+          .subscribe((res: ApiData) => {
+            if (res.code === 200) {
+              this.progressInfo = res.data;
+            }
+          })
+      }
+    })
+  }
 
 }

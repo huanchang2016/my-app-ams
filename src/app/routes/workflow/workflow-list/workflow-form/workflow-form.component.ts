@@ -4,7 +4,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { List, ApiData } from 'src/app/data/interface.data';
 import { SettingsConfigService } from 'src/app/routes/service/settings-config.service';
 
-
 @Component({
   selector: 'app-workflow-form',
   templateUrl: './workflow-form.component.html',
@@ -24,6 +23,8 @@ export class WorkflowFormComponent implements OnInit {
 
   departmentArray:List[] = [];
   departmentLoading:boolean = false;
+  userList:List[] = [];
+  usersLoading:boolean = false;
   workflowCategoryArray:List[] = [];
   workflowCategoryLoading:boolean = false;
 
@@ -45,20 +46,10 @@ export class WorkflowFormComponent implements OnInit {
       name: [null, [Validators.required]],
       company_id: [ this.companyId, [Validators.required] ],
       department_id: [ null, [Validators.required] ],
+      execute_user_id: [ null, [Validators.required] ],
       workflow_category_id: [ null, [Validators.required] ],
       is_large: [ null, [Validators.required]]
     });
-
-    // 获取当前单位下的 部门
-    if(this.companyId) {
-      this.getDepartmentAndWorkflowCategory(this.companyId);
-    }
-    this.validateForm.get('company_id').valueChanges.subscribe( id => {
-      this.departmentArray = [];
-      this.workflowCategoryArray = [];
-      this.getDepartmentAndWorkflowCategory(id);
-    });
-    
 
     if(this.data) {
       //  如果存在 data， 那么需要给表单设置
@@ -66,6 +57,18 @@ export class WorkflowFormComponent implements OnInit {
     }else {
       this.validateForm.get('company_id').setValidators(Validators.required);
       this.validateForm.get('department_id').setValidators(Validators.required);
+      // 获取当前单位下的 部门
+      if(this.companyId) {
+        this.getDepartmentAndWorkflowCategory(this.companyId);
+        this.getUserList(this.companyId);
+      }
+      this.validateForm.get('company_id').valueChanges.subscribe( id => {
+        this.departmentArray = [];
+        this.userList = [];
+        this.workflowCategoryArray = [];
+        this.getDepartmentAndWorkflowCategory(id);
+        this.getUserList(id);
+      });
     }
   }
   
@@ -75,7 +78,6 @@ export class WorkflowFormComponent implements OnInit {
       this.validateForm.controls[i].updateValueAndValidity();
     }
     if(this.validateForm.valid) {
-      // this.destroyModal(this.validateForm.value);
       if(this.data) {
         //  请求编辑 接口
         this.edit();
@@ -104,11 +106,11 @@ export class WorkflowFormComponent implements OnInit {
   edit() {
     const opt:any = {
       name: this.validateForm.value.name,
+      execute_user_id: this.validateForm.value.execute_user_id,
       workflow_id: this.data.id
     };
 
     this.settingsConfigService.post('/api/workflow/update', opt).subscribe((res:ApiData) => {
-      console.log(res);
       this.submitLoading = false;
       if(res.code === 200) {
         this.msg.success('更新成功');
@@ -126,12 +128,14 @@ export class WorkflowFormComponent implements OnInit {
       name: data.name,
       company_id: data.company.id,
       department_id: data.department.id,
+      execute_user_id: data.execute_user? data.execute_user.id : null,
       workflow_category_id: data.workflow_category.id,
       is_large: data.is_large
     });
 
     this.validateForm.get('company_id').disable();
     this.validateForm.get('department_id').disable();
+    this.validateForm.get('execute_user_id').disable();
     this.validateForm.get('workflow_category_id').disable();
     this.validateForm.get('is_large').disable();
   }
@@ -160,6 +164,18 @@ export class WorkflowFormComponent implements OnInit {
                                    });
       }
     });
+  }
+
+  getUserList(id:number) {
+    this.settingsConfigService.get(`/api/user/company/${id}`).subscribe((res:ApiData) => {
+      console.log(res, 'users')
+      if(res.code === 200) {
+        let data:any[] = res.data.user;
+        this.userList = data.map( v => {
+          return { id: v.id, name: v.name };
+        });
+      }
+    })
   }
 
   destroyModal(data:any, isEdit: boolean = false): void {

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SettingsConfigService } from 'src/app/routes/service/settings-config.service';
-import { ActivatedRoute, Router, Params } from '@angular/router';
+import { ActivatedRoute, Params } from '@angular/router';
 import { ApiData } from 'src/app/data/interface.data';
 import { NzNotificationService, NzMessageService } from 'ng-zorro-antd';
 import { SettingsService } from '@delon/theme';
@@ -63,10 +63,9 @@ export class BillReminderInvoicesInfoViewComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     public notice: NzNotificationService,
     public msg: NzMessageService,
-    private settings: SettingsService,
-    private router: Router
+    private settings: SettingsService
   ) {
-    console.log('发票开具   详情查看')
+    // console.log('发票开具   详情查看')
     this.projectId = +this.activatedRoute.snapshot.queryParams.project_id;
     if(this.projectId) {
       this.getConfig();
@@ -74,7 +73,7 @@ export class BillReminderInvoicesInfoViewComponent implements OnInit {
     this.activatedRoute.params.subscribe((params: Params) => {
       if (params && params['id']) {
         this.billId = +params['id'];
-        console.log(this.billId, 'billId');
+        // console.log(this.billId, 'billId');
         this.getBillInfo();
         this.getWorkflow();
       }
@@ -86,7 +85,7 @@ export class BillReminderInvoicesInfoViewComponent implements OnInit {
   }
   getBillInfo(): void {
     this.settingsConfigService.get(`/api/bill/${this.billId}`).subscribe((res: ApiData) => {
-      console.log('billInfo, ', res.data);
+      // console.log('billInfo, ', res.data);
       if (res.code === 200) {
         this.billInfo = res.data;
         this.transferAmount(this.billInfo.amount);
@@ -94,7 +93,7 @@ export class BillReminderInvoicesInfoViewComponent implements OnInit {
     });
 
     this.settingsConfigService.get(`/api/bill/fee/${this.billId}`).subscribe((res: ApiData) => {
-      console.log('bill fee, ', res.data);
+      // console.log('bill fee, ', res.data);
       if (res.code === 200) {
         this.billFees = res.data.bill_fee;
       }
@@ -104,7 +103,7 @@ export class BillReminderInvoicesInfoViewComponent implements OnInit {
   getConfig() {
     // 获取客户单位 信息详情
     this.settingsConfigService.get(`/api/project/detail/${this.projectId}`).subscribe((res:ApiData) => {
-      console.log('projectDetailInfo, ', res.data);
+      // console.log('projectDetailInfo, ', res.data);
       if(res.code === 200) {
         this.projectDetailInfo = res.data;
         // 发票的服务名称和项目是创建时已经绑定好了的，所以同一项目下的发票 服务名称不可改变
@@ -113,7 +112,7 @@ export class BillReminderInvoicesInfoViewComponent implements OnInit {
     });
     // 获取开票类型
     this.settingsConfigService.get(`/api/bill/category/all`).subscribe((res: ApiData) => {
-      console.log('bill/category, ', res.data);
+      // console.log('bill/category, ', res.data);
       if (res.code === 200) {
         this.billCategoryArray = res.data.bill_category;
       }
@@ -125,7 +124,7 @@ export class BillReminderInvoicesInfoViewComponent implements OnInit {
   getSubTaxFees(id: number) {
 
     this.settingsConfigService.get(`/api/tax/fee/${id}`).subscribe((res: ApiData) => {
-      console.log(res.data);
+      // console.log(res.data);
       if (res.code === 200) {
         let data: any[] = res.data.tax_fee;
         if (data.length !== 0) {
@@ -176,11 +175,11 @@ export class BillReminderInvoicesInfoViewComponent implements OnInit {
     this.settingsConfigService
         .get(`/api/node/process/${this.progressInfo.id}`)
         .subscribe((res:ApiData) => {
-          console.log(res, 'node_process');
+          // console.log(res, 'node_process');
           if(res.code === 200) {
             this.nodeProcess = res.data.node_process;
             this.currentNodeProcess = this.nodeProcess.filter( v => v.current)[0];
-            console.log(this.currentNodeProcess, this.isCurrentCheck, this.settings.user);
+            // console.log(this.currentNodeProcess, this.isCurrentCheck, this.settings.user);
             if(this.currentNodeProcess) {
               this.isCurrentCheck = this.currentNodeProcess.user.id === this.settings.user.id;
             }
@@ -193,7 +192,7 @@ export class BillReminderInvoicesInfoViewComponent implements OnInit {
       this.notice.error('错误', '是否通过未选择');
       return;
     }
-    console.log(this.checkOption, 'agree info submit!');
+    // console.log(this.checkOption, 'agree info submit!');
     const obj:any = {
       ...this.checkOption,
       node_process_id: this.currentNodeProcess.id
@@ -201,7 +200,7 @@ export class BillReminderInvoicesInfoViewComponent implements OnInit {
     this.settingsConfigService
         .post(`/api/bill/approval`, obj)
         .subscribe((res:ApiData) => {
-          console.log(res, 'approval');
+          // console.log(res, 'approval');
           if(res.code === 200) {
            this.msg.success('审核提交成功');
            this.settingsConfigService.resetGlobalTasks();
@@ -210,4 +209,22 @@ export class BillReminderInvoicesInfoViewComponent implements OnInit {
     })
   }
   cancel() { }
+
+  executeChange(data:any) {
+    console.log('执行情况信息 提交: ', data);
+    const option:any = Object.assign(data, { process_id: this.progressInfo.id });
+    this.settingsConfigService.post('/api/bill/execute', option).subscribe((res:ApiData) => {
+      console.log(res, '执行情况确认');
+      if(res.code === 200) {
+        this.msg.success('执行情况更新成功');
+        this.settingsConfigService
+        .get(`/api/bill/process/${this.billId}`)
+        .subscribe((res:ApiData) => {
+          if(res.code === 200) {
+            this.progressInfo = res.data;
+          }
+        })
+      }
+    })
+  }
 }

@@ -26,6 +26,16 @@
             </nz-form-control>
         </nz-form-item>
         <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="execute_user_id" nzRequired>执行人</nz-form-label>
+            <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请选择部门">
+                <nz-select style="width: 100%;" id="execute_user_id" formControlName="execute_user_id" [nzLoading]="usersLoading" nzShowSearch nzPlaceHolder="请选择执行人">
+                    <ng-container *ngFor="let item of userList">
+                        <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
+                    </ng-container>
+                </nz-select>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
             <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="workflow_category_id" nzRequired>流程类型</nz-form-label>
             <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请选择流程类型">
                 <nz-select style="width: 100%;" id="workflow_category_id" formControlName="workflow_category_id" [nzLoading]="workflowCategoryLoading" nzShowSearch nzPlaceHolder="请选择流程类型">

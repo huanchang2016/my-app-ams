@@ -96,7 +96,53 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     //   console.log('取消 Observable 事件发起!')
     //   obFn.unsubscribe();
     // }, 2000);
+    
+    // this.letterCasePermutation('a1b2')
+
   }
+
+  letterCasePermutation = function(S: string): string[] {
+    let result:string[] = [];
+    if(this.hasLetter(S)) {
+      result = this.dealWidthStr(S, [], []);
+    }else {
+      result = [S];
+    }
+console.log(result)
+    return result;
+};
+
+dealWidthStr = (str:string, arr:string[], res:string[]):string[] => {
+    const regx = /^[A-Za-z]*$/;
+    if(str === '') {
+      let s = arr.join("");
+      res.push(s);
+      console.log(s, 'finish', res)
+      return  res;
+    }
+    if(regx.test(str[0])) {
+        let upper = str[0].toUpperCase();
+        let lower = str[0].toLowerCase();
+        let a = str.slice(1);
+
+        this.dealWidthStr(str.slice(1), arr.concat([upper]), res);
+        this.dealWidthStr(str.slice(1), arr.concat([lower]), res);
+    }else {
+      let a = str.slice(1);
+        arr.push(str[0]);
+        this.dealWidthStr(str.slice(1), arr, res);
+    }
+}
+
+hasLetter = (str:any) => {
+    for (let i in str) {
+        var asc = str.charCodeAt(i);
+        if ((asc >= 65 && asc <= 90 || asc >= 97 && asc <= 122)) {
+            return true;
+        }
+    }
+    return false;
+}
 
   listData$: Subscription;
 

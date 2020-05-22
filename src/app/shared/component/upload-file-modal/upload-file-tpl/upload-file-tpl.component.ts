@@ -56,7 +56,7 @@ export class UploadFileTplComponent implements ControlValueAccessor {
   }
 
   beforeUpload = (file: File, fileList: UploadFile[]) => {
-    console.log(file, fileList);
+    // console.log(file, fileList);
     this.fileList = fileList;
       // const isLt2M = file.size / 1024 / 1024 < 1;
       // if (!isLt2M) {

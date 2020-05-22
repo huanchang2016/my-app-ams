@@ -2,14 +2,14 @@ import { Component, OnInit, Input } from '@angular/core';
 import { CommonFunctionService } from 'src/app/routes/service/common-function.service';
 import { ApiData } from 'src/app/data/interface.data';
 import { SettingsConfigService } from 'src/app/routes/service/settings-config.service';
-import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-approve-list-c',
-  templateUrl: './approve-list-c.component.html',
-  styles: []
+  selector: 'app-contract-excute-list-c',
+  templateUrl: './contract-excute-list-c.component.html',
+  styles: [
+  ]
 })
-export class ApproveListCComponent implements OnInit {
+export class ContractExcuteListCComponent implements OnInit {
   @Input() postUrl:string;
 
   // 单位id
@@ -31,8 +31,7 @@ export class ApproveListCComponent implements OnInit {
   
   constructor(
     private commonFn: CommonFunctionService,
-    private settingsConfigService: SettingsConfigService,
-    private router: Router
+    private settingsConfigService: SettingsConfigService
   ) {
     this.settingsConfigService.get('/api/company/user/all').subscribe((res:ApiData) => {
       if(res.code === 200) {

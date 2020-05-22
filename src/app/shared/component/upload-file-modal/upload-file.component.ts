@@ -40,7 +40,7 @@ export class UploadFileComponent implements OnChanges, OnInit, OnDestroy {
   ) { }
 
   ngOnChanges(changes:SimpleChanges) {
-    console.log(changes);
+    // console.log(changes);
     if(this.AttachmentCategory || this.Attachment) {
       console.log(this.AttachmentCategory, this.Attachment)
       // 过滤处理 附件，将附件根据类型不同来分类展示
@@ -107,7 +107,7 @@ export class UploadFileComponent implements OnChanges, OnInit, OnDestroy {
   deletedAttachment(id:number, category_id:number) {
     this.settingsService.post('/api/attachment/delete', { attachment_id: id }).subscribe((res:ApiData) => {
       if(res.code === 200) {
-        this.msg.success('附件删除成功');
+        // this.msg.success('附件删除成功');
         this.attachmentArray = this.attachmentArray.map(v => {
           if(v.id === category_id) {
             const members = v.members.filter(item => item.id !== id);
@@ -115,7 +115,7 @@ export class UploadFileComponent implements OnChanges, OnInit, OnDestroy {
           }
           return v.members.length !== 0 ? v : null;
         }).filter( v => v);
-        console.log(this.attachmentArray);
+        // console.log(this.attachmentArray);
       }else {
         this.msg.error(res.error || '附件删除失败');
       }

@@ -14,6 +14,10 @@ import { BillApproveFormyComponent } from './bill-manage/bill-approve/bill-appro
 import { BillApproveFinishedComponent } from './bill-manage/bill-approve/bill-approve-finished/bill-approve-finished.component';
 import { BillApproveWithoutComponent } from './bill-manage/bill-approve/bill-approve-without/bill-approve-without.component';
 
+// 开票执行情况
+import { BillExcuteNotStartComponent } from './bill-manage/bill-excute/bill-excute-not-start/bill-excute-not-start.component';
+import { BillExcuteFinishedComponent } from './bill-manage/bill-excute/bill-excute-finished/bill-excute-finished.component';
+
 // 发票详情
 import { BillReminderInvoicesInfoViewComponent } from './bill-manage/control-over-invoices/invoices-info-view/invoices-info-view.component';
 
@@ -61,6 +65,25 @@ const routes: Routes = [
       }
     }
   },
+  // 开票执行情况，路由
+  // 待执行 任务
+  { path: 'excute/my', component: BillExcuteNotStartComponent,
+    // canActivate: [ACLGuard],
+    // data: {
+    //   guard: <ACLType>{
+    //     ability: ['bill_approval']
+    //   }
+    // }
+  },
+  { path: 'excute/finished', component: BillExcuteFinishedComponent,
+    // canActivate: [ACLGuard],
+    // data: {
+    //   guard: <ACLType>{
+    //     ability: ['bill_approval']
+    //   }
+    // }
+  },
+  
 
   // 发票开具 详情
   { path: 'apply/invoices/view/:id', component: BillReminderInvoicesInfoViewComponent, data: { title: '开票详情'} },

@@ -1,24 +1,21 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { CommonFunctionService } from 'src/app/routes/service/common-function.service';
 import { ApiData } from 'src/app/data/interface.data';
 import { SettingsConfigService } from 'src/app/routes/service/settings-config.service';
-import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-approve-list-c',
-  templateUrl: './approve-list-c.component.html',
-  styles: []
+  selector: 'app-bill-excute-list-c',
+  templateUrl: './bill-excute-list-c.component.html',
+  styles: [
+  ]
 })
-export class ApproveListCComponent implements OnInit {
-  @Input() postUrl:string;
+export class BillExcuteListCComponent implements OnInit {
 
-  // 单位id
-  companyId:number = null;
-  companyArray:any[] = [];
+  @Input() postUrl:string;
+  @Input() isApprove?:boolean = false;
 
   list: any[] = [];
   listOfData:any[] = [];
-  loading: boolean = true;
+  loading: boolean = false;
   searchOption:any = {};
 
   total = 0;
@@ -27,12 +24,11 @@ export class ApproveListCComponent implements OnInit {
     page: 1,
     page_size: 10
   };
-
   
+  companyArray:any[] = [];
+
   constructor(
-    private commonFn: CommonFunctionService,
-    private settingsConfigService: SettingsConfigService,
-    private router: Router
+    private settingsConfigService: SettingsConfigService
   ) {
     this.settingsConfigService.get('/api/company/user/all').subscribe((res:ApiData) => {
       if(res.code === 200) {
@@ -48,15 +44,13 @@ export class ApproveListCComponent implements OnInit {
     this.getDataList();
   }
 
-  getDataList() { // 获取单位下的数据
+  getDataList() {
     this.loading = true;
     this.settingsConfigService.get(this.postUrl, this.pageOption).subscribe((res:ApiData) => {
-      console.log(res, '该我审批的合约支付');
       this.loading = false;
       if(res.code === 200) {
-        let data:any[] = res.data.contract_pay;
+        let data:any[] = res.data.bill;
         this.total = res.data.count;
-        
         this.list = data;
         this.searchOptionsChange();
       }
@@ -72,28 +66,19 @@ export class ApproveListCComponent implements OnInit {
     this.getDataList();
   }
 
-  
   // 搜索条件发生变化
   searchOptionsChange(option?:any) {
-    
-    if(option) this.searchOption = option;
-
-    option = option || this.searchOption;
-
     if(this.list.length !== 0) {
-      let object:any = {};
-      for (const key in option) {
-        if (option.hasOwnProperty(key)) {
-          const element = option[key];
-          if(key === 'code') {
-            object['supplier_code'] = element;
-          }else {
-            object[key] = element;
-          }
+      let list:any[] = this.list;
+      if(option) {
+        if(option.company_id) {
+          list = this.list.filter( v => v.company.id === option.company_id);
+        }
+        if(option.name) {
+          list = this.list.filter( v => v.name.indexOf(option.name) !== -1);
         }
       }
-
-      this.listOfData = this.commonFn.filterListOfData(this.list, object);
+      this.listOfData = list;
     }
   }
 }

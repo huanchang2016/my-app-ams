@@ -25,7 +25,7 @@ export class UploadFileAttachmentShowCComponent implements OnInit {
 
   getAttachment(url:string) {
     this.settingsConfigService.get(url).subscribe((res:ApiData) => {
-      console.log('项目 基础附件   附件展示：', res);
+      // console.log('项目 基础附件   附件展示：', res);
       if(res.code === 200) {
         this.dealAttachment(res.data.attachment);
       }
@@ -37,7 +37,7 @@ export class UploadFileAttachmentShowCComponent implements OnInit {
       all.some((item:any) => item.id === next.attachment_category.id) ? all : all.push(next.attachment_category);
       return all;
     }, [] );
-    console.log(attachmentCategoryArray);
+    // console.log(attachmentCategoryArray);
     this.attachment = [];
     // 将所有附件 根据分类 分别放置到 对应的类别下面。
     attachmentCategoryArray.sort((a:any, b:any) => a.sequence - b.sequence).forEach( category => {
@@ -45,7 +45,7 @@ export class UploadFileAttachmentShowCComponent implements OnInit {
       const option = Object.assign(category, { members: currentArr });
       this.attachment.push(option);
     });
-    console.log(this.attachment);
+    // console.log(this.attachment);
   }
 
   // 附件信息展示

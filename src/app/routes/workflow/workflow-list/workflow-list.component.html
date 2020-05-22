@@ -10,6 +10,7 @@
             <th>流程类型</th>
             <th>是否大金额</th>
             <th>部门</th>
+            <th>执行人</th>
             <th>操作</th>
         </tr>
       </thead>
@@ -25,6 +26,7 @@
                 </span>
             </td>
             <td>{{ data.department.name }}</td>
+            <td>{{ data.execute_user?.name }}</td>
             <td>
                 <a acl [acl-ability]="'modify_workflow'" (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
 

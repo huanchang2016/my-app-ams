@@ -54,7 +54,7 @@ export class RolesPermissionFormComponent implements OnInit {
   getSubPermission(groupPermission:any[]):void {
     console.log(1);
     if(groupPermission.length !== 0) {
-      groupPermission.forEach(group => {
+      groupPermission.sort((a:any, b:any) => a.id - b.id).forEach(group => {
         this.settingsConfigService.get(`/api/group/permission/${group.id}`).subscribe((res:ApiData) => {
           if(res.code === 200) {
             const subPermission:any[] = res.data.permission;
@@ -73,7 +73,10 @@ export class RolesPermissionFormComponent implements OnInit {
             });
             if(this.permissionGroup.length === this.groupLength) {
               console.log(this.permissionGroup);
-              this.permissionGroup = this.permissionGroup.sort( (a:any, b:any) => a.key - b.key)
+              this.permissionGroup = this.permissionGroup.sort((a:any, b:any) => a.key - b.key).map( v => {
+                v.key = v.key + '-' + v.title;
+                return v;
+              } )
             }
             
           }
@@ -96,7 +99,7 @@ export class RolesPermissionFormComponent implements OnInit {
   }
 
   submitPermission():void {
-    console.log(this.selectedKeys, 'selectedKeys');
+    // console.log(this.selectedKeys, 'selectedKeys');
     const option:any = {
       role_id: this.data.id,
       permission_ids: this.selectedKeys
@@ -113,7 +116,7 @@ export class RolesPermissionFormComponent implements OnInit {
   }
 
   nzEvent(event: NzFormatEmitEvent): void {
-    console.log(event);
+    // console.log(event);
     this.selectedKeys = event.keys;
   }
 

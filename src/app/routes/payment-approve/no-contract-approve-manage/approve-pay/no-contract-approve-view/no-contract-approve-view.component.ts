@@ -11,14 +11,14 @@ import { SettingsService } from '@delon/theme';
   styles: []
 })
 export class NoContractApproveViewComponent implements OnInit {
-  listOfData:any[] = [];
+  listOfData: any[] = [];
 
-  projectInfo:any = null;
-  projectId:number = null;
+  projectInfo: any = null;
+  projectId: number = null;
 
-  treaty_pay_id:number = null;
-  treatypayInfo:any = null;
-  treaty_id:number = null;
+  treaty_pay_id: number = null;
+  treatypayInfo: any = null;
+  treaty_id: number = null;
 
   constructor(
     public msg: NzMessageService,
@@ -27,63 +27,63 @@ export class NoContractApproveViewComponent implements OnInit {
     public notice: NzNotificationService,
     private settings: SettingsService
   ) {
-    this.activatedRoute.params.subscribe((params:Params) => {
-      if(params && params['id']) {
+    this.activatedRoute.params.subscribe((params: Params) => {
+      if (params && params['id']) {
         this.projectId = +params['id'];
         this.getProjectInfo(); // 项目信息
       }
     });
 
-    this.activatedRoute.queryParams.subscribe(params=> {
-      if(params && params['treaty_pay_id']) {
+    this.activatedRoute.queryParams.subscribe(params => {
+      if (params && params['treaty_pay_id']) {
         this.treaty_pay_id = +(params['treaty_pay_id']);
         this.getTreatyPayDetail();
         this.getWorkflow();
       }
     })
-    
+
   }
 
   ngOnInit() { }
 
-  getTreatyPayDetail():void {
+  getTreatyPayDetail(): void {
     this.settingsConfigService.get(`/api/treaty/pay/detail/${this.treaty_pay_id}`)
-        .subscribe((res:ApiData) => {
-          console.log(res, '非合约支付信息1111');
-          if(res.code === 200) {
-            this.treaty_id = res.data.id;
-            this.treatypayInfo = res.data;
-            this.getTreatyPayment();
-          }
-        })
+      .subscribe((res: ApiData) => {
+        console.log(res, '非合约支付信息1111');
+        if (res.code === 200) {
+          this.treaty_id = res.data.id;
+          this.treatypayInfo = res.data;
+          this.getTreatyPayment();
+        }
+      })
   }
 
   getTreatyPayment() {
     this.settingsConfigService.get(`/api/treaty/payment/${this.treaty_id}`)
-        .subscribe((res:ApiData) => {
-          console.log(res, '非合约支付详情列表2222');
-          if(res.code === 200) {
-            const treatyPayment:any[] = res.data.treaty_payment;
-            this.listOfData = treatyPayment;
-          }
-        })
+      .subscribe((res: ApiData) => {
+        console.log(res, '非合约支付详情列表2222');
+        if (res.code === 200) {
+          const treatyPayment: any[] = res.data.treaty_payment;
+          this.listOfData = treatyPayment;
+        }
+      })
   }
 
   getProjectInfo() { // 项目基础信息
-    this.settingsConfigService.get(`/api/project/detail/${this.projectId}`).subscribe((res:ApiData) => {
-      if(res.code === 200) {
+    this.settingsConfigService.get(`/api/project/detail/${this.projectId}`).subscribe((res: ApiData) => {
+      if (res.code === 200) {
         this.projectInfo = res.data;
       }
     })
   }
 
-  cancel(): void {}
+  cancel(): void { }
 
   // 流程进程信息
-  progressInfo:any = null;
-  nodeProcess:any[] = [];
-  currentNodeProcess:any = null;
-  isCurrentCheck:boolean = false;
+  progressInfo: any = null;
+  nodeProcess: any[] = [];
+  currentNodeProcess: any = null;
+  isCurrentCheck: boolean = false;
 
   checkOption: any = {
     agree: null,
@@ -92,52 +92,70 @@ export class NoContractApproveViewComponent implements OnInit {
 
   getWorkflow() {
     this.settingsConfigService
-        .get(`/api/treaty/pay/process/${this.treaty_pay_id}`)
-        .subscribe((res:ApiData) => {
-          console.log(res, 'workflow');
-          if(res.code === 200) {
-            this.progressInfo = res.data;
-            this.getNodeProcess();
-          }
-    })
+      .get(`/api/treaty/pay/process/${this.treaty_pay_id}`)
+      .subscribe((res: ApiData) => {
+        console.log(res, 'workflow');
+        if (res.code === 200) {
+          this.progressInfo = res.data;
+          this.getNodeProcess();
+        }
+      })
   }
 
-  getNodeProcess():void {
+  getNodeProcess(): void {
     this.isCurrentCheck = false;
     this.settingsConfigService
-        .get(`/api/node/process/${this.progressInfo.id}`)
-        .subscribe((res:ApiData) => {
-          console.log(res, 'node_process');
-          if(res.code === 200) {
-            this.nodeProcess = res.data.node_process;
-            this.currentNodeProcess = this.nodeProcess.filter( v => v.current)[0];
-            console.log(this.currentNodeProcess, this.isCurrentCheck, this.settings.user);
-            if(this.currentNodeProcess) {
-              this.isCurrentCheck = this.currentNodeProcess.user.id === this.settings.user.id;
-            }
+      .get(`/api/node/process/${this.progressInfo.id}`)
+      .subscribe((res: ApiData) => {
+        console.log(res, 'node_process');
+        if (res.code === 200) {
+          this.nodeProcess = res.data.node_process;
+          this.currentNodeProcess = this.nodeProcess.filter(v => v.current)[0];
+          console.log(this.currentNodeProcess, this.isCurrentCheck, this.settings.user);
+          if (this.currentNodeProcess) {
+            this.isCurrentCheck = this.currentNodeProcess.user.id === this.settings.user.id;
           }
-    })
+        }
+      })
   }
 
   submitCheckCurrentProcess() {
-    if(this.checkOption.agree === null) {
+    if (this.checkOption.agree === null) {
       this.notice.error('错误', '是否通过未选择');
       return;
     }
     console.log(this.checkOption, 'agree info submit!');
-    const obj:any = {
+    const obj: any = {
       ...this.checkOption,
       node_process_id: this.currentNodeProcess.id
     }
     this.settingsConfigService
-        .post(`/api/pay/node_process/approval`, obj)
-        .subscribe((res:ApiData) => {
-          console.log(res, 'approval');
-          if(res.code === 200) {
-           this.msg.success('审核提交成功');
-           this.settingsConfigService.resetGlobalTasks();
-           this.getWorkflow();
-          }
+      .post(`/api/pay/node_process/approval`, obj)
+      .subscribe((res: ApiData) => {
+        console.log(res, 'approval');
+        if (res.code === 200) {
+          this.msg.success('审核提交成功');
+          this.settingsConfigService.resetGlobalTasks();
+          this.getWorkflow();
+        }
+      })
+  }
+
+  executeChange(data: any) {
+    console.log('执行情况信息 提交: ', data);
+    const option: any = Object.assign(data, { process_id: this.progressInfo.id });
+    this.settingsConfigService.post('/api/treaty/pay/execute', option).subscribe((res: ApiData) => {
+      console.log(res, '执行情况确认');
+      if (res.code === 200) {
+        this.msg.success('执行情况更新成功');
+        this.settingsConfigService
+          .get(`/api/treaty/pay/process/${this.treaty_pay_id}`)
+          .subscribe((res: ApiData) => {
+            if (res.code === 200) {
+              this.progressInfo = res.data;
+            }
+          })
+      }
     })
   }
 

@@ -150,6 +150,21 @@ export class StartupService {
                   // }
                 ]
               },
+              {
+                text: '合约支付执行',
+                link: '/approve/contract/excute',
+                // hide: this.isHideRouter(['treaty_pay_approval'], permissionGroup),
+                children: [
+                  {
+                    text: '待执行',
+                    link: '/approve/contract/excute/my'
+                  },
+                  {
+                    text: '已执行',
+                    link: '/approve/contract/excute/finished'
+                  }
+                ]
+              }
               
               
             ]
@@ -203,6 +218,21 @@ export class StartupService {
                   //   link: '/approve/no-contract/pay/without-pass'
                   // }
                 ]
+              },
+              {
+                text: '非合约支付执行',
+                link: '/approve/no-contract/excute',
+                // hide: this.isHideRouter(['treaty_pay_approval'], permissionGroup),
+                children: [
+                  {
+                    text: '待执行',
+                    link: '/approve/no-contract/excute/my'
+                  },
+                  {
+                    text: '已执行',
+                    link: '/approve/no-contract/excute/finished'
+                  }
+                ]
               }
               
               
@@ -252,6 +282,21 @@ export class StartupService {
                   {
                     text: '已审批',
                     link: '/bill/approve/finished'
+                  }
+                ]
+              },
+              {
+                text: '开票执行',
+                link: '/bill/excute',
+                // hide: this.isHideRouter(['bill_approval'], permissionGroup),
+                children: [
+                  {
+                    text: "待执行",
+                    link: '/bill/excute/my'
+                  },
+                  {
+                    text: '已执行',
+                    link: '/bill/excute/finished'
                   }
                 ]
               }

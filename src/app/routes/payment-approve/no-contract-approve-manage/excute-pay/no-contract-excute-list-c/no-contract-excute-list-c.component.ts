@@ -5,16 +5,14 @@ import { SettingsConfigService } from 'src/app/routes/service/settings-config.se
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-approve-list-c',
-  templateUrl: './approve-list-c.component.html',
-  styles: []
+  selector: 'app-no-contract-excute-list-c',
+  templateUrl: './no-contract-excute-list-c.component.html',
+  styles: [
+  ]
 })
-export class ApproveListCComponent implements OnInit {
+export class NoContractExcuteListCComponent implements OnInit {
+  
   @Input() postUrl:string;
-
-  // 单位id
-  companyId:number = null;
-  companyArray:any[] = [];
 
   list: any[] = [];
   listOfData:any[] = [];
@@ -28,39 +26,36 @@ export class ApproveListCComponent implements OnInit {
     page_size: 10
   };
 
-  
+  // listOfData: any[] = [];
+  selectedMemberIds: number[] = []; // 已选成员
+  // TODO: checkbox
   constructor(
     private commonFn: CommonFunctionService,
     private settingsConfigService: SettingsConfigService,
     private router: Router
-  ) {
-    this.settingsConfigService.get('/api/company/user/all').subscribe((res:ApiData) => {
-      if(res.code === 200) {
-        let data:any[] = res.data.company;
-        this.companyArray = data.map( v => {
-          return { id: v.id, name: v.name };
-        });
-      }
-    })
-  }
+  ) {}
 
   ngOnInit() {
     this.getDataList();
   }
 
-  getDataList() { // 获取单位下的数据
+  getDataList() {
     this.loading = true;
     this.settingsConfigService.get(this.postUrl, this.pageOption).subscribe((res:ApiData) => {
-      console.log(res, '该我审批的合约支付');
+      console.log('非合约支付信息，执行非合约：', res);
+
       this.loading = false;
       if(res.code === 200) {
-        let data:any[] = res.data.contract_pay;
+        let data:any[] = res.data.treaty_pay;
         this.total = res.data.count;
-        
         this.list = data;
         this.searchOptionsChange();
       }
     });
+  }
+
+  view(data:any) {
+    this.router.navigateByUrl(`/approve/no-contract/pay/view/${data.project.id}?treaty_pay_id=${data.id}`);
   }
 
   pageIndexChange($event:number) {
@@ -72,7 +67,6 @@ export class ApproveListCComponent implements OnInit {
     this.getDataList();
   }
 
-  
   // 搜索条件发生变化
   searchOptionsChange(option?:any) {
     
@@ -85,15 +79,12 @@ export class ApproveListCComponent implements OnInit {
       for (const key in option) {
         if (option.hasOwnProperty(key)) {
           const element = option[key];
-          if(key === 'code') {
-            object['supplier_code'] = element;
-          }else {
-            object[key] = element;
-          }
+          object[key] = element;
         }
       }
 
       this.listOfData = this.commonFn.filterListOfData(this.list, object);
+      console.log('项目支付草稿: ', this.listOfData);
     }
   }
 }

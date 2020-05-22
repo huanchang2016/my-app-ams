@@ -151,76 +151,83 @@
 </nz-card>
 
 <!-- 流程进展 -->
-<nz-card [nzBordered]="false" class="mt-md" [nzTitle]="workflowStatusTitle" *ngIf="contractInfo && !contractInfo.draft">
-  <ng-template #workflowStatusTitle>
-    <span>审批进展</span>
-    <span class="text-primary ml-md text-sm">{{ progressInfo?.workflow_status.name }}</span>
-  </ng-template>
-  <ng-container *ngIf="nodeProcess.length !== 0;else nodeProcessLoadingTpl">
-    <nz-steps nzDirection="vertical" nzProgressDot class="hidden-pc">
-      <ng-container *ngFor="let process of nodeProcess">
-        <nz-step [nzTitle]="process.node.name"
-          [nzStatus]=" process.current ? 'process' : ( !process.finished ? 'wait' : ( !process.agree ?  'error' : 'finish') )"
-          [nzDescription]="createDesc">
-          <ng-template #createDesc>
-            <div class="desc">
-              <div class="my-sm">
-                {{ process.user.name }}
+<ng-container *ngIf="contractInfo && !contractInfo.draft">
+  <nz-card [nzBordered]="false" class="mt-md" [nzTitle]="workflowStatusTitle">
+    <ng-template #workflowStatusTitle>
+      <span>审批进展</span>
+      <span class="text-primary ml-md text-sm">{{ progressInfo?.workflow_status.name }}</span>
+    </ng-template>
+    <ng-container *ngIf="nodeProcess.length !== 0;else nodeProcessLoadingTpl">
+      <nz-steps nzDirection="vertical" nzProgressDot class="hidden-pc">
+        <ng-container *ngFor="let process of nodeProcess">
+          <nz-step [nzTitle]="process.node.name"
+            [nzStatus]=" process.current ? 'process' : ( !process.finished ? 'wait' : ( !process.agree ?  'error' : 'finish') )"
+            [nzDescription]="createDesc">
+            <ng-template #createDesc>
+              <div class="desc">
+                <div class="my-sm">
+                  {{ process.user.name }}
+                </div>
+                <div *ngIf="process.finished; else notFinished">
+                  {{ process.finished_time }}
+                </div>
+                <span class="text-sm text-primary"
+                  [class.text-error]="process.finished && !process.agree">{{ process.remark }}</span>
+                <ng-template #notFinished>
+                  <!-- TODO:暂不开发 -->
+                  <!-- <a *ngIf="process.current" (click)="msg.success('click')">催一下</a> -->
+                </ng-template>
               </div>
-              <div *ngIf="process.finished; else notFinished">
-                {{ process.finished_time }}
-              </div>
-              <span class="text-sm text-primary"
-                [class.text-error]="process.finished && !process.agree">{{ process.remark }}</span>
-              <ng-template #notFinished>
-                <!-- TODO:暂不开发 -->
-                <!-- <a *ngIf="process.current" (click)="msg.success('click')">催一下</a> -->
-              </ng-template>
-            </div>
-          </ng-template>
-        </nz-step>
-      </ng-container>
+            </ng-template>
+          </nz-step>
+        </ng-container>
 
-      <nz-step [nzTitle]="'完成'"
-        [nzStatus]=" !progressInfo.finished ? 'wait' : ( progressInfo.agree ? 'finish' : 'error' ) "></nz-step>
-    </nz-steps>
-    <nz-steps nzProgressDot class="hidden-mobile">
-      <ng-container *ngFor="let process of nodeProcess">
-        <nz-step [nzTitle]="process.node.name"
-          [nzStatus]=" process.current ? 'process' : ( !process.finished ? 'wait' : ( !process.agree ?  'error' : 'finish') )"
-          [nzDescription]="createDesc">
-          <ng-template #createDesc>
-            <div class="desc">
-              <div class="my-sm">
-                {{ process.user.name }}
+        <nz-step [nzTitle]="'完成'"
+          [nzStatus]=" !progressInfo.finished ? 'wait' : ( progressInfo.agree ? 'finish' : 'error' ) "></nz-step>
+      </nz-steps>
+      <nz-steps nzProgressDot class="hidden-mobile">
+        <ng-container *ngFor="let process of nodeProcess">
+          <nz-step [nzTitle]="process.node.name"
+            [nzStatus]=" process.current ? 'process' : ( !process.finished ? 'wait' : ( !process.agree ?  'error' : 'finish') )"
+            [nzDescription]="createDesc">
+            <ng-template #createDesc>
+              <div class="desc">
+                <div class="my-sm">
+                  {{ process.user.name }}
+                </div>
+                <div *ngIf="process.finished; else notFinished">
+                  {{ process.finished_time }}
+                </div>
+                <span class="text-sm text-primary"
+                  [class.text-error]="process.finished && !process.agree">{{ process.remark }}</span>
+                <ng-template #notFinished>
+                  <!-- TODO:暂不开发 -->
+                  <!-- <a *ngIf="process.current" (click)="msg.success('click')">催一下</a> -->
+                </ng-template>
               </div>
-              <div *ngIf="process.finished; else notFinished">
-                {{ process.finished_time }}
-              </div>
-              <span class="text-sm text-primary"
-                [class.text-error]="process.finished && !process.agree">{{ process.remark }}</span>
-              <ng-template #notFinished>
-                <!-- TODO:暂不开发 -->
-                <!-- <a *ngIf="process.current" (click)="msg.success('click')">催一下</a> -->
-              </ng-template>
-            </div>
-          </ng-template>
-        </nz-step>
-      </ng-container>
+            </ng-template>
+          </nz-step>
+        </ng-container>
 
-      <nz-step [nzTitle]="'完成'"
-        [nzStatus]=" !progressInfo.finished ? 'wait' : ( progressInfo.agree ? 'finish' : 'error' ) "
-        [nzDescription]="'合约支付审批完成'"></nz-step>
-    </nz-steps>
+        <nz-step [nzTitle]="'完成'"
+          [nzStatus]=" !progressInfo.finished ? 'wait' : ( progressInfo.agree ? 'finish' : 'error' ) "
+          [nzDescription]="'合约支付审批完成'"></nz-step>
+      </nz-steps>
 
+    </ng-container>
+    <ng-template #nodeProcessLoadingTpl>
+      <div class="p-xl text-center text-lg text-primary">
+        <nz-spin></nz-spin>
+      </div>
+    </ng-template>
+
+  </nz-card>
+
+  <ng-container *ngIf="progressInfo && progressInfo.execute_user">
+    <app-users-execute-flow [progressInfo]="progressInfo" (executeChange)="executeChange($event)"></app-users-execute-flow>
   </ng-container>
-  <ng-template #nodeProcessLoadingTpl>
-    <div class="p-xl text-center text-lg text-primary">
-      <nz-spin></nz-spin>
-    </div>
-  </ng-template>
+</ng-container>
 
-</nz-card>
 
 <!-- 流程进展 -->
 

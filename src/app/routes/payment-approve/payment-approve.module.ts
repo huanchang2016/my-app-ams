@@ -40,6 +40,12 @@ import { ApplyListCComponent } from './contract-approve-manage/apply-for/apply-l
 import { ApproveListCComponent } from './contract-approve-manage/approve-pay/approve-list-c/approve-list-c.component';
 import { NoContractPayListCComponent } from './no-contract-approve-manage/approve-pay/no-contract-pay-list-c/no-contract-pay-list-c.component';
 import { NoContractApplyListCComponent } from './no-contract-approve-manage/apply-for/no-contract-apply-list-c/no-contract-apply-list-c.component';
+import { NoContractExcuteNotStartComponent } from './no-contract-approve-manage/excute-pay/no-contract-excute-not-start/no-contract-excute-not-start.component';
+import { NoContractExcuteFinishedComponent } from './no-contract-approve-manage/excute-pay/no-contract-excute-finished/no-contract-excute-finished.component';
+import { NoContractExcuteListCComponent } from './no-contract-approve-manage/excute-pay/no-contract-excute-list-c/no-contract-excute-list-c.component';
+import { ContractExcuteNotStartComponent } from './contract-approve-manage/excute-pay/contract-excute-not-start/contract-excute-not-start.component';
+import { ContractExcuteFinishedComponent } from './contract-approve-manage/excute-pay/contract-excute-finished/contract-excute-finished.component';
+import { ContractExcuteListCComponent } from './contract-approve-manage/excute-pay/contract-excute-list-c/contract-excute-list-c.component';
 
 const COMPONENTS = [
   // 有合约  合约审批管理
@@ -70,7 +76,13 @@ const COMPONENTS = [
   NoContractForApproveListComponent,
   NoContractApprovedFinishedListComponent,
   NoContractApprovedWithoutListComponent,
-  NoContractApproveViewComponent
+  NoContractApproveViewComponent,
+  // 合约支付 执行情况
+  ContractExcuteNotStartComponent,
+  ContractExcuteFinishedComponent,
+  // 无合约执行情况
+  NoContractExcuteNotStartComponent,
+  NoContractExcuteFinishedComponent
 ];
 const COMPONENTS_NOROUNT = [
   ApproveSearchOptionComponent,
@@ -78,7 +90,9 @@ const COMPONENTS_NOROUNT = [
   ApplyListCComponent,
   ApproveListCComponent,
   NoContractPayListCComponent,
-  NoContractApplyListCComponent
+  NoContractApplyListCComponent,
+  NoContractExcuteListCComponent,
+  ContractExcuteListCComponent
 ];
 
 @NgModule({

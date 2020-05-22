@@ -172,3 +172,7 @@
       </div>
     </div>
   </nz-card>
+
+  <ng-container *ngIf="progressInfo && progressInfo.execute_user">
+    <app-users-execute-flow [progressInfo]="progressInfo" (executeChange)="executeChange($event)"></app-users-execute-flow>
+  </ng-container>

@@ -48,20 +48,65 @@ export class ProjectViewComponent implements OnInit {
   }
 
   // 打印
-  printCurrentModal(idname:string) {
-    let newWindow=window.open("打印窗口","_blank");
-    let obj = document.querySelector('#' + idname);
-    let head = document.querySelector('head').innerHTML;
-    let style = `<style>body {-webkit-print-color-adjust: exact; padding: 12px!important;}</style>`;
+  printCurrentModal(idname:string, title: string) {
+  //   let newWindow=window.open("打印窗口","_blank");
+  //   let obj = document.querySelector('#' + idname);
+  //   let head = document.querySelector('head').innerHTML;
+  //   let style = `<style>body {-webkit-print-color-adjust: exact; padding: 12px!important;}</style>`;
     
-    let docStr = head + style + obj.innerHTML;
-    newWindow.document.write(docStr);
-    newWindow.document.close();
+  //   let docStr = head + style + obj.innerHTML;
+  //   newWindow.document.write(docStr);
+  //   newWindow.document.close();
   
-    setTimeout(() => {
-      newWindow.print();
-      newWindow.close();
-    }, 300);
+  //   setTimeout(() => {
+  //     newWindow.print();
+  //     newWindow.close();
+  //   }, 300);
+
+    let printWindow = window.open();
+
+    html2canvas(document.querySelector(`#${idname}`)).then(canvas => {
+      let compress = document.createElement('canvas');
+
+      // change the image size
+
+      compress.width = canvas.width;
+
+      compress.height = canvas.height;
+
+      const imageStr = canvas.toDataURL("image/png");
+
+      let image = new Image();
+
+      image.src = imageStr;
+
+      image.onload = function () {
+
+        compress.getContext("2d").drawImage(image, 0, 0, compress.width, compress.height);
+
+        const imgString = compress.toDataURL("image/png");
+
+        // const iframe = '<iframe src="' + imageStr + '" frameborder="0" style="border:0;" allowfullscreen></iframe>'
+        const head:string = document.querySelector('head').innerHTML;;
+        const style:string = `<style>body {-webkit-print-color-adjust: exact; padding: 12px!important;}</style>`;
+        const div:string = '<div>' + '<img src="' + imgString + '" />' +'</div>';
+    
+        const docStr = head + style + div;
+
+        printWindow.document.write(docStr);
+
+        printWindow.document.close();
+
+        printWindow.onload = function () {
+
+          printWindow.print();
+          printWindow.close();
+
+        };
+
+      }
+
+    });
   }
 
   isPrinter:boolean = false;

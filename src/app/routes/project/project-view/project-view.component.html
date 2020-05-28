@@ -15,7 +15,7 @@
   </ng-template>
 
   <ng-template #action>
-    <button nz-button (click)="printCurrentModal('print-box')">打印</button>
+    <button nz-button (click)="printCurrentModal('print-box',  project.info?.name)">打印</button>
     <button nz-button nz-dropdown [nzDropdownMenu]="opMenu" class="mx-sm">
       下载 <i nz-icon nzType="download" nzTheme="outline"></i>
     </button>

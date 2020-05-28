@@ -135,7 +135,7 @@ export class ProjectIncomeListComponent implements OnInit {
   getDataList(id:number = this.companyId) { // 获取单位下的数据
     this.loading = true;
     this.settingsConfigService.get(`/api/tax/company/${id}`).subscribe((res:ApiData) => {
-      console.log(res);
+      // console.log(res);
       this.loading = false;
       if(res.code === 200) {
         let data:any[] = res.data.tax;

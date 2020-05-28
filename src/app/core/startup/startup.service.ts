@@ -468,16 +468,6 @@ export class StartupService {
     });
   }
 
-  // 获取单位类型
-  getCompanyNatureList() {
-    this.httpClient.get('/api/company_nature/all').subscribe((res:ApiData) => {
-      console.log(res, 'nature');
-      if(res.code === 200) {
-        
-      }
-    })
-  }
-
   load(): Promise<any> {
     // only works with promises
     return new Promise((resolve, reject) => {

@@ -42,6 +42,7 @@ export class ProjectCategoryFormComponent implements OnInit {
 
     this.validateForm = this.fb.group({
       name: [null, [Validators.required]],
+      code: [null, [Validators.required]],
       company_id: [ this.companyId, [Validators.required] ],
       department_id: [ this.departmentId, [Validators.required] ]
     });
@@ -51,8 +52,12 @@ export class ProjectCategoryFormComponent implements OnInit {
       this.getDepartment(this.companyId);
     }
     this.validateForm.get('company_id').valueChanges.subscribe( id => {
-      this.departmentArray = [];
-      this.getDepartment(id);
+      console.log(id !== this.companyId, id, this.companyId)
+      if(id !== this.companyId) {
+        this.departmentArray = [];
+        this.getDepartment(id);
+      }
+      
     });
     
 
@@ -86,6 +91,7 @@ export class ProjectCategoryFormComponent implements OnInit {
   create() {
     let opt:any = {
       name: this.validateForm.value.name,
+      code: this.validateForm.value.code,
       company_id: this.validateForm.value.company_id,
       department_id: this.validateForm.value.department_id,
       sequence: this.total
@@ -106,6 +112,7 @@ export class ProjectCategoryFormComponent implements OnInit {
   edit() {
     let opt:any = {
       name: this.validateForm.value.name,
+      code: this.validateForm.value.code,
       sequence: this.data.sequence
     };
     
@@ -126,12 +133,14 @@ export class ProjectCategoryFormComponent implements OnInit {
   setFormValue(data:any) :void {
     this.validateForm.patchValue({
       name: data.name,
+      code: data.code,
       company_id: data.company.id,
       department_id: data.department.id
     });
   }
 
   getDepartment(id:number): void {
+    this.companyId = id;
     this.departmentLoading = true;
     this.settingsConfigService.get(`/api/department/${id}`).subscribe((res:ApiData) => {
       this.departmentLoading = false;

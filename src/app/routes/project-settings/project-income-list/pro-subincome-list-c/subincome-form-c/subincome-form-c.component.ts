@@ -35,7 +35,9 @@ export class SubincomeFormCComponent implements OnInit {
   ngOnInit(): void {
 
     this.validateForm = this.fb.group({
-      name: [null, [Validators.required]]
+      name: [null, [Validators.required]],
+      code: [null, [Validators.required]],
+      subject: [null, [Validators.required]]
     });
     
 
@@ -102,7 +104,9 @@ export class SubincomeFormCComponent implements OnInit {
     console.log(data);
     
     this.validateForm.patchValue({
-      name: data.name
+      name: data.name,
+      code: data.code,
+      subject: data.subject
     });
 
   }

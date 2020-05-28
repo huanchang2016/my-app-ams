@@ -46,7 +46,7 @@ export class WorkflowFormComponent implements OnInit {
       name: [null, [Validators.required]],
       company_id: [ this.companyId, [Validators.required] ],
       department_id: [ null, [Validators.required] ],
-      execute_user_id: [ null, [Validators.required] ],
+      execute_user_id: [ null ],
       workflow_category_id: [ null, [Validators.required] ],
       is_large: [ null, [Validators.required]]
     });

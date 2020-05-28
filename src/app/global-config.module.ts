@@ -28,6 +28,8 @@ const alainConfig: AlainConfig = {
   },
 };
 
+// {"token":"63ea1ab11743489387f455cdbe429ef7"}
+
 const alainModules = [
   AlainThemeModule.forRoot(),
   DelonACLModule.forRoot()

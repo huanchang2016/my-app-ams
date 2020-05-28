@@ -10,7 +10,7 @@
             <th>流程类型</th>
             <th>是否大金额</th>
             <th>部门</th>
-            <th>执行人</th>
+            <th>执行人员</th>
             <th>操作</th>
         </tr>
       </thead>
@@ -37,7 +37,7 @@
             </td>
           </tr>
           <tr *ngIf="showExpand[data.id]" style="background-color: #f1f1f1;">
-            <td colspan="6">
+            <td colspan="7">
               <app-node-list [workflowInfo]="data"></app-node-list>
             </td>
           </tr>

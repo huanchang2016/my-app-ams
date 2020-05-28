@@ -9,7 +9,7 @@
             <nz-card [nzActions]="!isView ? [actionEdit, actionDisabled] : []" class="mb-sm">
                 <sv-container>
                     <sv label="服务名称">{{ data.name }}</sv>
-                    <sv label="金额（元）"><span class="text-error">{{ data.amount | _currency }}</span></sv>
+                    <sv label="金额（元）"><span>{{ data.amount | _currency }}</span></sv>
                 </sv-container>
                 <ng-template #actionEdit>
                     <a *ngIf="!isView" (click)="editContract(data, false)"><i nz-icon nzType="edit"
@@ -53,7 +53,7 @@
                         <td>{{ i + 1 }}</td>
                         <td>{{ data.name }}</td>
                         <td>
-                            <span class="text-error">{{ data.amount | _currency }}</span>
+                            <span>{{ data.amount | _currency }}</span>
                         </td>
                         <td *ngIf="!isView">
                             <a (click)="editContract(data, false)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>

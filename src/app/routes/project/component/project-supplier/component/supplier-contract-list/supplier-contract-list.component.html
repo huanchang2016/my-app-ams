@@ -9,7 +9,7 @@
             <nz-card [nzActions]="!isView ? [actionEdit, actionDisabled] : []" class="mb-sm">
                 <sv-container>
                     <sv label="合约名称">{{ data.name }}</sv>
-                    <sv label="金额（元）"><span class="text-error">{{ data.amount | _currency }}</span></sv>
+                    <sv label="金额（元）"><span>{{ data.amount | _currency }}</span></sv>
                     <sv label="合约编号">{{ data.number }}</sv>
                     <sv label="起止日期">{{ data.start_time }} - {{ data.end_time }}</sv>
                     <sv label="服务类型">{{ data.service_category.name }}</sv>
@@ -61,7 +61,7 @@
                         <td>{{ i + 1 }}</td>
                         <td>{{ data.name }}</td>
                         <td>
-                            <span class="text-error">{{ data.amount | _currency }}</span>
+                            <span>{{ data.amount | _currency }}</span>
                         </td>
                         <td>{{ data.number }}</td>
                         <td>{{ data.start_time }} - {{ data.end_time }}</td>

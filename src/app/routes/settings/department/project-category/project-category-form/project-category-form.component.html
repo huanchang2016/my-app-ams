@@ -1,8 +1,14 @@
 <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
     <nz-form-item>
-        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="name" nzRequired>职位名称</nz-form-label>
-        <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请输入职位/职级名称">
-            <input nz-input id="name" formControlName="name" placeholder="输入职位/职级名称" />
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="name" nzRequired>项目名称</nz-form-label>
+        <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请输入项目名称">
+            <input nz-input id="name" formControlName="name" placeholder="输入项目名称" />
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="code" nzRequired>项目编号</nz-form-label>
+        <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请输入项目编号">
+            <input nz-input id="code" formControlName="code" placeholder="输入项目编号" />
         </nz-form-control>
     </nz-form-item>
     <ng-container *ngIf="!data">

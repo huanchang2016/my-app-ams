@@ -1,15 +1,15 @@
 <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
     <nz-form-item *ngIf="projectInfo" class="mb-0">
         <nz-form-label>项目名称</nz-form-label>
-        <nz-form-control>
+        <nz-form-text class="d-flex align-items-center">
             <strong>{{ projectInfo.name }}</strong>
-        </nz-form-control>
+        </nz-form-text>
     </nz-form-item>
     <nz-form-item *ngIf="supplierInfo" class="mb-0">
         <nz-form-label>供 应 商</nz-form-label>
-        <nz-form-control>
+        <nz-form-text class="d-flex align-items-center">
             <strong>{{ supplierInfo.name }}</strong>
-        </nz-form-control>
+        </nz-form-text>
     </nz-form-item>
     
     <nz-form-item>

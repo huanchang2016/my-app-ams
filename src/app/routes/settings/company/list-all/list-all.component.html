@@ -33,7 +33,7 @@
             <td>{{ data.name }}</td>
             <td>
                 <sv-container col="1" size="small">
-                    <sv label="供&nbsp;&nbsp;应&nbsp;&nbsp;商">
+                    <sv label="客&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;户">
                         <span *ngIf="data.customer; else notCustomer">
                             {{ data.customer_code }}
                         </span>
@@ -41,7 +41,7 @@
                             <span class="text-error"><i nz-icon nzType="close" nzTheme="outline"></i></span>
                         </ng-template>
                     </sv>
-                    <sv label="客&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;户">
+                    <sv label="供&nbsp;&nbsp;应&nbsp;&nbsp;商">
                         <span *ngIf="data.supplier; else notSupplier">
                             {{ data.supplier_code }}
                         </span>
@@ -80,7 +80,7 @@
                     <nz-card-meta [nzTitle]="data.name"></nz-card-meta>
                     <div class="pt-md">
                         <sv-container col="1" size="small">
-                            <sv label="供&nbsp;&nbsp;应&nbsp;&nbsp;商">
+                            <sv label="客&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;户">
                                 <span *ngIf="data.customer; else notCustomer">
                                     {{ data.customer_code }}
                                 </span>
@@ -88,7 +88,7 @@
                                     <span class="text-error"><i nz-icon nzType="close" nzTheme="outline"></i></span>
                                 </ng-template>
                             </sv>
-                            <sv label="客&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;户">
+                            <sv label="供&nbsp;&nbsp;应&nbsp;&nbsp;商">
                                 <span *ngIf="data.supplier; else notSupplier">
                                     {{ data.supplier_code }}
                                 </span>

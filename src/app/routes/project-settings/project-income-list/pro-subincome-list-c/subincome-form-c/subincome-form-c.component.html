@@ -1,8 +1,20 @@
 <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
     <nz-form-item>
-        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="name" nzRequired>名称</nz-form-label>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="name" nzRequired>类别名称</nz-form-label>
         <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请输入名称">
             <input nz-input id="name" formControlName="name" placeholder="输入名称" />
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="code" nzRequired>税目代码</nz-form-label>
+        <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请输入税目对应代码">
+            <input nz-input id="code" formControlName="code" placeholder="输入税目对应代码" />
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="subject" nzRequired>科目名称</nz-form-label>
+        <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请输入科目名称">
+            <input nz-input id="subject" formControlName="subject" placeholder="输入科目名称" />
         </nz-form-control>
     </nz-form-item>
     <nz-form-item nz-row class="register-area">

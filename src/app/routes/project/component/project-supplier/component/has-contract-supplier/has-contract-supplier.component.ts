@@ -52,7 +52,7 @@ export class HasContractSupplierComponent implements OnInit {
       contract_time: [null, [Validators.required]],
       amount: [null, [Validators.required, Validators.pattern(/^\d+(\.\d{1,2})?$/)]],
       pay_company: [null, [Validators.required]],
-      bank_account: [null, [Validators.required, Validators.pattern(/^([1-9]{1})(\d{14}|\d{18})$/)]],
+      bank_account: [null, [Validators.required]], // Validators.pattern(/^([1-9]{1})(\d{14}|\d{18})$/)
       bank_name: [null, [Validators.required]]
     });
 

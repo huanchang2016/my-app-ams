@@ -4,7 +4,6 @@
     <span class="font-weight-bold">{{ project.info?.name }}</span>
     <span class="text-primary text-xs mx-lg" [class.text-error]="project.info?.project_status.name === '已提交，已通过'"
       [class.text-error]="project.info?.project_status.name === '已提交，未通过'">{{ project.info?.project_status.name }}</span>
-    <a *ngIf="project.info?.draft" class="text-md" [routerLink]="['/project/edit', projectId]">编辑</a>
   </ng-template>
 
   <ng-template #breadcrumb>
@@ -27,6 +26,8 @@
         </li>
       </ul>
     </nz-dropdown-menu>
+
+    <a *ngIf="project.info?.draft" nz-button [nzType]="'primary'" [routerLink]="['/project/edit', projectId]">编辑</a>
 
     <a nz-popconfirm nz-button [nzType]="'primary'" *ngIf="project.info?.draft"
       nzPopconfirmTitle="请确认项目信息全部填写完整，无误后确认提交！！！" (nzOnConfirm)="submitProject()" (nzOnCancel)="cancel()">
@@ -133,27 +134,26 @@
   <nz-card [nzBordered]="false" nzTitle="项目预算" class="mb-md">
 
     <sv-container class="mb-md" title="收入" *ngIf="project.budget">
-      <sv label="收入类型"><span class="text-primary">{{ project.budget.tax.name }}</span></sv>
+      <sv label="收入类型"><span>{{ project.budget.tax.name }}</span></sv>
       <sv label="收入金额">
-        <span class="text-primary font-weight-bold mr-md"
-          [class.text-success]="project.budget.income > project.info.quota.chairman_amount_start">{{ project.budget.income | currency: 'CNY' }}</span>
+        <span class="font-weight-bold mr-md">{{ project.budget.income | currency: 'CNY' }}</span>
         大写：<span class="font-weight-bold">{{ transferNumber }}</span>
       </sv>
     </sv-container>
 
     <sv-container class="mb-md" title="成本" *ngIf="project.budget">
       <ng-container *ngFor="let cost of project.budget.cost">
-        <sv [label]="cost.cost_category.name"><span class="text-error">{{ cost.amount | currency: 'CNY' }}</span></sv>
+        <sv [label]="cost.cost_category.name"><span >{{ cost.amount | currency: 'CNY' }}</span></sv>
       </ng-container>
     </sv-container>
 
     <sv-container title="预算统计" *ngIf="project.budget">
-      <sv label="不含税收入"><span class="text-primary">{{ project.budget.exclude_tax_income | currency: 'CNY' }}</span></sv>
-      <sv label="预算税率"><span class="text-error">{{ countPercent(project.budget.tax.rate, 100) }} %</span></sv>
-      <sv label="税金"><span class="text-error">{{ project.budget.tax_amount | currency: 'CNY' }}</span></sv>
+      <sv label="不含税收入"><span>{{ project.budget.exclude_tax_income | currency: 'CNY' }}</span></sv>
+      <sv label="预算税率"><span>{{ countPercent(project.budget.tax.rate, 100) }} %</span></sv>
+      <sv label="税金"><span>{{ project.budget.tax_amount | currency: 'CNY' }}</span></sv>
       <sv label="成本总计">{{ project.budget.cost_amount | currency: 'CNY' }}</sv>
-      <sv label="毛利润"><span class="text-primary">{{ project.budget.gross_profit | currency: 'CNY' }}</span></sv>
-      <sv label="毛利率"><span class="text-primary">{{ countPercent(project.budget.gross_profit_rate, 100) }} %</span></sv>
+      <sv label="毛利润"><span>{{ project.budget.gross_profit | currency: 'CNY' }}</span></sv>
+      <sv label="毛利率"><span>{{ countPercent(project.budget.gross_profit_rate, 100) }} %</span></sv>
     </sv-container>
   </nz-card>
 

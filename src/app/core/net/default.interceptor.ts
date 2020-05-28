@@ -79,7 +79,7 @@ export class DefaultInterceptor implements HttpInterceptor {
         if (ev instanceof HttpResponse) {
             const body: any = ev.body;
             if (body && body.code === 401) {
-                this.msg.error('用户登录失效，请重新登录');
+                // this.msg.error('用户登录失效，请重新登录');
                 this.goTo('/passport/login');
                 // 继续抛出错误中断后续所有 Pipe、subscribe 操作，因此：
                 // this.http.get('/').subscribe() 并不会触发

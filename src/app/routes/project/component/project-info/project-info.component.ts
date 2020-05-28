@@ -50,7 +50,7 @@ export class ProjectInfoComponent implements OnChanges, OnInit {
     if(!this.settings.user.department) {
       return;
     }
-    this.settingsConfigService.get(`/api/project_category/company/${this.settings.user.company.id}`).subscribe((res:ApiData) => {
+    this.settingsConfigService.get(`/api/project_category/department/${this.settings.user.department.id}`).subscribe((res:ApiData) => {
       if(res.code === 200) {
         this.projectCategoryArray = res.data.project_category.sort( (a:any, b:any) => a.sequence - b.sequence);
       }

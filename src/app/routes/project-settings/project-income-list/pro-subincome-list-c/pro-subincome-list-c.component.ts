@@ -36,11 +36,11 @@ export class ProSubincomeListCComponent implements OnInit {
     this.getDataList();
   }
 
-  status: boolean = true;
+  // status: boolean = true;
 
-  statusChange() {
-    this.getDataList();
-  }
+  // statusChange() {
+  //   this.getDataList();
+  // }
 
   add() :void {
     this.createComponentModal();
@@ -53,7 +53,7 @@ export class ProSubincomeListCComponent implements OnInit {
   createComponentModal(data:any = null): void {
     console.log(data);
     const modal = this.modalService.create({
-      nzTitle: (!data ? '新增' : '编辑') + '类型',
+      nzTitle: (!data ? '新增' : '编辑') + '税目类别',
       nzContent: SubincomeFormCComponent,
       // nzWrapClassName: 'modal-lg',
       nzMaskClosable: false,
@@ -122,12 +122,12 @@ export class ProSubincomeListCComponent implements OnInit {
       return;
     }
     let url:string = `/api/tax/fee/${id}`;
-    if(!this.status) {
-      url =`/api/tax/fee/disable/${id}`;
-    }
+    // if(!this.status) {
+    //   url =`/api/tax/fee/disable/${id}`;
+    // }
     this.loading = true;
     this.settingsConfigService.get(url).subscribe((res:ApiData) => {
-      console.log(res, 'tax_fee list');
+      // console.log(res, 'tax_fee list');
       this.loading = false;
       if(res.code === 200) {
         let data:any[] = res.data.tax_fee;

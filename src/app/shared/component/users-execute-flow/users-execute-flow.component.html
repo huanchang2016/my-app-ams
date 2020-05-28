@@ -12,7 +12,7 @@
             <ng-template #createDesc>
               <div class="desc">
                 <div class="my-sm">
-                  执行人：{{ process.name }}
+                  执行人员：{{ process.name }}
                 </div>
                 <div *ngIf="process.complete; else notComplete">
                   {{ process.complete_time }}
@@ -45,7 +45,7 @@
             <ng-template #createDesc>
               <div class="desc">
                 <div class="my-sm">
-                    执行人：{{ process.name }}
+                    执行人员：{{ process.name }}
                   </div>
                   <div *ngIf="process.complete; else notComplete">
                     {{ process.complete_time }}

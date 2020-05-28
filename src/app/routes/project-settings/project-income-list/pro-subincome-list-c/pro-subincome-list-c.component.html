@@ -1,15 +1,17 @@
 <nz-card>
-    <nz-radio-group [(ngModel)]="status" (ngModelChange)="statusChange()" [nzButtonStyle]="'solid'">
+    <!-- <nz-radio-group [(ngModel)]="status" (ngModelChange)="statusChange()" [nzButtonStyle]="'solid'">
         <label nz-radio-button [nzValue]="true">有效</label>
         <label nz-radio-button [nzValue]="false">无效</label>
-    </nz-radio-group>
-    <button nz-button nzType="primary" (click)="add()" class="mb-sm ml-md">创建税目类别</button>
+    </nz-radio-group> -->
+    <button nz-button nzType="primary" (click)="add()" class="mb-sm">创建税目类别</button>
     <nz-table #basicTable [nzData]="listOfData" [nzLoading]="loading" [nzFrontPagination]="false"
         class="mt-md hidden-mobile">
         <thead>
             <tr>
                 <th>序号</th>
                 <th>类别名称</th>
+                <th>对应代码</th>
+                <th>科目名称</th>
                 <th>操作（拖动排序）</th>
             </tr>
         </thead>
@@ -17,6 +19,8 @@
             <tr *ngFor="let data of listOfData; let i = index" cdkDrag>
                 <td>{{ i + 1 }}</td>
                 <td>{{ data.name }}</td>
+                <td>{{ data.code }}</td>
+                <td>{{ data.subject }}</td>
                 <td>
                     <a (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
 

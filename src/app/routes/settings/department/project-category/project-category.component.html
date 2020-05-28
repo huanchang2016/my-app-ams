@@ -7,6 +7,7 @@
         <tr>
             <th>序号</th>
             <th>类型名称</th>
+            <th>项目编号</th>
             <th>操作</th>
         </tr>
     </thead>
@@ -14,6 +15,7 @@
         <tr *ngFor="let data of listOfData; let i = index" cdkDrag>
             <td>{{ i + 1 }}</td>
             <td>{{ data.name }}</td>
+            <td>{{ data.code }}</td>
             <td class="oper-td">
                 <a acl [acl-ability]="'modify_project_category'" (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
                 <nz-divider nzType="vertical"></nz-divider>

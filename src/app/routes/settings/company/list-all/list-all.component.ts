@@ -69,8 +69,8 @@ export class ListAllComponent implements OnInit {
       if (res.code === 200) {
         let data: any[] = res.data.company;
         this.list = data.sort((a: any, b: any) => a.sequence - b.sequence);
-        // this.listOfData = this.list.filter(v => v.active);
-        this.searchOptionsChange();
+        this.listOfData = this.list;
+        // this.searchOptionsChange();
 
       }
     });
@@ -203,13 +203,14 @@ export class ListAllComponent implements OnInit {
     if (this.list.length !== 0) {
       this.isIndeterminate = false;
       let list: any[] = this.list;
+      console.log(option)
       if (option) {
         if (option.name) {
-          let name: string = option.name.trim();
-          list = list.filter(v => v.indexOf(name) !== -1 ? true : false);
+          const name: string = option.name.trim();
+          list = list.filter(v => v.name.indexOf(name) !== -1 ? true : false);
         }
         if (option.code) {
-          let code: string = option.code.trim();
+          const code: string = option.code.trim();
           list = list.filter(v => {
             if (v.customer_code) {
               return v.customer_code.indexOf(code) !== -1 ? true : false;
@@ -225,7 +226,7 @@ export class ListAllComponent implements OnInit {
         }
 
         if (option.category && option.category !== -1) {
-          let category: string = option.category;
+          const category: string = option.category;
           list = list.filter(v => {
             return v[category];
           });

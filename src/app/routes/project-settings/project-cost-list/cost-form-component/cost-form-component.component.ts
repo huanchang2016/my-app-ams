@@ -37,6 +37,7 @@ export class CostFormComponentComponent implements OnInit {
 
     this.validateForm = this.fb.group({
       name: [null, [Validators.required]],
+      code: [null, [Validators.required]],
       company_id: [ this.companyId ],
       description: [ null ]
     });
@@ -86,6 +87,7 @@ export class CostFormComponentComponent implements OnInit {
   edit() {
     let opt:any = {
       name: this.validateForm.value.name,
+      code: this.validateForm.value.code,
       description: this.validateForm.value.description
     };
     
@@ -108,6 +110,7 @@ export class CostFormComponentComponent implements OnInit {
     
     this.validateForm.patchValue({
       name: data.name,
+      code: data.code,
       description: data.description
     });
   }

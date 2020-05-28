@@ -1,8 +1,14 @@
 <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
     <nz-form-item>
-        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="name" nzRequired>成本类型</nz-form-label>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="name" nzRequired>类型名称</nz-form-label>
         <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请输入项目成本类型名称">
             <input nz-input id="name" formControlName="name" placeholder="输入项目成本类型名称" />
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="code" nzRequired>类型代码</nz-form-label>
+        <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请输入项目成本类型代码">
+            <input nz-input id="code" formControlName="code" placeholder="输入项目成本类型代码" />
         </nz-form-control>
     </nz-form-item>
     <ng-container *ngIf="!data">

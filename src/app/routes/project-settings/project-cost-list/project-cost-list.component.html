@@ -7,6 +7,7 @@
         <tr>
             <th>序号</th>
             <th>名称</th>
+            <th>对应代码</th>
             <th>单位</th>
             <th>描述</th>
             <th>操作</th>
@@ -16,6 +17,7 @@
         <tr *ngFor="let data of basicTable.data; let i = index">
             <td>{{ i + 1 }}</td>
             <td>{{ data.name }}</td>
+            <td>{{ data.code }}</td>
             <td>{{ data.company.name }}</td>
             <td>
                 <span [innerHTML]=" data.description | showTextareaContent"></span>
@@ -44,6 +46,7 @@
                     <nz-card-meta [nzTitle]="data.name"></nz-card-meta>
                     <div class="pt-md">
                         <sv-container size="small">
+                            <sv label="对应代码">{{ data.code }}</sv>
                             <sv label="单位">{{ data.company.name }}</sv>
                             <sv label="描述"><span [innerHTML]=" data.description | showTextareaContent"></span></sv>
                         </sv-container>

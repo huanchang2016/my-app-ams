@@ -1,0 +1,25 @@
+<form nz-form [formGroup]="basicInfoForm" (ngSubmit)="submitbasicInfoForm()">
+    <nz-form-item *ngIf="data">
+        <nz-form-label>历史供应商</nz-form-label>
+        <nz-form-control>
+            <strong>{{ data.name }}</strong>
+        </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+        <nz-form-label nzFor="supplier_id" nzRequired>{{ data ? '更新' : ''}}供应商</nz-form-label>
+        <nz-form-control nzErrorTip="请选择项目供应商">
+            <nz-select style="width: 100%;" id="supplier_id" nzShowSearch nzPlaceHolder="请选择项目供应商" formControlName="supplier_id">
+                <ng-container *ngFor="let item of companyArray">
+                    <nz-option [nzLabel]="item.name" [nzValue]="item.id" [nzDisabled]="isDisabled(item.id)"></nz-option>
+                </ng-container>
+            </nz-select>
+        </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item nz-row>
+        <nz-form-control [nzSpan]="18" [nzOffset]="6">
+            <button nz-button nzType="primary" [nzLoading]="submitBasicLoading">{{ data ? '保存' : '新增' }}</button>
+        </nz-form-control>
+    </nz-form-item>
+</form>

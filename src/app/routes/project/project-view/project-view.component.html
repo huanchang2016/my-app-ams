@@ -83,38 +83,59 @@
       </sv>
     </sv-container>
     <ng-container *ngIf="project.info">
-      <nz-table #basicTable nzBordered [nzData]="project.info?.customer" [nzFrontPagination]="false">
-        <thead>
-          <tr>
-            <th>客户单位</th>
-            <th>联系信息</th>
-            <th>银行信息</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let data of basicTable.data">
-            <td>
-              <sv-container col="1">
-                <sv label="单位名称">{{ data.name }}</sv>
+      <div class="hidden-mobile">
+        <nz-table #basicTable nzBordered [nzData]="project.info.customer" [nzFrontPagination]="false">
+          <thead>
+            <tr>
+              <th>客户单位</th>
+              <th>联系信息</th>
+              <th>银行信息</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of basicTable.data">
+              <td>
+                <sv-container col="1">
+                  <sv label="单位名称">{{ data.name }}</sv>
+                  <sv label="统一社会信用代码">{{ data.code }}</sv>
+                </sv-container>
+              </td>
+              <td>
+                <sv-container col="1">
+                  <sv label="电话">{{ data.tel }}</sv>
+                  <sv label="地址">{{ data.address }}</sv>
+                </sv-container>
+              </td>
+              <td>
+                <sv-container col="1">
+                  <sv label="支行名称">{{ data.bank_name }}</sv>
+                  <sv label="银行账号">{{ data.bank_account }}</sv>
+                </sv-container>
+              </td>
+            </tr>
+          </tbody>
+        </nz-table>
+      </div>
+      <div class="hidden-pc">
+        <nz-card nzTitle="客户单位" class="mt-md">
+          <ng-container *ngFor="let data of project.info.customer">
+            <sv-container [title]="data.name" col="1" class="mt-md">
+              <sv label="电话">{{ data.tel }}</sv>
+              <sv label="地址">{{ data.address }}</sv>
+              <sv label="支行名称">{{ data.bank_name }}</sv>
+              <sv label="银行账号">{{ data.bank_account }}</sv>
+              <sv label="统一社会信用代码">{{ data.code }}</sv>
+            </sv-container>
+              <!-- <sv-container col="1">
                 <sv label="统一社会信用代码">{{ data.code }}</sv>
-              </sv-container>
-            </td>
-            <td>
-              <sv-container col="1">
                 <sv label="电话">{{ data.tel }}</sv>
                 <sv label="地址">{{ data.address }}</sv>
-              </sv-container>
-            </td>
-            <td>
-              <sv-container col="1">
                 <sv label="支行名称">{{ data.bank_name }}</sv>
                 <sv label="银行账号">{{ data.bank_account }}</sv>
-              </sv-container>
-            </td>
-          </tr>
-        </tbody>
-      </nz-table>
-
+              </sv-container> -->
+          </ng-container>
+        </nz-card>
+      </div>
     </ng-container>
 
     <sv-container title="项目描述" col="1" class="mt-lg">

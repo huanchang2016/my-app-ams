@@ -1,0 +1,52 @@
+<page-header [title]="'项目调整'" [breadcrumb]="breadcrumb" [action]="action" [extra]="extra">
+    <ng-template #breadcrumb>
+        <nz-breadcrumb>
+            <nz-breadcrumb-item><a [routerLink]="['/dashboard']">首页</a></nz-breadcrumb-item>
+            <nz-breadcrumb-item>项目管理</nz-breadcrumb-item>
+            <nz-breadcrumb-item>项目调整</nz-breadcrumb-item>
+        </nz-breadcrumb>
+    </ng-template>
+
+    <ng-template #action>
+        <button nz-button (click)="save()">保存</button>
+
+        <a nz-popconfirm nz-button [nzType]="'primary'" nzPopconfirmTitle="请确认调整信息准确，无误后确认提交！！！" (nzOnConfirm)="submitProject()" (nzOnCancel)="cancel()">
+            提交项目
+        </a>
+    </ng-template>
+    <ng-template #extra>
+        <!-- <div nz-row>
+        <div nz-col nzSpan="24">
+          <p class="text-grey">状态</p>
+          <p class="text-lg">待审批</p>
+        </div>
+        <div nz-col nzXs="24" nzSm="12">
+            <p class="text-grey">项目金额</p>
+            <p class="text-lg">¥ 568.08</p>
+          </div>
+      </div> -->
+    </ng-template>
+
+</page-header>
+
+<nz-card>
+
+    <!-- <app-adjust-project-info [projectInfo]="project.info" [logInfo]="logJson?.info" (logInfoChange)="logInfoChange($event)"></app-adjust-project-info> -->
+
+    <app-adjust-budget-info></app-adjust-budget-info>
+
+    <!-- <app-adjust-supplier-info [projectInfo]="project.info" [logInfo]="logJson?.supplier"></app-adjust-supplier-info> -->
+
+</nz-card>
+
+<!-- 操作日志， *ngIf="!draft" -->
+<!-- <ng-container *ngIf="project.info && !project.info.draft">
+  
+      <nz-card nzTitle="日志" class="mt-lg ant-card__body-nopadding" [nzLoading]="logLoading">
+        <app-project-logs [logs]="logs"></app-project-logs>
+      </nz-card>
+    </ng-container> -->
+
+<nz-card nzTitle="日志" class="mt-lg">
+    logs works!
+</nz-card>

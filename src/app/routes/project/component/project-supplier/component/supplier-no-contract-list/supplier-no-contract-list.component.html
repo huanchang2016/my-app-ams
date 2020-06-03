@@ -16,7 +16,7 @@
                             nzTheme="outline"></i></a>
                 </ng-template>
                 <ng-template #actionDisabled>
-                    <a *ngIf="!isView" nz-popconfirm nzPopconfirmTitle="确定禁用当前预算？"
+                    <a *ngIf="!isView" nz-popconfirm nzPopconfirmTitle="确定禁用当前非合约？"
                         (nzOnConfirm)="disabled(data.id, false)" (nzOnCancel)="cancel()" class="text-error">
                         禁用
                     </a>
@@ -58,7 +58,7 @@
                         <td *ngIf="!isView">
                             <a (click)="editContract(data, false)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
                             <nz-divider nzType="vertical"></nz-divider>
-                            <a nz-popconfirm nzPopconfirmTitle="确定禁用当前预算？" (nzOnConfirm)="disabled(data.id, false)"
+                            <a nz-popconfirm nzPopconfirmTitle="确定禁用当前非合约？" (nzOnConfirm)="disabled(data.id, false)"
                                 (nzOnCancel)="cancel()" class="text-error">
                                 禁用
                             </a>

@@ -1,0 +1,63 @@
+<!-- 项目供应商 -->
+<nz-card [nzBordered]="false" nzTitle="供应商" [nzExtra]="createSupTemplate" class="hidden-mobile">
+    <nz-table #basicTable [nzFrontPagination]="false" [nzData]="supplier">
+        <thead>
+            <tr>
+                <th>序号</th>
+                <th>供应商名称</th>
+                <th>编号</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <ng-container *ngFor="let data of basicTable.data;let i = index">
+                <tr>
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ data.name }}</td>
+                    <td>{{ data.supplier_code }}</td>
+                    <td>
+                        <a (click)="editSupplier(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
+<!-- 
+                        <nz-divider nzType="vertical"></nz-divider>
+                        <a (click)="showContract(data.id)" class="text-nowrap">合约<i nz-icon
+                                nzType="{{ showContractExpand[data.id] ? 'caret-up' : 'caret-down' }}"
+                                nzTheme="outline"></i></a> -->
+
+                        <!-- <nz-divider nzType="vertical"></nz-divider>
+
+                        <a (click)="showNoContract(data.id)" class="text-nowrap">非合约<i nz-icon
+                                nzType="{{ showNoContractExpand[data.id] ? 'caret-up' : 'caret-down' }}"
+                                nzTheme="outline"></i></a> -->
+                    </td>
+                </tr>
+                <tr style="background-color: #f1f1f1;">
+                    <td colspan="4">
+                        <app-adjust-supplier-contract-list-c [projectInfo]="projectInfo" [supplierInfo]="data">
+              </app-adjust-supplier-contract-list-c>
+                    </td>
+                </tr>
+                <tr style="background-color: #f1f1f1;">
+                    <td colspan="4">
+                        <!-- <app-supplier-no-contract-list [projectInfo]="projectInfo" [supplierInfo]="data">
+              </app-supplier-no-contract-list> -->
+                    </td>
+                </tr>
+            </ng-container>
+        </tbody>
+    </nz-table>
+</nz-card>
+<nz-card [nzBordered]="false" nzTitle="供应商" [nzExtra]="createSupTemplate" class="hidden-pc mobile-card">
+    <ng-container *ngFor="let data of supplier;let i = index">
+        <nz-card nzType="inner" [nzTitle]="mobileSupplierTpl" class="mb-md inner-card">
+            <ng-template #mobileSupplierTpl>
+                <div>{{ data.name }} <span class="ml-sm text-sm">{{ data.supplier_code }}</span></div>
+            </ng-template>
+            <app-supplier-contract-list [projectInfo]="projectInfo" [supplierInfo]="data">
+            </app-supplier-contract-list>
+        </nz-card>
+    </ng-container>
+</nz-card>
+
+<ng-template #createSupTemplate>
+    <button nz-button nzType="primary" (click)="addSupplier()">新增</button>
+</ng-template>

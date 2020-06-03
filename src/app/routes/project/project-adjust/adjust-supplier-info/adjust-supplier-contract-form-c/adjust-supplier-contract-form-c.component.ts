@@ -6,8 +6,8 @@ import { SettingsConfigService } from 'src/app/routes/service/settings-config.se
 import { filter, map } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-has-contract-supplier',
-  templateUrl: './has-contract-supplier.component.html',
+  selector: 'app-adjust-supplier-contract-form-c',
+  templateUrl: './adjust-supplier-contract-form-c.component.html',
   styles: [`
     form  {
       max-width: 600px;
@@ -25,7 +25,7 @@ import { filter, map } from 'rxjs/operators';
     }
   `]
 })
-export class HasContractSupplierComponent implements OnInit {
+export class AdjustSupplierContractFormCComponent implements OnInit {
 
   @Input() data?:any;
   @Input() projectInfo:any;
@@ -224,5 +224,4 @@ export class HasContractSupplierComponent implements OnInit {
     });
     
   }
-
 }

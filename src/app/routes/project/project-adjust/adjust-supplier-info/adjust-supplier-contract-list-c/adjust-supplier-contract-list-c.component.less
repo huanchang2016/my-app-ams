@@ -1,0 +1,13 @@
+@import '~@delon/theme/styles/default';
+:host {
+  ::ng-deep {
+    .ant-table-wrapper:only-child .ant-table {
+      margin: 0!important;
+    }
+    @media screen and (max-width: @screen-sm) {
+      .ant-card-body {
+        padding:16px!important; 
+      }
+    }
+  }
+}

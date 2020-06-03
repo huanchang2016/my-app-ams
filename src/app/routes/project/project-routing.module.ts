@@ -11,6 +11,7 @@ import { MyApprovaledListComponent } from './approval-project/my-approvaled-list
 import { MyForApprovaledListComponent } from './approval-project/my-for-approvaled-list/my-for-approvaled-list.component';
 
 import { ACLGuard, ACLType } from '@delon/acl';
+import { ProjectAdjustComponent } from './project-adjust/project-adjust.component';
 
 const routes: Routes = [
   { path: 'my/draft', component: DraftListComponent, data: { title: '项目草稿'} },
@@ -46,7 +47,8 @@ const routes: Routes = [
   },
   { path: 'create', component: ProjectCreateComponent, data: { title: '创建项目'} },
   { path: 'edit/:id', component: ProjectCreateComponent, data: { title: '编辑项目信息'} },
-  { path: 'view/:id', component: ProjectViewComponent, data: { title: '预览项目信息'} }
+  { path: 'view/:id', component: ProjectViewComponent, data: { title: '预览项目信息'} },
+  // { path: 'adjust/:id', component: ProjectAdjustComponent, data: { title: '调整项目信息'} }
 ];
 
 @NgModule({

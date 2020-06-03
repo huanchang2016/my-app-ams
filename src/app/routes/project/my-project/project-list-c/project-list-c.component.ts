@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { CommonFunctionService } from 'src/app/routes/service/common-function.service';
-import { NzDrawerService } from 'ng-zorro-antd';
+import { NzDrawerService, NzMessageService } from 'ng-zorro-antd';
 import { ApiData } from 'src/app/data/interface.data';
 import { SettingsConfigService } from 'src/app/routes/service/settings-config.service';
 import { Router } from '@angular/router';
@@ -45,7 +45,8 @@ export class ProjectListCComponent implements OnInit {
     private commonFn: CommonFunctionService,
     private settingsConfigService: SettingsConfigService,
     private drawerService: NzDrawerService,
-    private router: Router
+    private router: Router,
+    private msg: NzMessageService
   ) {
     this.settingsConfigService.get('/api/company/user/all').subscribe((res: ApiData) => {
       if (res.code === 200) {
@@ -78,6 +79,11 @@ export class ProjectListCComponent implements OnInit {
 
   view(data: any) {
     this.router.navigateByUrl(`/project/view/${data.id}`);
+  }
+
+  change(data:any) {
+    // this.router.navigateByUrl(`/project/adjust/${data.id}`);
+    this.msg.warning('待开发......')
   }
   // TODO: checkbox
 

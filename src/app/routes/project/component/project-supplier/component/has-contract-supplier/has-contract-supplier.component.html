@@ -25,8 +25,8 @@
     </nz-form-item>
     
     <nz-form-item>
-        <nz-form-label nzFor="name" nzRequired>名称</nz-form-label>
-        <nz-form-control nzErrorTip="请填写名称">
+        <nz-form-label nzFor="name" nzRequired>合同名称</nz-form-label>
+        <nz-form-control nzErrorTip="请填写合同名称">
             <input id="name" formControlName="name" nz-input placeholder="填写合同名称" />
         </nz-form-control>
     </nz-form-item>
@@ -87,7 +87,9 @@
             <span [class.text-error]="attachmentError">合约附件</span>
         </nz-form-label>
         <nz-form-control>
-            <app-upload-file [Attachment]="attachment" [AttachmentCategory]="attachmentCategory" [isAttachmentChange]="isAttachmentChange" (attachmentChange)="attachmentChange($event)"></app-upload-file>
+            <!-- <app-upload-file [Attachment]="attachment" [AttachmentCategory]="attachmentCategory" [isAttachmentChange]="isAttachmentChange" (attachmentChange)="attachmentChange($event)"></app-upload-file> -->
+            <app-upload-file-attachment-tpl [Attachment]="attachment" [AttachmentCategory]="attachmentCategory"
+    [isAttachmentChange]="isAttachmentChange" (attachmentChange)="attachmentChange($event)"></app-upload-file-attachment-tpl>
         </nz-form-control>
     </nz-form-item>
 

@@ -1,5 +1,5 @@
 <ng-container *ngIf="attachment && attachment.length !== 0; else emptyTpl">
-    <ng-container *ngFor="let attachmentCategory of attachment">
+    <!-- <ng-container *ngFor="let attachmentCategory of attachment">
         <sv-container [title]="attachmentCategory.name" col="1" size="small" class="mt-sm">
             <ng-container *ngIf="attachmentCategory.members.length !== 0; else emptyAttachment">
                 <ng-container *ngFor="let attachment of attachmentCategory.members; let i = index">
@@ -15,7 +15,22 @@
                 </div>
             </ng-template>
         </sv-container>
-    </ng-container>
+    </ng-container> -->
+
+                
+    <sv-container *ngIf="attachment && attachment.length !== 0">
+        <ng-container *ngFor="let attachmentCategory of attachment">
+            <sv [label]="attachmentCategory.name" [col]="1" *ngIf="attachmentCategory.members.length !== 0" class="mb-md">
+                <ng-container *ngFor="let attachment of attachmentCategory.members; let i = index">
+                    <div class="clearfix bg-grey-light-h mb-sm pointer px-xs">
+                        <span>{{ i + 1 }}. </span>
+                        <a href="{{ environment.SERVER_URL + attachment.path }}" class="bg-grey-light-h px-md" target="_blank"><i nz-icon
+                            nzType="link" nzTheme="outline" class="pr-xs"></i> {{ attachment.name }}</a>
+                    </div>
+                </ng-container>
+            </sv>
+        </ng-container>
+    </sv-container>
 
 </ng-container>
 <ng-template #emptyTpl>

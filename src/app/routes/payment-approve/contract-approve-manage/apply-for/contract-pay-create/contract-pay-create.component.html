@@ -146,8 +146,10 @@
 </nz-card>
 
 <nz-card nzTitle="合约支付附件" class="mt-md" *ngIf="!contractInfo || contractInfo.draft">
-  <app-upload-file [Attachment]="attachment" [AttachmentCategory]="attachmentCategory"
-    [isAttachmentChange]="isAttachmentChange" (attachmentChange)="attachmentChange($event)"></app-upload-file>
+  <!-- <app-upload-file [Attachment]="attachment" [AttachmentCategory]="attachmentCategory"
+    [isAttachmentChange]="isAttachmentChange" (attachmentChange)="attachmentChange($event)"></app-upload-file> -->
+  <app-upload-file-attachment-tpl [Attachment]="attachment" [AttachmentCategory]="attachmentCategory"
+    [isAttachmentChange]="isAttachmentChange" (attachmentChange)="attachmentChange($event)"></app-upload-file-attachment-tpl>
 </nz-card>
 
 <!-- 流程进展 -->

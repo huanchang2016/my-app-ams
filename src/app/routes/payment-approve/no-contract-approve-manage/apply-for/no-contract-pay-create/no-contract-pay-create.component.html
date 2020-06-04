@@ -118,9 +118,11 @@
             </ng-container>
 
             <ng-container *ngIf="!treatypayInfo || treatypayInfo.draft">
-              <app-upload-file [Attachment]="attachment" [AttachmentCategory]="attachmentCategory"
+              <!-- <app-upload-file [Attachment]="attachment" [AttachmentCategory]="attachmentCategory"
                 [isAttachmentChange]="isAttachmentChange" (attachmentChange)="attachmentChange($event)">
-              </app-upload-file>
+              </app-upload-file> -->
+              <app-upload-file-attachment-tpl [Attachment]="attachment" [AttachmentCategory]="attachmentCategory"
+    [isAttachmentChange]="isAttachmentChange" (attachmentChange)="attachmentChange($event)"></app-upload-file-attachment-tpl>
             </ng-container>
           </nz-form-control>
         </nz-form-item>

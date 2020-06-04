@@ -17,6 +17,9 @@ import { SettingsConfigService } from 'src/app/routes/service/settings-config.se
       flex-grow: 1;
       line-height: 40px;
     }
+    ::ng-deep nz-form-control .category-list {
+      line-height: 40px !important;
+    }
     ::ng-deep .ant-form-item-label {
         padding: 0;
         line-height: 40px;

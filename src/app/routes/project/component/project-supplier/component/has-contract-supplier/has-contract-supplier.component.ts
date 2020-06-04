@@ -18,6 +18,9 @@ import { filter, map } from 'rxjs/operators';
       flex-grow: 1;
       line-height: 40px;
     }
+    ::ng-deep nz-form-control .category-list {
+      line-height: 40px !important;
+    }
     ::ng-deep .ant-form-item-label {
         padding: 0;
         line-height: 40px;
@@ -51,7 +54,7 @@ export class HasContractSupplierComponent implements OnInit {
       contract_time: [null, [Validators.required]],
       is_amount: [null, [Validators.required]],
       amount: [null, [Validators.required, Validators.pattern(/^\d+(\.\d{1,2})?$/)]],
-      pay_company: [this.supplierInfo.name, [Validators.required]],
+      pay_company: [ null, [Validators.required]],
       bank_account: [null, [Validators.required]], // Validators.pattern(/^([1-9]{1})(\d{14}|\d{18})$/)
       bank_name: [null, [Validators.required]]
     });

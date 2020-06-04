@@ -115,7 +115,8 @@
                 <span [class.text-orange]="compareArray(currentAttachmentIds, logInfo.attachment)">项目附件</span>
             </ng-template>
             <sv class="d-flex">
-                <app-upload-file [Attachment]="attachment" [AttachmentCategory]="configs.attachment_category" [isAttachmentChange]="isAttachmentChange" (attachmentChange)="attachmentChange($event)" (attachmentIdsChange)="attachmentIdsChange($event)"></app-upload-file>
+                <!-- <app-upload-file [Attachment]="attachment" [AttachmentCategory]="configs.attachment_category" [isAttachmentChange]="isAttachmentChange" (attachmentChange)="attachmentChange($event)" (attachmentIdsChange)="attachmentIdsChange($event)"></app-upload-file> -->
+                <app-upload-file-attachment-tpl [Attachment]="attachment" [AttachmentCategory]="configs.attachment_category" [isAttachmentChange]="isAttachmentChange" (attachmentChange)="attachmentChange($event)" (attachmentIdsChange)="attachmentIdsChange($event)"></app-upload-file-attachment-tpl>
             </sv>
         </sv-container>
 

@@ -31,6 +31,7 @@ import { UploadFileTplComponent } from './component/upload-file-modal/upload-fil
 import { UploadFileAttachmentShowCComponent } from './component/upload-file-attachment-show-c/upload-file-attachment-show-c.component';
 import { CustomerCompanyShowListCComponent } from './component/customer-company-show-list-c/customer-company-show-list-c.component';
 import { UsersExecuteFlowComponent } from './component/users-execute-flow/users-execute-flow.component';
+import { UploadFileAttachmentTplComponent } from './component/upload-file-attachment-tpl/upload-file-attachment-tpl.component';
 
 const COMPONENTS = [
   CascaderAreaComponent,
@@ -38,6 +39,7 @@ const COMPONENTS = [
   RangeDatepickerComponent,
   UploadFileComponent,
   UploadFileTplComponent,
+  UploadFileAttachmentTplComponent,
   UploadFileAttachmentShowCComponent,
   CustomerCompanyShowListCComponent,
   UsersExecuteFlowComponent

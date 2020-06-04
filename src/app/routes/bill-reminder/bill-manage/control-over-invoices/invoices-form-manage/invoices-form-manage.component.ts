@@ -15,6 +15,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
     }
     :host ::ng-deep nz-form-control {
       flex-grow: 1;
+      line-height: 40px;
     }
   `]
 })

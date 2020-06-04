@@ -61,7 +61,9 @@ import {
   UsergroupAddOutline,
   UnlockOutline,
   FolderOutline,
-  IssuesCloseOutline
+  IssuesCloseOutline,
+  BorderOutline,
+  CheckSquareOutline
 } from '@ant-design/icons-angular/icons';
 
 export const ICONS_AUTO = [
@@ -123,5 +125,7 @@ export const ICONS_AUTO = [
   UsergroupAddOutline,
   UnlockOutline,
   FolderOutline,
-  IssuesCloseOutline
+  IssuesCloseOutline,
+  BorderOutline,
+  CheckSquareOutline
 ];

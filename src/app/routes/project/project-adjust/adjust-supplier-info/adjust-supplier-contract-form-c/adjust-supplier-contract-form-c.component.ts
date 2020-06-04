@@ -15,7 +15,11 @@ import { filter, map } from 'rxjs/operators';
     }
 
     ::ng-deep nz-form-control {
-            flex-grow: 1;
+      flex-grow: 1;
+      line-height: 40px;
+    }
+    ::ng-deep nz-form-control .category-list {
+      line-height: 40px !important;
     }
     ::ng-deep .ant-form-item-label {
         padding: 0;

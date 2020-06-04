@@ -138,7 +138,9 @@
         <nz-form-item class="form-item-box">
             <nz-form-label>发票附件</nz-form-label>
             <nz-form-control>
-                <app-upload-file [Attachment]="attachment" [AttachmentCategory]="attachmentCategory" [isAttachmentChange]="isAttachmentChange" (attachmentChange)="attachmentChange($event)"></app-upload-file>
+                <!-- <app-upload-file [Attachment]="attachment" [AttachmentCategory]="attachmentCategory" [isAttachmentChange]="isAttachmentChange" (attachmentChange)="attachmentChange($event)"></app-upload-file> -->
+                <app-upload-file-attachment-tpl [Attachment]="attachment" [AttachmentCategory]="attachmentCategory"
+    [isAttachmentChange]="isAttachmentChange" (attachmentChange)="attachmentChange($event)"></app-upload-file-attachment-tpl>
             </nz-form-control>
         </nz-form-item>
 

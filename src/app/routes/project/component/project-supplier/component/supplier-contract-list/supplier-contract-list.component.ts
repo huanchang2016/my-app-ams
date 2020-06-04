@@ -61,6 +61,7 @@ export class SupplierContractListComponent implements OnInit {
     });
   }
 
+  isShowList:boolean = false;
   getHasContractDataList() {
     const opt: any = {
       project_id: this.projectInfo.id,
@@ -73,6 +74,11 @@ export class SupplierContractListComponent implements OnInit {
       if (res.code === 200) {
         const conList:any[] = res.data.contract;
         this.contractList = conList.filter( v => v.active );
+        if(this.contractList.length === 0 && this.isView) {
+          this.isShowList = false;
+        }else {
+          this.isShowList = true;
+        }
       }
     })
   }

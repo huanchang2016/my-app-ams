@@ -64,6 +64,8 @@ export class SupplierNoContractListComponent implements OnInit {
     });
   }
 
+  isShowList:boolean = false;
+
   getNoContractDataList() {
     const opt: any = {
       project_id: this.projectInfo.id,
@@ -76,6 +78,11 @@ export class SupplierNoContractListComponent implements OnInit {
       if (res.code === 200) {
         const treatyList:any[] = res.data.treaty;
         this.treatyList = treatyList.filter(v => v.active); // 只显示有效的数据
+        if(this.treatyList.length === 0 && this.isView) {
+          this.isShowList = false;
+        }else {
+          this.isShowList = true;
+        }
       }
     })
   }

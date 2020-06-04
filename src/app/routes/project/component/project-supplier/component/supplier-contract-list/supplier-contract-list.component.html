@@ -1,4 +1,4 @@
-<div class="contract-box hidden-pc">
+<div class="contract-box hidden-pc" *ngIf="isShowList">
     <div class="clearfix">
         <span class="float-left text-primary">签订合约</span>
         <a (click)="addContract()" *ngIf="!isView" class="float-right">新增合约</a>
@@ -32,7 +32,7 @@
     
 </div>
 
-<div class="contract-box hidden-mobile">
+<div class="contract-box hidden-mobile" *ngIf="isShowList">
     <ng-template #contractAddTemplate>
         <button *ngIf="!isView"
             class="mr-lg"
@@ -42,7 +42,7 @@
         >新增合约</button>
     </ng-template>
     <nz-card class="mb-md" nzTitle="签订合约" [nzExtra]="contractAddTemplate">
-        <ng-container *ngIf="contractList.length !== 0;else noDataContract">
+        <ng-container *ngIf="contractList.length !== 0">
             <nz-table #contracTable [nzData]="contractList" nzSize="small" [nzLoading]="loadingContract" [nzFrontPagination]="false">
                 <thead>
                     <tr>
@@ -81,9 +81,6 @@
                 </tbody>
             </nz-table>
         </ng-container>
-        <ng-template #noDataContract>
-            无数据
-        </ng-template>
     </nz-card>
 
 </div>

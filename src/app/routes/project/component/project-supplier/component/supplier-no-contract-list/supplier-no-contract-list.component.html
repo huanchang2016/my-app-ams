@@ -1,4 +1,4 @@
-<div class="contract-box hidden-pc">
+<div class="contract-box hidden-pc" *ngIf="isShowList">
     <div class="clearfix">
         <span class="float-left text-primary">未签订合约</span>
         <a (click)="addContract()" *ngIf="!isView" class="float-right">新增非合约</a>
@@ -30,14 +30,14 @@
 
 </div>
 
-<div class="contract-box hidden-mobile">
+<div class="contract-box hidden-mobile" *ngIf="isShowList">
 
     <ng-template #treatyAddTemplate>
         <button *ngIf="!isView" class="mr-lg" nz-button [nzType]="'primary'" (click)="addContract()">新增非合约</button>
     </ng-template>
     <nz-card nzTitle="未签订合约" [nzExtra]="treatyAddTemplate">
 
-        <ng-container *ngIf="treatyList.length !== 0;else noDataTreaty">
+        <ng-container *ngIf="treatyList.length !== 0">
             <nz-table #treatyTable [nzData]="treatyList" nzSize="small" [nzLoading]="loadingTreaty"
                 [nzFrontPagination]="false">
                 <thead>
@@ -67,8 +67,5 @@
                 </tbody>
             </nz-table>
         </ng-container>
-        <ng-template #noDataTreaty>
-            无数据
-        </ng-template>
     </nz-card>
 </div>

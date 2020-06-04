@@ -15,7 +15,8 @@ import { filter, map } from 'rxjs/operators';
     }
 
     ::ng-deep nz-form-control {
-            flex-grow: 1;
+      flex-grow: 1;
+      line-height: 40px;
     }
     ::ng-deep .ant-form-item-label {
         padding: 0;
@@ -48,8 +49,9 @@ export class HasContractSupplierComponent implements OnInit {
       name: [null, [Validators.required]],
       contract_number: [null, [Validators.required]], // 合约编号
       contract_time: [null, [Validators.required]],
+      is_amount: [null, [Validators.required]],
       amount: [null, [Validators.required, Validators.pattern(/^\d+(\.\d{1,2})?$/)]],
-      pay_company: [null, [Validators.required]],
+      pay_company: [this.supplierInfo.name, [Validators.required]],
       bank_account: [null, [Validators.required]], // Validators.pattern(/^([1-9]{1})(\d{14}|\d{18})$/)
       bank_name: [null, [Validators.required]]
     });
@@ -66,7 +68,8 @@ export class HasContractSupplierComponent implements OnInit {
           start: this.data.start_time,
           end: this.data.end_time
         },
-        amount: this.data.amount,
+        is_amount: this.data.contract_amount ? 'A' : 'B',
+        amount: this.data.contract_amount ? this.data.contract_amount : this.data.request_amount,
         pay_company: this.data.pay_company,
         bank_account: this.data.bank_account,
         bank_name: this.data.bank_name
@@ -76,35 +79,46 @@ export class HasContractSupplierComponent implements OnInit {
     }
   }
 
+  attachmentError:boolean = false;
   submitForm(): void {
     for (const i in this.validateForm.controls) {
       this.validateForm.controls[i].markAsDirty();
       this.validateForm.controls[i].updateValueAndValidity();
     }
-    if(this.validateForm.valid) {
+    if(this.validateForm.valid && this.attachment.length !== 0) {
       let value:any = this.validateForm.value;
 
       this.submitLoading = true;
       console.log(value);
       if(this.data) {
         //  请求编辑 接口
-        const option:any = {
+        let option:any = {
           contract_id: this.data.id,
           service_category_id: value.service_category_id,
           name: value.name,
           contract_number: value.contract_number,
           start_time: value.contract_time.start,
           end_time: value.contract_time.end,
-          amount: +value.amount,
           pay_company: value.pay_company,
           bank_account: value.bank_account,
           bank_name: value.bank_name
         };
+        let amountT = {};
+        if(this.validateForm.value.is_amount === 'A') {
+          amountT = {
+            contract_amount: +value.amount
+          };
+        }else {
+          amountT = {
+            request_amount: +value.amount
+          };
+        }
+        option = Object.assign(option, amountT);
         console.log(option);
         this.editContract(option);
       }else {
         //  请求 新增接口
-        const opt:any = {
+        let opt:any = {
           project_id: this.projectInfo.id,
           supplier_id: this.supplierInfo.id,
           service_category_id: value.service_category_id,
@@ -112,15 +126,28 @@ export class HasContractSupplierComponent implements OnInit {
           contract_number: value.contract_number,
           start_time: value.contract_time.start,
           end_time: value.contract_time.end,
-          amount: +value.amount,
           pay_company: value.pay_company,
           bank_account: value.bank_account,
           bank_name: value.bank_name
         };
+        let amountT = {};
+        if(this.validateForm.value.is_amount === 'A') {
+          amountT = {
+            contract_amount: +value.amount
+          };
+        }else {
+          amountT = {
+            request_amount: +value.amount
+          };
+        }
+        opt = Object.assign(opt, amountT);
         console.log(opt);
         this.addContract(opt);
       }
     } else {
+      if(this.attachment.length === 0) {
+        this.attachmentError = true;
+      }
       this.msg.warning('信息填写不完整');
     }
   }
@@ -134,12 +161,12 @@ export class HasContractSupplierComponent implements OnInit {
         // this.msg.success('创建成功');
         this.bindAttachment(res.data);
       }else {
+        this.submitLoading = false;
         this.msg.error(res.error || '创建失败');
       }
     });
   }
   editContract(opt:any) {
-
     this.settingsConfigService.post('/api/contract/update', opt).subscribe((res:ApiData) => {
       console.log(res);
       this.submitLoading = false;
@@ -147,6 +174,7 @@ export class HasContractSupplierComponent implements OnInit {
         this.msg.success('更新成功');
         this.destroyModal({});
       }else {
+        this.submitLoading = false;
         this.msg.error(res.error || '更新失败');
       }
     });
@@ -165,6 +193,9 @@ export class HasContractSupplierComponent implements OnInit {
     this.isAttachmentChange = !this.isAttachmentChange;
     if(this.data) {
       this.bindAttachment(this.data, true);
+    }
+    if(this.attachment.length !== 0) {
+      this.attachmentError = false;
     }
   }
 

@@ -8,7 +8,7 @@
                 <ng-template #nameLabel>
                     <span [class.text-orange]="logInfo.name">项目名称</span>
                 </ng-template>
-                <input #name nz-input placeholder="项目名称" [(ngModel)]="info.name" (ngModelChange)="valueChange('name', name.value)" />
+                <input #name nz-input placeholder="项目名称" [(ngModel)]="info.name"  />
             </sv>
             <sv label="项目编号">{{ info?.number }}</sv>
             <sv [label]="categoryLabel">
@@ -17,7 +17,7 @@
                 </ng-template>
                 <nz-select #category style="width: 100%;" id="category_id" nzShowSearch
                         nzPlaceHolder="请选择项目类型" [(ngModel)]="info.category.id"
-                        (ngModelChange)="valueChange('category_id', category.value)">
+                        >
                         <ng-container *ngFor="let item of configs.category">
                             <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
                         </ng-container>
@@ -32,7 +32,7 @@
                 </ng-template>
                 <nz-select #origin style="width: 100%;" id="category_id" nzShowSearch
                         nzPlaceHolder="请选择客户来源" [(ngModel)]="info.origin.id"
-                        (ngModelChange)="valueChange('origin_id', origin.value)">
+                        >
                         <ng-container *ngFor="let item of configs.origin">
                             <nz-option [nzLabel]="item.code.code_name + item.name" [nzValue]="item.id"></nz-option>
                         </ng-container>
@@ -44,12 +44,12 @@
                 </ng-template>
                 <app-date-range-picker-c [keys]="['plan_execution_start_time', 'plan_execution_end_time']" [rangeDate]="{start: info.plan_execution_start_time, end: info.plan_execution_end_time}" (rangeDateChange)="rangeDateChange($event)"></app-date-range-picker-c>
             </sv>
-            <sv [label]="actualExecutionLabel">
+            <!-- <sv [label]="actualExecutionLabel">
                 <ng-template #actualExecutionLabel>
                     <span [class.text-orange]="logInfo.actual_execution_start_time || logInfo.actual_execution_end_time">实际执行时间</span>
                 </ng-template>
                 <app-date-range-picker-c [keys]="['actual_execution_start_time', 'actual_execution_end_time']" [rangeDate]="{start: info.actual_execution_start_time, end: info.actual_execution_end_time}" (rangeDateChange)="rangeDateChange($event)"></app-date-range-picker-c>
-            </sv>
+            </sv> -->
         </sv-container>
         <ng-container *ngIf="info">
             <div class="hidden-mobile">

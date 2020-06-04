@@ -44,7 +44,7 @@
           <th>序号</th>
           <th>成本类型</th>
           <th>本期支付（元）</th>
-          <th nzWidth="250px">支付统计</th>
+          <th nzWidth="250px">预算统计</th>
           <th>描述</th>
         </tr>
       </thead>
@@ -55,7 +55,7 @@
           <td class="text-success">{{ data.amount | _currency }}</td>
           <td>
             <sv-container size="small" col="1">
-              <sv label="总计支付"><span class="text-error">{{ data.cost.amount | _currency }}</span></sv>
+              <sv label="预算支付"><span class="text-error">{{ data.cost.amount | _currency }}</span></sv>
               <sv label="累计支付"><span class="text-success">{{ data.cost.pay_amount | _currency }}</span></sv>
               <sv label="剩余支付"><span class="text-primary">{{ (data.cost.amount - data.cost.pay_amount) | _currency }}</span></sv>
             </sv-container>

@@ -73,7 +73,7 @@ export class ProjectInfoComponent implements OnChanges, OnInit {
       category_id: [null],
       origin_id: [null],
       plan_time: [null],
-      actual_time: [null],
+      // actual_time: [null],
       description: [null]
     });
     if (this.data) {
@@ -141,10 +141,10 @@ export class ProjectInfoComponent implements OnChanges, OnInit {
           start: opt.plan_execution_start_time,
           end: opt.plan_execution_end_time
         },
-        actual_time: {
-          start: opt.actual_execution_start_time,
-          end: opt.actual_execution_end_time
-        },
+        // actual_time: {
+        //   start: opt.actual_execution_start_time,
+        //   end: opt.actual_execution_end_time
+        // },
         description: opt.description
       });
     }

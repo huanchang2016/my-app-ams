@@ -48,7 +48,7 @@ const routes: Routes = [
   { path: 'create', component: ProjectCreateComponent, data: { title: '创建项目'} },
   { path: 'edit/:id', component: ProjectCreateComponent, data: { title: '编辑项目信息'} },
   { path: 'view/:id', component: ProjectViewComponent, data: { title: '预览项目信息'} },
-  // { path: 'adjust/:id', component: ProjectAdjustComponent, data: { title: '调整项目信息'} }
+  { path: 'adjust/:id', component: ProjectAdjustComponent, data: { title: '调整项目信息'} }
 ];
 
 @NgModule({

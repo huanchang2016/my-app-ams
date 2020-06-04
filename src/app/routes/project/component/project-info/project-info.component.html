@@ -11,8 +11,8 @@
         </div>
         <div nz-col [nzSpan]="24">
             <nz-form-item>
-                <nz-form-label nzFor="customer_ids" nzRequired>业主单位</nz-form-label>
-                <nz-form-control nzErrorTip="请选择业主单位">
+                <nz-form-label nzFor="customer_ids" nzRequired>客户单位</nz-form-label>
+                <nz-form-control nzErrorTip="请选择客户单位">
                     <nz-select style="width: 100%;"
                         nzMode="multiple"
                         nzPlaceHolder="请选择用户"
@@ -27,9 +27,14 @@
 
         <div nz-col [nzMd]="12" [nzSm]="24">
             <nz-form-item>
-                <nz-form-label nzFor="plan_time">计划时间</nz-form-label>
+                <nz-form-label nzFor="origin_id">项目来源</nz-form-label>
                 <nz-form-control>
-                    <app-range-datepicker id="plan_time" formControlName="plan_time"></app-range-datepicker>
+                    <nz-select style="width: 100%;" id="origin_id" nzShowSearch
+                        nzPlaceHolder="请选择项目来源" formControlName="origin_id">
+                        <ng-container *ngFor="let item of projectOriginArray">
+                            <nz-option [nzLabel]="item.code.code_name + item.name" [nzValue]="item.id"></nz-option>
+                        </ng-container>
+                    </nz-select>
                 </nz-form-control>
             </nz-form-item>
         </div>
@@ -47,27 +52,23 @@
             </nz-form-item>
         </div>
         
-        <div nz-col [nzMd]="12" [nzSm]="24">
+        <!-- <div nz-col [nzMd]="12" [nzSm]="24">
             <nz-form-item>
                 <nz-form-label nzFor="actual_time">实际时间</nz-form-label>
                 <nz-form-control>
                     <app-range-datepicker id="actual_time" formControlName="actual_time"></app-range-datepicker>
                 </nz-form-control>
             </nz-form-item>
-        </div>
+        </div> -->
 
         <div nz-col [nzMd]="12" [nzSm]="24">
             <nz-form-item>
-                <nz-form-label nzFor="origin_id">项目来源</nz-form-label>
+                <nz-form-label nzFor="plan_time">计划时间</nz-form-label>
                 <nz-form-control>
-                    <nz-select style="width: 100%;" id="origin_id" nzShowSearch
-                        nzPlaceHolder="请选择项目来源" formControlName="origin_id">
-                        <ng-container *ngFor="let item of projectOriginArray">
-                            <nz-option [nzLabel]="item.code.code_name + item.name" [nzValue]="item.id"></nz-option>
-                        </ng-container>
-                    </nz-select>
+                    <app-range-datepicker id="plan_time" formControlName="plan_time"></app-range-datepicker>
                 </nz-form-control>
             </nz-form-item>
+            
         </div>
         
         <div nz-col [nzSpan]="24">

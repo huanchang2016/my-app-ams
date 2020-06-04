@@ -29,16 +29,16 @@ import { ProjectListCComponent } from './my-project/project-list-c/project-list-
 import { ApprovalProjectListCComponent } from './approval-project/approval-project-list-c/approval-project-list-c.component';
 import { ProjectInfoShowCComponent } from './component/project-info-show-c/project-info-show-c.component';
 import { ProjectLogsComponent } from './component/project-logs/project-logs.component';
-// import { ProjectAdjustComponent } from './project-adjust/project-adjust.component';
-// import { AdjustProjectInfoComponent } from './project-adjust/adjust-project-info/adjust-project-info.component';
-// import { AdjustBudgetInfoComponent } from './project-adjust/adjust-budget-info/adjust-budget-info.component';
-// import { AdjustSupplierInfoComponent } from './project-adjust/adjust-supplier-info/adjust-supplier-info.component';
-// import { DateRangePickerCComponent } from './project-adjust/component/date-range-picker-c/date-range-picker-c.component';
-// import { AdjustSupplierFormCComponent } from './project-adjust/adjust-supplier-info/adjust-supplier-form-c/adjust-supplier-form-c.component';
-// import { AdjustSupplierContractListCComponent } from './project-adjust/adjust-supplier-info/adjust-supplier-contract-list-c/adjust-supplier-contract-list-c.component';
-// import { AdjustSupplierTreatyListCComponent } from './project-adjust/adjust-supplier-info/adjust-supplier-treaty-list-c/adjust-supplier-treaty-list-c.component';
-// import { AdjustSupplierContractFormCComponent } from './project-adjust/adjust-supplier-info/adjust-supplier-contract-form-c/adjust-supplier-contract-form-c.component';
-// import { AdjustSupplierTreatyFormCComponent } from './project-adjust/adjust-supplier-info/adjust-supplier-treaty-form-c/adjust-supplier-treaty-form-c.component';
+import { ProjectAdjustComponent } from './project-adjust/project-adjust.component';
+import { AdjustProjectInfoComponent } from './project-adjust/adjust-project-info/adjust-project-info.component';
+import { AdjustBudgetInfoComponent } from './project-adjust/adjust-budget-info/adjust-budget-info.component';
+import { AdjustSupplierInfoComponent } from './project-adjust/adjust-supplier-info/adjust-supplier-info.component';
+import { DateRangePickerCComponent } from './project-adjust/component/date-range-picker-c/date-range-picker-c.component';
+import { AdjustSupplierFormCComponent } from './project-adjust/adjust-supplier-info/adjust-supplier-form-c/adjust-supplier-form-c.component';
+import { AdjustSupplierContractListCComponent } from './project-adjust/adjust-supplier-info/adjust-supplier-contract-list-c/adjust-supplier-contract-list-c.component';
+import { AdjustSupplierTreatyListCComponent } from './project-adjust/adjust-supplier-info/adjust-supplier-treaty-list-c/adjust-supplier-treaty-list-c.component';
+import { AdjustSupplierContractFormCComponent } from './project-adjust/adjust-supplier-info/adjust-supplier-contract-form-c/adjust-supplier-contract-form-c.component';
+import { AdjustSupplierTreatyFormCComponent } from './project-adjust/adjust-supplier-info/adjust-supplier-treaty-form-c/adjust-supplier-treaty-form-c.component';
 
 const COMPONENTS = [
   DraftListComponent,
@@ -50,7 +50,7 @@ const COMPONENTS = [
   RefuseProjectListComponent,
   MyApprovaledListComponent,
   MyForApprovaledListComponent,
-  // ProjectAdjustComponent
+  ProjectAdjustComponent
 ];
 const COMPONENTS_NOROUNT = [
   ProductSearchOptionComponent,
@@ -71,15 +71,15 @@ const COMPONENTS_NOROUNT = [
   ProjectInfoShowCComponent,
   SupplierNoContractListComponent,
   ProjectLogsComponent,
-  // AdjustProjectInfoComponent,
-  // AdjustBudgetInfoComponent,
-  // AdjustSupplierInfoComponent,
-  // DateRangePickerCComponent,
-  // AdjustSupplierFormCComponent,
-  // AdjustSupplierContractListCComponent,
-  // AdjustSupplierTreatyListCComponent,
-  // AdjustSupplierContractFormCComponent,
-  // AdjustSupplierTreatyFormCComponent
+  AdjustProjectInfoComponent,
+  AdjustBudgetInfoComponent,
+  AdjustSupplierInfoComponent,
+  DateRangePickerCComponent,
+  AdjustSupplierFormCComponent,
+  AdjustSupplierContractListCComponent,
+  AdjustSupplierTreatyListCComponent,
+  AdjustSupplierContractFormCComponent,
+  AdjustSupplierTreatyFormCComponent
 ];
 
 @NgModule({

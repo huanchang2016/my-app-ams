@@ -14,7 +14,8 @@ import { SettingsConfigService } from 'src/app/routes/service/settings-config.se
     }
 
     ::ng-deep nz-form-control {
-            flex-grow: 1;
+      flex-grow: 1;
+      line-height: 40px;
     }
     ::ng-deep .ant-form-item-label {
         padding: 0;
@@ -29,6 +30,7 @@ export class NoContractSupplierComponent implements OnInit {
   @Input() data?:any;
   @Input() projectInfo:any;
   @Input() supplierInfo:any;
+  @Input() serviceCategoryArray:any[];
 
   validateForm: FormGroup; // 基本资料
   submitLoading:boolean = false;
@@ -44,14 +46,14 @@ export class NoContractSupplierComponent implements OnInit {
 
   ngOnInit() {
     this.validateForm = this.fb.group({
-      name: [null, [Validators.required]],
-      amount: [null, [Validators.required, Validators.max(20000), Validators.pattern(/^\d+(\.\d{1,2})?$/)]]
+      service_category_id: [null, [Validators.required]],
+      amount: [null, [Validators.required, Validators.pattern(/^\d+(\.\d{1,2})?$/)]]
     });
 
     if(this.data) {
       console.log(this.data);
       this.validateForm.patchValue({
-        name: this.data.name,
+        service_category_id: this.data.service_category.id,
         amount: this.data.amount
       })
     }
@@ -70,7 +72,7 @@ export class NoContractSupplierComponent implements OnInit {
         //  请求编辑 接口
         const option:any = {
           treaty_id: this.data.id,
-          name: value.name,
+          service_category_id: value.service_category_id,
           amount: +value.amount
         };
         this.editNoContract(option);
@@ -79,7 +81,7 @@ export class NoContractSupplierComponent implements OnInit {
         const opt:any = {
           project_id: this.projectInfo.id,
           supplier_id: this.supplierInfo.id,
-          name: value.name,
+          service_category_id: value.service_category_id,
           amount: +value.amount
         };
         this.addNoContract(opt);
@@ -119,5 +121,7 @@ export class NoContractSupplierComponent implements OnInit {
   destroyModal(data:any = null): void {
     this.modal.destroy(data);
   }
+
+  cancel() {}
 
 }

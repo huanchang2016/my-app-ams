@@ -43,12 +43,21 @@
             <app-range-datepicker id="contract_time" formControlName="contract_time"></app-range-datepicker>
         </nz-form-control>
     </nz-form-item>
+    <nz-form-item>
+        <nz-form-label nzFor="is_amount" nzRequired>金额类型</nz-form-label>
+        <nz-form-control nzErrorTip="请选择金额类型">
+            <nz-radio-group id="is_amount" formControlName="is_amount">
+                <label nz-radio nzValue="A">合同金额</label>
+                <label nz-radio nzValue="B">请示金额</label>
+              </nz-radio-group>
+        </nz-form-control>
+    </nz-form-item>
 
     <nz-form-item>
-        <nz-form-label nzFor="amount" nzRequired>合同金额</nz-form-label>
+        <nz-form-label nzFor="amount" nzRequired>{{ validateForm.value.is_amount === 'A' ? '合同金额' : '请示金额'}}</nz-form-label>
         <nz-form-control nzErrorTip="请填写合同金额">
             <nz-input-group nzSuffix="元">
-                <input type="text" id="amount" formControlName="amount" nz-input placeholder="请填写合同金额" />
+                <input type="text" id="amount" formControlName="amount" nz-input placeholder="请填写{{ validateForm.value.is_amount === 'A' ? '合同金额' : '请示金额'}}" />
             </nz-input-group>
         </nz-form-control>
     </nz-form-item>
@@ -74,7 +83,9 @@
         </nz-form-control>
     </nz-form-item>
     <nz-form-item>
-        <nz-form-label>合约附件</nz-form-label>
+        <nz-form-label nzRequired>
+            <span [class.text-error]="attachmentError">合约附件</span>
+        </nz-form-label>
         <nz-form-control>
             <app-upload-file [Attachment]="attachment" [AttachmentCategory]="attachmentCategory" [isAttachmentChange]="isAttachmentChange" (attachmentChange)="attachmentChange($event)"></app-upload-file>
         </nz-form-control>

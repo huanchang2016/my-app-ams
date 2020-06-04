@@ -50,7 +50,7 @@
 </page-header>
 
 <div class="print-box" [class.p-lg]="isPrinter" id="print-box" #printBox>
-  <!-- 项目信息 -->
+
   <nz-card [nzTitle]="proTitle" [nzBordered]="false" class="mb-md">
     <ng-template #proTitle>
       <ng-container *ngIf="isPrinter;else noPrinter">
@@ -64,11 +64,21 @@
 
       </ng-container>
       <ng-template #noPrinter>
-        <span class="font-weight-bold text-md">项目资料</span>
+        <span class="font-weight-bold text-md">项目描述</span>
       </ng-template>
     </ng-template>
+    
+    <div [innerHTML]="project.info?.description | showTextareaContent"></div>
+  </nz-card>
+  <!-- 项目信息 -->
+  <nz-card nzTitle="项目信息" [nzBordered]="false" class="mb-md">
     <!-- 基础信息 -->
-    <sv-container title="基础信息" class="mb-lg">
+    <sv-container class="mb-lg">
+      <sv label="客户单位" [col]="1">
+        <ng-container *ngFor="let data of project.info?.customer;let i = index">
+          <div>{{ i + 1}}. {{ data.name }}</div>
+        </ng-container>
+      </sv>
       <sv label="项目名称"><strong>{{ project.info?.name }}</strong></sv>
       <sv label="项目编号"><strong>{{ project.info?.number }}</strong></sv>
       <sv label="项目类型">{{ project.info?.category?.name }}</sv>
@@ -79,10 +89,10 @@
       <sv label="客户来源">{{ project.info?.origin?.code.code_name + project.info?.origin.name }}</sv>
       <sv label="预计执行时间">{{ project.info?.plan_execution_start_time }} - {{ project.info?.plan_execution_end_time }}
       </sv>
-      <sv label="实际执行时间">{{ project.info?.actual_execution_start_time }} - {{ project.info?.actual_execution_end_time }}
-      </sv>
+      <!-- <sv label="实际执行时间">{{ project.info?.actual_execution_start_time }} - {{ project.info?.actual_execution_end_time }}
+      </sv> -->
     </sv-container>
-    <ng-container *ngIf="project.info">
+    <!-- <ng-container *ngIf="project.info">
       <div class="hidden-mobile">
         <nz-table #basicTable nzBordered [nzData]="project.info.customer" [nzFrontPagination]="false">
           <thead>
@@ -126,23 +136,18 @@
               <sv label="银行账号">{{ data.bank_account }}</sv>
               <sv label="统一社会信用代码">{{ data.code }}</sv>
             </sv-container>
-              <!-- <sv-container col="1">
+              <sv-container col="1">
                 <sv label="统一社会信用代码">{{ data.code }}</sv>
                 <sv label="电话">{{ data.tel }}</sv>
                 <sv label="地址">{{ data.address }}</sv>
                 <sv label="支行名称">{{ data.bank_name }}</sv>
                 <sv label="银行账号">{{ data.bank_account }}</sv>
-              </sv-container> -->
+              </sv-container>
           </ng-container>
         </nz-card>
       </div>
-    </ng-container>
+    </ng-container> -->
 
-    <sv-container title="项目描述" col="1" class="mt-lg">
-      <sv>
-        <span [innerHTML]="project.info?.description | showTextareaContent"></span>
-      </sv>
-    </sv-container>
 
     <ng-container *ngIf="project.info">
       <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/project/' + project.info.id">

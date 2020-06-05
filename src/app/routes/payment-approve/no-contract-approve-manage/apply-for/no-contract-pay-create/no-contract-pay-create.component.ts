@@ -35,6 +35,7 @@ export class NoContractPayCreateComponent implements OnInit {
 
   costArr:any[] = []; // 所有的成本列表  需要通过预算（通过项目） 获取
 
+  pageTitle: string = '';
   constructor(
     public msg: NzMessageService,
     private modalService: NzModalService,
@@ -56,7 +57,10 @@ export class NoContractPayCreateComponent implements OnInit {
     this.activatedRoute.queryParams.subscribe(params=> {
       if(params && params['treaty_pay_id']) {
         this.treaty_pay_id = +(params['treaty_pay_id']);
+        this.pageTitle = '编辑非合约支付';
         this.getAttachment();
+      }else {
+        this.pageTitle = '新增非合约支付';
       }
     })
     

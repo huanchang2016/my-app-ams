@@ -32,6 +32,7 @@ import { UploadFileAttachmentShowCComponent } from './component/upload-file-atta
 import { CustomerCompanyShowListCComponent } from './component/customer-company-show-list-c/customer-company-show-list-c.component';
 import { UsersExecuteFlowComponent } from './component/users-execute-flow/users-execute-flow.component';
 import { UploadFileAttachmentTplComponent } from './component/upload-file-attachment-tpl/upload-file-attachment-tpl.component';
+import { ProjectInfoShowTplComponent } from './component/project-info-show-tpl/project-info-show-tpl.component';
 
 const COMPONENTS = [
   CascaderAreaComponent,
@@ -42,7 +43,8 @@ const COMPONENTS = [
   UploadFileAttachmentTplComponent,
   UploadFileAttachmentShowCComponent,
   CustomerCompanyShowListCComponent,
-  UsersExecuteFlowComponent
+  UsersExecuteFlowComponent,
+  ProjectInfoShowTplComponent
 ];
 
 const DIRECTIVES = [

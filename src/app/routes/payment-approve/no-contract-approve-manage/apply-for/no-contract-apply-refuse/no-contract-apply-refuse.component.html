@@ -1,3 +1,13 @@
-<page-header></page-header>
+<page-header [breadcrumb]="breadcrumb">
+
+    <ng-template #breadcrumb>
+        <nz-breadcrumb>
+            <nz-breadcrumb-item><a [routerLink]="['/dashboard']">首页</a></nz-breadcrumb-item>
+            <nz-breadcrumb-item>非合约支付管理</nz-breadcrumb-item>
+            <nz-breadcrumb-item>非合约支付申请</nz-breadcrumb-item>
+            <nz-breadcrumb-item>未通过</nz-breadcrumb-item>
+        </nz-breadcrumb>
+    </ng-template>
+</page-header>
 
 <app-no-contract-apply-list-c [postUrl]="'/api/treaty/pay/refuse/my'"></app-no-contract-apply-list-c>

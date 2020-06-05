@@ -18,6 +18,8 @@ export class ProjectContractListComponent implements OnInit {
 
   contractList:any[] = [];
 
+  pageTitle:string = '';
+
   constructor(
     public msg: NzMessageService,
     private settingsConfigService: SettingsConfigService,

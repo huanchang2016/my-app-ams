@@ -1,0 +1,42 @@
+<!-- <sv-container size="small" col="2">
+    <sv label="项目名称">{{ projectInfo?.name }}</sv>
+    <sv label="客户">
+      
+    </sv>
+    <sv label="负责部门">{{ projectInfo?.department?.name }}</sv>
+    <sv label="创建时间">{{ projectInfo?.create_time | date: 'yyyy/MM/dd HH:mm:ss' }}</sv>
+    <sv label="项目创建人">{{ projectInfo?.user.name }}</sv>
+  </sv-container> -->
+<sv-container class="mb-lg" [title]="proDesTpl">
+    <ng-template #proDesTpl>
+        <span class="font-weight-bold text-md">一、项目描述</span>
+    </ng-template>
+    <sv col="1">
+        <div [innerHTML]="projectInfo?.description | showTextareaContent"></div>
+    </sv>
+</sv-container>
+
+<sv-container class="mb-lg" [title]="proInfoTpl">
+    <ng-template #proInfoTpl>
+        <span class="font-weight-bold text-md">二、项目信息</span>
+    </ng-template>
+    <sv label="客户单位" [col]="1">
+        <ng-container *ngFor="let data of projectInfo?.customer;let i = index">
+            <div>{{ i + 1}}. {{ data.name }}</div>
+        </ng-container>
+    </sv>
+    <sv label="项目名称">{{ projectInfo?.name }}</sv>
+    <sv label="项目编号">{{ projectInfo?.number }}</sv>
+    <sv label="项目类型">{{ projectInfo?.category?.name }}</sv>
+
+    <sv label="负 责 人 ">{{ projectInfo?.user.name }}</sv>
+    <sv label="负责部门">{{ projectInfo?.department?.name }}</sv>
+
+    <sv label="客户来源">{{ projectInfo?.origin?.code.code_name + projectInfo?.origin.name }}</sv>
+    <sv label="预计执行时间">{{ projectInfo?.plan_execution_start_time }} - {{ projectInfo?.plan_execution_end_time }}</sv>
+
+</sv-container>
+<ng-container *ngIf="projectInfo">
+    <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/project/' + projectInfo.id">
+    </app-upload-file-attachment-show-c>
+</ng-container>

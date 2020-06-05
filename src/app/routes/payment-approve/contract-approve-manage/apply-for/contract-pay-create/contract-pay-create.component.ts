@@ -36,6 +36,8 @@ export class ContractPayCreateComponent implements OnInit {
 
   costArr: any[] = []; // 所有的成本列表  需要通过预算（通过项目） 获取
 
+  pageTitle:string = '';
+
   constructor(
     public msg: NzMessageService,
     private modalService: NzModalService,
@@ -53,8 +55,6 @@ export class ContractPayCreateComponent implements OnInit {
         this.getBudgetInfo();
       }
     });
-
-
   }
   submitLoading: boolean = false;
 
@@ -109,9 +109,12 @@ export class ContractPayCreateComponent implements OnInit {
         this.activatedRoute.queryParams.subscribe(params => {
           if (params && params['contract_pay_id']) {
             this.contract_pay_id = +(params['contract_pay_id']);
+            this.pageTitle = '编辑合约支付申请';
             this.getContractPayDetail();
             this.getContractPayment();
             this.getAttachment();
+          }else {
+            this.pageTitle = '新增合约支付申请';
           }
         })
       }

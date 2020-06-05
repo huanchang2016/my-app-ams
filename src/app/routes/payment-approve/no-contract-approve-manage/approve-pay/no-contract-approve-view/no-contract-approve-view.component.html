@@ -1,4 +1,4 @@
-<page-header [title]="'项目非合约支付管理'" [breadcrumb]="breadcrumb" [action]="actionBtn">
+<page-header [title]="'项目非合约支付管理'" [breadcrumb]="breadcrumb" [action]="action">
 
   <ng-template #breadcrumb>
     <nz-breadcrumb>
@@ -8,116 +8,121 @@
     </nz-breadcrumb>
   </ng-template>
 
-  <ng-template #actionBtn>
-
+  <ng-template #action>
+    <button nz-button (click)="printCurrentModal('print-box',  projectInfo?.name)">打印</button>
+    <button nz-button nz-dropdown [nzDropdownMenu]="opMenu" class="mx-sm">
+      下载 <i nz-icon nzType="download" nzTheme="outline"></i>
+    </button>
+    <nz-dropdown-menu #opMenu="nzDropdownMenu">
+      <ul nz-menu>
+        <li nz-menu-item (click)="downloadFile('pdf')"><i nz-icon nzType="file-pdf" nzTheme="outline"></i> .pdf</li>
+        <li nz-menu-item (click)="downloadFile('image')"><i nz-icon nzType="file-excel" nzTheme="outline"></i> .image
+        </li>
+      </ul>
+    </nz-dropdown-menu>
   </ng-template>
 
-
-  <!-- <sv-container size="small" col="2">
-    <sv label="项目名称"><strong>{{ projectInfo?.name }}</strong></sv>
-    <sv label="客户">
-      <app-customer-company-show-list-c [customer]="projectInfo?.customer"></app-customer-company-show-list-c>
-    </sv>
-    <sv label="负责部门">{{ projectInfo?.department?.name }}</sv>
-    <sv label="创建时间">{{ projectInfo?.create_time | date: 'yyyy/MM/dd HH:mm:ss' }}</sv>
-    <sv label="项目创建人">{{ projectInfo?.user.name }}</sv>
-  </sv-container> -->
   <app-project-info-show-tpl [projectInfo]="projectInfo"></app-project-info-show-tpl>
 
 </page-header>
 
-
-<nz-card nzTitle="非合约支付资料">
-  <sv-container col="2" *ngIf="treatypayInfo">
-    <sv label="非合约名称"><span class="font-weight-bold">{{ treatypayInfo.treaty.name }}</span></sv>
-    <sv label="收款单位">{{ treatypayInfo.pay_company }}</sv>
-    <sv label="银行账号"><span class="font-weight-bold">{{ treatypayInfo.bank_account }}</span></sv>
-    <sv label="银行名称">{{ treatypayInfo.bank_name }}</sv>
-    <sv label="抵扣金额">
-      <span class="text-error font-weight-bold"
-        *ngIf="treatypayInfo.if_write_off;else notWriteOff">{{ treatypayInfo.write_off_amount | currency: 'CNY' }}</span>
-      <ng-template #notWriteOff>
-        <span class="text-primary">无抵扣金额</span>
-      </ng-template>
-    </sv>
-  </sv-container>
-
-</nz-card>
-
-<nz-card nzTitle="非合约成本支付" class="mt-md hidden-mobile">
-  <nz-table #costSelectTable [nzData]="listOfData" [nzFrontPagination]="false">
-    <thead>
-      <tr>
-        <th>序号</th>
-        <th>摘要</th>
-        <th>费用类型</th>
-        <th>本期支付（元）</th>
-        <th nzWidth="250px">支付统计</th>
-        <th nzWidth="250px">收款信息</th>
-        <th>描述</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let data of costSelectTable.data; let i = index">
-        <td>{{ i + 1}}</td>
-        <td>{{ data.abstract }}</td>
-        <td class="text-nowrap">
-          <span>{{ data.cost.cost_category.name }}</span>
-          <span nz-tooltip [nzTooltipTitle]="data.cost.cost_category.description" class="text-md ml-sm">
-            <i nz-icon nzType="exclamation-circle" nzTheme="outline"></i></span>
-        </td>
-        <td class="text-error">{{ data.amount | currency: 'CNY' }}</td>
-        <td>
-          <sv-container size="small" col="1">
-            <sv label="总计支付"><span class="text-error">{{ data.cost.amount | _currency }}</span></sv>
-            <sv label="累计支付"><span class="text-success">{{ data.cost.pay_amount | _currency }}</span></sv>
-            <sv label="剩余支付"><span class="text-primary">{{ (data.cost.amount - data.cost.pay_amount) | _currency }}</span></sv>
-          </sv-container>
-        </td>
-        <td>
-          <div>
-            <span>商务卡：</span><strong>{{ data.is_business_card ? '是' : '否' }}</strong>
-          </div>
-          <div>
-            <strong>收款人：</strong><span>{{ data.account_name }}</span>
-          </div>
-          <div>
-            <strong>卡&nbsp;&nbsp; 号：</strong><span>{{ data.card_number }}</span>
-          </div>
-        </td>
-        <td>
-          <span [innerHTML]="data.remark | showTextareaContent"></span>
-        </td>
-      </tr>
-    </tbody>
-  </nz-table>
-</nz-card>
-
-
-<nz-card nzTitle="非合约成本支付" class="mt-md hidden-pc" *ngIf="listOfData.length !== 0">
-  <ng-container *ngFor="let data of listOfData">
-    <sv-container size="small" [title]="svConTpl" class="py-sm">
-      <ng-template #svConTpl>
-        <span class="font-weight-bold">{{ data.cost.cost_category.name }}</span>
-      </ng-template>
-      <sv label="摘&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;要">{{ data.abstract }}</sv>
-      <sv label="费用类型">{{ data.cost.cost_category.name }}</sv>
-      <sv label="总计支付"><span class="text-error">{{ data.cost.amount | currency: 'CNY' }}</span></sv>
-      <sv label="累计支付"><span class="text-success">{{ data.cost.pay_amount | currency: 'CNY' }}</span></sv>
-      <sv label="剩余支付"><span class="text-primary">{{ (data.cost.amount - data.cost.pay_amount) | currency: 'CNY' }}</span></sv>
-      <sv label="本期支付"><span class="text-primary">{{ data.amount | currency: 'CNY' }}</span></sv>
-      <sv label="商&nbsp;务&nbsp;卡&nbsp;"><strong>{{ data.is_business_card ? '是' : '否' }}</strong></sv>
-      <sv label="收款人">{{ data.account_name }}</sv>
-      <sv label="卡&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号">{{ data.card_number }}</sv>
-      <sv label="描述"><span [innerHTML]="data.remark | showTextareaContent"></span></sv>
+<div id="print-box">
+  <nz-card nzTitle="非合约支付资料">
+    <sv-container col="2" *ngIf="treatypayInfo">
+      <sv label="非合约名称"><span class="font-weight-bold">{{ treatypayInfo.treaty.name }}</span></sv>
+      <sv label="收款单位">{{ treatypayInfo.pay_company }}</sv>
+      <sv label="银行账号"><span class="font-weight-bold">{{ treatypayInfo.bank_account }}</span></sv>
+      <sv label="银行名称">{{ treatypayInfo.bank_name }}</sv>
+      <sv label="抵扣金额">
+        <span class="text-error font-weight-bold"
+          *ngIf="treatypayInfo.if_write_off;else notWriteOff">{{ treatypayInfo.write_off_amount | currency: 'CNY' }}</span>
+        <ng-template #notWriteOff>
+          <span class="text-primary">无抵扣金额</span>
+        </ng-template>
+      </sv>
     </sv-container>
-  </ng-container>
-</nz-card>
 
-<nz-card nzTitle="附件" *ngIf="treaty_pay_id" class="mt-md">
-  <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/contract_pay/' + treaty_pay_id"></app-upload-file-attachment-show-c>
-</nz-card>
+  </nz-card>
 
+  <nz-card nzTitle="非合约成本支付" class="mt-md hidden-mobile">
+    <nz-table #costSelectTable [nzData]="listOfData" [nzFrontPagination]="false">
+      <thead>
+        <tr>
+          <th>序号</th>
+          <th>摘要</th>
+          <th>费用类型</th>
+          <th>本期支付（元）</th>
+          <th nzWidth="250px">支付统计</th>
+          <th nzWidth="250px">收款信息</th>
+          <th>描述</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of costSelectTable.data; let i = index">
+          <td>{{ i + 1}}</td>
+          <td>{{ data.abstract }}</td>
+          <td class="text-nowrap">
+            <span>{{ data.cost.cost_category.name }}</span>
+            <span nz-tooltip [nzTooltipTitle]="data.cost.cost_category.description" class="text-md ml-sm">
+              <i nz-icon nzType="exclamation-circle" nzTheme="outline"></i></span>
+          </td>
+          <td class="text-error">{{ data.amount | currency: 'CNY' }}</td>
+          <td>
+            <sv-container size="small" col="1">
+              <sv label="总计支付"><span class="text-error">{{ data.cost.amount | _currency }}</span></sv>
+              <sv label="累计支付"><span class="text-success">{{ data.cost.pay_amount | _currency }}</span></sv>
+              <sv label="剩余支付"><span
+                  class="text-primary">{{ (data.cost.amount - data.cost.pay_amount) | _currency }}</span></sv>
+            </sv-container>
+          </td>
+          <td>
+            <div>
+              <span>商务卡：</span><strong>{{ data.is_business_card ? '是' : '否' }}</strong>
+            </div>
+            <div>
+              <strong>收款人：</strong><span>{{ data.account_name }}</span>
+            </div>
+            <div>
+              <strong>卡&nbsp;&nbsp; 号：</strong><span>{{ data.card_number }}</span>
+            </div>
+          </td>
+          <td>
+            <span [innerHTML]="data.remark | showTextareaContent"></span>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </nz-card>
+
+
+  <nz-card nzTitle="非合约成本支付" class="mt-md hidden-pc" *ngIf="listOfData.length !== 0">
+    <ng-container *ngFor="let data of listOfData">
+      <sv-container size="small" [title]="svConTpl" class="py-sm">
+        <ng-template #svConTpl>
+          <span class="font-weight-bold">{{ data.cost.cost_category.name }}</span>
+        </ng-template>
+        <sv label="摘&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;要">{{ data.abstract }}</sv>
+        <sv label="费用类型">{{ data.cost.cost_category.name }}</sv>
+        <sv label="总计支付"><span class="text-error">{{ data.cost.amount | currency: 'CNY' }}</span></sv>
+        <sv label="累计支付"><span class="text-success">{{ data.cost.pay_amount | currency: 'CNY' }}</span></sv>
+        <sv label="剩余支付"><span
+            class="text-primary">{{ (data.cost.amount - data.cost.pay_amount) | currency: 'CNY' }}</span></sv>
+        <sv label="本期支付"><span class="text-primary">{{ data.amount | currency: 'CNY' }}</span></sv>
+        <sv label="商&nbsp;务&nbsp;卡&nbsp;"><strong>{{ data.is_business_card ? '是' : '否' }}</strong></sv>
+        <sv label="收款人">{{ data.account_name }}</sv>
+        <sv label="卡&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号">{{ data.card_number }}</sv>
+        <sv label="描述"><span [innerHTML]="data.remark | showTextareaContent"></span></sv>
+      </sv-container>
+    </ng-container>
+  </nz-card>
+
+  <nz-card nzTitle="附件" *ngIf="treaty_pay_id" class="mt-md">
+    <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/contract_pay/' + treaty_pay_id">
+    </app-upload-file-attachment-show-c>
+  </nz-card>
+
+
+</div>
 <!-- 支付流程进展： 草稿 不显示 -->
 <nz-card [nzBordered]="false" class="mt-md" [nzTitle]="workflowStatusTitle">
   <ng-template #workflowStatusTitle>
@@ -207,5 +212,6 @@
 </nz-card>
 
 <ng-container *ngIf="progressInfo && progressInfo.execute_user">
-  <app-users-execute-flow [progressInfo]="progressInfo" (executeChange)="executeChange($event)"></app-users-execute-flow>
+  <app-users-execute-flow [progressInfo]="progressInfo" (executeChange)="executeChange($event)">
+  </app-users-execute-flow>
 </ng-container>

@@ -7,6 +7,10 @@ import { FormGroup, Validators, FormBuilder, FormControl } from '@angular/forms'
 import { filter, map } from 'rxjs/operators';
 import { SettingsService } from '@delon/theme';
 
+// html ===> pdf
+import * as jspdf from 'jspdf';
+import html2canvas from 'html2canvas';
+
 @Component({
   selector: 'app-contract-pay-create',
   templateUrl: './contract-pay-create.component.html',
@@ -36,7 +40,7 @@ export class ContractPayCreateComponent implements OnInit {
 
   costArr: any[] = []; // 所有的成本列表  需要通过预算（通过项目） 获取
 
-  pageTitle:string = '';
+  pageTitle: string = '';
 
   constructor(
     public msg: NzMessageService,
@@ -113,7 +117,7 @@ export class ContractPayCreateComponent implements OnInit {
             this.getContractPayDetail();
             this.getContractPayment();
             this.getAttachment();
-          }else {
+          } else {
             this.pageTitle = '新增合约支付申请';
           }
         })
@@ -131,7 +135,7 @@ export class ContractPayCreateComponent implements OnInit {
           [this.selectedContract] = this.contractList.filter(v => v.id === this.contract_id);
           this.transferAmount(this.selectedContract.amount);
 
-          if(!this.contractInfo.draft) {
+          if (!this.contractInfo.draft) {
             this.getWorkflow();
           }
         }
@@ -458,12 +462,12 @@ export class ContractPayCreateComponent implements OnInit {
 
   }
 
-  
+
   // 流程进程信息
-  progressInfo:any = null;
-  nodeProcess:any[] = [];
-  currentNodeProcess:any = null;
-  isCurrentCheck:boolean = false;
+  progressInfo: any = null;
+  nodeProcess: any[] = [];
+  currentNodeProcess: any = null;
+  isCurrentCheck: boolean = false;
 
   checkOption: any = {
     agree: null,
@@ -472,32 +476,32 @@ export class ContractPayCreateComponent implements OnInit {
 
   getWorkflow() {
     this.settingsConfigService
-        .get(`/api/contract/pay/process/${this.contract_pay_id}`)
-        .subscribe((res:ApiData) => {
-          console.log(res, 'workflow');
-          if(res.code === 200) {
-            this.progressInfo = res.data;
-            this.getNodeProcess();
-          }
-    })
+      .get(`/api/contract/pay/process/${this.contract_pay_id}`)
+      .subscribe((res: ApiData) => {
+        console.log(res, 'workflow');
+        if (res.code === 200) {
+          this.progressInfo = res.data;
+          this.getNodeProcess();
+        }
+      })
   }
 
-  getNodeProcess():void {
+  getNodeProcess(): void {
     this.isCurrentCheck = false;
     this.settingsConfigService
-        .get(`/api/node/process/${this.progressInfo.id}`)
-        .subscribe((res:ApiData) => {
-          console.log(res, 'node_process');
-          if(res.code === 200) {
-            this.nodeProcess = res.data.node_process;
-            this.currentNodeProcess = this.nodeProcess.filter( v => v.current)[0];
-            if(this.currentNodeProcess) {
-              this.isCurrentCheck = this.currentNodeProcess.user.id === this.settings.user.id;
-            }
+      .get(`/api/node/process/${this.progressInfo.id}`)
+      .subscribe((res: ApiData) => {
+        console.log(res, 'node_process');
+        if (res.code === 200) {
+          this.nodeProcess = res.data.node_process;
+          this.currentNodeProcess = this.nodeProcess.filter(v => v.current)[0];
+          if (this.currentNodeProcess) {
+            this.isCurrentCheck = this.currentNodeProcess.user.id === this.settings.user.id;
           }
-    })
+        }
+      })
   }
-  
+
   executeChange(data: any) {
     console.log('执行情况信息 提交: ', data);
     const option: any = Object.assign(data, { process_id: this.progressInfo.id });
@@ -514,6 +518,112 @@ export class ContractPayCreateComponent implements OnInit {
           })
       }
     })
+  }
+
+  // 打印
+  printCurrentModal(idname: string, title: string) {
+    let printWindow = window.open();
+
+    html2canvas(document.querySelector(`#${idname}`)).then(canvas => {
+      let compress = document.createElement('canvas');
+
+      // change the image size
+
+      compress.width = canvas.width;
+
+      compress.height = canvas.height;
+
+      const imageStr = canvas.toDataURL("image/png");
+
+      let image = new Image();
+
+      image.src = imageStr;
+
+      image.onload = function () {
+
+        compress.getContext("2d").drawImage(image, 0, 0, compress.width, compress.height);
+
+        const imgString = compress.toDataURL("image/png");
+
+        // const iframe = '<iframe src="' + imageStr + '" frameborder="0" style="border:0;" allowfullscreen></iframe>'
+        const head: string = document.querySelector('head').innerHTML;;
+        const style: string = `<style>body {-webkit-print-color-adjust: exact; padding: 12px!important;}</style>`;
+        const div: string = '<div>' + '<img src="' + imgString + '" />' + '</div>';
+
+        const docStr = head + style + div;
+
+        printWindow.document.write(docStr);
+
+        printWindow.document.close();
+
+        printWindow.onload = function () {
+
+          printWindow.print();
+          printWindow.close();
+
+        };
+
+      }
+
+    });
+  }
+
+  isPrinter: boolean = false;
+  // pdf
+  downloadFile(type: string) {
+    this.isPrinter = true;
+    setTimeout(() => {
+      const data: any = document.getElementById('print-box');
+      html2canvas(data).then(canvas => {
+        this.isPrinter = false;
+        // Few necessary setting options  
+        const imgWidth: number = 208;
+        const imgHeight: number = canvas.height * imgWidth / canvas.width;
+        console.log(canvas, imgWidth, imgHeight);
+        const pageHeight: number = 295;
+        const leftHeight: number = imgHeight;
+
+        const contentDataURL = canvas.toDataURL('image/png', 1.0)
+        if (type === 'pdf') {
+          this.exportPdf(contentDataURL, imgWidth, imgHeight, pageHeight, leftHeight);
+        }
+        if (type === 'image') {
+          this.exportImage(contentDataURL);
+        }
+
+      });
+    }, 500);
+
+  }
+  pdfPosition: number = 0;
+  exportPdf(contentDataURL: any, imgWidth: number, imgHeight: number, pageHeight: number, leftHeight: number) {
+    let pdf = new jspdf('p', 'mm', 'a4'); // A4 size page of PDF  
+    if (leftHeight + 10 < pageHeight) {
+      pdf.addImage(contentDataURL, 'PNG', 0, 0, imgWidth, imgHeight)
+    } else {
+      while (leftHeight > 0) {
+        pdf.addImage(contentDataURL, 'PNG', 0, this.pdfPosition, imgWidth, imgHeight);
+        leftHeight -= pageHeight;
+        this.pdfPosition -= 295;
+        // 避免添加空白页
+        if (leftHeight > 0) {
+          pdf.addPage()
+        }
+      }
+    }
+
+    const pdf_name: string = this.projectInfo.name + "_" + (new Date().getTime()) + '.pdf';
+    pdf.save(pdf_name); // Generated PDF 
+  }
+  // 图片和 pdf 下载 功能
+  exportImage(contentDataURL: any) {
+    var base64Img = contentDataURL;
+    let oA: any = document.createElement('a');
+    oA.href = base64Img;
+    oA.download = this.projectInfo.name + "_" + (new Date().getTime());
+    var event = document.createEvent('MouseEvents');
+    event.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+    oA.dispatchEvent(event);
   }
 
 }

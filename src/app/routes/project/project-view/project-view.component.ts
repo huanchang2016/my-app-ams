@@ -49,20 +49,6 @@ export class ProjectViewComponent implements OnInit {
 
   // 打印
   printCurrentModal(idname:string, title: string) {
-  //   let newWindow=window.open("打印窗口","_blank");
-  //   let obj = document.querySelector('#' + idname);
-  //   let head = document.querySelector('head').innerHTML;
-  //   let style = `<style>body {-webkit-print-color-adjust: exact; padding: 12px!important;}</style>`;
-    
-  //   let docStr = head + style + obj.innerHTML;
-  //   newWindow.document.write(docStr);
-  //   newWindow.document.close();
-  
-  //   setTimeout(() => {
-  //     newWindow.print();
-  //     newWindow.close();
-  //   }, 300);
-
     let printWindow = window.open();
 
     html2canvas(document.querySelector(`#${idname}`)).then(canvas => {

@@ -10,8 +10,18 @@
       <nz-breadcrumb-item>{{ pageTitle }}</nz-breadcrumb-item>
     </nz-breadcrumb>
   </ng-template>
-
   <ng-template #actionBtn>
+    <button nz-button (click)="printCurrentModal('print-box',  projectInfo?.name)">打印</button>
+    <button nz-button nz-dropdown [nzDropdownMenu]="opMenu" class="mx-sm">
+      下载 <i nz-icon nzType="download" nzTheme="outline"></i>
+    </button>
+    <nz-dropdown-menu #opMenu="nzDropdownMenu">
+      <ul nz-menu>
+        <li nz-menu-item (click)="downloadFile('pdf')"><i nz-icon nzType="file-pdf" nzTheme="outline"></i> .pdf</li>
+        <li nz-menu-item (click)="downloadFile('image')"><i nz-icon nzType="file-excel" nzTheme="outline"></i> .image
+        </li>
+      </ul>
+    </nz-dropdown-menu>
     <ng-container *ngIf="selectedContract && listOfData.length !== 0 ">
       <button *ngIf="!contractInfo || contractInfo.draft" nz-button [nzType]="'dashed'" (click)="submitPayAmount()"
         [nzLoading]="submitLoading" class="ml-xs">保存合约支付</button>
@@ -24,139 +34,130 @@
 
   </ng-template>
 
-  <!-- <sv-container size="small" col="2">
-    <sv label="项目名称"><strong>{{ projectInfo?.name }}</strong></sv>
-    <sv label="客&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;户">
-      <app-customer-company-show-list-c [customer]="projectInfo?.customer"></app-customer-company-show-list-c>
-    </sv>
-    <sv label="负责部门">{{ projectInfo?.department?.name }}</sv>
-    <sv label="创建时间">{{ projectInfo?.create_time | date: 'yyyy/MM/dd HH:mm:ss' }}</sv>
-    <sv label="项目创建人">{{ projectInfo?.user.name }}</sv>
-  </sv-container> -->
-  
   <app-project-info-show-tpl [projectInfo]="projectInfo"></app-project-info-show-tpl>
 
 </page-header>
+<div id="print-box">
+  <nz-card nzTitle="项目合同" [nzBordered]="false" [nzExtra]="contractTpl">
+    <ng-template #contractTpl>
+      <nz-select style="min-width: 300px;" nzShowSearch nzPlaceHolder="请选择支付合同" [nzDisabled]="contract_pay_id"
+        [(ngModel)]="contract_id" (ngModelChange)="contractValueChange()">
+        <ng-container *ngFor="let item of contractList">
+          <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
+        </ng-container>
+      </nz-select>
+    </ng-template>
 
-<nz-card nzTitle="项目合同" [nzExtra]="contractTpl">
-  <ng-template #contractTpl>
-    <nz-select style="min-width: 300px;" nzShowSearch nzPlaceHolder="请选择支付合同" [nzDisabled]="contract_pay_id"
-      [(ngModel)]="contract_id" (ngModelChange)="contractValueChange()">
-      <ng-container *ngFor="let item of contractList">
-        <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
-      </ng-container>
-    </nz-select>
-  </ng-template>
+    <sv-container size="small" col="2" *ngIf="selectedContract;else notSelectedContract">
+      <!-- <sv label="供应商客户编号"><strong>{{ selectedContract.name }}</strong></sv> -->
+      <sv label="合同名称">{{ selectedContract.name }}</sv>
+      <sv label="收款单位">{{ selectedContract.pay_company }}</sv>
+      <sv label="合同金额"><span class="text-error mr-md">{{ selectedContract.amount | _currency }}</span> 大写：<span
+          class="font-weight-bold">{{ transferNumber }}</span></sv>
+      <sv label="开户银行">{{ selectedContract.bank_name }}</sv>
+      <sv label="合同单位"><strong>{{ selectedContract.supplier?.name }}</strong></sv>
+      <sv label="银行账号">{{ selectedContract.bank_account }}</sv>
+      <sv label="合同编号">{{ selectedContract.number }}</sv>
+    </sv-container>
+    <ng-template #notSelectedContract>
+      <div class="text-center my-lg text-grey text-lg">暂未选择合同</div>
+    </ng-template>
 
-  <sv-container size="small" col="2" *ngIf="selectedContract;else notSelectedContract">
-    <!-- <sv label="供应商客户编号"><strong>{{ selectedContract.name }}</strong></sv> -->
-    <sv label="合同名称">{{ selectedContract.name }}</sv>
-    <sv label="收款单位">{{ selectedContract.pay_company }}</sv>
-    <sv label="合同金额"><span class="text-error mr-md">{{ selectedContract.amount | _currency }}</span> 大写：<span
-        class="font-weight-bold">{{ transferNumber }}</span></sv>
-    <sv label="开户银行">{{ selectedContract.bank_name }}</sv>
-    <sv label="合同单位"><strong>{{ selectedContract.supplier?.name }}</strong></sv>
-    <sv label="银行账号">{{ selectedContract.bank_account }}</sv>
-    <sv label="合同编号">{{ selectedContract.number }}</sv>
-  </sv-container>
-  <ng-template #notSelectedContract>
-    <div class="text-center my-lg text-grey text-lg">暂未选择合同</div>
-  </ng-template>
+  </nz-card>
 
-</nz-card>
+  <nz-card nzTitle="成本支付" [nzBordered]="false" [nzExtra]="costTpl" class="mt-md" *ngIf="selectedContract">
+    <ng-template #costTpl>
+      <button *ngIf="!contractInfo || contractInfo.draft" nz-button [nzType]="'primary'"
+        (click)="addPaymentCost(tplTitle, tplContent, tplFooter, $event)">新增成本支付</button>
+    </ng-template>
 
-<nz-card nzTitle="成本支付" [nzExtra]="costTpl" class="mt-md" *ngIf="selectedContract">
-  <ng-template #costTpl>
-    <button *ngIf="!contractInfo || contractInfo.draft" nz-button [nzType]="'primary'"
-      (click)="addPaymentCost(tplTitle, tplContent, tplFooter, $event)">新增成本支付</button>
-  </ng-template>
+    <div class="hidden-mobile">
+      <nz-table #costSelectTable [nzData]="listOfData" [nzFrontPagination]="false">
+        <thead>
+          <tr>
+            <th>序号</th>
+            <th>成本类型</th>
+            <th>本期支付（元）</th>
+            <th nzWidth="250px">支付统计</th>
+            <th>描述</th>
+            <th *ngIf="!contractInfo || contractInfo.draft">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of costSelectTable.data; let i = index">
+            <td>{{ i + 1}}</td>
+            <td>{{ data.cost.cost_category.name }}</td>
+            <td class="text-success">{{ data.amount | _currency}}</td>
+            <td>
+              <sv-container size="small" col="1">
+                <sv label="总计支付"><span class="text-error">{{ data.cost.amount | currency: 'CNY' }}</span></sv>
+                <sv label="累计支付"><span class="text-success">{{ data.cost.pay_amount | currency: 'CNY' }}</span></sv>
+                <sv label="剩余支付"><span
+                    class="text-primary">{{ (data.cost.amount - data.cost.pay_amount) | currency: 'CNY' }}</span></sv>
+              </sv-container>
+            </td>
+            <td>
+              <span [innerHTML]="data.remark | showTextareaContent"></span>
+            </td>
+            <td *ngIf="!contractInfo || contractInfo.draft">
+              <a (click)="edit(tplTitle, tplContent, tplFooter, data)"><i nz-icon nzType="edit"
+                  nzTheme="outline"></i></a>
+              <nz-divider nzType="vertical"></nz-divider>
+              <a nz-popconfirm nzPopconfirmTitle="确认删除当前成本支付?" (nzOnConfirm)="delete(data.cost.id)"
+                (nzOnCancel)="cancel()" class="text-error">删除</a>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </div>
 
-  <div class="hidden-mobile">
-    <nz-table #costSelectTable [nzData]="listOfData" [nzFrontPagination]="false">
-      <thead>
-        <tr>
-          <th>序号</th>
-          <th>成本类型</th>
-          <th>本期支付（元）</th>
-          <th nzWidth="250px">支付统计</th>
-          <th>描述</th>
-          <th *ngIf="!contractInfo || contractInfo.draft">操作</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let data of costSelectTable.data; let i = index">
-          <td>{{ i + 1}}</td>
-          <td>{{ data.cost.cost_category.name }}</td>
-          <td class="text-success">{{ data.amount | _currency}}</td>
-          <td>
-            <sv-container size="small" col="1">
-              <sv label="总计支付"><span class="text-error">{{ data.cost.amount | currency: 'CNY' }}</span></sv>
-              <sv label="累计支付"><span class="text-success">{{ data.cost.pay_amount | currency: 'CNY' }}</span></sv>
-              <sv label="剩余支付"><span
-                  class="text-primary">{{ (data.cost.amount - data.cost.pay_amount) | currency: 'CNY' }}</span></sv>
-            </sv-container>
-          </td>
-          <td>
-            <span [innerHTML]="data.remark | showTextareaContent"></span>
-          </td>
-          <td *ngIf="!contractInfo || contractInfo.draft">
+    <div class="hidden-pc">
+      <ng-container *ngFor="let data of listOfData">
+        <nz-card [nzActions]=" (!contractInfo || contractInfo.draft) ? [actionEdit, actionDelete] : [] " class="mt-md">
+          <nz-skeleton [nzActive]="true" [nzLoading]="false">
+            <nz-card-meta [nzTitle]="treatyTitltTpl"></nz-card-meta>
+            <ng-template #treatyTitltTpl>
+              <span>{{ data.cost.cost_category.name }}</span>
+            </ng-template>
+            <div class="pt-md">
+              <sv-container size="small">
+                <sv label="总计支付"><span class="text-error">{{ data.cost.amount | currency: 'CNY' }}</span></sv>
+                <sv label="累计支付"><span class="text-success">{{ data.cost.pay_amount | currency: 'CNY' }}</span></sv>
+                <sv label="剩余支付"><span
+                    class="text-primary">{{ (data.cost.amount - data.cost.pay_amount) | currency: 'CNY' }}</span></sv>
+                <sv label="本期支付"><span class="text-error font-weight-bold">{{ data.amount | currency: 'CNY' }}</span>
+                </sv>
+                <sv label="描述"><span [innerHTML]="data.remark | showTextareaContent"></span></sv>
+              </sv-container>
+            </div>
+          </nz-skeleton>
+
+          <ng-template #actionEdit>
             <a (click)="edit(tplTitle, tplContent, tplFooter, data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
-            <nz-divider nzType="vertical"></nz-divider>
+          </ng-template>
+          <ng-template #actionDelete>
             <a nz-popconfirm nzPopconfirmTitle="确认删除当前成本支付?" (nzOnConfirm)="delete(data.cost.id)"
               (nzOnCancel)="cancel()" class="text-error">删除</a>
-          </td>
-        </tr>
-      </tbody>
-    </nz-table>
-  </div>
-
-  <!-- new edit -->
-  <div class="hidden-pc">
-    <ng-container *ngFor="let data of listOfData">
-      <nz-card [nzActions]=" (!contractInfo || contractInfo.draft) ? [actionEdit, actionDelete] : [] " class="mt-md">
-        <nz-skeleton [nzActive]="true" [nzLoading]="false">
-          <nz-card-meta [nzTitle]="treatyTitltTpl"></nz-card-meta>
-          <ng-template #treatyTitltTpl>
-            <span>{{ data.cost.cost_category.name }}</span>
           </ng-template>
-          <div class="pt-md">
-            <sv-container size="small">
-              <sv label="总计支付"><span class="text-error">{{ data.cost.amount | currency: 'CNY' }}</span></sv>
-              <sv label="累计支付"><span class="text-success">{{ data.cost.pay_amount | currency: 'CNY' }}</span></sv>
-              <sv label="剩余支付"><span
-                  class="text-primary">{{ (data.cost.amount - data.cost.pay_amount) | currency: 'CNY' }}</span></sv>
-              <sv label="本期支付"><span class="text-error font-weight-bold">{{ data.amount | currency: 'CNY' }}</span></sv>
-              <sv label="描述"><span [innerHTML]="data.remark | showTextareaContent"></span></sv>
-            </sv-container>
-          </div>
-        </nz-skeleton>
+        </nz-card>
+      </ng-container>
+    </div>
+    <!-- edit -->
 
-        <ng-template #actionEdit>
-          <a (click)="edit(tplTitle, tplContent, tplFooter, data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
-        </ng-template>
-        <ng-template #actionDelete>
-          <a nz-popconfirm nzPopconfirmTitle="确认删除当前成本支付?" (nzOnConfirm)="delete(data.cost.id)" (nzOnCancel)="cancel()"
-            class="text-error">删除</a>
-        </ng-template>
-      </nz-card>
-    </ng-container>
-  </div>
-  <!-- edit -->
+  </nz-card>
 
-</nz-card>
+  <nz-card nzTitle="附件" [nzBordered]="false" *ngIf="contractInfo && !contractInfo.draft" class="mt-md">
+    <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/contract_pay/' + contractInfo.id">
+    </app-upload-file-attachment-show-c>
+  </nz-card>
 
-<nz-card nzTitle="附件" *ngIf="contractInfo && !contractInfo.draft" class="mt-md">
-  <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/contract_pay/' + contractInfo.id">
-  </app-upload-file-attachment-show-c>
-</nz-card>
+  <nz-card nzTitle="合约支付附件" [nzBordered]="false" class="mt-md" *ngIf="!contractInfo || contractInfo.draft">
+    <app-upload-file-attachment-tpl [Attachment]="attachment" [AttachmentCategory]="attachmentCategory"
+      [isAttachmentChange]="isAttachmentChange" (attachmentChange)="attachmentChange($event)">
+    </app-upload-file-attachment-tpl>
+  </nz-card>
 
-<nz-card nzTitle="合约支付附件" class="mt-md" *ngIf="!contractInfo || contractInfo.draft">
-  <!-- <app-upload-file [Attachment]="attachment" [AttachmentCategory]="attachmentCategory"
-    [isAttachmentChange]="isAttachmentChange" (attachmentChange)="attachmentChange($event)"></app-upload-file> -->
-  <app-upload-file-attachment-tpl [Attachment]="attachment" [AttachmentCategory]="attachmentCategory"
-    [isAttachmentChange]="isAttachmentChange" (attachmentChange)="attachmentChange($event)"></app-upload-file-attachment-tpl>
-</nz-card>
-
+</div>
 <!-- 流程进展 -->
 <ng-container *ngIf="contractInfo && !contractInfo.draft">
   <nz-card [nzBordered]="false" class="mt-md" [nzTitle]="workflowStatusTitle">
@@ -231,7 +232,8 @@
   </nz-card>
 
   <ng-container *ngIf="progressInfo && progressInfo.execute_user">
-    <app-users-execute-flow [progressInfo]="progressInfo" (executeChange)="executeChange($event)"></app-users-execute-flow>
+    <app-users-execute-flow [progressInfo]="progressInfo" (executeChange)="executeChange($event)">
+    </app-users-execute-flow>
   </ng-container>
 </ng-container>
 

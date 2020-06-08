@@ -1,14 +1,14 @@
-import { Component, OnInit, EventEmitter, Output, Input, SimpleChanges, OnChanges } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { List, ApiData } from 'src/app/data/interface.data';
 import { SettingsConfigService } from 'src/app/routes/service/settings-config.service';
 
 @Component({
-  selector: 'app-positions-search-option',
+  selector: 'app-category-subject-search-option',
   templateUrl: './search-option.component.html',
   styleUrls: ['./search-option.component.less']
 })
-export class PositionSearchOptionComponent implements OnChanges, OnInit {
+export class CategorySubjectSearchOptionComponent implements OnInit {
   validateForm: FormGroup;
 
   @Input() COMPANY:List[];
@@ -40,7 +40,6 @@ export class PositionSearchOptionComponent implements OnChanges, OnInit {
       company_id: [ null ], // 单位
       department: [null ],
       name: [ null ] // 名称
-      // active: [ true ] // 是否有效
     });
 
     this.validateForm.get('company_id').valueChanges.subscribe( id => {

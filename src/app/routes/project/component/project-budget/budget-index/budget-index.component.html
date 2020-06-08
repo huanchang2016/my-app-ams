@@ -1,0 +1,10 @@
+<div class="steps-content-box">
+
+    <app-project-info-show-c [projectInfo]="projectInfo"></app-project-info-show-c>
+
+
+    budget works!
+    
+    <a nz-button (click)="prevSteps($event)">上一步</a>
+    <button nz-button nzType="primary" [nzLoading]="submitLoading" (click)="submitForm()">下一步</button>
+</div>

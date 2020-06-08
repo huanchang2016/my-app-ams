@@ -4,10 +4,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { List, ApiData } from 'src/app/data/interface.data';
 import { SettingsConfigService } from 'src/app/routes/service/settings-config.service';
 
-
 @Component({
-  selector: 'app-department-category-form',
-  templateUrl: './department-category-form.component.html',
+  selector: 'app-subject-form-c',
+  templateUrl: './subject-form-c.component.html',
   styles: [
     `
       [nz-form] {
@@ -25,12 +24,14 @@ import { SettingsConfigService } from 'src/app/routes/service/settings-config.se
     `
   ]
 })
-export class DepartmentCategoryFormComponent implements OnInit {
+export class SubjectFormCComponent implements OnInit {
   @Input() data:any;
   @Input() COMPANY:List[];
   @Input() companyId:number;
 
   companyArray:List[] = [];
+  departmentArray:List[] = [];
+  departmentLoading: boolean = false;
 
   validateForm: FormGroup;
 
@@ -49,8 +50,21 @@ export class DepartmentCategoryFormComponent implements OnInit {
 
     this.validateForm = this.fb.group({
       company_id: [ this.companyId, Validators.required ],
-      name: [null, [Validators.required]]
+      department_id: [ null, Validators.required ],
+      name: [null, [Validators.required]],
+      code: [null, [Validators.required]]
     });
+
+    if(this.companyId) {
+      this.getDepartmentList(this.companyId);
+    }
+
+    this.validateForm.get('company_id').valueChanges.subscribe( v => {
+      console.log(v, 'company list  select changed')
+      if(v) {
+        this.getDepartmentList(v);
+      }
+    })
     
 
     if(this.data) {
@@ -81,7 +95,7 @@ export class DepartmentCategoryFormComponent implements OnInit {
 
   create() {
     let opt:any = this.validateForm.value;
-    this.settingsConfigService.post('/api/department_category/create', opt).subscribe((res:ApiData) => {
+    this.settingsConfigService.post('/api/project/category/subject/create', opt).subscribe((res:ApiData) => {
       console.log(res);
       this.submitLoading = false;
       if(res.code === 200) {
@@ -97,10 +111,11 @@ export class DepartmentCategoryFormComponent implements OnInit {
     let opt:any = this.validateForm.value;
     
     let obj:any = {
-      department_category_id: this.data.id,
+      subject_id: this.data.id,
+      code: opt.code,
       name: opt.name
     };
-    this.settingsConfigService.post('/api/department_category/update', obj).subscribe((res:ApiData) => {
+    this.settingsConfigService.post('/api/project/category/subject/update', obj).subscribe((res:ApiData) => {
       console.log(res);
       this.submitLoading = false;
       if(res.code === 200) {
@@ -113,8 +128,25 @@ export class DepartmentCategoryFormComponent implements OnInit {
   }
   setFormValue(data:any) :void {
     this.validateForm.patchValue({
-      name: data.name
-      // company_id: data.company.id
+      name: data.name,
+      code: data.code,
+      company_id: data.company.id,
+      department_id: data.department.id
+    });
+  }
+
+  getDepartmentList(id:number) {
+    this.departmentLoading = true;
+    this.settingsConfigService.get(`/api/department/${id}`).subscribe((res:ApiData) => {
+      this.departmentLoading = false;
+      if(res.code === 200) {
+        let data:any[] = res.data.department;
+        this.departmentArray = data.sort((a:any, b:any) => a.sequence - b.sequence)
+                                    .filter( v => v.active )
+                                    .map( v => {
+                                      return { id: v.id, name: v.name };
+                                    });
+      }
     });
   }
 

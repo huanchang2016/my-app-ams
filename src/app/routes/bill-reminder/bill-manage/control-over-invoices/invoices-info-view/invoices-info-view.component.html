@@ -34,7 +34,7 @@
     <div class="text-center font-weight-bold">发票确认单</div>
   </ng-template>
   <div id="print-box" class="bill-info-box" *ngIf="projectDetailInfo && billInfo">
-    <nz-table #borderedTable nzBordered nzData="[1]" [nzFrontPagination]="false" [nzTitle]="tableTitle" [nzFooter]="tableFooter">
+    <nz-table #borderedTable nzData="[1]" nzBordered [nzFrontPagination]="false" [nzTitle]="tableTitle" [nzFooter]="tableFooter">
       <ng-template #tableTitle>
         <div class="text-center text-lg">{{ billInfo?.company.name }}</div>
       </ng-template>
@@ -43,12 +43,20 @@
           <td colspan="5" class="text-md text-center">发票确认单</td>
         </tr>
         <tr>
+          <td class="font-weight-bold td-left">项目名称</td>
+          <td colspan="4">{{ billInfo?.project.name }}</td>
+        </tr>
+        <tr>
+          <td class="font-weight-bold td-left">项目编号</td>
+          <td colspan="4">{{ billInfo?.project.number }}</td>
+        </tr>
+        <tr>
           <td class="font-weight-bold td-left">项目类型</td>
           <td colspan="4">{{ billInfo?.project.category?.name }}</td>
         </tr>
         <tr>
           <td class="font-weight-bold">协议号</td>
-          <td colspan="4">{{ billInfo?.number }}</td>
+          <td colspan="4">{{ billInfo?.customer_contract_code }}</td>
         </tr>
         <tr>
           <td class="font-weight-bold">发票类型</td>
@@ -106,13 +114,19 @@
           <td colspan="4" class="font-weight-bold">{{ transferNumber }}</td>
         </tr>
         <tr>
-          <td class="font-weight-bold">开票所属日期</td>
+          <td class="font-weight-bold">经费所属期</td>
           <td colspan="4">{{ billInfo?.bill_period_start_time + ' - ' + billInfo?.bill_period_end_time }}</td>
         </tr>
         <tr>
           <td class="font-weight-bold">备注信息</td>
           <td colspan="4" class="text-error font-weight-bold"><span
               [innerHTML]="billInfo?.remark | showTextareaContent"></span></td>
+        </tr>
+        <tr *ngIf="billId">
+          <td class="font-weight-bold">附件</td>
+          <td colspan="4">
+            <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/bill/' + billId"></app-upload-file-attachment-show-c>
+          </td>
         </tr>
       </tbody>
       <ng-template #tableFooter>
@@ -122,9 +136,9 @@
   </div>
 </nz-card>
 
-<nz-card nzTitle="附件" *ngIf="billId" class="mt-md">
+<!-- <nz-card nzTitle="附件" *ngIf="billId" class="mt-md">
   <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/bill/' + billId"></app-upload-file-attachment-show-c>
-</nz-card>
+</nz-card> -->
 
 <!-- 开票 审批流程进展： 草稿 不显示 -->
 <nz-card [nzBordered]="false" class="mt-md" [nzTitle]="workflowStatusTitle">

@@ -12,7 +12,7 @@
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let data of listOfData; let i = index">
+        <tr *ngFor="let data of basicTable.data; let i = index">
             <td>{{ i + 1 }}</td>
             <td>{{ data.name }}</td>
             <td>{{ data.company.name }}</td>
@@ -20,7 +20,10 @@
                 <a acl [acl-ability]="'modify_department_category'" (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
                 <nz-divider nzType="vertical"></nz-divider>
                 <ng-container *ngIf="data.active; else activeFalse">
-                    <a acl [acl-ability]="'delete_department_category'" (click)="disabled(data.id)" class="text-nowrap">禁用</a>
+                    <a acl [acl-ability]="'delete_department_category'" nz-popconfirm
+                    nzPopconfirmTitle="确定禁用当前类型？"
+                    (nzOnConfirm)="disabled(data.id)"
+                    (nzOnCancel)="cancel()" class="text-nowrap text-error">禁用</a>
                 </ng-container>
                 <ng-template #activeFalse>
                     <a acl [acl-ability]="'delete_department_category'" (click)="enabled(data.id)" class="text-nowrap">启用</a>
@@ -47,7 +50,10 @@
                 </ng-template>
                 <ng-template #actionEllipsis>
                     <ng-container *ngIf="data.active; else activeFalse">
-                        <a acl [acl-ability]="'delete_department_category'" (click)="disabled(data.id)" class="text-error">禁用</a>
+                        <a acl [acl-ability]="'delete_department_category'" nz-popconfirm
+                        nzPopconfirmTitle="确定禁用当前类型？"
+                        (nzOnConfirm)="disabled(data.id)"
+                        (nzOnCancel)="cancel()" class="text-error">禁用</a>
                     </ng-container>
                     <ng-template #activeFalse>
                         <a acl [acl-ability]="'delete_department_category'" (click)="enabled(data.id)" class="text-primary">启用</a>

@@ -39,6 +39,7 @@ import { AdjustSupplierContractListCComponent } from './project-adjust/adjust-su
 import { AdjustSupplierTreatyListCComponent } from './project-adjust/adjust-supplier-info/adjust-supplier-treaty-list-c/adjust-supplier-treaty-list-c.component';
 import { AdjustSupplierContractFormCComponent } from './project-adjust/adjust-supplier-info/adjust-supplier-contract-form-c/adjust-supplier-contract-form-c.component';
 import { AdjustSupplierTreatyFormCComponent } from './project-adjust/adjust-supplier-info/adjust-supplier-treaty-form-c/adjust-supplier-treaty-form-c.component';
+import { BudgetIndexComponent } from './component/project-budget/budget-index/budget-index.component';
 
 const COMPONENTS = [
   DraftListComponent,
@@ -57,9 +58,10 @@ const COMPONENTS_NOROUNT = [
   ProjectDrawerSearchOptionComponent,
   ProjectInfoComponent,
   ProjectBudgetComponent,
-  ProjectSupplierComponent,
+  BudgetIndexComponent,
   BudgetCostManageComponent,
   BudgetCostFormComponent,
+  ProjectSupplierComponent,
   HasContractSupplierComponent,
   NoContractSupplierComponent,
   ProjectSupplierFormComponent,

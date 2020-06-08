@@ -6,7 +6,11 @@ import { environment } from '@env/environment';
 @Component({
   selector: 'app-upload-file-attachment-show-c',
   templateUrl: './upload-file-attachment-show-c.component.html',
-  styles: []
+  styles: [`
+    .category-list {
+      line-height: 32px;
+    }
+  `]
 })
 export class UploadFileAttachmentShowCComponent implements OnInit {
 

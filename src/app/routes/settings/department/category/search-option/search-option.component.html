@@ -20,7 +20,7 @@
                 </nz-form-control>
             </nz-form-item>
         </div>
-        <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="8">
+        <!-- <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="8">
             <nz-form-item>
                 <nz-form-label nzFor="active">状态</nz-form-label>
                 <nz-form-control>
@@ -30,12 +30,12 @@
                     </nz-radio-group>
                 </nz-form-control>
             </nz-form-item>
-        </div>
+        </div> -->
     </div>
     <div nz-row>
         <div nz-col [nzSpan]="24" class="search-area">
-            <button nz-button [nzType]="'primary'" (click)="submit()">查询</button>
-            <button nz-button (click)="resetForm()" class="ml-sm">清空条件</button >
+            <!-- <button nz-button [nzType]="'primary'" (click)="submit()">查询</button> -->
+            <button nz-button (click)="resetForm()">清空条件</button >
             <button acl [acl-ability]="'modify_department_category'" nz-button (click)="add()" class="ml-sm" [nzType]="'primary'">新增</button >
         </div>
     </div>

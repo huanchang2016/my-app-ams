@@ -10,11 +10,15 @@ import { DepartmentCategoryFormComponent } from './category/department-category-
 import { ProjectCategoryComponent } from './project-category/project-category.component';
 import { SearchOptionComponent } from './project-category/search-option/search-option.component';
 import { ProjectCategoryFormComponent } from './project-category/project-category-form/project-category-form.component';
+import { CategorySubjectComponent } from './category-subject/category-subject.component';
+import { CategorySubjectSearchOptionComponent } from './category-subject/search-option/search-option.component';
+import { SubjectFormCComponent } from './category-subject/subject-form-c/subject-form-c.component';
 
 const COMPONENTS = [
   DepartmentListComponent,
   DepartmentCategoryComponent,
-  ProjectCategoryComponent
+  ProjectCategoryComponent,
+  CategorySubjectComponent
 ];
 const COMPONENTS_NOROUNT = [
   // 部门列表
@@ -25,7 +29,9 @@ const COMPONENTS_NOROUNT = [
   DepartmentCategoryFormComponent,
   // 部门 相应的  项目类型
   SearchOptionComponent,
-  ProjectCategoryFormComponent
+  ProjectCategoryFormComponent,
+  CategorySubjectSearchOptionComponent,
+  SubjectFormCComponent
 ];
 
 @NgModule({

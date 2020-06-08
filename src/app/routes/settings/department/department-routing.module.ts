@@ -5,6 +5,7 @@ import { DepartmentCategoryComponent } from './category/category.component';
 import { ProjectCategoryComponent } from './project-category/project-category.component';
 
 import { ACLGuard, ACLType } from '@delon/acl';
+import { CategorySubjectComponent } from './category-subject/category-subject.component';
 
 const routes: Routes = [
   { path: 'list', component: DepartmentListComponent,
@@ -24,6 +25,14 @@ const routes: Routes = [
     }
   },
   { path: 'project-category', component: ProjectCategoryComponent,
+    canActivate: [ACLGuard],
+    data: {
+      guard: <ACLType>{
+        ability: ['project_category_list']
+      }
+    }
+  },
+  { path: 'category-subject', component: CategorySubjectComponent,
     canActivate: [ACLGuard],
     data: {
       guard: <ACLType>{

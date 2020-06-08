@@ -36,8 +36,8 @@ export class DepartmentCategorySearchOptionComponent implements OnChanges, OnIni
   ngOnInit(): void {
     this.validateForm = this.fb.group({
       company_id: [ null ], // 单位
-      name: [ null ], // 名称
-      active: [ true ] // 是否有效
+      name: [ null ] // 名称
+      // active: [ true ] // 是否有效
     });
     
     this.validateForm.get('company_id').valueChanges.subscribe( id => {
@@ -52,8 +52,7 @@ export class DepartmentCategorySearchOptionComponent implements OnChanges, OnIni
      * *****/
     this.companyValueChange.emit({company_id: id});
     this.validateForm.patchValue({
-      name: '',
-      active: true
+      name: ''
     });
   }
 
@@ -68,8 +67,7 @@ export class DepartmentCategorySearchOptionComponent implements OnChanges, OnIni
 
   resetForm(): void {
     this.validateForm.patchValue({
-      name: '',
-      active: true
+      name: ''
     });
     this.submit();
   }

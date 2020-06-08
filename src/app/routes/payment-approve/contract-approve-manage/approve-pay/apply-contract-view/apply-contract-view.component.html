@@ -27,75 +27,155 @@
 
 </page-header>
 
-<nz-card nzTitle="项目合同">
-
-  <sv-container size="small" col="2" *ngIf="selectedContract">
-    <sv label="合同名称">{{ selectedContract.name }}</sv>
-    <sv label="收款单位">{{ selectedContract.pay_company }}</sv>
-    <sv label="合同金额"><span class="text-error mr-md">{{ selectedContract.amount | _currency }}</span> 大写：<span
-        class="font-weight-bold">{{ transferNumber }}</span></sv>
-    <sv label="开户银行">{{ selectedContract.bank_name }}</sv>
-    <sv label="合同单位"><strong>{{ selectedContract.supplier?.name }}</strong></sv>
-    <sv label="银行账号">{{ selectedContract.bank_account }}</sv>
-    <sv label="合同编号">{{ selectedContract.number }}</sv>
-  </sv-container>
-
-</nz-card>
 <div id="print-box">
-  <nz-card nzTitle="成本支付" *ngIf="selectedContract" class="mt-md hidden-mobile">
-
-    <nz-table #costSelectTable [nzData]="listOfData" [nzFrontPagination]="false">
-      <thead>
+  <!-- [nzFooter]="tableFooter" -->
+  <nz-table #borderedTable nzBordered nzData="[1]" [nzFrontPagination]="false">
+    <!-- <ng-template #tableTitle> [nzTitle]="tableTitle"
+      <div class="text-center text-lg">成都天府新区人力资源开发服务有限公司</div>
+    </ng-template> -->
+    <tbody>
+      <!-- <tr>
+        <td colspan="6" class="text-md text-center">费 用 付 款 书</td>
+      </tr>
+      <tr>
+        <td colspan="6" class="text-md text-center">（合同款项支付用）</td>
+      </tr> -->
+      <tr>
+        <td class="font-weight-bold">合同编号</td>
+        <td colspan="2">{{ selectedContract?.number }}</td>
+        <td class="font-weight-bold">收款单位</td>
+        <td colspan="2">{{ selectedContract?.pay_company }}</td>
+      </tr>
+      <tr>
+        <td class="font-weight-bold">合同类型</td>
+        <td colspan="2">合同类型 我不知道怎么填类型</td>
+        <td class="font-weight-bold">开户银行</td>
+        <td colspan="2">{{ selectedContract?.bank_name }}</td>
+      </tr>
+      <tr>
+        <td class="font-weight-bold">合同名称</td>
+        <td colspan="2">{{ selectedContract?.name }}</td>
+        <td class="font-weight-bold">银行账号</td>
+        <td colspan="2">{{ selectedContract?.bank_account }}</td>
+      </tr>
+      <tr>
+        <td class="font-weight-bold">合同单位</td>
+        <td colspan="5">{{ selectedContract?.supplier?.name }}</td>
+      </tr>
+      <tr>
+        <td class="font-weight-bold">{{ selectedContract?.contract_amount ? '合同总价金额' : '请示金额上限' }}</td>
+        <td colspan="5">{{ selectedContract?.amount | _currency }}</td>
+      </tr>
+      <tr>
+        <td class="font-weight-bold">摘要</td>
+        <td colspan="5">摘要内容信息显示</td>
+      </tr>
+      <tr>
+        <td colspan="6" class="text-right font-weight-bold">单位: 元(人民币)</td>
+      </tr>
+      <tr class="font-weight-bold">
+        <td rowspan="2">序号</td>
+        <td rowspan="2">费用类型</td>
+        <td rowspan="2">本期支付金额</td>
+        <td colspan="2" class="text-center">累计金额</td>
+        <td rowspan="2" class="text-center">备注</td>
+      </tr>
+      <tr class="font-weight-bold">
+        <td>合同累计金额</td>
+        <td>费用预算累计金额</td>
+      </tr>
+      <ng-container *ngFor="let data of listOfData;let i = index">
         <tr>
-          <th>序号</th>
-          <th>成本类型</th>
-          <th>本期支付（元）</th>
-          <th nzWidth="250px">预算统计</th>
-          <th>描述</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let data of costSelectTable.data; let i = index">
-          <td>{{ i + 1}}</td>
+          <td>{{ i + 1 }}</td>
           <td>{{ data.cost.cost_category.name }}</td>
-          <td class="text-success">{{ data.amount | _currency }}</td>
-          <td>
-            <sv-container size="small" col="1">
-              <sv label="预算支付"><span class="text-error">{{ data.cost.amount | _currency }}</span></sv>
-              <sv label="累计支付"><span class="text-success">{{ data.cost.pay_amount | _currency }}</span></sv>
-              <sv label="剩余支付"><span
-                  class="text-primary">{{ (data.cost.amount - data.cost.pay_amount) | _currency }}</span></sv>
-            </sv-container>
-          </td>
+          <td>{{ data.amount | _currency }}</td>
+          <td>{{ data.cost.pay_amount | _currency }}</td>
+          <td>{{ data.cost.amount | _currency }}</td>
           <td>
             <span [innerHTML]="data.remark | showTextareaContent"></span>
           </td>
         </tr>
-      </tbody>
-    </nz-table>
+      </ng-container>
+      <tr>
+        <td colspan="2" class="font-weight-bold">合计</td>
+        <td colspan="4">{{ costTotalPay | _currency }}</td>
+      </tr>
+      <tr>
+        <td colspan="2" class="font-weight-bold">本期支付金额(大写)</td>
+        <td colspan="2">{{ costTotalPay | n2c }}</td>
+        <td class="font-weight-bold">合同支付比例</td>
+        <td>
+          <ng-container *ngIf="selectedContract?.amount">
+            {{ countPercent(selectedContract.amount) }}
+          </ng-container>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="6">
+          <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/contract_pay/' + contract_pay_id"></app-upload-file-attachment-show-c>
+        </td>
+      </tr>
 
-  </nz-card>
-
-  <nz-card [nzTitle]="'成本支付'" *ngIf="listOfData.length !== 0" class="mt-md hidden-pc">
-
-    <ng-container *ngFor="let data of listOfData">
-      <sv-container size="small" [title]="data.cost.cost_category.name" class="py-sm">
-        <sv label="总计支付"><span class="font-weight-bold">{{ data.cost.amount | _currency }}</span></sv>
-        <sv label="累计支付"><span class="text-success">{{ data.cost.pay_amount | _currency }}</span></sv>
-        <sv label="剩余支付"><span class="text-primary">{{ (data.cost.amount - data.cost.pay_amount) | _currency }}</span>
-        </sv>
-        <sv label="本期支付"><strong class="text-error">{{ data.amount | _currency }}</strong></sv>
-        <sv label="描述"><span [innerHTML]="data.remark | showTextareaContent"></span></sv>
-      </sv-container>
-
-    </ng-container>
-  </nz-card>
-
-  <nz-card nzTitle="附件" *ngIf="contract_pay_id" class="mt-md">
-    <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/contract_pay/' + contract_pay_id">
-    </app-upload-file-attachment-show-c>
-  </nz-card>
+    </tbody>
+    <ng-template #tableFooter>
+      <div class="text-right">开票日期： {{ '2020/06/06 15:30:22' }}</div>
+    </ng-template>
+  </nz-table>
 </div>
+<!-- 
+<nz-card nzTitle="成本支付" *ngIf="selectedContract" class="mt-md hidden-mobile">
+
+  <nz-table #costSelectTable [nzData]="listOfData" [nzFrontPagination]="false">
+    <thead>
+      <tr>
+        <th>序号</th>
+        <th>成本类型</th>
+        <th>本期支付（元）</th>
+        <th nzWidth="250px">预算统计</th>
+        <th>描述</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of costSelectTable.data; let i = index">
+        <td>{{ i + 1}}</td>
+        <td>{{ data.cost.cost_category.name }}</td>
+        <td class="text-success">{{ data.amount | _currency }}</td>
+        <td>
+          <sv-container size="small" col="1">
+            <sv label="预算支付"><span class="text-error">{{ data.cost.amount | _currency }}</span></sv>
+            <sv label="累计支付"><span class="text-success">{{ data.cost.pay_amount | _currency }}</span></sv>
+            <sv label="剩余支付"><span
+                class="text-primary">{{ (data.cost.amount - data.cost.pay_amount) | _currency }}</span></sv>
+          </sv-container>
+        </td>
+        <td>
+          <span [innerHTML]="data.remark | showTextareaContent"></span>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+
+</nz-card>
+
+<nz-card [nzTitle]="'成本支付'" *ngIf="listOfData.length !== 0" class="mt-md hidden-pc">
+
+  <ng-container *ngFor="let data of listOfData">
+    <sv-container size="small" [title]="data.cost.cost_category.name" class="py-sm">
+      <sv label="总计支付"><span class="font-weight-bold">{{ data.cost.amount | _currency }}</span></sv>
+      <sv label="累计支付"><span class="text-success">{{ data.cost.pay_amount | _currency }}</span></sv>
+      <sv label="剩余支付"><span class="text-primary">{{ (data.cost.amount - data.cost.pay_amount) | _currency }}</span>
+      </sv>
+      <sv label="本期支付"><strong class="text-error">{{ data.amount | _currency }}</strong></sv>
+      <sv label="描述"><span [innerHTML]="data.remark | showTextareaContent"></span></sv>
+    </sv-container>
+
+  </ng-container>
+</nz-card>
+
+<nz-card nzTitle="附件" *ngIf="contract_pay_id" class="mt-md">
+  <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/contract_pay/' + contract_pay_id">
+  </app-upload-file-attachment-show-c>
+</nz-card> -->
 <!-- 支付流程进展： 草稿 不显示 -->
 <nz-card [nzBordered]="false" class="mt-md" [nzTitle]="workflowStatusTitle" *ngIf="contractInfo && !contractInfo.draft">
   <ng-template #workflowStatusTitle>

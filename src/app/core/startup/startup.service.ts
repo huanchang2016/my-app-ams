@@ -389,6 +389,11 @@ export class StartupService {
                     text: '项目类型',
                     link: '/department/project-category',
                     hide: this.isHideRouter(['project_category_list'], permissionGroup)
+                  },
+                  {
+                    text: '类型科目',
+                    link: '/department/category-subject',
+                    hide: this.isHideRouter(['project_category_list'], permissionGroup)
                   }
                 ]
               },

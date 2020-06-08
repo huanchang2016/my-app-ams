@@ -1,14 +1,14 @@
 <page-header></page-header>
 
-<app-department-list-search-option [COMPANY]="companyArray" (companyValueChange)="companyValueChange($event)" (searchOptionsEmit)="searchOptionsChange($event)" (addContentEmit)="add()"></app-department-list-search-option>
+<app-category-subject-search-option [COMPANY]="companyArray" (companyValueChange)="companyValueChange($event)" (searchOptionsEmit)="searchOptionsChange($event)" (addContentEmit)="add()"></app-category-subject-search-option>
 
 <nz-table #basicTable [nzData]="listOfData" [nzLoading]="loading" class="mt-md hidden-mobile">
     <thead>
         <tr>
             <th>序号</th>
+            <th>科目名称</th>
+            <th>科目编号</th>
             <th>部门</th>
-            <th>类型</th>
-            <th>单位</th>
             <th>操作</th>
         </tr>
     </thead>
@@ -16,19 +16,19 @@
         <tr *ngFor="let data of basicTable.data; let i = index">
             <td>{{ i + 1 }}</td>
             <td>{{ data.name }}</td>
-            <td>{{ data.category?.name }}</td>
-            <td>{{ data.company.name }}</td>
+            <td>{{ data.code }}</td>
+            <td>{{ data.department.name }}</td>
             <td>
-                <a acl [acl-ability]="'modify_department'" (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
+                <a acl [acl-ability]="'modify_department_category'" (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
                 <nz-divider nzType="vertical"></nz-divider>
                 <ng-container *ngIf="data.active; else activeFalse">
-                    <a acl [acl-ability]="'delete_department'" nz-popconfirm
-                    nzPopconfirmTitle="确定禁用当前部门？"
+                    <a acl [acl-ability]="'delete_department_category'" class="text-nowrap text-error" nz-popconfirm
+                    nzPopconfirmTitle="确定禁用当前项目类型科目？"
                     (nzOnConfirm)="disabled(data.id)"
-                    (nzOnCancel)="cancel()" class="text-nowrap">禁用</a>
+                    (nzOnCancel)="cancel()">禁用</a>
                 </ng-container>
                 <ng-template #activeFalse>
-                    <a acl [acl-ability]="'delete_department'" (click)="enabled(data.id)" class="text-nowrap">启用</a>
+                    <a acl [acl-ability]="'delete_department_category'" (click)="enabled(data.id)" class="text-nowrap">启用</a>
                 </ng-template>
             </td>
         </tr>
@@ -44,27 +44,22 @@
                 <nz-skeleton [nzActive]="true" [nzLoading]="false">
                     <nz-card-meta [nzTitle]="data.name"></nz-card-meta>
                     <div class="pt-md">
-                        <sv-container col="1" size="small">
-                            <sv label="别名">{{ data.alias }}</sv>
-                            <sv label="类型">{{ data.category?.name}}</sv>
-                            <sv label="单位">{{ data.company?.name }}</sv>
-                            <sv label="描述"><span [innerHTML]="data.business | showTextareaContent | html"></span></sv>
-                            <sv label="职责"><span [innerHTML]="data.duty | showTextareaContent | html"></span></sv>
-                        </sv-container>
+                        <div>科目编号： {{ data.code }}</div>
+                        <div>所在部门： {{ data.department?.name }}</div>
                     </div>
                 </nz-skeleton>
                 <ng-template #actionEdit>
-                    <i acl [acl-ability]="'modify_department'" nz-icon nzType="edit" (click)="edit(data)"></i>
+                    <i acl [acl-ability]="'modify_department_category'" nz-icon nzType="edit" (click)="edit(data)"></i>
                 </ng-template>
                 <ng-template #actionEllipsis>
                     <ng-container *ngIf="data.active; else activeFalse">
-                        <a acl [acl-ability]="'delete_department'" nz-popconfirm
-                    nzPopconfirmTitle="确定禁用当前部门？"
-                    (nzOnConfirm)="disabled(data.id)"
-                    (nzOnCancel)="cancel()" class="text-error">禁用</a>
+                        <a acl [acl-ability]="'delete_department_category'" class="text-error" nz-popconfirm
+                        nzPopconfirmTitle="确定禁用当前项目类型科目？"
+                        (nzOnConfirm)="disabled(data.id)"
+                        (nzOnCancel)="cancel()">禁用</a>
                     </ng-container>
                     <ng-template #activeFalse>
-                        <a acl [acl-ability]="'delete_department'" (click)="enabled(data.id)" class="text-primary">启用</a>
+                        <a acl [acl-ability]="'delete_department_category'" (click)="enabled(data.id)" class="text-primary">启用</a>
                     </ng-template>
                 </ng-template>
             </nz-card>

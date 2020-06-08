@@ -56,7 +56,7 @@ export class NoContractSupplierComponent implements OnInit {
     if(this.data) {
       console.log(this.data);
       this.validateForm.patchValue({
-        service_category_id: this.data.service_category.id,
+        service_category_id: this.data.service_category ? this.data.service_category.id : null,
         amount: this.data.amount
       })
     }

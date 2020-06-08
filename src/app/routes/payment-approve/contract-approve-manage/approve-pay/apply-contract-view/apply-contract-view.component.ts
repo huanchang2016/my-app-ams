@@ -13,7 +13,11 @@ import html2canvas from 'html2canvas';
 @Component({
   selector: 'app-apply-contract-view',
   templateUrl: './apply-contract-view.component.html',
-  styles: []
+  styles: [`
+    #print-box {
+      max-width: 1000px;
+    }
+  `]
 })
 export class ApplyContractViewComponent implements OnInit {
   listOfData:any[] = [];
@@ -30,6 +34,9 @@ export class ApplyContractViewComponent implements OnInit {
   selectedContract:any = null;
   contractList:any[] = [];
 
+  costTotalPay:number = 0;
+  payPercent:string = '0%';
+
   constructor(
     public msg: NzMessageService,
     private settingsConfigService: SettingsConfigService,
@@ -40,62 +47,31 @@ export class ApplyContractViewComponent implements OnInit {
     this.activatedRoute.params.subscribe((params:Params) => {
       if(params && params['id']) {
         this.projectId = +params['id'];
-        this.getProjectInfo();
         this.getContractList();
-        // this.getBudgetInfo();
+        this.getProjectInfo();
       }
     });
+    // 如果有 contract_pay_id 参数， 则表示为编辑 合约支付
+    this.activatedRoute.queryParams.subscribe(params=> {
+      if(params && params['contract_pay_id']) {
+        this.contract_pay_id = +(params['contract_pay_id']);
+        this.getContractPayment();
+      }
+    })
 
-    // this.activatedRoute.queryParams.subscribe(params=> {
-    //   if(params && params['contract_pay_id']) {
-    //     this.contract_pay_id = +(params['contract_pay_id']);
-    //     this.getContractPayDetail();
-    //     this.getContractPayment();
-    //   }
-    // })
   }
   submitLoading: boolean = false;
 
 
   ngOnInit() {
-    
   }
-
-  currentSelectCost:any = null;
-  confirmationAmountValidator = (control: FormControl): { [s: string]: boolean } => {
-
-    if(!this.currentSelectCost) {
-      return { required: true };
-    }else {
-      const max:number = this.currentSelectCost.max - this.currentSelectCost.pay_amount;
-      const amount:number = Number(control.value);
-      if (!amount) {
-        return { required: true };
-      } else if (amount > max || amount > this.selectedContract.amount) {
-        return { confirm: true, error: true };
-      }
-      return {};
-    }
-    
-    
-  };
-
-  // contractValueChange() {
-  //   [this.selectedContract] = this.contractList.filter( v => v.id === this.contract_id);
-  // }
 
   getContractList():void { // 通过项目获取合约
     this.settingsConfigService.get(`/api/contract/project/${this.projectId}`).subscribe((res:ApiData) => {
       if(res.code === 200) {
         this.contractList = res.data.contract;
-        // 如果有 contract_pay_id 参数， 则表示为编辑 合约支付
-        this.activatedRoute.queryParams.subscribe(params=> {
-          if(params && params['contract_pay_id']) {
-            this.contract_pay_id = +(params['contract_pay_id']);
-            this.getContractPayDetail();
-            this.getContractPayment();
-          }
-        })
+        console.log(this.contractList, 'contractList ');
+        this.getContractPayDetail();
       }
     })
   }
@@ -108,7 +84,6 @@ export class ApplyContractViewComponent implements OnInit {
             this.contractInfo = res.data;
             this.contract_id = res.data.contract.id;
             [this.selectedContract] = this.contractList.filter( v => v.id === this.contract_id);
-            this.transferAmount(this.selectedContract.amount)
             if(!res.data.draft) { // 非草稿时 获取流程
               this.getWorkflow();
             }
@@ -122,9 +97,22 @@ export class ApplyContractViewComponent implements OnInit {
           if(res.code === 200) {
             const contractPayment:any[] = res.data.contract_payment;
             this.listOfData = contractPayment;
-
+            this.countTotal();
           }
         })
+  }
+  countTotal() {
+    this.costTotalPay = this.listOfData.reduce((currentTotal:number, item:any) => {
+      return item.amount + currentTotal;
+    }, 0);
+  }
+  countPercent(total:number):string {
+    const payTotal = this.listOfData.reduce((currentTotal:number, item:any) => {
+      return item.cost.pay_amount + currentTotal;
+    }, 0);
+    const payPercent = ((payTotal / total) * 100).toFixed(2) + '%';
+    return payPercent;
+
   }
 
   getProjectInfo() { // 项目基础信息
@@ -135,18 +123,6 @@ export class ApplyContractViewComponent implements OnInit {
     })
   }
   
-  // 金额大写
-  transferNumber:string = '';
-  transferAmount(num:number) {
-    console.log(num, 'sldkjfslkjdf');
-    
-    this.settingsConfigService.post(`/api/finance/transfer`, { num }).subscribe((res: ApiData) => {
-      if (res.code === 200) {
-        this.transferNumber = res.data.number;
-      }
-    });
-  }
-
   // 流程进程信息
   progressInfo:any = null;
   nodeProcess:any[] = [];
@@ -162,7 +138,7 @@ export class ApplyContractViewComponent implements OnInit {
     this.settingsConfigService
         .get(`/api/contract/pay/process/${this.contract_pay_id}`)
         .subscribe((res:ApiData) => {
-          console.log(res, 'workflow');
+          // console.log(res, 'workflow');
           if(res.code === 200) {
             this.progressInfo = res.data;
             this.getNodeProcess();
@@ -175,11 +151,11 @@ export class ApplyContractViewComponent implements OnInit {
     this.settingsConfigService
         .get(`/api/node/process/${this.progressInfo.id}`)
         .subscribe((res:ApiData) => {
-          console.log(res, 'node_process');
+          // console.log(res, 'node_process');
           if(res.code === 200) {
             this.nodeProcess = res.data.node_process;
             this.currentNodeProcess = this.nodeProcess.filter( v => v.current)[0];
-            console.log(this.currentNodeProcess, this.isCurrentCheck, this.settings.user);
+            // console.log(this.currentNodeProcess, this.isCurrentCheck, this.settings.user);
             if(this.currentNodeProcess) {
               this.isCurrentCheck = this.currentNodeProcess.user.id === this.settings.user.id;
             }
@@ -192,7 +168,7 @@ export class ApplyContractViewComponent implements OnInit {
       this.notice.error('错误', '是否通过未选择');
       return;
     }
-    console.log(this.checkOption, 'agree info submit!');
+    // console.log(this.checkOption, 'agree info submit!');
     const obj:any = {
       ...this.checkOption,
       node_process_id: this.currentNodeProcess.id
@@ -200,7 +176,7 @@ export class ApplyContractViewComponent implements OnInit {
     this.settingsConfigService
         .post(`/api/pay/node_process/approval`, obj)
         .subscribe((res:ApiData) => {
-          console.log(res, 'approval');
+          // console.log(res, 'approval');
           if(res.code === 200) {
            this.msg.success('审核提交成功');
            this.settingsConfigService.resetGlobalTasks();

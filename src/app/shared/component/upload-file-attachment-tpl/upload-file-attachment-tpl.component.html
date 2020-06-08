@@ -16,12 +16,12 @@
 
 <!-- 显示已有附件内容 -->
 
-<sv-container *ngIf="attachmentArray && attachmentArray.length !== 0">
+<sv-container *ngIf="attachmentArray && attachmentArray.length !== 0" class="mt-md" size="small">
     <ng-container *ngFor="let attachmentCategory of attachmentArray">
-        <sv [label]="attachmentCategory.name" [col]="1" *ngIf="attachmentCategory.members.length !== 0" class="mb-md">
+        <sv [label]="attachmentCategory.name" [col]="1" *ngIf="attachmentCategory.members.length !== 0">
             <ng-container *ngFor="let attachment of attachmentCategory.members; let i = index">
                 <div class="clearfix bg-grey-light-h mb-sm pointer px-xs">
-                    <span class="mr-md font-weigth-bold">{{ i + 1 }}. </span>
+                    <span class="mr-md font-weigth-bold float-left">{{ i + 1 }}. </span>
                     <a href="{{ environment.SERVER_URL + attachment.path }}" class="float-left" target="_blank"><i
                             nz-icon nzType="link" nzTheme="outline" class="pr-xs"></i> {{ attachment.name }}</a>
                     <a nz-popconfirm nzPopconfirmTitle="确定删除当前附件？"

@@ -65,7 +65,8 @@ export class ApplyListCComponent implements OnInit {
 
   
   view(data:any) {
-    this.router.navigateByUrl(`/approve/contract/apply/pay/edit/${data.project.id}?contract_pay_id=${data.id}`);
+    // this.router.navigateByUrl(`/approve/contract/apply/pay/edit/${data.project.id}?contract_pay_id=${data.id}`);
+    this.router.navigateByUrl(`/approve/contract/pay/view/${data.project.id}?contract_pay_id=${data.id}`);
   }
   pageIndexChange($event:number) {
     this.pageOption.page = $event;

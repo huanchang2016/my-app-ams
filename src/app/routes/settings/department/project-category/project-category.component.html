@@ -20,7 +20,10 @@
                 <a acl [acl-ability]="'modify_project_category'" (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
                 <nz-divider nzType="vertical"></nz-divider>
                 <ng-container *ngIf="data.active; else activeFalse">
-                    <a acl [acl-ability]="'delete_project_category'" (click)="disabled(data.id)" class="text-nowrap">禁用</a>
+                    <a acl [acl-ability]="'delete_project_category'" nz-popconfirm
+                    nzPopconfirmTitle="确定禁用当前项目类型？"
+                    (nzOnConfirm)="disabled(data.id)"
+                    (nzOnCancel)="cancel()" class="text-nowrap text-error">禁用</a>
                 </ng-container>
                 <ng-template #activeFalse>
                     <a acl [acl-ability]="'delete_project_category'" (click)="enabled(data.id)" class="text-nowrap">启用</a>

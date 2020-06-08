@@ -2,16 +2,17 @@ import { Component, OnInit } from '@angular/core';
 import { CommonFunctionService } from 'src/app/routes/service/common-function.service';
 import { NzModalService, NzMessageService } from 'ng-zorro-antd';
 import { List, ApiData } from 'src/app/data/interface.data';
-import { DepartmentCategoryFormComponent } from './department-category-form/department-category-form.component';
 import { SettingsConfigService } from 'src/app/routes/service/settings-config.service';
+import { SubjectFormCComponent } from './subject-form-c/subject-form-c.component';
 
 
 @Component({
-  selector: 'app-department-category',
-  templateUrl: './category.component.html',
-  styles: []
+  selector: 'app-category-subject',
+  templateUrl: './category-subject.component.html',
+  styles: [
+  ]
 })
-export class DepartmentCategoryComponent implements OnInit {
+export class CategorySubjectComponent implements OnInit {
   companyArray: List[] = [];
   // 单位id
   companyId:number = null;
@@ -52,8 +53,8 @@ export class DepartmentCategoryComponent implements OnInit {
   createComponentModal(data:any = null): void {
     console.log(data);
     const modal = this.modalService.create({
-      nzTitle: (!data ? '新增' : '编辑') + '部门',
-      nzContent: DepartmentCategoryFormComponent,
+      nzTitle: (!data ? '新增' : '编辑') + '项目类型科目',
+      nzContent: SubjectFormCComponent,
       nzMaskClosable: false,
       nzComponentParams: {
         companyId: this.companyId,
@@ -74,7 +75,7 @@ export class DepartmentCategoryComponent implements OnInit {
 
   }
   disabled(id:number):void {
-    this.settingsConfigService.post('/api/department_category/disable', { department_category_ids: [id] })
+    this.settingsConfigService.post('/api/project/category/subject/disable', { subject_id: id })
         .subscribe((res:ApiData) => {
           if(res.code === 200) {
             this.msg.success('禁用成功');
@@ -137,11 +138,11 @@ export class DepartmentCategoryComponent implements OnInit {
   
   getDataList(id:number = this.companyId) { // 获取单位下的数据
     this.loading = true;
-    this.settingsConfigService.get(`/api/department_category/${id}`).subscribe((res:ApiData) => {
-      console.log(res);
+    this.settingsConfigService.get(`/api/project/category/subject/all`).subscribe((res:ApiData) => {
+      console.log(res, 'subject');
       this.loading = false;
       if(res.code === 200) {
-        let data:any[] = res.data.department_category;
+        let data:any[] = res.data.project_category_subject;
         this.list = data.sort((a:any, b:any) => a.sequence - b.sequence);
         this.searchOptionsChange();
       }

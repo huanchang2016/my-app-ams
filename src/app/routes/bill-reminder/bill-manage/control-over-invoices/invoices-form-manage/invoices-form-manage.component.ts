@@ -12,6 +12,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   styles: [`
     :host ::ng-deep .form-item-box > nz-form-label {
       min-width: 100px;
+      line-height: 40px;
     }
     :host ::ng-deep nz-form-control {
       flex-grow: 1;

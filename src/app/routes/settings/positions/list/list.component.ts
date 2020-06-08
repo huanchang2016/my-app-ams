@@ -138,4 +138,5 @@ export class PositionListComponent implements OnInit {
     });
   }
 
+  cancel() {}
 }

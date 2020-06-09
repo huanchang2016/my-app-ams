@@ -39,7 +39,10 @@ import { AdjustSupplierContractListCComponent } from './project-adjust/adjust-su
 import { AdjustSupplierTreatyListCComponent } from './project-adjust/adjust-supplier-info/adjust-supplier-treaty-list-c/adjust-supplier-treaty-list-c.component';
 import { AdjustSupplierContractFormCComponent } from './project-adjust/adjust-supplier-info/adjust-supplier-contract-form-c/adjust-supplier-contract-form-c.component';
 import { AdjustSupplierTreatyFormCComponent } from './project-adjust/adjust-supplier-info/adjust-supplier-treaty-form-c/adjust-supplier-treaty-form-c.component';
-import { BudgetIndexComponent } from './component/project-budget/budget-index/budget-index.component';
+import { ProjectIncomeCComponent } from './component/project-budget/budget-index/project-income-c/project-income-c.component';
+import { SubsidyIncomeCComponent } from './component/project-budget/budget-index/subsidy-income-c/subsidy-income-c.component';
+import { ProjectIncomeFormCComponent } from './component/project-budget/budget-index/project-income-c/project-income-form-c/project-income-form-c.component';
+import { SubsidyIncomeFormCComponent } from './component/project-budget/budget-index/subsidy-income-c/subsidy-income-form-c/subsidy-income-form-c.component';
 
 const COMPONENTS = [
   DraftListComponent,
@@ -58,7 +61,6 @@ const COMPONENTS_NOROUNT = [
   ProjectDrawerSearchOptionComponent,
   ProjectInfoComponent,
   ProjectBudgetComponent,
-  BudgetIndexComponent,
   BudgetCostManageComponent,
   BudgetCostFormComponent,
   ProjectSupplierComponent,
@@ -75,6 +77,10 @@ const COMPONENTS_NOROUNT = [
   ProjectLogsComponent,
   AdjustProjectInfoComponent,
   AdjustBudgetInfoComponent,
+  ProjectIncomeCComponent,
+  SubsidyIncomeCComponent,
+  ProjectIncomeFormCComponent,
+  SubsidyIncomeFormCComponent,
   AdjustSupplierInfoComponent,
   DateRangePickerCComponent,
   AdjustSupplierFormCComponent,

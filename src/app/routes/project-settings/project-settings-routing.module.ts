@@ -5,6 +5,7 @@ import { ProjectIncomeListComponent } from './project-income-list/project-income
 import { ProjectServiceCategoryListComponent } from './project-service-category-list/project-service-category-list.component';
 
 import { ACLGuard, ACLType } from '@delon/acl';
+import { ContractCategoryComponent } from './contract-category-list/contract-category.component';
 
 const routes: Routes = [
   { path: 'cost', component: ProjectCostListComponent,
@@ -30,6 +31,14 @@ const routes: Routes = [
         ability: ['supplier_service_list']
       }
     }
+  },
+  { path: 'contract-category', component: ContractCategoryComponent,
+    // canActivate: [ACLGuard],
+    // data: {
+    //   guard: <ACLType>{
+    //     ability: ['supplier_service_list']
+    //   }
+    // }
   }
 ];
 

@@ -1,0 +1,82 @@
+<form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+    <nz-form-item>
+        <div class="font-weight-bold text-md">甲方信息</div>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="partyA" nzRequired>甲方</nz-form-label>
+        <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请选择甲方单位">
+            <nz-select style="width: 100%;" nzMode="multiple" id="partyA" nzPlaceHolder="请选择甲方单位" formControlName="partyA">
+                <ng-container *ngFor="let item of partACompanyList">
+                    <nz-option [nzLabel]="item.name" [nzValue]="item.name"></nz-option>
+                </ng-container>
+            </nz-select>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="partyA_power">甲方全责界定</nz-form-label>
+        <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请填写甲方权责界定描述">
+            <textarea
+                nz-input
+                id="partyA_power"
+                placeholder="请填写甲方权责界定描述"
+                formControlName="partyA_power"
+                [nzAutosize]="{ minRows: 2, maxRows: 6 }"
+            ></textarea>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="partyA_condition">甲方费用及支付条件</nz-form-label>
+        <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请填写甲方费用及支付条件">
+            <textarea
+                nz-input
+                id="partyA_condition"
+                placeholder="请填写甲方费用及支付条件"
+                formControlName="partyA_condition"
+                [nzAutosize]="{ minRows: 2, maxRows: 6 }"
+            ></textarea>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <div class="font-weight-bold text-md">乙方信息</div>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="partyB" nzRequired>乙方</nz-form-label>
+        <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请选择乙方单位">
+            <nz-select style="width: 100%;" id="partyB" nzShowSearch nzPlaceHolder="请选择乙方单位" nzDisabled formControlName="partyB">
+                <ng-container *ngFor="let item of partACompanyList">
+                    <nz-option [nzLabel]="item.name" [nzValue]="item.name"></nz-option>
+                </ng-container>
+            </nz-select>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="partyB_power">乙方全责界定</nz-form-label>
+        <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请填写乙方权责界定描述">
+            <textarea
+                nz-input
+                id="partyB_power"
+                placeholder="请填写乙方权责界定描述"
+                formControlName="partyB_power"
+                [nzAutosize]="{ minRows: 2, maxRows: 6 }"
+            ></textarea>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="partyB_condition">乙方费用及支付条件</nz-form-label>
+        <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请填写乙方费用及支付条件">
+            <textarea
+                nz-input
+                id="partyB_condition"
+                placeholder="请填写乙方费用及支付条件"
+                formControlName="partyB_condition"
+                [nzAutosize]="{ minRows: 2, maxRows: 6 }"
+            ></textarea>
+        </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item nz-row class="register-area">
+        <nz-form-control [nzSpan]="18" [nzOffset]="6">
+            <button nz-button nzType="primary">{{ data ? '保存' : '新增' }}</button>
+        </nz-form-control>
+    </nz-form-item>
+</form>

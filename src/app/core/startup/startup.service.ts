@@ -322,6 +322,11 @@ export class StartupService {
                 text: '服务商类型',
                 link: '/pro-settings/service-category',
                 hide: this.isHideRouter(['supplier_service_list'], permissionGroup)
+              },
+              {
+                text: '合同类型',
+                link: '/pro-settings/contract-category',
+                // hide: this.isHideRouter(['supplier_service_list'], permissionGroup)
               }
             ]
           },

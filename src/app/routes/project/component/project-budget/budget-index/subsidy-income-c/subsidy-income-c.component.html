@@ -1,0 +1,37 @@
+<nz-card nzTitle="补贴收入" [nzExtra]="createTemplate">
+    <ng-template #createTemplate>
+        <button nz-button nzType="primary" (click)="add()">新增</button>
+    </ng-template>
+
+
+        <nz-table #incomeTable [nzData]="incomeList" [nzFrontPagination]="false">
+            <thead>
+                <tr>
+                    <th>序号</th>
+                    <th nzWidth="200px">补贴名称</th>
+                    <th>申请条件</th>
+                    <th>测算依据</th>
+                    <th>备注</th>
+                    <th nzWidth="100px">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let data of incomeTable.data; let i = index">
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ data.name }}</td>
+                    <td><span [innerHTML]="data.condition | showTextareaContent"></span></td>
+                    <td><span [innerHTML]="data.calculation_basis | showTextareaContent"></span></td>
+                    <td><span [innerHTML]="data.remark | showTextareaContent"></span></td>
+                    <td rowspan="2">
+                        <a (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
+
+                        <nz-divider nzType="vertical"></nz-divider>
+
+                        <a nz-popconfirm nzPopconfirmTitle="确定禁用当前补贴收入？" (nzOnConfirm)="confirm(data.id)"
+                            (nzOnCancel)="cancel()" class="text-error"><i nz-icon nzType="delete"
+                                nzTheme="outline"></i></a>
+                    </td>
+                </tr>
+            </tbody>
+        </nz-table>
+</nz-card>

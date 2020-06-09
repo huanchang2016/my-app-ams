@@ -10,7 +10,7 @@ import { ApiData } from 'src/app/data/interface.data';
 })
 export class ProjectCreateComponent implements OnInit {
 
-  currentSteps = 1;
+  currentSteps = 0;
 
   project:any = {
     info: null

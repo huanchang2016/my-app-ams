@@ -56,6 +56,8 @@ export class ProjectBudgetComponent implements OnInit {
     this.validateForm = this.fb.group({
       tax_id: [ null, [Validators.required] ],
       income: [ null, [Validators.required, Validators.pattern(/^\d+(\.\d{1,2})?$/)] ],
+      // subsidy_type: [ null, [Validators.required] ],
+      subsidy_income: [ null, [Validators.required, Validators.pattern(/^\d+(\.\d{1,2})?$/)] ],
       cost: [ null ]
     });
 
@@ -68,6 +70,8 @@ export class ProjectBudgetComponent implements OnInit {
       //  如果存在 data， 需要通过项目  获取 预算表
       this.getBudgetData();
       console.log(this.projectInfo, 'project info');
+      this.getProjectIncomeList();
+      this.getSubsidyIncomeList();
     }
   }
 
@@ -111,6 +115,7 @@ export class ProjectBudgetComponent implements OnInit {
          project_id: this.projectInfo.id,
          tax_id: value.tax_id,
          income: +value.income,
+         subsidy_income: +value.subsidy_income,
          cost: costArr
       };
 
@@ -154,7 +159,8 @@ export class ProjectBudgetComponent implements OnInit {
   setFormValue(opt:any) :void {
     this.validateForm.patchValue({
       tax_id: opt.tax ? opt.tax.id : null,
-      income: opt.income === 0 ? null : opt.income
+      income: opt.income === 0 ? null : opt.income,
+      subsidy_income: opt.subsidy_income === 0 ? null : opt.subsidy_income
     });
 
     this.settingsConfigService.get(`/api/cost/budget/${opt.id}`).subscribe((res:ApiData) => {
@@ -175,7 +181,7 @@ export class ProjectBudgetComponent implements OnInit {
         this.currentTax = this.taxArray.filter( v => v.id === value.tax_id)[0];
       }
       
-      const totalIncome:number = Number(value.income); // 总收入
+      const totalIncome:number = Number(value.income); // 项目总收入 + 补贴总收入 + Number(value.subsidy_income) TODO: 待定
       const sj:number = totalIncome * this.currentTax.rate; // 税金
       const no_tax_income:number = totalIncome - sj;
       let totalCost:number = 0;
@@ -206,4 +212,54 @@ export class ProjectBudgetComponent implements OnInit {
     e.preventDefault();
     this.prevStepsChange.emit();
   }
+  // 新增修改需求
+  incomeOpt:any = {
+    project: true,
+    subsidy: false
+  };
+  projectIncome:any[] = [];
+  subsidyIncome:any[] = [];
+
+  listValueChange(type:string) {
+    if(type === 'project') {
+      this.getProjectIncomeList();
+    }else {
+      this.getSubsidyIncomeList();
+    }
+    
+  }
+
+  getProjectIncomeList() {
+    // 获取项目收入
+    this.settingsConfigService.get(`/api/project/revenue/${this.projectInfo.id}`).subscribe((res:ApiData) => {
+      console.log('项目收入', res);
+      if(res.code === 200) {
+        this.projectIncome = res.data.project_revenue;
+        if(this.projectIncome.length !== 0) {
+          this.incomeOpt.project = true;
+        }
+      }
+    });
+
+    
+  }
+  getSubsidyIncomeList() {
+
+    // 获取补贴收入
+    this.settingsConfigService.get(`/api/subsidy/income/${this.projectInfo.id}`).subscribe((res:ApiData) => {
+      console.log('补贴收入', res);
+      if(res.code === 200) {
+        this.subsidyIncome = res.data.subsidy_income;
+        if(this.subsidyIncome.length !== 0) {
+          this.incomeOpt.subsidy = true;
+        }
+      }
+    });
+  }
+
+  incomeChange() {
+    console.log(this.incomeOpt, 'income option')
+
+  }
+  
 }

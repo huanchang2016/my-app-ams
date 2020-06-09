@@ -145,4 +145,5 @@ export class ProjectIncomeListComponent implements OnInit {
     });
   }
 
+  cancel() {}
 }

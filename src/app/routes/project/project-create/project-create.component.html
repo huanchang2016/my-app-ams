@@ -29,6 +29,8 @@
                 </app-project-info>
             </div>
             <div *ngSwitchCase="1">
+                <!-- <app-project-budget-index [projectInfo]="project.info" (submitChangeSuccess)="submitChangeSuccess($event)"
+                    (prevStepsChange)="prevStepsChange()"></app-project-budget-index> -->
                 <app-project-budget [projectInfo]="project.info" (submitChangeSuccess)="submitChangeSuccess($event)"
                     (prevStepsChange)="prevStepsChange()"></app-project-budget>
             </div>

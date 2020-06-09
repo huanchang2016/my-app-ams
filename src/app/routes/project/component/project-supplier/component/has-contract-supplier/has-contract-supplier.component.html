@@ -30,6 +30,17 @@
             <input id="name" formControlName="name" nz-input placeholder="填写合同名称" />
         </nz-form-control>
     </nz-form-item>
+    <nz-form-item>
+        <nz-form-label nzFor="contract_category_id" nzRequired>合同类型</nz-form-label>
+        <nz-form-control nzErrorTip="请选择合同类型">
+            <nz-select style="width: 100%;" id="contract_category_id" nzShowSearch
+                nzPlaceHolder="请选择合同类型" formControlName="contract_category_id">
+                <ng-container *ngFor="let item of contractCategoryList">
+                    <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
+               </ng-container>
+             </nz-select>
+        </nz-form-control>
+    </nz-form-item>
 
     <nz-form-item>
         <nz-form-label nzFor="contract_number" nzRequired>合约编号</nz-form-label>

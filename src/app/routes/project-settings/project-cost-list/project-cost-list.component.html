@@ -26,7 +26,8 @@
                 <a acl [acl-ability]="'modify_cost'" class="text-nowrap" (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
                 <nz-divider nzType="vertical"></nz-divider>
                 <ng-container *ngIf="data.active; else activeFalse">
-                    <a acl [acl-ability]="'delete_cost'" (click)="disabled(data.id)" class="text-error text-nowrap">禁用</a>
+                    <a acl [acl-ability]="'delete_cost'" nz-popconfirm nzPopconfirmTitle="确定禁用当前成本类型？" (nzOnConfirm)="disabled(data.id)"
+                    (nzOnCancel)="cancel()" class="text-error text-nowrap">禁用</a>
                 </ng-container>
                 <ng-template #activeFalse>
                     <a acl [acl-ability]="'delete_cost'" (click)="enabled(data.id)" class="text-nowrap">启用</a>
@@ -57,7 +58,8 @@
                 </ng-template>
                 <ng-template #actionEllipsis>
                     <ng-container *ngIf="data.active; else activeFalse">
-                        <a acl [acl-ability]="'delete_cost'" (click)="disabled(data.id)" class="text-error">禁用</a>
+                        <a acl [acl-ability]="'delete_cost'" nz-popconfirm nzPopconfirmTitle="确定禁用当前成本类型？" (nzOnConfirm)="disabled(data.id)"
+                        (nzOnCancel)="cancel()" class="text-error">禁用</a>
                     </ng-container>
                     <ng-template #activeFalse>
                         <a acl [acl-ability]="'delete_cost'" (click)="enabled(data.id)">启用</a>

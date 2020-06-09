@@ -2,17 +2,29 @@
 
     <app-project-info-show-c [projectInfo]="projectInfo"></app-project-info-show-c>
 
+    <div class="income-box mb-md">
+        <span class="mr-md">收入类型: </span>
+        <label nz-checkbox [(ngModel)]="incomeOpt.project" (ngModelChange)="incomeChange()">项目收入</label>
+        <label nz-checkbox [(ngModel)]="incomeOpt.subsidy" (ngModelChange)="incomeChange()">补贴收入</label>
+    </div>
+    <div class="project-income-box mb-md" *ngIf="incomeOpt.project">
+        <app-project-income-c [projectId]="projectInfo?.id" [incomeList]="projectIncome"
+            (listValueChange)="listValueChange($event)"></app-project-income-c>
+    </div>
+    <div class="subsidy-income-box mb-md" *ngIf="incomeOpt.subsidy">
+        <app-subsidy-income-c [projectId]="projectInfo?.id" [incomeList]="subsidyIncome"
+        (listValueChange)="listValueChange($event)"></app-subsidy-income-c>
+    </div>
     <nz-card>
         <form nz-form [formGroup]="validateForm">
             <div nz-row [nzGutter]="24" nzType="flex">
-                <div nz-col [nzSm]="24" [nzMd]="12" class="border-right">
+                <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="12" *ngIf="incomeOpt.project">
                     <div nz-row>
-                        <div nz-col [nzSpan]="24" class="font-weight-bold text-md mb-sm">预算收入</div>
                         <div nz-col [nzSpan]="24">
                             <nz-form-item>
-                                <nz-form-label nzFor="tax_id" nzRequired>预算类型</nz-form-label>
-                                <nz-form-control nzErrorTip="请选择预算类型">
-                                    <nz-select style="width: 100%;" id="tax_id" nzShowSearch nzPlaceHolder="请选择预算类型"
+                                <nz-form-label nzFor="tax_id" nzRequired>项目预算类型</nz-form-label>
+                                <nz-form-control nzErrorTip="请选择项目收入预算类型">
+                                    <nz-select style="width: 100%;" id="tax_id" nzShowSearch nzPlaceHolder="请选择项目收入预算类型"
                                         formControlName="tax_id" (ngModelChange)="budgetChange()">
                                         <ng-container *ngFor="let item of taxArray">
                                             <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
@@ -23,35 +35,42 @@
                         </div>
                         <div nz-col [nzSpan]="24">
                             <nz-form-item>
-                                <nz-form-label nzFor="income" nzRequired>金额</nz-form-label>
-                                <nz-form-control nzErrorTip="预算收入只能输入数字且最多保留2位小数">
+                                <nz-form-label nzFor="income" nzRequired>项目收入金额</nz-form-label>
+                                <nz-form-control nzErrorTip="项目预算收入只能输入数字且最多保留2位小数">
                                     <nz-input-group nzSuffix="元" nzPrefix="￥" style="width: 100%">
-                                        <input type="text" id="income" formControlName="income" nzPlaceHolder="填写预算收入金额"
+                                        <input type="text" id="income" formControlName="income" placeholder="填写项目收入预算金额"
                                             nz-input />
                                     </nz-input-group>
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
+                        <!-- <div nz-col [nzSpan]="24">
+                            <nz-form-item>
+                                <nz-form-label nzFor="subsidy_type" nzRequired>补贴收入类型</nz-form-label>
+                                <nz-form-control nzErrorTip="请选择补贴收入类型">
+                                    <nz-select style="width: 100%;" id="subsidy_type" nzShowSearch nzPlaceHolder="请选择补贴收入类型"
+                                        formControlName="subsidy_type" (ngModelChange)="budgetChange()">
+                                        <ng-container *ngFor="let item of taxArray">
+                                            <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
+                                        </ng-container>
+                                    </nz-select>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div> -->
                         <div nz-col [nzSpan]="24">
-                            <sv-container col="1" class="float-right text-right">
-                                <sv label="不含税收入">
-                                    <strong class="text-primary">{{ currentCountResult.no_tax_income || 0 | currency: 'CNY' }}</strong>
-                                </sv>
-                                <sv label="税&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;率">
-                                    <strong class="text-error">{{ currentCountResult.rate || 0 }} %</strong>
-                                </sv>
-                                <sv label="税&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;金">
-                                    <strong class="text-error">{{ currentCountResult.tax_income || 0 | currency: 'CNY' }}</strong>
-                                </sv>
-                                <sv label="价税合计">
-                                    <strong class="">{{ currentCountResult.income || 0 | currency: 'CNY' }}</strong>
-                                </sv>
-                            </sv-container>
+                            <nz-form-item>
+                                <nz-form-label nzFor="subsidy_income" nzRequired>补贴收入金额</nz-form-label>
+                                <nz-form-control nzErrorTip="补贴收入只能输入数字且最多保留2位小数">
+                                    <nz-input-group nzSuffix="元" nzPrefix="￥" style="width: 100%">
+                                        <input type="text" id="subsidy_income" formControlName="subsidy_income" placeholder="填写补贴收入预算金额"
+                                            nz-input />
+                                    </nz-input-group>
+                                </nz-form-control>
+                            </nz-form-item>
                         </div>
-
                     </div>
                 </div>
-                <div nz-col [nzSm]="24" [nzXs]="24" [nzMd]="12">
+                <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="12">
                     <div nz-row>
                         <div nz-col [nzSpan]="24" class="cost-title font-weight-bold text-md mb-sm">
                             <span>预算成本</span>
@@ -66,14 +85,35 @@
                     </div>
                 </div>
 
-
+                <div nz-col [nzSpan]="24">
+                    <sv-container col="1">
+                        <sv label="不含税收入">
+                            <strong
+                                class="text-primary">{{ currentCountResult.no_tax_income || 0 | currency: 'CNY' }}</strong>
+                        </sv>
+                        <sv label="税&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;率">
+                            <strong class="text-error">{{ currentCountResult.rate || 0 }} %</strong>
+                        </sv>
+                        <sv label="税&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;金">
+                            <strong
+                                class="text-error">{{ currentCountResult.tax_income || 0 | currency: 'CNY' }}</strong>
+                        </sv>
+                        <sv label="价税合计">
+                            <strong class="">{{ currentCountResult.income || 0 | currency: 'CNY' }}</strong>
+                        </sv>
+                    </sv-container>
+                </div>
+                
                 <div nz-col [nzSpan]="24" class="my-lg">
+
                     <sv-container class="profit-count" col="2">
                         <sv label="毛利润">
-                            <span class="text-primary font-weight-bold">{{ currentCountResult.gross_profit | currency: 'CNY' }}</span>
+                            <span
+                                class="text-primary font-weight-bold">{{ currentCountResult.gross_profit | currency: 'CNY' }}</span>
                         </sv>
                         <sv label="毛利率">
-                            <span class="text-primary font-weight-bold">{{ currentCountResult.gross_profit_percent }}</span>
+                            <span
+                                class="text-primary font-weight-bold">{{ currentCountResult.gross_profit_percent }}</span>
                         </sv>
                     </sv-container>
                 </div>

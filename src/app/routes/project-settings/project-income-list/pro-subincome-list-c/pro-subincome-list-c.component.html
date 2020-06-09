@@ -26,7 +26,7 @@
 
                     <nz-divider nzType="vertical"></nz-divider>
 
-                    <a *ngIf="data.active" nz-popconfirm nzPopconfirmTitle="确认是否需要禁用当前税目类型" class="text-error"
+                    <a *ngIf="data.active" nz-popconfirm nzPopconfirmTitle="确认是否需要禁用当前税目明细类型" class="text-error"
                         (nzOnConfirm)="disabled(data.id)" (nzOnCancel)="cancel()">
                         禁用
                     </a>

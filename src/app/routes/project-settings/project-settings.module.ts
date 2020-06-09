@@ -12,11 +12,15 @@ import { ServiceCategoryFormComponent } from './project-service-category-list/se
 import { ServiceCategorySearchComponent } from './project-service-category-list/service-category-search/service-category-search.component';
 import { ProSubincomeListCComponent } from './project-income-list/pro-subincome-list-c/pro-subincome-list-c.component';
 import { SubincomeFormCComponent } from './project-income-list/pro-subincome-list-c/subincome-form-c/subincome-form-c.component';
+import { ContractCategoryComponent } from './contract-category-list/contract-category.component';
+import { ContractCategoryFormCComponent } from './contract-category-list/contract-category-form-c/contract-category-form-c.component';
+import { ContractCategorySearchCComponent } from './contract-category-list/contract-category-search-c/contract-category-search-c.component';
 
 const COMPONENTS = [
   ProjectCostListComponent,
   ProjectIncomeListComponent,
-  ProjectServiceCategoryListComponent
+  ProjectServiceCategoryListComponent,
+  ContractCategoryComponent
 ];
 const COMPONENTS_NOROUNT = [
   CostSearchComponentComponent,
@@ -26,7 +30,9 @@ const COMPONENTS_NOROUNT = [
   ServiceCategoryFormComponent,
   ServiceCategorySearchComponent,
   ProSubincomeListCComponent,
-  SubincomeFormCComponent
+  SubincomeFormCComponent,
+  ContractCategoryFormCComponent,
+  ContractCategorySearchCComponent
 ];
 
 @NgModule({

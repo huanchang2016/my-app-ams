@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { List, ApiData } from 'src/app/data/interface.data';
 import { SettingsConfigService } from 'src/app/routes/service/settings-config.service';
 import { filter, map } from 'rxjs/operators';
+import { SettingsService } from '@delon/theme';
 
 @Component({
   selector: 'app-has-contract-supplier',
@@ -39,17 +40,31 @@ export class HasContractSupplierComponent implements OnInit {
   validateForm: FormGroup; // 基本资料
   submitLoading:boolean = false;
 
+  contractCategoryList:any[] = [];
+
   constructor(
     private modal: NzModalRef,
     private fb: FormBuilder,
     private msg: NzMessageService,
-    public settingsConfigService: SettingsConfigService
-  ) { }
+    public settingsConfigService: SettingsConfigService,
+    private settings: SettingsService
+  ) {
+    // 获取合同类型
+    if(this.settings.user.company) {
+      this.settingsConfigService.get(`/api/contract/category/${this.settings.user.company.id}`).subscribe((res:ApiData) => {
+        console.log('合同类型lieb ', res)
+        if(res.code === 200) {
+          this.contractCategoryList = res.data.contract_category;
+        }
+      })
+    }
+  }
 
   ngOnInit() {
     this.validateForm = this.fb.group({
       service_category_id: [null, [Validators.required]], // 服务商 类型选择
       name: [null, [Validators.required]],
+      contract_category_id: [null, [Validators.required]],
       contract_number: [null, [Validators.required]], // 合约编号
       contract_time: [null, [Validators.required]],
       is_amount: [null, [Validators.required]],
@@ -65,6 +80,7 @@ export class HasContractSupplierComponent implements OnInit {
       console.log(this.data);
       this.validateForm.patchValue({
         name: this.data.name,
+        contract_category_id: this.data.contract_category ? this.data.contract_category.id : null,
         service_category_id: this.data.service_category.id,
         contract_number: this.data.number,
         contract_time: {
@@ -99,6 +115,7 @@ export class HasContractSupplierComponent implements OnInit {
           contract_id: this.data.id,
           service_category_id: value.service_category_id,
           name: value.name,
+          contract_category_id: value.contract_category_id,
           contract_number: value.contract_number,
           start_time: value.contract_time.start,
           end_time: value.contract_time.end,
@@ -126,6 +143,7 @@ export class HasContractSupplierComponent implements OnInit {
           supplier_id: this.supplierInfo.id,
           service_category_id: value.service_category_id,
           name: value.name,
+          contract_category_id: value.contract_category_id,
           contract_number: value.contract_number,
           start_time: value.contract_time.start,
           end_time: value.contract_time.end,

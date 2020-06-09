@@ -1,0 +1,43 @@
+<nz-card nzTitle="项目收入" [nzExtra]="createTemplate">
+    <ng-template #createTemplate>
+        <button nz-button nzType="primary" (click)="add()">新增</button>
+    </ng-template>
+
+    <ng-container *ngFor="let data of incomeList; let i = index">
+
+        <nz-table [nzData]="[1]" [nzFrontPagination]="false" [class.mb-md]="i < incomeList.length - 1">
+            <thead>
+                <tr>
+                    <th>{{ i + 1 }}</th>
+                    <th nzWidth="250px">单位名称</th>
+                    <th>权责界定</th>
+                    <th>费用及支付条件</th>
+                    <th nzWidth="100px">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>甲方</td>
+                    <td>{{ data.partyA }}</td>
+                    <td><span [innerHTML]="data.partyA_power | showTextareaContent"></span></td>
+                    <td><span [innerHTML]="data.partyA_condition | showTextareaContent"></span></td>
+                    <td rowspan="2">
+                        <a (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
+
+                        <nz-divider nzType="vertical"></nz-divider>
+
+                        <a nz-popconfirm nzPopconfirmTitle="确定禁用当前项目收入？" (nzOnConfirm)="confirm(data.id)"
+                            (nzOnCancel)="cancel()" class="text-error"><i nz-icon nzType="delete"
+                                nzTheme="outline"></i></a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>乙方</td>
+                    <td>{{ data.partyB }}</td>
+                    <td><span [innerHTML]="data.partyB_power | showTextareaContent"></span></td>
+                    <td><span [innerHTML]="data.partyB_condition | showTextareaContent"></span></td>
+                </tr>
+            </tbody>
+        </nz-table>
+    </ng-container>
+</nz-card>

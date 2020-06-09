@@ -3,15 +3,15 @@ import { CommonFunctionService } from 'src/app/routes/service/common-function.se
 import { NzModalService, NzMessageService } from 'ng-zorro-antd';
 import { List, ApiData } from 'src/app/data/interface.data';
 import { SettingsConfigService } from 'src/app/routes/service/settings-config.service';
-import { ServiceCategoryFormComponent } from './service-category-form/service-category-form.component';
+import { ContractCategoryFormCComponent } from './contract-category-form-c/contract-category-form-c.component';
 
 @Component({
-  selector: 'app-project-service-category-list',
-  templateUrl: './project-service-category-list.component.html',
-  styles: []
+  selector: 'app-contract-category',
+  templateUrl: './contract-category.component.html',
+  styles: [
+  ]
 })
-
-export class ProjectServiceCategoryListComponent implements OnInit {
+export class ContractCategoryComponent implements OnInit {
   companyArray: List[] = [];
   // 单位id
   companyId:number = null;
@@ -33,7 +33,7 @@ export class ProjectServiceCategoryListComponent implements OnInit {
         });
         if(this.companyArray.length === 1) {
           this.companyId = this.companyArray[0].id;
-          this.getDataList(this.companyArray[0].id);
+          this.getDataList();
         }
       }
     })
@@ -55,8 +55,8 @@ export class ProjectServiceCategoryListComponent implements OnInit {
   createComponentModal(data:any = null): void {
     console.log(data);
     const modal = this.modalService.create({
-      nzTitle: (!data ? '新增' : '编辑') + '服务商类型',
-      nzContent: ServiceCategoryFormComponent,
+      nzTitle: (!data ? '新增' : '编辑') + '合同类型',
+      nzContent: ContractCategoryFormCComponent,
       nzWrapClassName: 'modal-lg',
       nzMaskClosable: false,
       nzComponentParams: {
@@ -79,7 +79,7 @@ export class ProjectServiceCategoryListComponent implements OnInit {
   }
   
   disabled(id:number):void {
-    this.settingsConfigService.post('/api/service/category/disable', { category_ids: [id] })
+    this.settingsConfigService.post('/api/contract/category/disable', { contract_category_id: id })
         .subscribe((res:ApiData) => {
           if(res.code === 200) {
             this.msg.success('禁用成功');
@@ -93,21 +93,21 @@ export class ProjectServiceCategoryListComponent implements OnInit {
           }
     });
   }
-  enabled(id:number):void {
-    this.settingsConfigService.post('/api/service/category/enable', { category_ids: [id] })
-        .subscribe((res:ApiData) => {
-          if(res.code === 200) {
-            this.msg.success('启用成功');
-            this.listOfData = this.listOfData.filter( v => v.id !== id);
-            this.list = this.list.map( v => {
-              if(v.id === id ) v.active = true;
-              return v;
-            });
-          }else {
-            this.msg.error(res.error || '启用失败')
-          }
-    })
-  }
+  // enabled(id:number):void {
+  //   this.settingsConfigService.post('/api/service/category/enable', { category_ids: [id] })
+  //       .subscribe((res:ApiData) => {
+  //         if(res.code === 200) {
+  //           this.msg.success('启用成功');
+  //           this.listOfData = this.listOfData.filter( v => v.id !== id);
+  //           this.list = this.list.map( v => {
+  //             if(v.id === id ) v.active = true;
+  //             return v;
+  //           });
+  //         }else {
+  //           this.msg.error(res.error || '启用失败')
+  //         }
+  //   })
+  // }
 
 
   // 搜索条件发生变化
@@ -129,20 +129,20 @@ export class ProjectServiceCategoryListComponent implements OnInit {
   // 单位筛选发生变化
   companyValueChange({company_id}):void {
     this.companyId = company_id;
-    this.getDataList(company_id);
+    this.getDataList();
   }
-  getDataList(id:number = this.companyId) { // 获取单位下的数据
+  getDataList() { // 获取单位下的数据
     this.loading = true;
-    this.settingsConfigService.get(`/api/service/category/${id}`).subscribe((res:ApiData) => {
-      console.log(res);
+    this.settingsConfigService.get(`/api/contract/category/${this.companyId}`).subscribe((res:ApiData) => {
+      console.log(res, 'contract category list');
       this.loading = false;
       if(res.code === 200) {
-        let data:any[] = res.data.service_category;
+        let data:any[] = res.data.contract_category;
         this.list = data.sort((a:any, b:any) => a.sequence - b.sequence);
         this.searchOptionsChange();
       }
     });
   }
-  cancel() {}
 
+  cancel() {}
 }

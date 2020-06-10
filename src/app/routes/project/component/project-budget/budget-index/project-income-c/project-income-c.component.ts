@@ -74,7 +74,7 @@ export class ProjectIncomeCComponent implements OnChanges, OnInit {
   }
 
   confirm(id:number):void {
-    const opt:any = { project_revenue_id: id };
+    const opt:any = { project_revenue_ids: [id] };
     this.settingsConfigService.post('/api/project/revenue/disable', opt).subscribe((res: ApiData) => {
       if (res.code === 200) {
         this.msg.success('禁用成功');

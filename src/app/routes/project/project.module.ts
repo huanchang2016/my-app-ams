@@ -43,6 +43,8 @@ import { ProjectIncomeCComponent } from './component/project-budget/budget-index
 import { SubsidyIncomeCComponent } from './component/project-budget/budget-index/subsidy-income-c/subsidy-income-c.component';
 import { ProjectIncomeFormCComponent } from './component/project-budget/budget-index/project-income-c/project-income-form-c/project-income-form-c.component';
 import { SubsidyIncomeFormCComponent } from './component/project-budget/budget-index/subsidy-income-c/subsidy-income-form-c/subsidy-income-form-c.component';
+import { ProjectIncomeShowCComponent } from './project-view/project-income-show-c/project-income-show-c.component';
+import { SubsidyIncomeShowCComponent } from './project-view/subsidy-income-show-c/subsidy-income-show-c.component';
 
 const COMPONENTS = [
   DraftListComponent,
@@ -87,7 +89,9 @@ const COMPONENTS_NOROUNT = [
   AdjustSupplierContractListCComponent,
   AdjustSupplierTreatyListCComponent,
   AdjustSupplierContractFormCComponent,
-  AdjustSupplierTreatyFormCComponent
+  AdjustSupplierTreatyFormCComponent,
+  ProjectIncomeShowCComponent,
+  SubsidyIncomeShowCComponent
 ];
 
 @NgModule({

@@ -26,7 +26,10 @@
                     (nzOnCancel)="cancel()" class="text-nowrap text-error">禁用</a>
                 </ng-container>
                 <ng-template #activeFalse>
-                    <a acl [acl-ability]="'delete_project_category'" (click)="enabled(data.id)" class="text-nowrap">启用</a>
+                    <a acl [acl-ability]="'delete_project_category'" nz-popconfirm
+                    nzPopconfirmTitle="确定启用当前项目类型？"
+                    (nzOnConfirm)="enabled(data.id)"
+                    (nzOnCancel)="cancel()" class="text-nowrap">启用</a>
                 </ng-template>
             </td>
         </tr>

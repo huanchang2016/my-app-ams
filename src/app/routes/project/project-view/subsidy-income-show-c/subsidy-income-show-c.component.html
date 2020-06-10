@@ -1,0 +1,20 @@
+<nz-table #incomeTable [nzData]="incomeList" [nzFrontPagination]="false">
+    <thead>
+        <tr>
+            <th>序号</th>
+            <th nzWidth="200px">补贴名称</th>
+            <th>申请条件</th>
+            <th>测算依据</th>
+            <th>备注</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let data of incomeTable.data; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ data.name }}</td>
+            <td><span [innerHTML]="data.condition | showTextareaContent"></span></td>
+            <td><span [innerHTML]="data.calculation_basis | showTextareaContent"></span></td>
+            <td><span [innerHTML]="data.remark | showTextareaContent"></span></td>
+        </tr>
+    </tbody>
+</nz-table>

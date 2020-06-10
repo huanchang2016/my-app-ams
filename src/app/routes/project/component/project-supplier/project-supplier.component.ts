@@ -40,6 +40,7 @@ export class ProjectSupplierComponent implements OnChanges, OnInit {
 
   ngOnChanges() {
     if(this.projectInfo) {
+      console.log('this.projectInfo', this.projectInfo)
       this.getSupplierInfo();
       this.getServiceCategory();
     }

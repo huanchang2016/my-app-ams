@@ -196,21 +196,26 @@ export class ProjectViewComponent implements OnInit {
           if(costRes.code === 200) {
             this.project.budget = Object.assign(budget, { cost: costRes.data.cost });
             console.log(this.project);
-            this.transferAmount(this.project.budget.income)
+            // this.transferAmount(this.project.budget.income)
           }
         })
       }
     })
   }
   
+  contractList:any[] = []; // 项目下的合约列表
+  treatyList:any[] = []; // 项目下的非合约列表
   getSupplierInfo(proId:number):void {
-
-    this.settingsConfigService.get(`/api/supplier/project/${proId}`).subscribe((res:ApiData) => {
+    this.settingsConfigService.get(`/api/contract/project/${proId}`).subscribe((res:ApiData) => {
+      // console.log('项目下的所有 合约 列表', res);
       if(res.code === 200) {
-        this.project.supplier = res.data.supplier;
-        // 是否默认展示供应商下 合约列表数据
-        this.project.supplier.forEach(item => (this.showContractExpand[item.id] = true));
-        this.project.supplier.forEach(item => (this.showNoContractExpand[item.id] = true));
+        this.contractList = res.data.contract;
+      }
+    })
+    this.settingsConfigService.get(`/api/treaty/${proId}`).subscribe((res:ApiData) => {
+      // console.log('项目下的所有 非合约 列表', res);
+      if(res.code === 200) {
+        this.treatyList = res.data.treaty;
       }
     })
   }
@@ -240,8 +245,6 @@ export class ProjectViewComponent implements OnInit {
   // 金额大写
   transferNumber:string = '';
   transferAmount(num:number) {
-    console.log(1, { num: num });
-    
     this.settingsConfigService.post(`/api/finance/transfer`, { num }).subscribe((res: ApiData) => {
       if (res.code === 200) {
         this.transferNumber = res.data.number;

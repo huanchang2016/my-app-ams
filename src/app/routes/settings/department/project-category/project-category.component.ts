@@ -172,4 +172,5 @@ export class ProjectCategoryComponent implements OnInit {
     this.settingsConfigService.post('/api/project_category/sort', opt).subscribe();
   }
 
+  cancel() {}
 }

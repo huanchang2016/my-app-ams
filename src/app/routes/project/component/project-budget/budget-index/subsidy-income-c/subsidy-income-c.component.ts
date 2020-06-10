@@ -74,8 +74,8 @@ export class SubsidyIncomeCComponent implements OnInit {
   }
 
   confirm(id:number):void {
-    const opt:any = { income_id: id };
-    this.settingsConfigService.post('/api/subsidy/income/diable', opt).subscribe((res: ApiData) => {
+    const opt:any = { income_ids: [id] };
+    this.settingsConfigService.post('/api/subsidy/income/disable', opt).subscribe((res: ApiData) => {
       if (res.code === 200) {
         this.msg.success('禁用成功');
         this.listValueChange.emit('subsidy');

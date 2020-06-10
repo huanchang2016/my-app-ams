@@ -56,7 +56,6 @@ export class ProjectBudgetComponent implements OnInit {
     this.validateForm = this.fb.group({
       tax_id: [ null, [Validators.required] ],
       income: [ null, [Validators.required, Validators.pattern(/^\d+(\.\d{1,2})?$/)] ],
-      // subsidy_type: [ null, [Validators.required] ],
       subsidy_income: [ null, [Validators.required, Validators.pattern(/^\d+(\.\d{1,2})?$/)] ],
       cost: [ null ]
     });
@@ -93,15 +92,53 @@ export class ProjectBudgetComponent implements OnInit {
     
   }
 
+  get taxId() {
+    return this.validateForm.controls.tax_id;
+  }
+  get income() {
+    return this.validateForm.controls.income;
+  }
+  get subsidy_income() {
+    return this.validateForm.controls.subsidy_income;
+  }
   submitForm(): void {
-    for (const i in this.validateForm.controls) {
-      this.validateForm.controls[i].markAsDirty();
-      this.validateForm.controls[i].updateValueAndValidity();
+    // for (const i in this.validateForm.controls) {
+    //   this.validateForm.controls[i].markAsDirty();
+    //   this.validateForm.controls[i].updateValueAndValidity();
+    // }
+    
+    // 如果收入类型均为选择或填写不能提交 project: false,
+    // subsidy: false
+    const isProjectIncome:boolean = this.projectIncome.length !== 0;
+    const isSubsidyIncome:boolean = this.subsidyIncome.length !== 0;
+
+    if(!this.incomeOpt.project && !this.incomeOpt.subsidy ) {
+      this.msg.warning('收入类型未选择');
+      return;
+    }
+    if (this.incomeOpt.project) {
+      this.taxId.markAsDirty();
+      this.taxId.updateValueAndValidity();
+      this.income.markAsDirty();
+      this.income.updateValueAndValidity();
+      if (this.taxId.invalid || this.income.invalid || !isProjectIncome ) {
+        this.msg.warning('项目收入类型或者金额未正确填写！');
+        return;
+      }
+    }
+    if (this.incomeOpt.subsidy){
+
+      this.subsidy_income.markAsDirty();
+      this.subsidy_income.updateValueAndValidity();
+      if (this.subsidy_income.invalid || !isSubsidyIncome) {
+        this.msg.warning('补贴收入金额或者补贴明细未正确填写')
+        return;
+      }
     }
 
-    // console.log(this.validateForm.value);
 
-    if(this.validateForm.valid) {
+    console.log(this.validateForm);
+
       const value:any = this.validateForm.value;
       console.log(value, '项目预算提交 submit valid === true!');
       const costArr:any[] = value.cost.map( v => {
@@ -110,20 +147,21 @@ export class ProjectBudgetComponent implements OnInit {
           cost_category_id: v.cost_category.id,
           amount: v.amount
         }
-      })
+      });
       const opt:any = {
          project_id: this.projectInfo.id,
-         tax_id: value.tax_id,
-         income: +value.income,
-         subsidy_income: +value.subsidy_income,
+         tax_id: isProjectIncome && this.incomeOpt.project ? value.tax_id : null,
+         income: isProjectIncome && this.incomeOpt.project ? +value.income : 0,
+         subsidy_income: isSubsidyIncome && this.incomeOpt.subsidy ? +value.subsidy_income : 0,
          cost: costArr
       };
 
       this.updateBudget(opt);
       
-    } else {
-      this.msg.warning('信息填写不完整');
-    }
+    
+    // if(this.validateForm.valid) {} else {
+    //   this.msg.warning('信息填写不完整');
+    // }
   }
 
   updateBudget(data:any):void {
@@ -214,7 +252,7 @@ export class ProjectBudgetComponent implements OnInit {
   }
   // 新增修改需求
   incomeOpt:any = {
-    project: true,
+    project: false,
     subsidy: false
   };
   projectIncome:any[] = [];
@@ -237,6 +275,7 @@ export class ProjectBudgetComponent implements OnInit {
         this.projectIncome = res.data.project_revenue;
         if(this.projectIncome.length !== 0) {
           this.incomeOpt.project = true;
+          this.switchPopconfirm = true;
         }
       }
     });
@@ -244,7 +283,6 @@ export class ProjectBudgetComponent implements OnInit {
     
   }
   getSubsidyIncomeList() {
-
     // 获取补贴收入
     this.settingsConfigService.get(`/api/subsidy/income/${this.projectInfo.id}`).subscribe((res:ApiData) => {
       console.log('补贴收入', res);
@@ -252,14 +290,94 @@ export class ProjectBudgetComponent implements OnInit {
         this.subsidyIncome = res.data.subsidy_income;
         if(this.subsidyIncome.length !== 0) {
           this.incomeOpt.subsidy = true;
+          this.switchPopconfirm = true;
         }
       }
     });
   }
 
-  incomeChange() {
-    console.log(this.incomeOpt, 'income option')
+  popconfirmTitle:string = '';
+  switchPopconfirm:boolean = false;
 
+  incomeTypeChange() {
+    //  && !this.incomeOpt.subsidy
+    console.log((!this.incomeOpt.project && !this.incomeOpt.subsidy) || (this.incomeOpt.project && this.incomeOpt.subsidy ))
+    if((!this.incomeOpt.project && !this.incomeOpt.subsidy) || (this.incomeOpt.project && this.incomeOpt.subsidy )) {
+      this.switchPopconfirm = true;
+      return;
+    }
+    if(!this.incomeOpt.project && this.projectIncome.length !== 0) {
+      this.popconfirmTitle = '项目收入类型未选择，且项目收入不为空，如果继续提交，会自动删除所有项目收入信息，是否继续？';
+      this.switchPopconfirm = false;
+    }
+    if(!this.incomeOpt.subsidy && this.subsidyIncome.length !== 0) {
+      this.popconfirmTitle = '补贴收入类型未选择，且补贴收入不为空，如果继续提交，会自动删除所有补贴收入信息，是否继续？';
+      this.switchPopconfirm = false;
+    }
+
+    if(this.projectIncome.length === 0 && this.subsidyIncome.length === 0) {
+      this.switchPopconfirm = true;
+    }
+    if(this.projectIncome.length === 0 && !this.incomeOpt.project) {
+      this.switchPopconfirm = true;
+    }
+    if(this.subsidyIncome.length === 0 && !this.incomeOpt.subsidy) {
+      this.switchPopconfirm = true;
+    }
+
+    if(this.incomeOpt.subsidy && this.subsidyIncome.length === 0) {
+      this.switchPopconfirm = true;
+    }
+    if(this.incomeOpt.project && this.projectIncome.length === 0) {
+      this.switchPopconfirm = true;
+    }
+
+    console.log(this.popconfirmTitle, this.switchPopconfirm);
+
+  }
+
+  confirm() {
+
+    if(this.switchPopconfirm || (this.incomeOpt.project && this.incomeOpt.subsidy ) || (!this.incomeOpt.project && !this.incomeOpt.subsidy )) {
+      this.submitForm();
+    }else {
+      if(!this.incomeOpt.project && this.projectIncome.length !== 0) {
+        console.log('删除所有项目收入信息');
+        const proIncomeIds:number[] = this.projectIncome.map( v => v.id);
+        this.deletedProjectIncomeList(proIncomeIds);
+      }else {
+        console.log('删除所有补贴收入信息');
+        const subIncomeIds:number[] = this.subsidyIncome.map( v => v.id);
+        this.deletedSubsidyIncomeList(subIncomeIds);
+      }
+    }
+  }
+
+  cancel() { }
+
+  deletedProjectIncomeList(ids:number[]):void {
+    const opt:any = { project_revenue_ids: ids };
+    this.settingsConfigService.post('/api/project/revenue/disable', opt).subscribe((res: ApiData) => {
+      if (res.code === 200) {
+        this.switchPopconfirm = true;
+        this.incomeOpt.project = false;
+        this.submitForm();
+      }else {
+        this.msg.error(res.error || '项目收入信息删除失败');
+      }
+    });
+  }
+  deletedSubsidyIncomeList(ids:number[]):void {
+    const opt:any = { income_ids: ids };
+    this.settingsConfigService.post('/api/subsidy/income/disable', opt).subscribe((res: ApiData) => {
+      if (res.code === 200) {
+        this.switchPopconfirm = true;
+        this.incomeOpt.subsidy = false;
+        this.submitForm();
+      }else {
+        this.msg.error(res.error || '补贴收入信息删除失败');
+      }
+    });
   }
   
 }

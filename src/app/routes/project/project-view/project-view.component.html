@@ -92,7 +92,8 @@
       <sv label="负责部门">{{ project.info?.department?.name }}</sv>
 
       <sv label="客户来源">{{ project.info?.origin?.code.code_name + project.info?.origin.name }}</sv>
-      <sv label="预计执行时间">{{ project.info?.plan_execution_start_time }} - {{ project.info?.plan_execution_end_time }}</sv>
+      <sv label="预计执行时间">{{ project.info?.plan_execution_start_time }} - {{ project.info?.plan_execution_end_time }}
+      </sv>
 
     </sv-container>
     <ng-container *ngIf="project.info">
@@ -106,15 +107,42 @@
         <span class="font-weight-bold text-md">三、项目预算</span>
       </ng-template>
       <sv-title>1. 收入</sv-title>
-      <sv label="收入类型"><span>{{ project.budget?.tax.name }}</span></sv>
-      <sv label="收入金额">
-        <span class="font-weight-bold mr-md">{{ project.budget?.income | currency: 'CNY' }}</span>
-        大写：<span class="">{{ transferNumber }}</span>
+      <ng-container>
+        <ng-container *ngIf="project.budget?.tax">
+          <sv-title><span class="text-sm font-weight-bold">项目收入</span></sv-title>
+          <sv col="1" class="income-show-box">
+            <app-project-income-show-c [projectId]="projectId"></app-project-income-show-c>
+          </sv>
+        </ng-container>
+        <ng-container *ngIf="project.budget?.subsidy_income">
+          <sv-title><span class="text-sm font-weight-bold">补贴收入</span></sv-title>
+          <sv col="1" class="income-show-box">
+            <app-subsidy-income-show-c [projectId]="projectId"></app-subsidy-income-show-c>
+          </sv>
+        </ng-container>
+        <sv label="收入类型">
+          <ng-container *ngIf="project.budget?.tax; else noProjectBudgetTax">
+            <span>{{ project.budget?.tax.name }}</span>
+          </ng-container>
+          <ng-template #noProjectBudgetTax>无项目收入</ng-template>
+        </sv>
+        <sv label="项目收入金额">
+          <ng-container *ngIf="project.budget?.tax; else noProjectIncome">
+            <span class="font-weight-bold mr-md">{{ project.budget?.income | currency: 'CNY' }}</span>
+            大写：<span class="">{{ project.budget?.income | n2c }}</span>
+          </ng-container>
+          <ng-template #noProjectIncome>0</ng-template>
+        </sv>
+      </ng-container>
+      <sv label="补贴收入金额" col="1" *ngIf="project.budget?.subsidy_income">
+        <span class="font-weight-bold mr-md">{{ project.budget?.subsidy_income | currency: 'CNY' }}</span>
+        大写：<span class="">{{ project.budget?.subsidy_income | n2c }}</span>
       </sv>
 
       <sv-title>2. 成本</sv-title>
       <ng-container *ngFor="let cost of project.budget?.cost">
-        <sv [label]="cost.cost_category.name"><span class="font-weight-bold">{{ cost.amount | currency: 'CNY' }}</span></sv>
+        <sv [label]="cost.cost_category.name"><span class="font-weight-bold">{{ cost.amount | currency: 'CNY' }}</span>
+        </sv>
       </ng-container>
       <sv [label]="costTpl" col="1">
         <ng-template #costTpl>
@@ -124,11 +152,14 @@
       </sv>
 
       <sv-title>3. 收支统计</sv-title>
-      <sv label="不含税收入"><span class="font-weight-bold">{{ project.budget?.exclude_tax_income | currency: 'CNY' }}</span></sv>
-      <sv label="预算税率"><span>{{ countPercent(project.budget?.tax.rate, 100) }} %</span></sv>
-      <sv label="税金"><span class="font-weight-bold">{{ project.budget?.tax_amount | currency: 'CNY' }}</span></sv>
-      <sv label="毛利润"><span>{{ project.budget?.gross_profit | currency: 'CNY' }}</span></sv>
-      <sv label="毛利率"><span>{{ countPercent(project.budget?.gross_profit_rate, 100) }} %</span></sv>
+      <ng-container *ngIf="project.budget?.tax">
+        <sv label="不含税收入"><span class="font-weight-bold">{{ project.budget?.exclude_tax_income | currency: 'CNY' }}</span>
+        </sv>
+        <sv label="预算税率"><span>{{ countPercent(project.budget?.tax?.rate, 100) }} %</span></sv>
+        <sv label="税金"><span class="font-weight-bold">{{ project.budget?.tax_amount | currency: 'CNY' }}</span></sv>
+        <sv label="毛利润"><span>{{ project.budget?.gross_profit | currency: 'CNY' }}</span></sv>
+        <sv label="毛利率"><span>{{ countPercent(project.budget?.gross_profit_rate, 100) }} %</span></sv>
+      </ng-container>
     </sv-container>
 
     <sv-container class="mb-lg" [title]="proSupplierTpl">
@@ -137,56 +168,97 @@
       </ng-template>
       <sv col="1" class="table-box">
         <div class="hidden-mobile">
-          <nz-table #basicTable [nzFrontPagination]="false" [nzData]="project.supplier">
-            <thead>
-              <tr>
-                <th>序号</th>
-                <th>供应商名称</th>
-                <th>编号</th>
-                <th>操作</th>
-              </tr>
-            </thead>
-            <tbody>
-              <ng-container *ngFor="let data of basicTable.data;let i = index">
-                <tr>
-                  <td>{{ i + 1 }}</td>
-                  <td>{{ data.name }}</td>
-                  <td>{{ data.supplier_code }}</td>
-                  <td>
-                    <a (click)="showContract(data.id)" class="text-nowrap">合约<i nz-icon
-                        nzType="{{ showContractExpand[data.id] ? 'caret-up' : 'caret-down' }}" nzTheme="outline"></i></a>
-      
-                    <nz-divider nzType="vertical"></nz-divider>
-      
-                    <a (click)="showNoContract(data.id)" class="text-nowrap">非合约<i nz-icon
-                        nzType="{{ showNoContractExpand[data.id] ? 'caret-up' : 'caret-down' }}" nzTheme="outline"></i></a>
-                  </td>
-                </tr>
-                <tr *ngIf="showContractExpand[data.id]" style="background-color: #f1f1f1;">
-                  <td colspan="4">
-                    <app-supplier-contract-list [projectInfo]="project.info" [supplierInfo]="data" [isView]="true">
-                    </app-supplier-contract-list>
-                  </td>
-                </tr>
-                <tr *ngIf="showNoContractExpand[data.id]" style="background-color: #f1f1f1;">
-                  <td colspan="4">
-                    <app-supplier-no-contract-list [projectInfo]="project.info" [supplierInfo]="data" [isView]="true">
-                    </app-supplier-no-contract-list>
-                  </td>
-                </tr>
-              </ng-container>
-            </tbody>
-          </nz-table>
+          <ng-container *ngIf="contractList.length !== 0">
+            <nz-card class="mb-md" nzTitle="签订合约">
+              <nz-table #contracTable [nzData]="contractList" nzSize="small"
+                [nzFrontPagination]="false">
+                <thead>
+                  <tr>
+                    <th nzWidth="50px">序号</th>
+                    <th style="max-width: 400px; width: 400px;">合约信息</th>
+                    <th>供应商</th>
+                    <th>附件</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let data of contracTable.data;let i = index">
+                    <td>{{ i + 1 }}</td>
+                    <td>
+                      <sv-container col="1" size="small">
+                        <sv label="合约名称">{{ data.name }}</sv>
+                        <sv label="合约金额">{{ data.amount | _currency }}</sv>
+                        <sv label="合约类型">{{ data.contract_category?.name }}</sv>
+                        <sv label="合约编号">{{ data.number }}</sv>
+                        <sv label="合约编号">{{ data.service_category?.name }}</sv>
+                        <sv label="起止日期">{{ data.start_time }} - {{ data.end_time }}</sv>
+                      </sv-container>
+                    </td>
+                    <td>
+                      {{ data.supplier?.name }}
+                    </td>
+                    
+                    <td>
+                      <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/contract/' + data.id">
+                      </app-upload-file-attachment-show-c>
+                    </td>
+                  </tr>
+                </tbody>
+              </nz-table>
+            </nz-card>
+          </ng-container>
+
+          <ng-container *ngIf="treatyList.length !== 0">
+            <nz-card nzTitle="未签订合约">
+              <nz-table #treatyTable [nzData]="treatyList" nzSize="small"
+                [nzFrontPagination]="false">
+                <thead>
+                  <tr>
+                    <th>序号</th>
+                    <th>服务商类型</th>
+                    <th>金额（元）</th>
+                    <th>供应商</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let data of treatyTable.data;let i = index">
+                    <td>{{ i + 1 }}</td>
+                    <td>{{  data.service_category?.name }}</td>
+                    <td>
+                      <span>{{ data.amount | _currency }}</span>
+                    </td>
+                    <td>{{ data.company?.name }}</td>
+                  </tr>
+                </tbody>
+              </nz-table>
+            </nz-card>
+          </ng-container>
         </div>
         <div class="hidden-pc">
-          <ng-container *ngFor="let data of project.supplier;let i = index">
-            <nz-card nzType="inner" [nzTitle]="mobileSupplierTpl" class="mb-md inner-card">
-              <ng-template #mobileSupplierTpl>
-                <div>{{ data.name }} <span class="ml-sm text-sm">{{ data.supplier_code }}</span></div>
-              </ng-template>
-              <app-supplier-contract-list [projectInfo]="project.info" [supplierInfo]="data" [isView]="true">
-              </app-supplier-contract-list>
-            </nz-card>
+          <ng-container *ngIf="contractList.length !== 0">
+            <ng-container *ngFor="let data of contractList">
+                <nz-card class="mb-sm">
+                    <sv-container>
+                        <sv label="合约名称">{{ data.name }}</sv>
+                        <sv label="合约类型">{{ data.contract_category?.name }}</sv>
+                        <sv label="金额（元）"><span>{{ data.amount | _currency }}</span></sv>
+                        <sv label="合约编号">{{ data.number }}</sv>
+                        <sv label="起止日期">{{ data.start_time }} - {{ data.end_time }}</sv>
+                        <sv label="服务商类型">{{ data.service_category?.name }}</sv>
+                        <sv label="供应商名称">{{ data.supplier?.name }}</sv>
+                    </sv-container>
+                </nz-card>
+            </ng-container>
+          </ng-container>
+          <ng-container *ngIf="treatyList.length !== 0">
+            <ng-container *ngFor="let data of treatyList">
+              <nz-card class="mb-sm">
+                <sv-container col="1" size="small">
+                  <sv label="服务商类型">{{  data.service_category?.name }}</sv>
+                  <sv label="金额（元）"><span>{{ data.amount | _currency }}</span></sv>
+                  <sv label="供应商名称">{{ data.company?.name }}</sv>
+                </sv-container>
+              </nz-card>
+            </ng-container>
           </ng-container>
         </div>
       </sv>
@@ -222,7 +294,7 @@
                 </ng-template>
               </nz-step>
             </ng-container>
-  
+
             <nz-step [nzTitle]="'完成'"
               [nzStatus]=" !progressInfo.finished ? 'wait' : ( progressInfo.agree ? 'finish' : 'error' ) "></nz-step>
           </nz-steps>
@@ -249,19 +321,19 @@
                 </ng-template>
               </nz-step>
             </ng-container>
-  
+
             <nz-step [nzTitle]="'完成'"
               [nzStatus]=" !progressInfo.finished ? 'wait' : ( progressInfo.agree ? 'finish' : 'error' ) "
               [nzDescription]="'项目审核完成'"></nz-step>
           </nz-steps>
-  
+
         </ng-container>
         <ng-template #nodeProcessLoadingTpl>
           <div class="p-xl text-center text-lg text-primary">
             <nz-spin></nz-spin>
           </div>
         </ng-template>
-  
+
         <div class="steps-content" *ngIf="isCurrentCheck">
           <div class="check-box mt-md float-right">
             <nz-radio-group [(ngModel)]="checkOption.agree" [nzButtonStyle]="'solid'">
@@ -278,7 +350,7 @@
             </div>
           </div>
         </div>
-        
+
       </sv>
     </sv-container>
 

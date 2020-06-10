@@ -26,9 +26,9 @@
 
     <nz-form-item>
         <nz-form-label nzFor="amount" nzRequired>非合约金额</nz-form-label>
-        <nz-form-control nzErrorTip="请填写非合约金额">
+        <nz-form-control nzErrorTip="请填写非合约金额，金额应小于或等于{{ limtAmount }}元">
             <nz-input-group nzSuffix="元">
-                <input type="text" #treatyAmount id="amount" formControlName="amount" nz-input placeholder="请填写非合约金额" />
+                <input type="text" #treatyAmount id="amount" formControlName="amount" nz-input placeholder="请填写非合约金额，金额小于或等于{{ limtAmount }}元" />
             </nz-input-group>
         </nz-form-control>
     </nz-form-item>

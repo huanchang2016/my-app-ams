@@ -45,13 +45,13 @@
                     <a acl [acl-ability]="'modify_supplier_service'" (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
                 </ng-template>
                 <ng-template #actionEllipsis>
-                    <ng-container *ngIf="data.active; else activeFalse">
-                        <a acl [acl-ability]="'delete_supplier_service'" nz-popconfirm nzPopconfirmTitle="确定禁用当前合同类型？" (nzOnConfirm)="disabled(data.id)"
+                    <a acl [acl-ability]="'delete_supplier_service'" nz-popconfirm nzPopconfirmTitle="确定禁用当前合同类型？" (nzOnConfirm)="disabled(data.id)"
                     (nzOnCancel)="cancel()" class="text-error text-nowrap">禁用</a>
-                    </ng-container>
+                    
+                    <!-- <ng-container *ngIf="data.active; else activeFalse"></ng-container>
                     <ng-template #activeFalse>
                         <a acl [acl-ability]="'delete_supplier_service'" (click)="enabled(data.id)">启用</a>
-                    </ng-template>
+                    </ng-template> -->
                 </ng-template>
             </nz-card>
         </ng-container>

@@ -152,4 +152,6 @@ export class DepartmentListComponent implements OnInit {
     this.mobilePageList = this.listOfData.slice(this.currentPage * 10 - 10, this.currentPage * 10);
   }
 
+  cancel() {}
+
 }

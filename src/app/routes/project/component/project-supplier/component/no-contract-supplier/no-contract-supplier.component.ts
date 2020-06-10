@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { NzModalRef, NzMessageService } from 'ng-zorro-antd';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { List, ApiData } from 'src/app/data/interface.data';
 import { SettingsConfigService } from 'src/app/routes/service/settings-config.service';
 
@@ -37,6 +37,7 @@ export class NoContractSupplierComponent implements OnInit {
 
   validateForm: FormGroup; // 基本资料
   submitLoading:boolean = false;
+  limtAmount:number;
   
   constructor(
     private modal: NzModalRef,
@@ -48,9 +49,22 @@ export class NoContractSupplierComponent implements OnInit {
   }
 
   ngOnInit() {
+    
+    // 计算 限制金额  重新获取最新的 预算（成本）金额信息计算
+    if(this.projectInfo) {
+      this.settingsConfigService.get(`/api/project/detail/${this.projectInfo.id}`).subscribe((res:ApiData) => {
+        if(res.code === 200) {
+          const info:any = res.data;
+          this.limtAmount = info.budget.cost_amount - info.budget.surplus_cost_amount;
+          if(this.data) {
+            this.limtAmount = this.limtAmount + this.data.amount;
+          }
+        }
+      })
+    }
     this.validateForm = this.fb.group({
       service_category_id: [null, [Validators.required]],
-      amount: [null, [Validators.required, Validators.pattern(/^\d+(\.\d{1,2})?$/)]]
+      amount: [null, [Validators.required, this.confirmValidator, Validators.pattern(/^\d+(\.\d{1,2})?$/)]]
     });
 
     if(this.data) {
@@ -61,6 +75,15 @@ export class NoContractSupplierComponent implements OnInit {
       })
     }
   }
+
+  confirmValidator = (control: FormControl): { [s: string]: boolean } => {
+    if (!control.value) {
+      return { error: true, required: true };
+    } else if (+control.value > this.limtAmount) {
+      return { confirm: true, error: true };
+    }
+    return {};
+  };
 
   submitForm(): void {
     for (const i in this.validateForm.controls) {

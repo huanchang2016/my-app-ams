@@ -1,0 +1,27 @@
+<nz-table [nzData]="[1]" nzBordered [nzFrontPagination]="false">
+    <thead>
+        <tr>
+            <th colspan="2">科目</th>
+            <th style="width: 250px;">单位名称</th>
+            <th>权责界定</th>
+            <th>费用及支付条件</th>
+        </tr>
+    </thead>
+    <tbody>
+        <ng-container *ngFor="let data of incomeList; let i = index">
+            <tr>
+                <td rowspan="2" style="width: 80px;">{{ i + 1 }}</td>
+                <td style="width: 100px;">甲方</td>
+                <td>{{ data.partyA }}</td>
+                <td><span [innerHTML]="data.partyA_power | showTextareaContent"></span></td>
+                <td><span [innerHTML]="data.partyA_condition | showTextareaContent"></span></td>
+            </tr>
+            <tr>
+                <td style="width: 100px;">乙方</td>
+                <td>{{ data.partyB }}</td>
+                <td><span [innerHTML]="data.partyB_power | showTextareaContent"></span></td>
+                <td><span [innerHTML]="data.partyB_condition | showTextareaContent"></span></td>
+            </tr>
+        </ng-container>
+    </tbody>
+</nz-table>

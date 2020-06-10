@@ -66,9 +66,9 @@
 
     <nz-form-item>
         <nz-form-label nzFor="amount" nzRequired>{{ validateForm.value.is_amount === 'A' ? '合同金额' : '请示金额'}}</nz-form-label>
-        <nz-form-control nzErrorTip="请填写合同金额">
+        <nz-form-control nzErrorTip="请填写合同金额，金额应小于或等于{{ limtAmount }}元">
             <nz-input-group nzSuffix="元">
-                <input type="text" id="amount" formControlName="amount" nz-input placeholder="请填写{{ validateForm.value.is_amount === 'A' ? '合同金额' : '请示金额'}}" />
+                <input type="text" id="amount" formControlName="amount" nz-input placeholder="请填写{{ validateForm.value.is_amount === 'A' ? '合同金额' : '请示金额'}}，金额小于或等于{{ limtAmount }}元" />
             </nz-input-group>
         </nz-form-control>
     </nz-form-item>

@@ -39,6 +39,7 @@ export class SubsidyIncomeFormCComponent implements OnChanges, OnDestroy {
   ngOnInit(): void {
     const partyB:string = this.settings.user.company ? this.settings.user.company.name : null;
     this.validateForm = this.fb.group({
+      appropriation_unit: [null, [Validators.required]],
       name: [null, [Validators.required]],
       condition: [null, [Validators.required]],
       calculation_basis: [null, [Validators.required]],

@@ -47,6 +47,13 @@ import { ContractExcuteNotStartComponent } from './contract-approve-manage/excut
 import { ContractExcuteFinishedComponent } from './contract-approve-manage/excute-pay/contract-excute-finished/contract-excute-finished.component';
 import { ContractExcuteListCComponent } from './contract-approve-manage/excute-pay/contract-excute-list-c/contract-excute-list-c.component';
 
+import { ContractApprovePayListComponent } from './contract-approve-manage/approve-pay/contract-approve-pay-list/contract-approve-pay-list.component';
+import { ContractApplyForListComponent } from './contract-approve-manage/apply-for/contract-apply-for-list/contract-apply-for-list.component';
+import { ExcuteContractPayListComponent } from './contract-approve-manage/excute-pay/excute-contract-pay-list/excute-contract-pay-list.component';
+import { NoContractApplyForListComponent } from './no-contract-approve-manage/apply-for/no-contract-apply-for-list/no-contract-apply-for-list.component';
+import { NoContractApprovePayListComponent } from './no-contract-approve-manage/approve-pay/no-contract-approve-pay-list/no-contract-approve-pay-list.component';
+import { NoContractExcutePayListComponent } from './no-contract-approve-manage/excute-pay/no-contract-excute-pay-list/no-contract-excute-pay-list.component';
+
 const COMPONENTS = [
   // 有合约  合约审批管理
   ApproveNotStartedComponent,
@@ -103,6 +110,13 @@ const COMPONENTS_NOROUNT = [
   declarations: [
     ...COMPONENTS,
     ...COMPONENTS_NOROUNT,
+    ContractApprovePayListComponent,
+    NoContractApproveListComponent,
+    ContractApplyForListComponent,
+    ExcuteContractPayListComponent,
+    NoContractApplyForListComponent,
+    NoContractApprovePayListComponent,
+    NoContractExcutePayListComponent,
     
   ],
   entryComponents: COMPONENTS_NOROUNT

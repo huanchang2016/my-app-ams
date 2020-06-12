@@ -59,44 +59,44 @@ export class StartupService {
               },
               {
                 text: '我的项目',
-                link: '/project/my',
-                children: [
-                  {
-                    text: '草稿',
-                    link: '/project/my/draft'
-                  },
-                  {
-                    text: '待审核',
-                    link: '/project/my/progress'
-                  },
-                  {
-                    text: '未通过',
-                    link: '/project/my/refuse'
-                  },
-                  {
-                    text: '已通过',
-                    link: '/project/my/finished'
-                  }
-                ]
+                link: '/project/list'
+                // children: [
+                //   {
+                //     text: '草稿',
+                //     link: '/project/list/draft'
+                //   },
+                //   {
+                //     text: '待审核',
+                //     link: '/project/list/progress'
+                //   },
+                //   {
+                //     text: '未通过',
+                //     link: '/project/list/refuse'
+                //   },
+                //   {
+                //     text: '已通过',
+                //     link: '/project/list/finished'
+                //   }
+                // ]
               },
               {
                 text: '项目审批',
-                link: '/project/approve',
-                hide: this.isHideRouter(['project_approval'], permissionGroup),
-                children: [
-                  {
-                    text: '我的审批',
-                    link: '/project/approve'
-                  },
-                  {
-                    text: '待审批',
-                    link: '/project/forApproved'
-                  },
-                  {
-                    text: '已审批',
-                    link: '/project/approved'
-                  }
-                ]
+                link: '/project/approval',
+                hide: this.isHideRouter(['project_approval'], permissionGroup)
+                // children: [
+                //   {
+                //     text: '我的审批',
+                //     link: '/project/approve'
+                //   },
+                //   {
+                //     text: '待审批',
+                //     link: '/project/forApproved'
+                //   },
+                //   {
+                //     text: '已审批',
+                //     link: '/project/approved'
+                //   }
+                // ]
               },
             ]
           },
@@ -106,67 +106,65 @@ export class StartupService {
             icon: { type: 'icon', value: 'audit' },
             children: [
               {
-                text: '合约支付申请',
-                link: '/approve/contract/apply',
-                children: [
-                  {
-                    text: '项目列表',
-                    link: '/approve/contract/apply/draft'
-                  },
-                  {
-                    text: '审批中',
-                    link: '/approve/contract/apply/in_progress'
-                  },
-                  {
-                    text: '已通过',
-                    link: '/approve/contract/apply/pass'
-                  },
-                  {
-                    text: '未通过',
-                    link: '/approve/contract/apply/refuse'
-                  }
-                ]
+                text: '支付项目',
+                link: '/approve/contract/project/list'
               },
               {
-                text: '合约支付审批',
+                text: '支付申请',
+                link: '/approve/contract/apply'
+                // children: [
+                //   {
+                //     text: '审批中',
+                //     link: '/approve/contract/apply/in_progress'
+                //   },
+                //   {
+                //     text: '已通过',
+                //     link: '/approve/contract/apply/pass'
+                //   },
+                //   {
+                //     text: '未通过',
+                //     link: '/approve/contract/apply/refuse'
+                //   }
+                // ]
+              },
+              {
+                text: '支付审批',
                 link: '/approve/contract/pay',
                 hide: this.isHideRouter(['contract_pay_approval'], permissionGroup),
-                children: [
-                  {
-                    text: '我的审批',
-                    link: '/approve/contract/pay/progress'
-                  },
-                  {
-                    text: '待审批',
-                    link: '/approve/contract/pay/forApproval'
-                  },
-                  {
-                    text: '已审批',
-                    link: '/approve/contract/pay/finished'
-                  }
-                  // {
-                  //   text: '未审批未通过',
-                  //   link: '/approve/contract/pay/without-pass'
-                  // }
-                ]
+                // children: [
+                //   {
+                //     text: '我的审批',
+                //     link: '/approve/contract/pay/progress'
+                //   },
+                //   {
+                //     text: '待审批',
+                //     link: '/approve/contract/pay/forApproval'
+                //   },
+                //   {
+                //     text: '已审批',
+                //     link: '/approve/contract/pay/finished'
+                //   }
+                //   // {
+                //   //   text: '未审批未通过',
+                //   //   link: '/approve/contract/pay/without-pass'
+                //   // }
+                // ]
               },
               {
-                text: '合约支付执行',
-                link: '/approve/contract/excute',
+                text: '支付执行',
+                link: '/approve/contract/excute'
                 // hide: this.isHideRouter(['treaty_pay_approval'], permissionGroup),
-                children: [
-                  {
-                    text: '待执行',
-                    link: '/approve/contract/excute/my'
-                  },
-                  {
-                    text: '已执行',
-                    link: '/approve/contract/excute/finished'
-                  }
-                ]
+                // children: [
+                //   {
+                //     text: '待执行',
+                //     link: '/approve/contract/excute/my'
+                //   },
+                //   {
+                //     text: '已执行',
+                //     link: '/approve/contract/excute/finished'
+                //   }
+                // ]
               }
-              
-              
             ]
           },
           {
@@ -175,64 +173,64 @@ export class StartupService {
             icon: { type: 'icon', value: 'exception' },
             children: [
               {
-                text: '非合约支付申请',
-                link: '/approve/no-contract/apply',
-                children: [
-                  {
-                    text: '项目列表',
-                    link: '/approve/no-contract/apply/draft'
-                  },
-                  {
-                    text: '审批中',
-                    link: '/approve/no-contract/apply/in_progress'
-                  },
-                  {
-                    text: '已通过',
-                    link: '/approve/no-contract/apply/pass'
-                  },
-                  {
-                    text: '未通过',
-                    link: '/approve/no-contract/apply/refuse'
-                  }
-                ]
+                text: '支付项目',
+                link: '/approve/no-contract/project/list'
               },
               {
-                text: '非合约支付审批',
+                text: '支付申请',
+                link: '/approve/no-contract/apply'
+                // children: [
+                //   {
+                //     text: '审批中',
+                //     link: '/approve/no-contract/apply/in_progress'
+                //   },
+                //   {
+                //     text: '已通过',
+                //     link: '/approve/no-contract/apply/pass'
+                //   },
+                //   {
+                //     text: '未通过',
+                //     link: '/approve/no-contract/apply/refuse'
+                //   }
+                // ]
+              },
+              {
+                text: '支付审批',
                 link: '/approve/no-contract/pay',
-                hide: this.isHideRouter(['treaty_pay_approval'], permissionGroup),
-                children: [
-                  {
-                    text: '我的审批',
-                    link: '/approve/no-contract/pay/progress'
-                  },
-                  {
-                    text: '待审批',
-                    link: '/approve/no-contract/pay/forApproval'
-                  },
-                  {
-                    text: '已审批',
-                    link: '/approve/no-contract/pay/finished'
-                  }
-                  // {
-                  //   text: '未审批未通过',
-                  //   link: '/approve/no-contract/pay/without-pass'
-                  // }
-                ]
+                hide: this.isHideRouter(['treaty_pay_approval'], permissionGroup)
+                // children: [
+                //   {
+                //     text: '我的审批',
+                //     link: '/approve/no-contract/pay/progress'
+                //   },
+                //   {
+                //     text: '待审批',
+                //     link: '/approve/no-contract/pay/forApproval'
+                //   },
+                //   {
+                //     text: '已审批',
+                //     link: '/approve/no-contract/pay/finished'
+                //   }
+                //   // {
+                //   //   text: '未审批未通过',
+                //   //   link: '/approve/no-contract/pay/without-pass'
+                //   // }
+                // ]
               },
               {
-                text: '非合约支付执行',
+                text: '支付执行',
                 link: '/approve/no-contract/excute',
                 // hide: this.isHideRouter(['treaty_pay_approval'], permissionGroup),
-                children: [
-                  {
-                    text: '待执行',
-                    link: '/approve/no-contract/excute/my'
-                  },
-                  {
-                    text: '已执行',
-                    link: '/approve/no-contract/excute/finished'
-                  }
-                ]
+                // children: [
+                //   {
+                //     text: '待执行',
+                //     link: '/approve/no-contract/excute/my'
+                //   },
+                //   {
+                //     text: '已执行',
+                //     link: '/approve/no-contract/excute/finished'
+                //   }
+                // ]
               }
               
               
@@ -245,60 +243,64 @@ export class StartupService {
             icon: { type: 'icon', value: 'transaction' },
             children: [
               {
+                text: '开票项目',
+                link: '/bill/apply/project/list'
+              },
+              {
                 text: '开票申请',
-                link: '/bill/apply',
-                children: [
-                  {
-                    text: '开票项目',
-                    link: '/bill/apply/projects'
-                  },
-                  {
-                    text: '进行中',
-                    link: '/bill/apply/in_progress'
-                  },
-                  {
-                    text: '已通过',
-                    link: '/bill/apply/pass'
-                  },
-                  {
-                    text: '已拒绝',
-                    link: '/bill/apply/refused'
-                  }
-                ]
+                link: '/bill/apply'
+                // children: [
+                //   {
+                //     text: '开票项目',
+                //     link: '/bill/apply/projects'
+                //   },
+                //   {
+                //     text: '进行中',
+                //     link: '/bill/apply/in_progress'
+                //   },
+                //   {
+                //     text: '已通过',
+                //     link: '/bill/apply/pass'
+                //   },
+                //   {
+                //     text: '已拒绝',
+                //     link: '/bill/apply/refused'
+                //   }
+                // ]
               },
               {
                 text: '开票审批',
                 link: '/bill/approve',
-                hide: this.isHideRouter(['bill_approval'], permissionGroup),
-                children: [
-                  {
-                    text: '我审批的',
-                    link: '/bill/approve/my'
-                  },
-                  {
-                    text: '待审批',
-                    link: '/bill/approve/forApprove'
-                  },
-                  {
-                    text: '已审批',
-                    link: '/bill/approve/finished'
-                  }
-                ]
+                hide: this.isHideRouter(['bill_approval'], permissionGroup)
+                // children: [
+                //   {
+                //     text: '我审批的',
+                //     link: '/bill/approve/my'
+                //   },
+                //   {
+                //     text: '待审批',
+                //     link: '/bill/approve/forApprove'
+                //   },
+                //   {
+                //     text: '已审批',
+                //     link: '/bill/approve/finished'
+                //   }
+                // ]
               },
               {
                 text: '开票执行',
                 link: '/bill/excute',
                 // hide: this.isHideRouter(['bill_approval'], permissionGroup),
-                children: [
-                  {
-                    text: "待执行",
-                    link: '/bill/excute/my'
-                  },
-                  {
-                    text: '已执行',
-                    link: '/bill/excute/finished'
-                  }
-                ]
+                // children: [
+                //   {
+                //     text: "待执行",
+                //     link: '/bill/excute/my'
+                //   },
+                //   {
+                //     text: '已执行',
+                //     link: '/bill/excute/finished'
+                //   }
+                // ]
               }
             ]
           },
@@ -482,7 +484,410 @@ export class StartupService {
     // only works with promises
     return new Promise((resolve, reject) => {
       // http
-      this.viaHttp(resolve, reject);
+      // this.viaHttp(resolve, reject);
+      this.viaMock(resolve, reject);
     });
+  }
+
+  private viaMock(resolve: any, reject: any) {
+    // const tokenData = this.tokenService.get();
+    // if (!tokenData.token) {
+    //   this.injector.get(Router).navigateByUrl('/passport/login');
+    //   resolve({});
+    //   return;
+    // }
+    // mock
+    const app: any = {
+      name: `ng-alain`,
+      description: `Ng-zorro admin panel front-end framework`
+    };
+    const user: any = {
+      name: 'Admin',
+      avatar: './assets/tmp/img/avatar.jpg',
+      email: 'cipchk@qq.com',
+      token: '123456789'
+    };
+    // Application information: including site name, description, year
+    this.settingService.setApp(app);
+    // User information: including name, avatar, email address
+    this.settingService.setUser(user);
+    // ACL: Set the permissions to full, https://ng-alain.com/acl/getting-started
+    this.aclService.setFull(true);
+    // Menu data, https://ng-alain.com/theme/menu
+    this.menuService.add([
+      {
+        text: '',
+        group: true,
+        hideInBreadcrumb: true,
+        children: [
+          {
+            text: '数据中心',
+            link: '/dashboard',
+            icon: { type: 'icon', value: 'appstore' }
+          },
+          {
+            text: '项目管理',
+            link: '/project',
+            icon: { type: 'icon', value: 'bars' },
+            children: [
+              {
+                text: '新建项目',
+                link: '/project/create'
+              },
+              {
+                text: '我的项目',
+                link: '/project/list'
+                // children: [
+                //   {
+                //     text: '草稿',
+                //     link: '/project/my/draft'
+                //   },
+                //   {
+                //     text: '待审核',
+                //     link: '/project/my/progress'
+                //   },
+                //   {
+                //     text: '未通过',
+                //     link: '/project/my/refuse'
+                //   },
+                //   {
+                //     text: '已通过',
+                //     link: '/project/my/finished'
+                //   }
+                // ]
+              },
+              {
+                text: '项目审批',
+                link: '/project/approval'
+                // children: [
+                //   {
+                //     text: '我的审批',
+                //     link: '/project/approve'
+                //   },
+                //   {
+                //     text: '待审批',
+                //     link: '/project/forApproved'
+                //   },
+                //   {
+                //     text: '已审批',
+                //     link: '/project/approved'
+                //   }
+                // ]
+              },
+            ]
+          },
+          {
+            text: '合约支付管理',
+            link: '/approve/contract',
+            icon: { type: 'icon', value: 'audit' },
+            children: [
+              {
+                text: '支付项目',
+                link: '/approve/contract/project/list'
+              },
+              {
+                text: '支付申请',
+                link: '/approve/contract/apply'
+                // children: [
+                //   {
+                //     text: '审批中',
+                //     link: '/approve/contract/apply/in_progress'
+                //   },
+                //   {
+                //     text: '已通过',
+                //     link: '/approve/contract/apply/pass'
+                //   },
+                //   {
+                //     text: '未通过',
+                //     link: '/approve/contract/apply/refuse'
+                //   }
+                // ]
+              },
+              {
+                text: '支付审批',
+                link: '/approve/contract/pay'
+                // children: [
+                //   {
+                //     text: '我的审批',
+                //     link: '/approve/contract/pay/progress'
+                //   },
+                //   {
+                //     text: '待审批',
+                //     link: '/approve/contract/pay/forApproval'
+                //   },
+                //   {
+                //     text: '已审批',
+                //     link: '/approve/contract/pay/finished'
+                //   }
+                //   // {
+                //   //   text: '未审批未通过',
+                //   //   link: '/approve/contract/pay/without-pass'
+                //   // }
+                // ]
+              },
+              {
+                text: '支付执行',
+                link: '/approve/contract/excute',
+                // children: [
+                //   {
+                //     text: '待执行',
+                //     link: '/approve/contract/excute/my'
+                //   },
+                //   {
+                //     text: '已执行',
+                //     link: '/approve/contract/excute/finished'
+                //   }
+                // ]
+              }
+              
+              
+            ]
+          },
+          {
+            text: '非合约支付管理',
+            link: '/approve/no-contract',
+            icon: { type: 'icon', value: 'exception' },
+            children: [
+              {
+                text: '支付项目',
+                link: '/approve/no-contract/project/list'
+              },
+              {
+                text: '支付申请',
+                link: '/approve/no-contract/apply'
+                // children: [
+                //   {
+                //     text: '审批中',
+                //     link: '/approve/no-contract/apply/in_progress'
+                //   },
+                //   {
+                //     text: '已通过',
+                //     link: '/approve/no-contract/apply/pass'
+                //   },
+                //   {
+                //     text: '未通过',
+                //     link: '/approve/no-contract/apply/refuse'
+                //   }
+                // ]
+              },
+              {
+                text: '支付审批',
+                link: '/approve/no-contract/pay',
+                // children: [
+                //   {
+                //     text: '我的审批',
+                //     link: '/approve/no-contract/pay/progress'
+                //   },
+                //   {
+                //     text: '待审批',
+                //     link: '/approve/no-contract/pay/forApproval'
+                //   },
+                //   {
+                //     text: '已审批',
+                //     link: '/approve/no-contract/pay/finished'
+                //   }
+                //   // {
+                //   //   text: '未审批未通过',
+                //   //   link: '/approve/no-contract/pay/without-pass'
+                //   // }
+                // ]
+              },
+              {
+                text: '支付执行',
+                link: '/approve/no-contract/excute'
+                // children: [
+                //   {
+                //     text: '待执行',
+                //     link: '/approve/no-contract/excute/my'
+                //   },
+                //   {
+                //     text: '已执行',
+                //     link: '/approve/no-contract/excute/finished'
+                //   }
+                // ]
+              }
+            ]
+          },
+  
+          {
+            text: '账务管理',
+            link: '/bill',
+            icon: { type: 'icon', value: 'transaction' },
+            children: [
+              {
+                text: '开票项目',
+                link: '/bill/apply/project/list'
+              },
+              {
+                text: '开票申请',
+                link: '/bill/apply'
+                // children: [
+                //   {
+                //     text: '开票项目',
+                //     link: '/bill/apply/projects'
+                //   },
+                //   {
+                //     text: '进行中',
+                //     link: '/bill/apply/in_progress'
+                //   },
+                //   {
+                //     text: '已通过',
+                //     link: '/bill/apply/pass'
+                //   },
+                //   {
+                //     text: '已拒绝',
+                //     link: '/bill/apply/refused'
+                //   }
+                // ]
+              },
+              {
+                text: '开票审批',
+                link: '/bill/approve'
+                // children: [
+                //   {
+                //     text: '我审批的',
+                //     link: '/bill/approve/my'
+                //   },
+                //   {
+                //     text: '待审批',
+                //     link: '/bill/approve/forApprove'
+                //   },
+                //   {
+                //     text: '已审批',
+                //     link: '/bill/approve/finished'
+                //   }
+                // ]
+              },
+              {
+                text: '开票执行',
+                link: '/bill/excute'
+                // children: [
+                //   {
+                //     text: "待执行",
+                //     link: '/bill/excute/my'
+                //   },
+                //   {
+                //     text: '已执行',
+                //     link: '/bill/excute/finished'
+                //   }
+                // ]
+              }
+            ]
+          },
+          {
+            text: '项目配置管理',
+            link: '/pro-settings',
+            icon: { type: 'icon', value: 'control' },
+            children: [
+              {
+                text: '成本类型配置',
+                link: '/pro-settings/cost',
+              },
+              {
+                text: '税目配置（收入）',
+                link: '/pro-settings/income',
+              },
+              {
+                text: '服务商类型',
+                link: '/pro-settings/service-category',
+              },
+              {
+                text: '合同类型',
+                link: '/pro-settings/contract-category',
+              }
+            ]
+          },
+          {
+            text: '项目流程管理',
+            link: '/workflow',
+            icon: { type: 'icon', value: 'sort-ascending' },
+            children: [
+              {
+                text: '流程列表',
+                link: '/workflow/list',
+              },
+              {
+                text: '流程限额配置',
+                link: '/workflow/quota-settings',
+              }
+            ]
+          },
+          {
+            text: '基础配置',
+            link: '/company',
+            icon: { type: 'icon', value: 'setting' },
+            children: [
+              {
+                text: '单位管理',
+                children: [
+                  {
+                    text: '用户单位',
+                    link: '/company/list',
+                  },
+                  {
+                    text: '客户单位',
+                    link: '/company/customer',
+                  },
+                  {
+                    text: '供应商',
+                    link: '/company/supplier',
+                  }
+                ]
+              },
+              {
+                text: '部门配置',
+                link: '/department',
+                children: [
+                  {
+                    text: '部门管理',
+                    link: '/department/list',
+                  },
+                  {
+                    text: '部门类型',
+                    link: '/department/category',
+                  },
+                  {
+                    text: '项目类型',
+                    link: '/department/project-category',
+                  },
+                  {
+                    text: '类型科目',
+                    link: '/department/category-subject',
+                  }
+                ]
+              },
+              {
+                text: '职位管理',
+                link: '/position/list',
+              }
+            ]
+          },
+          {
+            text: '用户管理',
+            icon: { type: 'icon', value: 'usergroup-add' },
+            children: [
+              {
+                text: '用户列表',
+                link: '/users/list',
+              }
+            ]
+          },
+          {
+            text: '权限管理',
+            icon: { type: 'icon', value: 'key' },
+            children: [
+              {
+                text: '角色管理',
+                link: '/authority/roles',
+              }
+            ]
+          }
+        ]
+      }
+    ]);
+    // Can be set page suffix title, https://ng-alain.com/theme/title
+    this.titleService.suffix = app.name;
+
+    resolve({});
   }
 }

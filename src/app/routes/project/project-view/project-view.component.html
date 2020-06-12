@@ -75,11 +75,44 @@
       </sv>
     </sv-container>
 
-    <sv-container class="mb-lg" [title]="proInfoTpl">
+    <sv-container class="mb-lg" [title]="proInfoTpl" col="1">
       <ng-template #proInfoTpl>
         <span class="font-weight-bold text-md">二、项目信息</span>
       </ng-template>
-      <sv label="客户单位" [col]="1">
+      <sv class="table-box">
+        <nz-table #basicTable [nzData]="[1]" [nzFrontPagination]="false">
+          <thead>
+            <tr>
+              <th nzWidth="300px">项目名称</th>
+              <th nzWidth="200px">项目编号</th>
+              <th>项目情况</th>
+              <th nzWidth="250px">预计执行时间</th>
+              <th>附件</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{ project.info?.name }}</td>
+              <td>{{ project.info?.number }}</td>
+              <td>
+                <sv-container size="small" col="1">
+                  <sv label="项目类型">{{ project.info?.category?.name }}</sv>
+                  <sv label="执行人">{{ project.info?.user.name }}</sv>
+                  <sv label="客户来源">{{ project.info?.origin?.code.code_name + project.info?.origin.name }}</sv>
+                </sv-container>
+              </td>
+              <td>{{ project.info?.plan_execution_start_time }} - {{ project.info?.plan_execution_end_time }}</td>
+              <td>
+                <ng-container *ngIf="project.info">
+                  <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/project/' + project.info.id">
+                  </app-upload-file-attachment-show-c>
+                </ng-container>
+              </td>
+            </tr>
+          </tbody>
+        </nz-table>
+      </sv>
+      <!-- <sv label="客户单位" [col]="1">
         <ng-container *ngFor="let data of project.info?.customer;let i = index">
           <div>{{ i + 1}}. {{ data.name }}</div>
         </ng-container>
@@ -93,14 +126,32 @@
 
       <sv label="客户来源">{{ project.info?.origin?.code.code_name + project.info?.origin.name }}</sv>
       <sv label="预计执行时间">{{ project.info?.plan_execution_start_time }} - {{ project.info?.plan_execution_end_time }}
-      </sv>
+      </sv> -->
 
     </sv-container>
-    <ng-container *ngIf="project.info">
+    <!-- <ng-container *ngIf="project.info">
       <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/project/' + project.info.id">
       </app-upload-file-attachment-show-c>
-    </ng-container>
+    </ng-container> -->
 
+    <sv-container class="mb-lg mt-sm" [title]="proBudgetTpl">
+      <ng-template #proBudgetTpl>
+        <span class="font-weight-bold text-md">三、项目对象</span>
+      </ng-template>
+      <!-- <sv-title>1. 收入</sv-title> -->
+      <ng-container *ngIf="project.budget?.tax">
+          <!-- <sv-title><span class="text-sm font-weight-bold">项目收入</span></sv-title> -->
+          <sv col="1" class="income-show-box">
+            <app-project-income-show-c [projectId]="projectId"></app-project-income-show-c>
+          </sv>
+        </ng-container>
+        <ng-container *ngIf="project.budget?.subsidy_income">
+          <!-- <sv-title><span class="text-sm font-weight-bold">补贴收入</span></sv-title> -->
+          <sv col="1" class="income-show-box">
+            <app-subsidy-income-show-c [projectId]="projectId"></app-subsidy-income-show-c>
+          </sv>
+        </ng-container>
+    </sv-container>
 
     <sv-container class="mb-lg" [title]="proBudgetTpl">
       <ng-template #proBudgetTpl>
@@ -108,18 +159,7 @@
       </ng-template>
       <sv-title>1. 收入</sv-title>
       <ng-container>
-        <ng-container *ngIf="project.budget?.tax">
-          <sv-title><span class="text-sm font-weight-bold">项目收入</span></sv-title>
-          <sv col="1" class="income-show-box">
-            <app-project-income-show-c [projectId]="projectId"></app-project-income-show-c>
-          </sv>
-        </ng-container>
-        <ng-container *ngIf="project.budget?.subsidy_income">
-          <sv-title><span class="text-sm font-weight-bold">补贴收入</span></sv-title>
-          <sv col="1" class="income-show-box">
-            <app-subsidy-income-show-c [projectId]="projectId"></app-subsidy-income-show-c>
-          </sv>
-        </ng-container>
+        
         <sv label="收入类型">
           <ng-container *ngIf="project.budget?.tax; else noProjectBudgetTax">
             <span>{{ project.budget?.tax.name }}</span>
@@ -129,14 +169,14 @@
         <sv label="项目收入金额">
           <ng-container *ngIf="project.budget?.tax; else noProjectIncome">
             <span class="font-weight-bold mr-md">{{ project.budget?.income | currency: 'CNY' }}</span>
-            大写：<span class="">{{ project.budget?.income | n2c }}</span>
+            <!-- 大写：<span class="">{{ project.budget?.income | n2c }}</span> -->
           </ng-container>
           <ng-template #noProjectIncome>0</ng-template>
         </sv>
       </ng-container>
       <sv label="补贴收入金额" col="1" *ngIf="project.budget?.subsidy_income">
         <span class="font-weight-bold mr-md">{{ project.budget?.subsidy_income | currency: 'CNY' }}</span>
-        大写：<span class="">{{ project.budget?.subsidy_income | n2c }}</span>
+        <!-- 大写：<span class="">{{ project.budget?.subsidy_income | n2c }}</span> -->
       </sv>
 
       <sv-title>2. 成本</sv-title>
@@ -151,12 +191,12 @@
         <strong>{{ project.budget?.cost_amount | currency: 'CNY' }}</strong>
       </sv>
 
-      <sv-title>3. 收支统计</sv-title>
+      <sv-title>3. 项目利润</sv-title>
       <ng-container *ngIf="project.budget?.tax">
-        <sv label="不含税收入"><span class="font-weight-bold">{{ project.budget?.exclude_tax_income | currency: 'CNY' }}</span>
+        <!-- <sv label="不含税收入"><span class="font-weight-bold">{{ project.budget?.exclude_tax_income | currency: 'CNY' }}</span>
         </sv>
         <sv label="预算税率"><span>{{ countPercent(project.budget?.tax?.rate, 100) }} %</span></sv>
-        <sv label="税金"><span class="font-weight-bold">{{ project.budget?.tax_amount | currency: 'CNY' }}</span></sv>
+        <sv label="税金"><span class="font-weight-bold">{{ project.budget?.tax_amount | currency: 'CNY' }}</span></sv> -->
         <sv label="毛利润"><span>{{ project.budget?.gross_profit | currency: 'CNY' }}</span></sv>
         <sv label="毛利率"><span>{{ countPercent(project.budget?.gross_profit_rate, 100) }} %</span></sv>
       </ng-container>

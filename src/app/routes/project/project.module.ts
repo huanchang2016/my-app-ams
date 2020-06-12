@@ -45,6 +45,8 @@ import { ProjectIncomeFormCComponent } from './component/project-budget/budget-i
 import { SubsidyIncomeFormCComponent } from './component/project-budget/budget-index/subsidy-income-c/subsidy-income-form-c/subsidy-income-form-c.component';
 import { ProjectIncomeShowCComponent } from './project-view/project-income-show-c/project-income-show-c.component';
 import { SubsidyIncomeShowCComponent } from './project-view/subsidy-income-show-c/subsidy-income-show-c.component';
+import { MyProjectListComponent } from './my-project/my-project-list/my-project-list.component';
+import { ApprovalProjectListComponent } from './approval-project/approval-project-list/approval-project-list.component';
 
 const COMPONENTS = [
   DraftListComponent,
@@ -101,7 +103,9 @@ const COMPONENTS_NOROUNT = [
   ],
   declarations: [
     ...COMPONENTS,
-    ...COMPONENTS_NOROUNT
+    ...COMPONENTS_NOROUNT,
+    MyProjectListComponent,
+    ApprovalProjectListComponent
   ],
   entryComponents: COMPONENTS_NOROUNT
 })

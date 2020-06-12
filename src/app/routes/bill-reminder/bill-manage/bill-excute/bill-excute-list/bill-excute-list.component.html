@@ -1,0 +1,19 @@
+<page-header [title]="'发票开具执行'" [breadcrumb]="breadcrumb" [tab]="tab">
+    <ng-template #breadcrumb>
+        <nz-breadcrumb>
+            <nz-breadcrumb-item><a [routerLink]="['/dashboard']">首页</a></nz-breadcrumb-item>
+            <nz-breadcrumb-item>账务管理</nz-breadcrumb-item>
+            <nz-breadcrumb-item>开票执行</nz-breadcrumb-item>
+        </nz-breadcrumb>
+    </ng-template>
+
+    <ng-template #tab>
+        <nz-tabset [nzSelectedIndex]="pos">
+            <nz-tab *ngFor="let i of tabs" [nzTitle]="i.tab" (nzClick)="to(i)"></nz-tab>
+        </nz-tabset>
+    </ng-template>
+</page-header>
+
+<nz-card [nzBordered]="false">
+    <router-outlet></router-outlet>
+</nz-card>

@@ -1,6 +1,8 @@
 <nz-card nzTitle="补贴收入" [nzExtra]="createTemplate">
     <ng-template #createTemplate>
-        <button nz-button nzType="primary" (click)="add()">新增</button>
+        <ng-container *ngIf="incomeList.length === 0">
+            <button nz-button nzType="primary" (click)="add()">新增</button>
+        </ng-container>
     </ng-template>
 
 
@@ -22,7 +24,7 @@
                     <td><span [innerHTML]="data.condition | showTextareaContent"></span></td>
                     <td><span [innerHTML]="data.calculation_basis | showTextareaContent"></span></td>
                     <td><span [innerHTML]="data.remark | showTextareaContent"></span></td>
-                    <td rowspan="2">
+                    <td>
                         <a (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
 
                         <nz-divider nzType="vertical"></nz-divider>

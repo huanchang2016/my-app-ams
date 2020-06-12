@@ -1,3 +1,4 @@
+import { BillExcuteListComponent } from './bill-manage/bill-excute/bill-excute-list/bill-excute-list.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 // 发票开具申请
@@ -23,66 +24,87 @@ import { BillReminderInvoicesInfoViewComponent } from './bill-manage/control-ove
 
 import { ACLGuard, ACLType } from '@delon/acl';
 
+import { BillApplyListComponent } from './bill-manage/bill-apply/bill-apply-list/bill-apply-list.component';
+import { BillApproveListComponent } from './bill-manage/bill-approve/bill-approve-list/bill-approve-list.component';
+
 const routes: Routes = [
-  { path: 'apply/projects', component: BillApplyProjectsComponent },
+  { path: 'apply/project/list', component: BillApplyProjectsComponent },
   // 项目下的开票申请列表
   { path: 'apply/invoices/list/:id', component: BillReminderInvoicesListComponent, data: { title: '项目发票'} },
   { path: 'apply/invoices/add', component: InvoicesFormManageComponent, data: { title: '新增项目发票'} },
   { path: 'apply/invoices/edit/:id', component: InvoicesFormManageComponent, data: { title: '编辑项目发票'} },
-  { path: 'apply/in_progress', component: BillReminderBillApplyInProgressComponent },
-  { path: 'apply/pass', component: BillApplyPassComponent },
-  { path: 'apply/refused', component: BillApplyRefusedComponent },
+
+  { path: 'apply', component: BillApplyListComponent,
+    children: [
+      { path: '', redirectTo: 'in_progress', pathMatch: 'full' },
+      { path: 'in_progress', component: BillReminderBillApplyInProgressComponent },
+      { path: 'pass', component: BillApplyPassComponent },
+      { path: 'refused', component: BillApplyRefusedComponent }
+    ]
+  },
+
   // 开票审批
-  { path: 'approve/my', component: BillApproveBemyComponent,
-    canActivate: [ACLGuard],
-    data: {
-      guard: <ACLType>{
-        ability: ['bill_approval']
+  { path: 'approve', component: BillApproveListComponent,
+    children: [
+      { path: '', redirectTo: 'forApprove', pathMatch: 'full' },
+      { path: 'forApprove', component: BillApproveFormyComponent,
+        canActivate: [ACLGuard],
+        data: {
+          guard: <ACLType>{
+            ability: ['bill_approval']
+          }
+        }
+      },
+      { path: 'finished', component: BillApproveFinishedComponent,
+        canActivate: [ACLGuard],
+        data: {
+          guard: <ACLType>{
+            ability: ['bill_approval']
+          }
+        }
+      },
+      { path: 'my', component: BillApproveBemyComponent,
+        canActivate: [ACLGuard],
+        data: {
+          guard: <ACLType>{
+            ability: ['bill_approval']
+          }
+        }
+      },
+      { path: 'without', component: BillApproveWithoutComponent,
+        canActivate: [ACLGuard],
+        data: {
+          guard: <ACLType>{
+            ability: ['bill_approval']
+          }
+        }
       }
-    }
-  },
-  { path: 'approve/forApprove', component: BillApproveFormyComponent,
-    canActivate: [ACLGuard],
-    data: {
-      guard: <ACLType>{
-        ability: ['bill_approval']
-      }
-    }
-  },
-  { path: 'approve/finished', component: BillApproveFinishedComponent,
-    canActivate: [ACLGuard],
-    data: {
-      guard: <ACLType>{
-        ability: ['bill_approval']
-      }
-    }
-  },
-  { path: 'approve/without', component: BillApproveWithoutComponent,
-    canActivate: [ACLGuard],
-    data: {
-      guard: <ACLType>{
-        ability: ['bill_approval']
-      }
-    }
+    ]
   },
   // 开票执行情况，路由
   // 待执行 任务
-  { path: 'excute/my', component: BillExcuteNotStartComponent,
-    // canActivate: [ACLGuard],
-    // data: {
-    //   guard: <ACLType>{
-    //     ability: ['bill_approval']
-    //   }
-    // }
+  { path: 'excute', component: BillExcuteListComponent,
+    children: [
+      { path: '', redirectTo: 'my', pathMatch: 'full' },
+      { path: 'my', component: BillExcuteNotStartComponent,
+        // canActivate: [ACLGuard],
+        // data: {
+        //   guard: <ACLType>{
+        //     ability: ['bill_approval']
+        //   }
+        // }
+      },
+      { path: 'finished', component: BillExcuteFinishedComponent,
+        // canActivate: [ACLGuard],
+        // data: {
+        //   guard: <ACLType>{
+        //     ability: ['bill_approval']
+        //   }
+        // }
+      },
+    ]
   },
-  { path: 'excute/finished', component: BillExcuteFinishedComponent,
-    // canActivate: [ACLGuard],
-    // data: {
-    //   guard: <ACLType>{
-    //     ability: ['bill_approval']
-    //   }
-    // }
-  },
+  
   
 
   // 发票开具 详情

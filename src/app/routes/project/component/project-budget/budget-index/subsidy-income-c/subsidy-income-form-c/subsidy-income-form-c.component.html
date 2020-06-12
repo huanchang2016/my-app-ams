@@ -1,5 +1,15 @@
 <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
     <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="appropriation_unit" nzRequired>拨款单位</nz-form-label>
+        <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请选择拨款单位">
+            <nz-select style="width: 100%;" nzMode="multiple" id="appropriation_unit" nzPlaceHolder="请选择拨款单位" formControlName="appropriation_unit">
+                <ng-container *ngFor="let item of partACompanyList">
+                    <nz-option [nzLabel]="item.name" [nzValue]="item.name"></nz-option>
+                </ng-container>
+            </nz-select>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
         <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="name" nzRequired>补贴名称</nz-form-label>
         <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请输入补贴名称">
             <input nz-input id="name" formControlName="name" placeholder="请输入补贴名称" />

@@ -14,6 +14,8 @@ export class ProjectIncomeShowCComponent implements OnChanges {
 
   incomeList:any[] = [];
 
+  incomeInfo:any = null;
+
   constructor(
     private settingsConfigService: SettingsConfigService
   ) { }
@@ -29,6 +31,9 @@ export class ProjectIncomeShowCComponent implements OnChanges {
       console.log('项目收入', res);
       if(res.code === 200) {
         this.incomeList = res.data.project_revenue;
+        if(this.incomeList.length !== 0) {
+          this.incomeInfo = this.incomeList[0];
+        }
       }
     });
     

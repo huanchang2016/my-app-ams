@@ -1,6 +1,8 @@
 <nz-card nzTitle="项目收入" [nzExtra]="createTemplate">
     <ng-template #createTemplate>
-        <button nz-button nzType="primary" (click)="add()">新增</button>
+        <ng-container *ngIf="incomeList.length === 0">
+            <button nz-button nzType="primary" (click)="add()">新增</button>
+        </ng-container>
     </ng-template>
 
     <ng-container *ngFor="let data of incomeList; let i = index">

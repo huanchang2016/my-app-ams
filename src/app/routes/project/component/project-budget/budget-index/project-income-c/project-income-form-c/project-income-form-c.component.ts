@@ -39,12 +39,12 @@ export class ProjectIncomeFormCComponent implements OnChanges, OnDestroy {
   ngOnInit(): void {
     const partyB:string = this.settings.user.company ? this.settings.user.company.name : null;
     this.validateForm = this.fb.group({
-      partyA: [null, [Validators.required]],
-      partyA_power: [null ],
-      partyA_condition: [null ],
-      partyB: [partyB, [Validators.required]],
-      partyB_power: [null ],
-      partyB_condition: [null ]
+      partyA: [null, [Validators.required]],  // 甲方
+      partyA_power: [null ],  // 甲方权责界定
+      partyA_condition: [null ], // 甲方费用支付条件
+      partyB: [partyB, [Validators.required]], // 乙方
+      partyB_power: [null ], // 乙方服务内容
+      partyB_condition: [null ] // 乙方服务 附加条件
     });
 
     

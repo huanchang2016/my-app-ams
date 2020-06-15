@@ -47,7 +47,6 @@ export class ProjectIncomeFormCComponent implements OnChanges, OnDestroy {
       partyB_condition: [null ] // 乙方服务 附加条件
     });
 
-    
 
     if(this.data) {
       //  如果存在 data， 那么需要给表单设置

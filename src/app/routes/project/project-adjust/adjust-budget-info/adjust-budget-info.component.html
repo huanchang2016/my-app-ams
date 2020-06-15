@@ -1,1 +1,174 @@
-<p>adjust-budget-info works!</p>
+<nz-card [nzTitle]="proTitle" [nzBordered]="false" class="mb-md">
+    <ng-template #proTitle>
+        <span class="font-weight-bold text-md">收入预算</span>
+    </ng-template>
+    <div class="income-box mb-md">
+        <span class="mr-md">收入类型: </span>
+        <label nz-checkbox [(ngModel)]="incomeOpt.project" (ngModelChange)="incomeProjectTypeChange()">项目收入</label>
+        <label nz-checkbox [(ngModel)]="incomeOpt.subsidy" (ngModelChange)="incomeSubsidyTypeChange()">补贴收入</label>
+    </div>
+    
+    <ng-container *ngIf="incomeOpt.project">
+    <div class="text-md my-sm">项目收入</div>
+    <form nz-form [formGroup]="validateProjectForm" (ngSubmit)="submitProjectForm()">
+        <div nz-row [nzGutter]="24">
+            <div nz-col [nzSm]="12" [nzXs]="24">
+                <nz-form-item>
+                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="partyA" nzRequired>甲方</nz-form-label>
+                    <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请选择甲方单位">
+                        <nz-select style="width: 100%;" nzMode="multiple" id="partyA" nzPlaceHolder="请选择甲方单位"
+                            formControlName="partyA">
+                            <ng-container *ngFor="let item of partACompanyList">
+                                <nz-option [nzLabel]="item.name" [nzValue]="item.name"></nz-option>
+                            </ng-container>
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="partyA_power">甲方权责界定</nz-form-label>
+                    <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请填写甲方权责界定描述">
+                        <textarea nz-input id="partyA_power" placeholder="请填写甲方权责界定描述" formControlName="partyA_power"
+                            [nzAutosize]="{ minRows: 4, maxRows: 6 }"></textarea>
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="partyA_condition">甲方费用及支付条件</nz-form-label>
+                    <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请填写甲方费用及支付条件">
+                        <textarea nz-input id="partyA_condition" placeholder="请填写甲方费用及支付条件"
+                            formControlName="partyA_condition" [nzAutosize]="{ minRows: 4, maxRows: 6 }"></textarea>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+    
+            <div nz-col [nzSm]="12" [nzXs]="24">
+                <nz-form-item>
+                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="partyB" nzRequired>乙方</nz-form-label>
+                    <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请选择乙方单位">
+                        <nz-select style="width: 100%;" id="partyB" nzShowSearch nzPlaceHolder="请选择乙方单位" nzDisabled
+                            formControlName="partyB">
+                            <ng-container *ngFor="let item of partACompanyList">
+                                <nz-option [nzLabel]="item.name" [nzValue]="item.name"></nz-option>
+                            </ng-container>
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="partyB_power">乙方服务内容</nz-form-label>
+                    <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请填写乙方服务内容">
+                        <textarea nz-input id="partyB_power" placeholder="请填写乙方服务内容" formControlName="partyB_power"
+                            [nzAutosize]="{ minRows: 4, maxRows: 6 }"></textarea>
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="partyB_condition">相关附加条件</nz-form-label>
+                    <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请填写乙方服务相关附加条件">
+                        <textarea nz-input id="partyB_condition" placeholder="请填写乙方服务相关附加条件"
+                            formControlName="partyB_condition" [nzAutosize]="{ minRows: 4, maxRows: 6 }"></textarea>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+
+        <div nz-col [nzSm]="12" [nzXs]="24">
+            <app-project-income-type-and-amount formControlName="pro_income"></app-project-income-type-and-amount>
+        </div>
+    
+    </form>
+    </ng-container>
+    
+    <ng-container *ngIf="incomeOpt.subsidy">
+    <div class="text-md my-sm">补贴收入</div>
+    
+    <form nz-form [formGroup]="validateSubsidyForm" (ngSubmit)="submitSubsidyForm()">
+        <div nz-row [nzGutter]="24">
+            <div nz-col [nzSm]="12" [nzXs]="24">
+                <nz-form-item>
+                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="appropriation_unit" nzRequired>拨款单位</nz-form-label>
+                    <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请选择拨款单位">
+                        <nz-select style="width: 100%;" nzMode="multiple" id="appropriation_unit" nzPlaceHolder="请选择拨款单位" formControlName="appropriation_unit">
+                            <ng-container *ngFor="let item of partCompanyList">
+                                <nz-option [nzLabel]="item.name" [nzValue]="item.name"></nz-option>
+                            </ng-container>
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            
+            <div nz-col [nzSm]="12" [nzXs]="24">
+                <nz-form-item>
+                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="name" nzRequired>补贴名称</nz-form-label>
+                    <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请输入补贴名称">
+                        <input nz-input id="name" formControlName="name" placeholder="请输入补贴名称" />
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            
+            <div nz-col [nzSm]="12" [nzXs]="24">
+                <nz-form-item>
+                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="amount" nzRequired>补贴金额</nz-form-label>
+                    <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请输入补贴金额">
+                        <nz-input-group nzSuffix="RMB" nzPrefix="￥" style="width: 100%;">
+                            <input type="text" nz-input formControlName="amount" placeholder="请输入补贴金额" id="amount" />
+                          </nz-input-group>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col [nzSm]="12" [nzXs]="24">
+    
+                <nz-form-item>
+                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="condition" nzRequired>申请条件</nz-form-label>
+                    <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请填写申请条件">
+                        <textarea
+                            nz-input
+                            id="condition"
+                            placeholder="请填写申请条件"
+                            formControlName="condition"
+                            [nzAutosize]="{ minRows: 2, maxRows: 6 }"
+                        ></textarea>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col [nzSm]="12" [nzXs]="24">
+                <nz-form-item>
+                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="calculation_basis" nzRequired>测算依据</nz-form-label>
+                    <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请填写测算依据">
+                        <textarea
+                            nz-input
+                            id="calculation_basis"
+                            placeholder="请填写测算依据，如： 根据《***》文件，***标准，测算出补贴为**元。"
+                            formControlName="calculation_basis"
+                            [nzAutosize]="{ minRows: 2, maxRows: 6 }"
+                        ></textarea>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col [nzSm]="12" [nzXs]="24">
+                <nz-form-item>
+                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="remark" nzRequired>备注说明</nz-form-label>
+                    <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请填写备注说明">
+                        <textarea
+                            nz-input
+                            id="remark"
+                            placeholder="请填写备注说明"
+                            formControlName="remark"
+                            [nzAutosize]="{ minRows: 2, maxRows: 6 }"
+                        ></textarea>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+    
+    </form>
+    </ng-container>
+    
+    
+    <div class="text-md my-sm">成本预算</div>
+    <form nz-form [formGroup]="validateCostForm" (ngSubmit)="submitCostForm()">
+        <nz-form-item>
+            <nz-form-control [nzSpan]="24" nzErrorTip="请填写成本预算">
+                <app-budget-cost-manage id="cost" formControlName="cost"></app-budget-cost-manage>
+            </nz-form-control>
+        </nz-form-item>
+    </form>
+    
+</nz-card>

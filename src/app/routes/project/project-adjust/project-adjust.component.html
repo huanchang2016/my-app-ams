@@ -30,10 +30,10 @@
 </page-header>
 
 <nz-card>
-
+    
     <!-- <app-adjust-project-info [projectInfo]="project.info" [logInfo]="logJson?.info" (logInfoChange)="logInfoChange($event)"></app-adjust-project-info> -->
 
-    <app-adjust-budget-info></app-adjust-budget-info>
+    <app-adjust-budget-info [projectId]="projectId" [logInfo]="logJson?.budget" (logInfoChange)="logBudgetChange($event)"></app-adjust-budget-info>
 
     <!-- <app-adjust-supplier-info [projectInfo]="project.info" [logInfo]="logJson?.supplier"></app-adjust-supplier-info> -->
 

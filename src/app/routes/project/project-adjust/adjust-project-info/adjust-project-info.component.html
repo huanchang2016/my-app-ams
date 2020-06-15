@@ -1,124 +1,122 @@
-<ng-container *ngIf="info">
-    <nz-card [nzTitle]="proTitle" [nzBordered]="false" class="mb-md" [nzLoading]="!info">
-        <ng-template #proTitle>
-            <span class="font-weight-bold text-md">基础信息</span>
-        </ng-template>
-        <sv-container class="mb-lg">
-            <sv [label]="nameLabel">
-                <ng-template #nameLabel>
-                    <span [class.text-orange]="logInfo.name">项目名称</span>
-                </ng-template>
-                <input #name nz-input placeholder="项目名称" [(ngModel)]="info.name"  />
-            </sv>
-            <sv label="项目编号">{{ info?.number }}</sv>
-            <sv [label]="categoryLabel">
-                <ng-template #categoryLabel>
-                    <span [class.text-orange]="logInfo.category_id">项目类型</span>
-                </ng-template>
-                <nz-select #category style="width: 100%;" id="category_id" nzShowSearch
-                        nzPlaceHolder="请选择项目类型" [(ngModel)]="info.category.id"
-                        >
-                        <ng-container *ngFor="let item of configs.category">
-                            <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
-                        </ng-container>
-                </nz-select>
-            </sv>
-
-            <sv label="负 责 人 ">{{ info?.user.name }}</sv>
-            <sv label="负责部门">{{ info?.department?.name }}</sv>
-            <sv [label]="originLabel">
-                <ng-template #originLabel>
-                    <span [class.text-orange]="logInfo.origin_id">客户来源</span>
-                </ng-template>
-                <nz-select #origin style="width: 100%;" id="category_id" nzShowSearch
-                        nzPlaceHolder="请选择客户来源" [(ngModel)]="info.origin.id"
-                        >
-                        <ng-container *ngFor="let item of configs.origin">
-                            <nz-option [nzLabel]="item.code.code_name + item.name" [nzValue]="item.id"></nz-option>
-                        </ng-container>
-                </nz-select>
-            </sv>
-            <sv [label]="planExecutionLabel">
-                <ng-template #planExecutionLabel>
-                    <span [class.text-orange]="logInfo.plan_execution_start_time || logInfo.plan_execution_end_time">预计执行时间</span>
-                </ng-template>
-                <app-date-range-picker-c [keys]="['plan_execution_start_time', 'plan_execution_end_time']" [rangeDate]="{start: info.plan_execution_start_time, end: info.plan_execution_end_time}" (rangeDateChange)="rangeDateChange($event)"></app-date-range-picker-c>
-            </sv>
-            <!-- <sv [label]="actualExecutionLabel">
-                <ng-template #actualExecutionLabel>
-                    <span [class.text-orange]="logInfo.actual_execution_start_time || logInfo.actual_execution_end_time">实际执行时间</span>
-                </ng-template>
-                <app-date-range-picker-c [keys]="['actual_execution_start_time', 'actual_execution_end_time']" [rangeDate]="{start: info.actual_execution_start_time, end: info.actual_execution_end_time}" (rangeDateChange)="rangeDateChange($event)"></app-date-range-picker-c>
-            </sv> -->
-        </sv-container>
-        <ng-container *ngIf="info">
-            <div class="hidden-mobile">
-                <nz-table #basicTable nzBordered [nzData]="info.customer" [nzFrontPagination]="false">
-                    <thead>
-                        <tr>
-                            <th>客户单位</th>
-                            <th>联系信息</th>
-                            <th>银行信息</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let data of basicTable.data">
-                            <td>
-                                <sv-container col="1">
-                                    <sv label="单位名称">{{ data.name }}</sv>
-                                    <sv label="统一社会信用代码">{{ data.code }}</sv>
-                                </sv-container>
-                            </td>
-                            <td>
-                                <sv-container col="1">
-                                    <sv label="电话">{{ data.tel }}</sv>
-                                    <sv label="地址">{{ data.address }}</sv>
-                                </sv-container>
-                            </td>
-                            <td>
-                                <sv-container col="1">
-                                    <sv label="支行名称">{{ data.bank_name }}</sv>
-                                    <sv label="银行账号">{{ data.bank_account }}</sv>
-                                </sv-container>
-                            </td>
-                        </tr>
-                    </tbody>
-                </nz-table>
-            </div>
-            <div class="hidden-pc">
-                <nz-card nzTitle="客户单位" class="mt-md">
-                    <ng-container *ngFor="let data of info.customer">
-                        <sv-container [title]="data.name" col="1" class="mt-md">
-                            <sv label="电话">{{ data.tel }}</sv>
-                            <sv label="地址">{{ data.address }}</sv>
-                            <sv label="支行名称">{{ data.bank_name }}</sv>
-                            <sv label="银行账号">{{ data.bank_account }}</sv>
-                            <sv label="统一社会信用代码">{{ data.code }}</sv>
-                        </sv-container>
+<nz-card [nzTitle]="proTitle" [nzBordered]="false" class="mb-md" *ngIf="info">
+    <ng-template #proTitle>
+        <span class="font-weight-bold text-md">基础信息</span>
+    </ng-template>
+    <sv-container class="mb-lg">
+        <sv [label]="nameLabel">
+            <ng-template #nameLabel>
+                <span [class.text-orange]="logInfo.name">项目名称</span>
+            </ng-template>
+            <input #name nz-input placeholder="项目名称" [(ngModel)]="info.name"  />
+        </sv>
+        <sv label="项目编号">{{ info?.number }}</sv>
+        <sv [label]="categoryLabel">
+            <ng-template #categoryLabel>
+                <span [class.text-orange]="logInfo.category_id">项目类型</span>
+            </ng-template>
+            <nz-select #category style="width: 100%;" id="category_id" nzShowSearch
+                    nzPlaceHolder="请选择项目类型" [(ngModel)]="info.category.id"
+                    >
+                    <ng-container *ngFor="let item of configs.category">
+                        <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
                     </ng-container>
-                </nz-card>
-            </div>
-        </ng-container>
+            </nz-select>
+        </sv>
 
-        <sv-container [title]="descriptionLabel" col="1" class="mt-lg">
-            <ng-template #descriptionLabel>
-                <span [class.text-orange]="logInfo.description">项目描述</span>
+        <sv label="负 责 人 ">{{ info?.user.name }}</sv>
+        <sv label="负责部门">{{ info?.department?.name }}</sv>
+        <sv [label]="originLabel">
+            <ng-template #originLabel>
+                <span [class.text-orange]="logInfo.origin_id">客户来源</span>
             </ng-template>
-            <sv class="d-flex">
-                <textarea #descriptionTextarea nz-input [(ngModel)]="info.description"
-                (ngModelChange)="valueChange('description', descriptionTextarea.value)" [nzAutosize]="{ minRows: 4, maxRows: 8 }"></textarea>
-            </sv>
-        </sv-container>
-
-        <sv-container [title]="attachmentLabel" col="1" class="mt-lg">
-            <ng-template #attachmentLabel>
-                <span [class.text-orange]="compareArray(currentAttachmentIds, logInfo.attachment)">项目附件</span>
+            <nz-select #origin style="width: 100%;" id="category_id" nzShowSearch
+                    nzPlaceHolder="请选择客户来源" [(ngModel)]="info.origin.id"
+                    >
+                    <ng-container *ngFor="let item of configs.origin">
+                        <nz-option [nzLabel]="item.code.code_name + item.name" [nzValue]="item.id"></nz-option>
+                    </ng-container>
+            </nz-select>
+        </sv>
+        <sv [label]="planExecutionLabel">
+            <ng-template #planExecutionLabel>
+                <span [class.text-orange]="logInfo.plan_execution_start_time || logInfo.plan_execution_end_time">预计执行时间</span>
             </ng-template>
-            <sv class="d-flex">
-                <!-- <app-upload-file [Attachment]="attachment" [AttachmentCategory]="configs.attachment_category" [isAttachmentChange]="isAttachmentChange" (attachmentChange)="attachmentChange($event)" (attachmentIdsChange)="attachmentIdsChange($event)"></app-upload-file> -->
-                <app-upload-file-attachment-tpl [Attachment]="attachment" [AttachmentCategory]="configs.attachment_category" [isAttachmentChange]="isAttachmentChange" (attachmentChange)="attachmentChange($event)" (attachmentIdsChange)="attachmentIdsChange($event)"></app-upload-file-attachment-tpl>
-            </sv>
-        </sv-container>
+            <app-date-range-picker-c [keys]="['plan_execution_start_time', 'plan_execution_end_time']" [rangeDate]="{start: info.plan_execution_start_time, end: info.plan_execution_end_time}" (rangeDateChange)="rangeDateChange($event)"></app-date-range-picker-c>
+        </sv>
+        <!-- <sv [label]="actualExecutionLabel">
+            <ng-template #actualExecutionLabel>
+                <span [class.text-orange]="logInfo.actual_execution_start_time || logInfo.actual_execution_end_time">实际执行时间</span>
+            </ng-template>
+            <app-date-range-picker-c [keys]="['actual_execution_start_time', 'actual_execution_end_time']" [rangeDate]="{start: info.actual_execution_start_time, end: info.actual_execution_end_time}" (rangeDateChange)="rangeDateChange($event)"></app-date-range-picker-c>
+        </sv> -->
+    </sv-container>
+    <ng-container *ngIf="info">
+        <div class="hidden-mobile">
+            <nz-table #basicTable nzBordered [nzData]="info.customer" [nzFrontPagination]="false">
+                <thead>
+                    <tr>
+                        <th>客户单位</th>
+                        <th>联系信息</th>
+                        <th>银行信息</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let data of basicTable.data">
+                        <td>
+                            <sv-container col="1">
+                                <sv label="单位名称">{{ data.name }}</sv>
+                                <sv label="统一社会信用代码">{{ data.code }}</sv>
+                            </sv-container>
+                        </td>
+                        <td>
+                            <sv-container col="1">
+                                <sv label="电话">{{ data.tel }}</sv>
+                                <sv label="地址">{{ data.address }}</sv>
+                            </sv-container>
+                        </td>
+                        <td>
+                            <sv-container col="1">
+                                <sv label="支行名称">{{ data.bank_name }}</sv>
+                                <sv label="银行账号">{{ data.bank_account }}</sv>
+                            </sv-container>
+                        </td>
+                    </tr>
+                </tbody>
+            </nz-table>
+        </div>
+        <div class="hidden-pc">
+            <nz-card nzTitle="客户单位" class="mt-md">
+                <ng-container *ngFor="let data of info.customer">
+                    <sv-container [title]="data.name" col="1" class="mt-md">
+                        <sv label="电话">{{ data.tel }}</sv>
+                        <sv label="地址">{{ data.address }}</sv>
+                        <sv label="支行名称">{{ data.bank_name }}</sv>
+                        <sv label="银行账号">{{ data.bank_account }}</sv>
+                        <sv label="统一社会信用代码">{{ data.code }}</sv>
+                    </sv-container>
+                </ng-container>
+            </nz-card>
+        </div>
+    </ng-container>
 
-    </nz-card>
-</ng-container>
+    <sv-container [title]="descriptionLabel" col="1" class="mt-lg">
+        <ng-template #descriptionLabel>
+            <span [class.text-orange]="logInfo.description">项目描述</span>
+        </ng-template>
+        <sv class="d-flex">
+            <textarea #descriptionTextarea nz-input [(ngModel)]="info.description"
+            (ngModelChange)="valueChange('description', descriptionTextarea.value)" [nzAutosize]="{ minRows: 4, maxRows: 8 }"></textarea>
+        </sv>
+    </sv-container>
+
+    <sv-container [title]="attachmentLabel" col="1" class="mt-lg">
+        <ng-template #attachmentLabel>
+            <span [class.text-orange]="compareArray(currentAttachmentIds, logInfo.attachment)">项目附件</span>
+        </ng-template>
+        <sv class="d-flex">
+            <!-- <app-upload-file [Attachment]="attachment" [AttachmentCategory]="configs.attachment_category" [isAttachmentChange]="isAttachmentChange" (attachmentChange)="attachmentChange($event)" (attachmentIdsChange)="attachmentIdsChange($event)"></app-upload-file> -->
+            <app-upload-file-attachment-tpl [Attachment]="attachment" [AttachmentCategory]="configs.attachment_category" [isAttachmentChange]="isAttachmentChange" (attachmentChange)="attachmentChange($event)" (attachmentIdsChange)="attachmentIdsChange($event)"></app-upload-file-attachment-tpl>
+        </sv>
+    </sv-container>
+
+</nz-card>

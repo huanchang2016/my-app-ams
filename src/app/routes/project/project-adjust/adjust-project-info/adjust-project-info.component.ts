@@ -1,9 +1,9 @@
 import { SettingsConfigService } from 'src/app/routes/service/settings-config.service';
-import { Component, OnInit, OnChanges, Input, Output, EventEmitter } from '@angular/core';
-import { ApiData, List } from 'src/app/data/interface.data';
+import { Component, OnChanges, Input, Output, EventEmitter } from '@angular/core';
+import { ApiData } from 'src/app/data/interface.data';
 import { SettingsService } from '@delon/theme';
-import { merge, zip } from 'rxjs';
-import { map, catchError, filter } from 'rxjs/operators';
+import { zip } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({

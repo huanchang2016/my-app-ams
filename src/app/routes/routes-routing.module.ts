@@ -36,6 +36,8 @@ const routes: Routes = [
       { path: 'approve', loadChildren: () => import('./payment-approve/payment-approve.module').then( m => m.PaymentApproveModule ) },
       // 账务管理 （发票、账务处理）
       { path: 'bill', loadChildren: () => import('./bill-reminder/bill-reminder.module').then( m => m.BillReminderModule ) },
+      // 合同管理
+      { path: 'contract', loadChildren: () => import('./contract/contract.module').then( m => m.ContractModule ) },
       // 项目流程管理
       { path: 'workflow', loadChildren: () => import('./workflow/workflow.module').then( m => m.WorkflowModule ) },
       // 基础配置

@@ -305,6 +305,19 @@ export class StartupService {
             ]
           },
           {
+            text: '合同管理',
+            link: '/contract',
+            icon: { type: 'icon', value: 'file-protect' },
+            // hide: this.isHideRouter(['cost_list', 'tax_list', 'supplier_service_list'], permissionGroup),
+            children: [
+              {
+                text: '合同列表',
+                link: '/contract/list',
+                // hide: this.isHideRouter(['cost_list'], permissionGroup)
+              }
+            ]
+          },
+          {
             text: '项目配置管理',
             link: '/pro-settings',
             icon: { type: 'icon', value: 'control' },
@@ -498,7 +511,7 @@ export class StartupService {
     // }
     // mock
     const app: any = {
-      name: `ng-alain`,
+      name: `聚宝盆`,
       description: `Ng-zorro admin panel front-end framework`
     };
     const user: any = {
@@ -771,6 +784,19 @@ export class StartupService {
                 //     link: '/bill/excute/finished'
                 //   }
                 // ]
+              }
+            ]
+          },
+          {
+            text: '合同管理',
+            link: '/contract',
+            icon: { type: 'icon', value: 'file-protect' },
+            // hide: this.isHideRouter(['cost_list', 'tax_list', 'supplier_service_list'], permissionGroup),
+            children: [
+              {
+                text: '合同列表',
+                link: '/contract/list',
+                // hide: this.isHideRouter(['cost_list'], permissionGroup)
               }
             ]
           },

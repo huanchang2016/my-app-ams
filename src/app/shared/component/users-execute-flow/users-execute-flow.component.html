@@ -81,13 +81,35 @@
     <div class="steps-content" *ngIf="isExecuteUser && !progressInfo.complete">
       <div class="check-box mt-md float-right">
         <nz-radio-group [(ngModel)]="checkOption.is_execute" [nzButtonStyle]="'solid'">
-          <label nz-radio-button [nzValue]="true">已执行</label>
-          <label nz-radio-button [nzValue]="false">无法执行</label>
+          <label nz-radio-button [nzValue]="'A'">已执行</label>
+          <label nz-radio-button [nzValue]="'B'">无法执行</label>
         </nz-radio-group>
-        <!-- <textarea nz-input placeholder="请填写备注" [(ngModel)]="checkOption.remark"
-          [nzAutosize]="{ minRows: 3, maxRows: 6 }" class="my-sm"></textarea> -->
+        <ng-container *ngIf="checkOption.is_execute === 'B'">
+          <textarea nz-input placeholder="请填写无法执行的原因" [(ngModel)]="checkOption.remark"
+            [nzAutosize]="{ minRows: 3, maxRows: 6 }" class="my-sm"></textarea>
+        </ng-container>
+        <ng-container *ngIf="checkOption.is_execute === 'A'">
+          <div class="mt-sm">
+            <input nz-input placeholder="发票号码" [(ngModel)]="checkOption.bill_number" />
+          </div>
+          <div class="mt-sm">
+            <nz-input-group nzSuffix="RMB" nzPrefix="￥">
+              <input type="text" nz-input placeholder="发票金额" [(ngModel)]="checkOption.bill_amount" />
+            </nz-input-group>
+          </div>
+          <div class="mt-sm">
+            <nz-input-group nzSuffix="RMB" nzPrefix="￥">
+              <input type="text" nz-input placeholder="税额" [(ngModel)]="checkOption.bill_tax" />
+            </nz-input-group>
+          </div>
+          <div class="text-right my-sm">
+            价税合计：<span class="font-weight-bold">{{ checkOption.bill_amount + checkOption.bill_tax | _currency }}</span>
+          </div>
+          
+        </ng-container>
+
         <div class="text-right mt-md">
-          <a nz-popconfirm nz-button [nzType]="'primary'" nzPopconfirmTitle="请填写执行情况及备注"
+          <a nz-popconfirm nz-button [nzType]="'primary'" nzPopconfirmTitle="请仔细核对执行情况"
             (nzOnConfirm)="submitCheckCurrentProcess()" (nzOnCancel)="cancel()">
             提交
           </a>

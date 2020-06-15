@@ -191,6 +191,8 @@ export class BillReminderInvoicesInfoViewComponent implements OnInit {
     })
   }
 
+
+  
   submitCheckCurrentProcess() {
     if(this.checkOption.agree === null) {
       this.notice.error('错误', '是否通过未选择');

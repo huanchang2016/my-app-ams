@@ -19,6 +19,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 })
 export class TypeAmountListComponent implements OnInit {
   @Input() data:any;
+  @Input() index:number;
 
   @Output() deletedCostItem: EventEmitter<any> = new EventEmitter();
   

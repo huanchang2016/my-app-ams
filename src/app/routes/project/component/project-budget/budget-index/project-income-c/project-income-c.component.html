@@ -1,4 +1,4 @@
-<nz-card nzTitle="项目收入" [nzExtra]="createTemplate">
+<nz-card nzTitle="项目收入" [nzExtra]="createTemplate" class="ant-card__body-nopadding">
     <ng-template #createTemplate>
         <ng-container *ngIf="incomeList.length === 0">
             <button nz-button nzType="primary" (click)="add()">新增</button>
@@ -7,10 +7,10 @@
 
     <ng-container *ngFor="let data of incomeList; let i = index">
 
-        <nz-table [nzData]="[1]" [nzFrontPagination]="false" [class.mb-md]="i < incomeList.length - 1">
+        <nz-table [nzData]="[1]" [nzShowPagination]="false">
             <thead>
                 <tr>
-                    <th>{{ i + 1 }}</th>
+                    <th>项目对象</th>
                     <th nzWidth="250px">单位名称</th>
                     <th>权责界定</th>
                     <th>费用及支付条件</th>
@@ -38,6 +38,11 @@
                     <td>{{ data.partyB }}</td>
                     <td><span [innerHTML]="data.partyB_power | showTextareaContent"></span></td>
                     <td><span [innerHTML]="data.partyB_condition | showTextareaContent"></span></td>
+                </tr>
+                <tr>
+                    <td colspan="5">
+                        <app-project-income-type-amount [revenueId]="data.id" [taxList]="taxList"></app-project-income-type-amount>
+                    </td>
                 </tr>
             </tbody>
         </nz-table>

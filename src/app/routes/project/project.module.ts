@@ -49,6 +49,7 @@ import { MyProjectListComponent } from './my-project/my-project-list/my-project-
 import { ApprovalProjectListComponent } from './approval-project/approval-project-list/approval-project-list.component';
 import { ProjectIncomeTypeAndAmountComponent } from './component/project-budget/budget-index/project-income-type-and-amount/project-income-type-and-amount.component';
 import { TypeAmountListComponent } from './component/project-budget/budget-index/project-income-type-and-amount/type-amount-list/type-amount-list.component';
+import { ProjectIncomeTypeAmountComponent } from './component/project-budget/budget-index/project-income-c/project-income-type-amount/project-income-type-amount.component';
 
 const COMPONENTS = [
   DraftListComponent,
@@ -60,7 +61,9 @@ const COMPONENTS = [
   RefuseProjectListComponent,
   MyApprovaledListComponent,
   MyForApprovaledListComponent,
-  ProjectAdjustComponent
+  ProjectAdjustComponent,
+  MyProjectListComponent,
+  ApprovalProjectListComponent
 ];
 const COMPONENTS_NOROUNT = [
   ProductSearchOptionComponent,
@@ -95,7 +98,10 @@ const COMPONENTS_NOROUNT = [
   AdjustSupplierContractFormCComponent,
   AdjustSupplierTreatyFormCComponent,
   ProjectIncomeShowCComponent,
-  SubsidyIncomeShowCComponent
+  SubsidyIncomeShowCComponent,
+  ProjectIncomeTypeAndAmountComponent,
+  TypeAmountListComponent,
+  ProjectIncomeTypeAmountComponent
 ];
 
 @NgModule({
@@ -105,11 +111,7 @@ const COMPONENTS_NOROUNT = [
   ],
   declarations: [
     ...COMPONENTS,
-    ...COMPONENTS_NOROUNT,
-    MyProjectListComponent,
-    ApprovalProjectListComponent,
-    ProjectIncomeTypeAndAmountComponent,
-    TypeAmountListComponent
+    ...COMPONENTS_NOROUNT
   ],
   entryComponents: COMPONENTS_NOROUNT
 })

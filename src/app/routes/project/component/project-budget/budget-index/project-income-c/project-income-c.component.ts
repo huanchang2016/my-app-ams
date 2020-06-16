@@ -3,6 +3,7 @@ import { SettingsConfigService } from 'src/app/routes/service/settings-config.se
 import { Component, OnInit, Input, OnChanges, Output, EventEmitter } from '@angular/core';
 import { ApiData } from 'src/app/data/interface.data';
 import { NzModalService, NzMessageService } from 'ng-zorro-antd';
+import { SettingsService } from '@delon/theme';
 
 @Component({
   selector: 'app-project-income-c',
@@ -17,25 +18,23 @@ export class ProjectIncomeCComponent implements OnChanges, OnInit {
   @Output() listValueChange:EventEmitter<any> = new EventEmitter();
 
   partACompanyList:any[] = [];
+  taxList:any[] = [];
 
   constructor(
     private modalService: NzModalService,
     private msg: NzMessageService,
+    private settings: SettingsService,
     private settingsConfigService: SettingsConfigService
   ) {
-    // 获取甲方、乙方 单位列表
-    this.settingsConfigService.get('/api/company/all').subscribe((res: ApiData) => {
-      if (res.code === 200) {
-        let data: any[] = res.data.company;
-        this.partACompanyList = data.sort((a: any, b: any) => a.sequence - b.sequence)
-          .filter(v => v.active);
-      }
-    });
+
+    this.getConfigs();
+    
   }
 
   ngOnChanges() {}
 
   ngOnInit(): void {
+
   }
 
   add():void {
@@ -85,5 +84,26 @@ export class ProjectIncomeCComponent implements OnChanges, OnInit {
 
   cancel():void {}
 
+  getConfigs() {
+    // 获取甲方、乙方 单位列表
+    this.settingsConfigService.get('/api/company/all').subscribe((res: ApiData) => {
+      if (res.code === 200) {
+        let data: any[] = res.data.company;
+        this.partACompanyList = data.sort((a: any, b: any) => a.sequence - b.sequence)
+          .filter(v => v.active);
+      }
+    });
 
+    // 获取税目类型列表
+    if(this.settings.user.department) {
+      this.settingsConfigService.get(`/api/tax/department/${this.settings.user.department.id}`).subscribe((res: ApiData) => {
+        if (res.code === 200) {
+          let data: any[] = res.data.tax;
+          this.taxList = data.filter(v => v.active);
+        }
+      });
+    }
+    
+
+  }
 }

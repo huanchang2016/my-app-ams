@@ -24,13 +24,9 @@ import { ApiData } from 'src/app/data/interface.data';
   ]
 })
 export class ProjectIncomeTypeAndAmountComponent implements ControlValueAccessor {
-  costCategoryArr:any[] = [
-    { id: 1, name: '测试项目收入类型1' },
-    { id: 2, name: '测试项目收入类型2' },
-    { id: 3, name: '测试项目收入类型3' }
-  ];
+  incomeCategoryArr:any[] = [];
   
-  costArr:any [] = [];
+  projectIncomeType:any [] = [];
 
   total:number = null;
 
@@ -41,7 +37,7 @@ export class ProjectIncomeTypeAndAmountComponent implements ControlValueAccessor
     private modalService: NzModalService
   ) {
     if(this.settings.user.company) {
-      this.getConfigs(this.settings.user.company.id);
+      // this.getConfigs(this.settings.user.company.id);
     }
     
     this.validateCostForm = this.fb.group({
@@ -54,10 +50,10 @@ export class ProjectIncomeTypeAndAmountComponent implements ControlValueAccessor
 
 
   writeValue(obj: any[]): void {
-    this.costArr = obj;
-    if(this.costArr && this.costArr.length !== 0) {
+    this.projectIncomeType = obj || [];
+    if(this.projectIncomeType && this.projectIncomeType.length !== 0) {
       this.countCostTotal();
-      this.dealCostCategoryArr();
+      this.dealIncomeCategoryArr();
     }
   }
 
@@ -69,7 +65,7 @@ export class ProjectIncomeTypeAndAmountComponent implements ControlValueAccessor
 
   validate(control: AbstractControl): ValidationErrors | null {
     if(control.errors && control.errors.required) {
-      return this.costArr && this.costArr.length !== 0 ? null : {
+      return this.projectIncomeType && this.projectIncomeType.length !== 0 ? null : {
         isInvalid: {
           valid: false
         }
@@ -82,8 +78,8 @@ export class ProjectIncomeTypeAndAmountComponent implements ControlValueAccessor
   
   deletedCostItem(i:number, id?:number) {
     if(id) {
-      this.costArr.splice(i, 1);
-      this.dealCostCategoryArr();
+      this.projectIncomeType.splice(i, 1);
+      this.dealIncomeCategoryArr();
     }
     this.emitData();
   }
@@ -116,16 +112,16 @@ export class ProjectIncomeTypeAndAmountComponent implements ControlValueAccessor
 
 
   emitData():void {
-    this.costArr = this.costArr.map( v => {
+    this.projectIncomeType = this.projectIncomeType.map( v => {
       v.amount = Number(v.amount);
       return v;
     })
     this.countCostTotal();
-    this.propagateChange(this.costArr);
+    this.propagateChange(this.projectIncomeType);
   }
 
   countCostTotal() {
-    this.total = this.costArr.map( v => v.amount ).reduce( (sum1:number, sum2:number) => sum1 + sum2, 0);
+    this.total = this.projectIncomeType.map( v => v.amount ).reduce( (sum1:number, sum2:number) => sum1 + sum2, 0);
   }
   submitForm(): void {
     for (const key in this.validateCostForm.controls) {
@@ -134,9 +130,9 @@ export class ProjectIncomeTypeAndAmountComponent implements ControlValueAccessor
     }
     if(this.validateCostForm.valid) {
       const value = this.validateCostForm.value;
-      const cost:any = this.costCategoryArr.filter( v => v.id === value.cost_category)[0];
+      const cost:any = this.incomeCategoryArr.filter( v => v.id === value.cost_category)[0];
       // 添加成本预算后， 当前 成本类型就变成不可选
-      this.costCategoryArr = this.costCategoryArr.map( v => {
+      this.incomeCategoryArr = this.incomeCategoryArr.map( v => {
         if(v.id === value.cost_category) {
           v.active = true;
         }
@@ -147,10 +143,10 @@ export class ProjectIncomeTypeAndAmountComponent implements ControlValueAccessor
         cost_category: cost,
         amount: Number(value.amount)
       };
-      console.log('opt', opt, this.costArr);
-      // this.costArr.push(opt);
-      // this.emitData();
-      // this.closeModal();
+      console.log('opt', opt, this.projectIncomeType);
+      this.projectIncomeType.push(opt);
+      this.emitData();
+      this.closeModal();
     }
   }
 
@@ -158,15 +154,15 @@ export class ProjectIncomeTypeAndAmountComponent implements ControlValueAccessor
     this.settingsConfigService.get(`/api/cost/category/${id}`).subscribe((res:ApiData) => {
       // console.log(res);
       if(res.code === 200) {
-        this.costCategoryArr = res.data.cost_category;
-        this.dealCostCategoryArr();
+        this.incomeCategoryArr = res.data.cost_category;
+        this.dealIncomeCategoryArr();
       }
     })
   }
 
-  dealCostCategoryArr() {
-    const list:any[] = this.costCategoryArr;
-    this.costCategoryArr = list.map( v => {
+  dealIncomeCategoryArr() {
+    const list:any[] = this.incomeCategoryArr;
+    this.incomeCategoryArr = list.map( v => {
       return {
         id: v.id,
         name: v.name,
@@ -176,8 +172,8 @@ export class ProjectIncomeTypeAndAmountComponent implements ControlValueAccessor
   }
 
   checkIsSelectedCost(id:number):boolean {
-    if(this.costArr && this.costArr.length !== 0) {
-      return this.costArr.filter( v => v.cost_category.id === id).length > 0;
+    if(this.projectIncomeType && this.projectIncomeType.length !== 0) {
+      return this.projectIncomeType.filter( v => v.cost_category.id === id).length > 0;
     }
     return false;
   }

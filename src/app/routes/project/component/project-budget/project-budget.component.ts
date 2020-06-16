@@ -252,8 +252,8 @@ export class ProjectBudgetComponent implements OnInit {
   }
   // 新增修改需求
   incomeOpt:any = {
-    project: false,
-    subsidy: false
+    project: true,
+    subsidy: true
   };
   projectIncome:any[] = [];
   subsidyIncome:any[] = [];
@@ -339,7 +339,8 @@ export class ProjectBudgetComponent implements OnInit {
   confirm() {
 
     if(this.switchPopconfirm || (this.incomeOpt.project && this.incomeOpt.subsidy ) || (!this.incomeOpt.project && !this.incomeOpt.subsidy )) {
-      this.submitForm();
+      console.log('submit budget info!')
+      // this.submitForm();
     }else {
       if(!this.incomeOpt.project && this.projectIncome.length !== 0) {
         console.log('删除所有项目收入信息');

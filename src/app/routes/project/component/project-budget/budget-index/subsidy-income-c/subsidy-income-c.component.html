@@ -1,4 +1,4 @@
-<nz-card nzTitle="补贴收入" [nzExtra]="createTemplate">
+<nz-card nzTitle="补贴收入" [nzExtra]="createTemplate" class="ant-card__body-nopadding">
     <ng-template #createTemplate>
         <ng-container *ngIf="incomeList.length === 0">
             <button nz-button nzType="primary" (click)="add()">新增</button>
@@ -6,7 +6,7 @@
     </ng-template>
 
 
-        <nz-table #incomeTable [nzData]="incomeList" [nzFrontPagination]="false">
+        <nz-table #incomeTable [nzData]="incomeList" [nzShowPagination]="false">
             <thead>
                 <tr>
                     <th>序号</th>

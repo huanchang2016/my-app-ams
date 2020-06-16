@@ -1,5 +1,5 @@
 <div class="cost-item d-flex justify-content-between align-items-center pt-md pb-md">
-    <span>{{ data.cost_category.name }}</span>
+    <span><strong>{{ index }}. </strong> {{ data.cost_category.name }}</span>
     <div class="cost-item-value text-center">
         <ng-container *ngIf="isEdit; else isNotEdit">
             <input style="width: 100%;" [(ngModel)]="data.amount" type="text" nzPlaceHolder="填写金额" nz-input />

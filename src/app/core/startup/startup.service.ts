@@ -497,8 +497,8 @@ export class StartupService {
     // only works with promises
     return new Promise((resolve, reject) => {
       // http
-      // this.viaHttp(resolve, reject);
-      this.viaMock(resolve, reject);
+      this.viaHttp(resolve, reject);
+      // this.viaMock(resolve, reject);
     });
   }
 

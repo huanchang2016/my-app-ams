@@ -18,7 +18,7 @@
                     <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请选择甲方单位">
                         <nz-select style="width: 100%;" nzMode="multiple" id="partyA" nzPlaceHolder="请选择甲方单位"
                             formControlName="partyA">
-                            <ng-container *ngFor="let item of partACompanyList">
+                            <ng-container *ngFor="let item of partCompanyList">
                                 <nz-option [nzLabel]="item.name" [nzValue]="item.name"></nz-option>
                             </ng-container>
                         </nz-select>
@@ -32,9 +32,9 @@
                     </nz-form-control>
                 </nz-form-item>
                 <nz-form-item>
-                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="partyA_condition">甲方费用及支付条件</nz-form-label>
-                    <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请填写甲方费用及支付条件">
-                        <textarea nz-input id="partyA_condition" placeholder="请填写甲方费用及支付条件"
+                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="partyA_condition">甲方费用支付条件</nz-form-label>
+                    <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请填写甲方费用支付条件">
+                        <textarea nz-input id="partyA_condition" placeholder="请填写甲方费用支付条件"
                             formControlName="partyA_condition" [nzAutosize]="{ minRows: 4, maxRows: 6 }"></textarea>
                     </nz-form-control>
                 </nz-form-item>
@@ -46,7 +46,7 @@
                     <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请选择乙方单位">
                         <nz-select style="width: 100%;" id="partyB" nzShowSearch nzPlaceHolder="请选择乙方单位" nzDisabled
                             formControlName="partyB">
-                            <ng-container *ngFor="let item of partACompanyList">
+                            <ng-container *ngFor="let item of partCompanyList">
                                 <nz-option [nzLabel]="item.name" [nzValue]="item.name"></nz-option>
                             </ng-container>
                         </nz-select>
@@ -69,7 +69,7 @@
             </div>
         </div>
 
-        <div nz-col [nzSm]="12" [nzXs]="24">
+        <div nz-col [nzSpan]="24">
             <app-project-income-type-and-amount formControlName="pro_income"></app-project-income-type-and-amount>
         </div>
     

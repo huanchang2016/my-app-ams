@@ -7,7 +7,7 @@
 
     <ng-container *ngFor="let data of incomeList; let i = index">
 
-        <nz-table [nzData]="[1]" [nzShowPagination]="false">
+        <nz-table [nzData]="[1]" [nzShowPagination]="false" [nzFooter]="footerTpl">
             <thead>
                 <tr>
                     <th>项目对象</th>
@@ -41,10 +41,17 @@
                 </tr>
                 <tr>
                     <td colspan="5">
-                        <app-project-income-type-amount [revenueId]="data.id" [taxList]="taxList"></app-project-income-type-amount>
+                        <app-project-income-type-amount [revenueId]="data.id" [taxList]="taxList" (incomeStatisticsChange)="incomeStatisticsChange($event)"></app-project-income-type-amount>
                     </td>
                 </tr>
             </tbody>
         </nz-table>
+        <ng-template #footerTpl>
+            <div class="text-right" *ngIf="staticOpt">
+                <span class="font-weight-bold">含税收入： {{ staticOpt.pro_income | _currency }}</span>
+                <span class="font-weight-bold mx-md">税金合计： {{ staticOpt.tax_amount | _currency }}</span>
+                <span class="font-weight-bold">不含税收入： {{ staticOpt.exclude_tax_income | _currency }}</span>
+            </div>
+        </ng-template>
     </ng-container>
 </nz-card>

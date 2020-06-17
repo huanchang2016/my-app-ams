@@ -21,7 +21,7 @@ export class SubsidyIncomeFormCComponent implements OnChanges, OnDestroy {
 
   @Input() projectId:number;
   @Input() data:any;
-  @Input() partACompanyList:any[];
+  @Input() customerCompany:any[];
 
   validateForm: FormGroup;
 
@@ -39,7 +39,7 @@ export class SubsidyIncomeFormCComponent implements OnChanges, OnDestroy {
   ngOnInit(): void {
     const partyB:string = this.settings.user.company ? this.settings.user.company.name : null;
     this.validateForm = this.fb.group({
-      appropriation_unit: [null, [Validators.required]],
+      company_id: [null, [Validators.required]],
       name: [null, [Validators.required]],
       condition: [null, [Validators.required]],
       calculation_basis: [null, [Validators.required]],
@@ -106,6 +106,7 @@ export class SubsidyIncomeFormCComponent implements OnChanges, OnDestroy {
 
   setFormValue(data:any) :void {
     this.validateForm.patchValue({
+      company_id: data.company.id,
       name: data.name,
       condition: data.condition,
       calculation_basis: data.calculation_basis,

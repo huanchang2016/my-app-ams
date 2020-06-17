@@ -1,6 +1,6 @@
 import { debounceTime, map } from 'rxjs/operators';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { NzMessageService } from 'ng-zorro-antd';
+import { NzMessageService, NzThSelectionComponent } from 'ng-zorro-antd';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { List, ApiData } from 'src/app/data/interface.data';
 import { SettingsConfigService } from 'src/app/routes/service/settings-config.service';
@@ -27,7 +27,6 @@ export class ProjectBudgetComponent implements OnInit {
   currentTax:any = null;
   currentCountResult:any = {
     income: null, // 总收入
-    rate: null, // 税率
     no_tax_income: null, // 不含税收入
     tax_income: null, // 税金
     gross_profit: null, // 毛利润
@@ -54,14 +53,14 @@ export class ProjectBudgetComponent implements OnInit {
   ngOnInit(): void {
 
     this.validateForm = this.fb.group({
-      tax_id: [ null, [Validators.required] ],
-      income: [ null, [Validators.required, Validators.pattern(/^\d+(\.\d{1,2})?$/)] ],
-      subsidy_income: [ null, [Validators.required, Validators.pattern(/^\d+(\.\d{1,2})?$/)] ],
+      // tax_id: [ null, [Validators.required] ],
+      // income: [ null, [Validators.required, Validators.pattern(/^\d+(\.\d{1,2})?$/)] ],
+      // subsidy_income: [ null, [Validators.required, Validators.pattern(/^\d+(\.\d{1,2})?$/)] ],
       cost: [ null ]
     });
 
     this.validateForm.valueChanges.pipe(debounceTime(500)).subscribe( _ => {
-      this.count();
+      this.statistics();
     })
     
 
@@ -83,30 +82,7 @@ export class ProjectBudgetComponent implements OnInit {
     })
   }
 
-  budgetChange() {
-    const selectId:number = this.validateForm.value.tax_id;
-    if(selectId) {
-      this.currentTax = this.taxArray.filter( v => v.id === selectId)[0];
-      this.count();
-    }
-    
-  }
-
-  get taxId() {
-    return this.validateForm.controls.tax_id;
-  }
-  get income() {
-    return this.validateForm.controls.income;
-  }
-  get subsidy_income() {
-    return this.validateForm.controls.subsidy_income;
-  }
   submitForm(): void {
-    // for (const i in this.validateForm.controls) {
-    //   this.validateForm.controls[i].markAsDirty();
-    //   this.validateForm.controls[i].updateValueAndValidity();
-    // }
-    
     // 如果收入类型均为选择或填写不能提交 project: false,
     // subsidy: false
     const isProjectIncome:boolean = this.projectIncome.length !== 0;
@@ -117,20 +93,13 @@ export class ProjectBudgetComponent implements OnInit {
       return;
     }
     if (this.incomeOpt.project) {
-      this.taxId.markAsDirty();
-      this.taxId.updateValueAndValidity();
-      this.income.markAsDirty();
-      this.income.updateValueAndValidity();
-      if (this.taxId.invalid || this.income.invalid || !isProjectIncome ) {
-        this.msg.warning('项目收入类型或者金额未正确填写！');
+      if (!isProjectIncome || !this.proIncomeOpt.pro_income ) {
+        this.msg.warning('项目收入或者金额未正确填写！');
         return;
       }
     }
     if (this.incomeOpt.subsidy){
-
-      this.subsidy_income.markAsDirty();
-      this.subsidy_income.updateValueAndValidity();
-      if (this.subsidy_income.invalid || !isSubsidyIncome) {
+      if (!isSubsidyIncome || !this.subIncomeOpt.sub_income) {
         this.msg.warning('补贴收入金额或者补贴明细未正确填写')
         return;
       }
@@ -150,12 +119,10 @@ export class ProjectBudgetComponent implements OnInit {
       });
       const opt:any = {
          project_id: this.projectInfo.id,
-         tax_id: isProjectIncome && this.incomeOpt.project ? value.tax_id : null,
-         income: isProjectIncome && this.incomeOpt.project ? +value.income : 0,
-         subsidy_income: isSubsidyIncome && this.incomeOpt.subsidy ? +value.subsidy_income : 0,
          cost: costArr
       };
 
+      console.log(opt, '预算新增')
       this.updateBudget(opt);
       
     
@@ -166,8 +133,8 @@ export class ProjectBudgetComponent implements OnInit {
 
   updateBudget(data:any):void {
     this.submitLoading = true;
-    this.settingsConfigService.post('/api/budget/update', data).subscribe((res:ApiData) => {
-      // console.log('budget : ', res);
+    this.settingsConfigService.post('/api/cost/handle', data).subscribe((res:ApiData) => {
+      console.log('budget 成本操作 : ', res);
       this.submitLoading = false;
       if(res.code === 200) {
         this.submitChangeSuccess.emit({
@@ -195,56 +162,15 @@ export class ProjectBudgetComponent implements OnInit {
   }
 
   setFormValue(opt:any) :void {
-    this.validateForm.patchValue({
-      tax_id: opt.tax ? opt.tax.id : null,
-      income: opt.income === 0 ? null : opt.income,
-      subsidy_income: opt.subsidy_income === 0 ? null : opt.subsidy_income
-    });
-
     this.settingsConfigService.get(`/api/cost/budget/${opt.id}`).subscribe((res:ApiData) => {
       if(res.code === 200) {
         this.validateForm.patchValue({
           cost: res.data.cost
         });
-        this.count();
       }
     })
   }
 
-  count() {
-    const value:any = this.validateForm.value;
-    
-    if(value.tax_id && this.validateForm.controls['income'].status === 'VALID') {
-      if(!this.currentTax) {
-        this.currentTax = this.taxArray.filter( v => v.id === value.tax_id)[0];
-      }
-      
-      const totalIncome:number = Number(value.income); // 项目总收入 + 补贴总收入 + Number(value.subsidy_income) TODO: 待定
-      const sj:number = totalIncome * this.currentTax.rate; // 税金
-      const no_tax_income:number = totalIncome - sj;
-      let totalCost:number = 0;
-
-      if(value.cost && value.cost.length !== 0) {
-        value.cost.forEach( item => {
-          totalCost += item.amount;
-        })
-      }
-      
-      const gross_profit:number = +(totalIncome - totalCost).toFixed(2);
-      const gross_profit_percent:string = (gross_profit / totalIncome * 100).toFixed(2) + '%';
-
-      this.currentCountResult = {
-        income: totalIncome, // 总收入
-        rate: this.currentTax.rate * 100, // 税率
-        tax_income: sj, // 税金
-        no_tax_income: no_tax_income, // 不含税收入
-        gross_profit: gross_profit,
-        gross_profit_percent: gross_profit_percent
-      };
-
-      // console.log(this.currentCountResult);
-    }
-  }
   
   prevSteps(e:MouseEvent) {
     e.preventDefault();
@@ -252,8 +178,8 @@ export class ProjectBudgetComponent implements OnInit {
   }
   // 新增修改需求
   incomeOpt:any = {
-    project: true,
-    subsidy: true
+    project: false,
+    subsidy: false
   };
   projectIncome:any[] = [];
   subsidyIncome:any[] = [];
@@ -333,6 +259,7 @@ export class ProjectBudgetComponent implements OnInit {
     }
 
     console.log(this.popconfirmTitle, this.switchPopconfirm);
+    this.statistics();
 
   }
 
@@ -340,7 +267,7 @@ export class ProjectBudgetComponent implements OnInit {
 
     if(this.switchPopconfirm || (this.incomeOpt.project && this.incomeOpt.subsidy ) || (!this.incomeOpt.project && !this.incomeOpt.subsidy )) {
       console.log('submit budget info!')
-      // this.submitForm();
+      this.submitForm();
     }else {
       if(!this.incomeOpt.project && this.projectIncome.length !== 0) {
         console.log('删除所有项目收入信息');
@@ -380,5 +307,68 @@ export class ProjectBudgetComponent implements OnInit {
       }
     });
   }
-  
+
+  proIncomeOpt:any = {
+    pro_income: 0,
+    tax_amount: 0,
+    exclude_tax_income: 0 // 不含税收入
+  };
+  subIncomeOpt:any = {
+    sub_income: 0,
+    tax_amount: 0,
+    exclude_tax_income: 0 // 不含税收入
+  };
+  proIncomeChange($event:any) {
+    this.proIncomeOpt = $event;
+    this.statistics();
+  }
+  subIncomeChange($event:any) {
+    this.subIncomeOpt = $event;
+    this.statistics();
+  }
+
+  statistics() {
+    let income = 0;
+    let tax_amount = 0;
+    let exclude_tax_income = 0;
+    let gross_profit:number = 0;
+    let gross_profit_percent:string = '0.00%';
+    if(!this.incomeOpt.project && !this.incomeOpt.subsidy) {
+      income = income;
+      tax_amount = tax_amount;
+      exclude_tax_income = exclude_tax_income;
+      gross_profit = gross_profit;
+      gross_profit_percent = gross_profit_percent;
+    }else {
+      if(this.incomeOpt.project && !this.incomeOpt.subsidy) {
+        income = this.proIncomeOpt.pro_income;
+        tax_amount = this.proIncomeOpt.tax_amount;
+        exclude_tax_income = this.proIncomeOpt.exclude_tax_income;
+      }else if(!this.incomeOpt.project && this.incomeOpt.subsidy) {
+        income = this.subIncomeOpt.sub_income;
+        tax_amount = this.subIncomeOpt.tax_amount;
+        exclude_tax_income = this.subIncomeOpt.exclude_tax_income;
+      }else {
+        income = this.proIncomeOpt.pro_income + this.subIncomeOpt.sub_income;
+        tax_amount = this.proIncomeOpt.tax_amount + this.subIncomeOpt.tax_amount;
+        exclude_tax_income = this.proIncomeOpt.exclude_tax_income + this.subIncomeOpt.exclude_tax_income;
+      }
+      // 计算成本总计:
+      let totalCost:number = 0;
+      const costArr = this.validateForm.get('cost').value;
+      if(costArr && costArr.length !== 0) {
+        totalCost = costArr.map( v => v.amount ).reduce( (sum1:number, sum2:number) => sum1 + sum2, 0);
+      }
+      gross_profit = +(income - totalCost).toFixed(2);
+      gross_profit_percent = (gross_profit / income * 100).toFixed(2) + '%';
+    }
+
+    this.currentCountResult = {
+      income: income, // 总收入
+      tax_income: tax_amount, // 税金
+      exclude_tax_income: exclude_tax_income, // 不含税收入
+      gross_profit: gross_profit,
+      gross_profit_percent: gross_profit_percent
+    };
+  }
 }

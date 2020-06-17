@@ -50,6 +50,7 @@ import { ApprovalProjectListComponent } from './approval-project/approval-projec
 import { ProjectIncomeTypeAndAmountComponent } from './component/project-budget/budget-index/project-income-type-and-amount/project-income-type-and-amount.component';
 import { TypeAmountListComponent } from './component/project-budget/budget-index/project-income-type-and-amount/type-amount-list/type-amount-list.component';
 import { ProjectIncomeTypeAmountComponent } from './component/project-budget/budget-index/project-income-c/project-income-type-amount/project-income-type-amount.component';
+import { SubsidyIncomeTypeAndAmountComponent } from './component/project-budget/budget-index/subsidy-income-c/subsidy-income-type-and-amount/subsidy-income-type-and-amount.component';
 
 const COMPONENTS = [
   DraftListComponent,
@@ -111,7 +112,8 @@ const COMPONENTS_NOROUNT = [
   ],
   declarations: [
     ...COMPONENTS,
-    ...COMPONENTS_NOROUNT
+    ...COMPONENTS_NOROUNT,
+    SubsidyIncomeTypeAndAmountComponent
   ],
   entryComponents: COMPONENTS_NOROUNT
 })

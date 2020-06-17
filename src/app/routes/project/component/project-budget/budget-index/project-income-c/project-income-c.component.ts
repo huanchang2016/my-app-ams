@@ -16,6 +16,7 @@ export class ProjectIncomeCComponent implements OnChanges, OnInit {
   @Input() incomeList:any[];
 
   @Output() listValueChange:EventEmitter<any> = new EventEmitter();
+  @Output() incomeChange:EventEmitter<any> = new EventEmitter();
 
   partACompanyList:any[] = [];
   taxList:any[] = [];
@@ -103,7 +104,10 @@ export class ProjectIncomeCComponent implements OnChanges, OnInit {
         }
       });
     }
-    
-
+  }
+  staticOpt:any = null;
+  incomeStatisticsChange(option:any) {
+    this.staticOpt = option;
+    this.incomeChange.emit(option);
   }
 }

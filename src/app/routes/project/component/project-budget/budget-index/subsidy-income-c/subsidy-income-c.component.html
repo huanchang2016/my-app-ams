@@ -5,11 +5,11 @@
         </ng-container>
     </ng-template>
 
-
-        <nz-table #incomeTable [nzData]="incomeList" [nzShowPagination]="false">
+    <ng-container *ngFor="let data of incomeList">
+        <nz-table #incomeTable [nzData]="[1]" [nzShowPagination]="false" [nzFooter]="footerTpl">
             <thead>
                 <tr>
-                    <th>序号</th>
+                    <th>拨款单位</th>
                     <th nzWidth="200px">补贴名称</th>
                     <th>申请条件</th>
                     <th>测算依据</th>
@@ -18,8 +18,8 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let data of incomeTable.data; let i = index">
-                    <td>{{ i + 1 }}</td>
+                <tr>
+                    <td>{{ data.company.name }}</td>
                     <td>{{ data.name }}</td>
                     <td><span [innerHTML]="data.condition | showTextareaContent"></span></td>
                     <td><span [innerHTML]="data.calculation_basis | showTextareaContent"></span></td>
@@ -34,6 +34,19 @@
                                 nzTheme="outline"></i></a>
                     </td>
                 </tr>
+                <tr>
+                    <td colspan="6">
+                        <app-subsidy-income-type-and-amount [subsidyId]="data.id" (incomeStatisticsChange)="incomeStatisticsChange($event)"></app-subsidy-income-type-and-amount>
+                    </td>
+                </tr>
             </tbody>
         </nz-table>
+        <ng-template #footerTpl>
+            <div class="text-right" *ngIf="staticOpt">
+                <span class="font-weight-bold">含税收入： {{ staticOpt.sub_income | _currency }}</span>
+                <span class="font-weight-bold mx-md">税金合计： {{ staticOpt.tax_amount | _currency }}</span>
+                <span class="font-weight-bold">不含税收入： {{ staticOpt.exclude_tax_income | _currency }}</span>
+            </div>
+        </ng-template>
+    </ng-container>
 </nz-card>

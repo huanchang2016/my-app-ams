@@ -5,20 +5,19 @@ import { SettingsConfigService } from 'src/app/routes/service/settings-config.se
 import { SettingsService } from '@delon/theme';
 import { ApiData } from 'src/app/data/interface.data';
 
+
 @Component({
-  selector: 'app-project-income-type-amount',
-  templateUrl: './project-income-type-amount.component.html',
+  selector: 'app-subsidy-income-type-and-amount',
+  templateUrl: './subsidy-income-type-and-amount.component.html',
   styles: [
   ]
 })
-export class ProjectIncomeTypeAmountComponent implements OnInit {
+export class SubsidyIncomeTypeAndAmountComponent implements OnInit {
 
-  @Input() taxList:any[];
-  @Input() revenueId:number;
-
+  @Input() subsidyId:number;
   @Output() incomeStatisticsChange:EventEmitter<any> = new EventEmitter();
 
-  projectIncomeList:any[] = [];
+  subsidyIncomeList:any[] = [];
 
   total:number = null;
 
@@ -33,52 +32,65 @@ export class ProjectIncomeTypeAmountComponent implements OnInit {
   ) {
     
     this.validateIncomeForm = this.fb.group({
-      tax_id: [null, [Validators.required]],
-      income: [null, [Validators.required, Validators.pattern(/^\d+(\.\d{1,2})?$/)]]
+      income: [null, [Validators.required, Validators.pattern(/^\d+(\.\d{1,2})?$/)]],
+      is_bill: [null, [Validators.required]],
+      tax_rate: [null ],
     });
 
     this.validateIncomeForm.valueChanges.subscribe( _ => {
-      if(this.tax_id.value && this.income.value) {
-        const currentTax = this.taxList.filter(v => v.id === this.tax_id.value)[0];
+      if(this.income.value && this.is_bill.value && this.tax_rate.value) {
         this.currentModalInfo = {
-          rate: currentTax.rate * 100,
-          invoice: currentTax.invoice,
-          income: this.income.value * (1 - currentTax.rate)
+          income: +this.income.value,
+          tax_rate: this.tax_rate.value,
+          tax_amount: +this.income.value * this.tax_rate.value
         };
-        console.log(this.currentModalInfo);
       }else {
         this.currentModalInfo = null;
       }
     })
   }
 
-  get tax_id() {
-    return this.validateIncomeForm.controls.tax_id;
+  
+  isBillChange(required: boolean): void {
+    if (!required) {
+      this.validateIncomeForm.get('tax_rate')!.clearValidators();
+      this.validateIncomeForm.get('tax_rate')!.markAsPristine();
+    } else {
+      this.validateIncomeForm.get('tax_rate')!.setValidators(Validators.required);
+      this.validateIncomeForm.get('tax_rate')!.markAsDirty();
+    }
+    this.validateIncomeForm.get('tax_rate')!.updateValueAndValidity();
   }
 
   get income() {
     return this.validateIncomeForm.controls.income;
   }
 
-  ngOnInit() {
-    this.getProjectIncomeList();
+  get is_bill() {
+    return this.validateIncomeForm.controls.is_bill;
   }
 
-  getProjectIncomeList() {
-    this.settingsConfigService.get(`/api/project_revenue_detail/revenue/${this.revenueId}`).subscribe((res:ApiData) => {
-      console.log(res, '通过项目收入获取详情');
+  get tax_rate() {
+    return this.validateIncomeForm.controls.tax_rate;
+  }
+
+  ngOnInit() {
+    this.getsubsidyIncomeList();
+  }
+
+  getsubsidyIncomeList() {
+    this.settingsConfigService.get(`/api/subsidy_income_detail/subsidy/${this.subsidyId}`).subscribe((res:ApiData) => {
+      console.log(res, '通过补贴收入获取详情');
       if(res.code === 200) {
-        this.projectIncomeList = res.data.project_revenue_detail;
+        this.subsidyIncomeList = res.data.subsidy_income_detail;
         this.countCostTotal();
-        this.dealtaxList();
       }
     });
   }
   
   deletedCostItem(i:number, id?:number) {
     if(id) {
-      this.projectIncomeList.splice(i, 1);
-      this.dealtaxList();
+      this.subsidyIncomeList.splice(i, 1);
     }
     this.countCostTotal();
   }
@@ -116,11 +128,11 @@ export class ProjectIncomeTypeAmountComponent implements OnInit {
 
 
   countCostTotal() {
-    this.total = this.projectIncomeList.map( v => v.exclude_tax_income ).reduce( (sum1:number, sum2:number) => sum1 + sum2, 0);
-    const pro_income = this.projectIncomeList.map( v => v.income ).reduce( (sum1:number, sum2:number) => sum1 + sum2, 0);
-    const tax_amount = this.projectIncomeList.map( v => v.tax_amount ).reduce( (sum1:number, sum2:number) => sum1 + sum2, 0);
+    this.total = this.subsidyIncomeList.map( v => v.exclude_tax_income ).reduce( (sum1:number, sum2:number) => sum1 + sum2, 0);
+    const sub_income = this.subsidyIncomeList.map( v => v.income ).reduce( (sum1:number, sum2:number) => sum1 + sum2, 0);
+    const tax_amount = this.subsidyIncomeList.map( v => v.tax_amount ).reduce( (sum1:number, sum2:number) => sum1 + sum2, 0);
     this.incomeStatisticsChange.emit({
-      pro_income,
+      sub_income,
       tax_amount,
       exclude_tax_income: this.total // 不含税收入
     });
@@ -132,37 +144,28 @@ export class ProjectIncomeTypeAmountComponent implements OnInit {
     }
     if(this.validateIncomeForm.valid) {
       const value = this.validateIncomeForm.value;
-      // 添加成本预算后， 当前 成本类型就变成不可选
-      this.taxList = this.taxList.map( v => {
-        if(v.id === value.id) {
-          v.active = true;
-        }
-        return v;
-      });
       
       let opt:any = {
-        tax_id: value.tax_id,
-        income: Number(value.income)
+        income: Number(value.income),
+        is_bill: this.is_bill.value,
+        tax_rate: this.is_bill.value ? this.tax_rate.value : 0
       };
-      console.log('opt', opt, this.projectIncomeList);
+      console.log('opt', opt, value);
       if(this.editDataInfo) {
         this.edit(opt);
       }else {
         this.create(opt);
       }
-      // this.projectIncomeList.push(opt);
-      // this.emitData();
-      // this.closeModal();
     }
   }
 
   create(obj:any) {
-    const opt:any = Object.assign(obj, { project_revenue_id: this.revenueId })
-    this.settingsConfigService.post(`/api/project_revenue_detail/create`, opt).subscribe((res:ApiData) => {
+    const opt:any = Object.assign(obj, { subsidy_income_id: this.subsidyId })
+    this.settingsConfigService.post(`/api/subsidy_income_detail/create`, opt).subscribe((res:ApiData) => {
       console.log(res);
       if(res.code === 200) {
         this.msg.success('添加成功');
-        this.getProjectIncomeList();
+        this.getsubsidyIncomeList();
         this.closeModal();
       }
     });
@@ -171,41 +174,23 @@ export class ProjectIncomeTypeAmountComponent implements OnInit {
   editDataInfo:any = null;
 
   edit(obj:any) {
-    const opt:any = Object.assign(obj, { project_revenue_detail_id: this.editDataInfo.id })
-    this.settingsConfigService.post(`/api/project_revenue_detail/update`, opt).subscribe((res:ApiData) => {
+    const opt:any = Object.assign(obj, { subsidy_income_detail_id: this.editDataInfo.id })
+    this.settingsConfigService.post(`/api/subsidy_income_detail/update`, opt).subscribe((res:ApiData) => {
       console.log(res);
       if(res.code === 200) {
         this.msg.success('添加成功');
-        this.getProjectIncomeList();
+        this.getsubsidyIncomeList();
         this.closeModal();
       }
     });
   }
-
-  dealtaxList() {
-    const list:any[] = this.taxList;
-    this.taxList = list.map( v => {
-      return {
-        ...v,
-        active: this.checkIsSelectedCost(v.id)
-      }
-    })
-  }
-
-  checkIsSelectedCost(id:number):boolean {
-    if(this.projectIncomeList && this.projectIncomeList.length !== 0) {
-      return this.projectIncomeList.filter( v => v.tax.id === id).length > 0;
-    }
-    return false;
-  }
-
   
   confirm(id:number):void {
-    const opt:any = { project_revenue_detail_id: id };
-    this.settingsConfigService.post('/api/project_revenue_detail/disable', opt).subscribe((res: ApiData) => {
+    const opt:any = { subsidy_income_detail_id: id };
+    this.settingsConfigService.post('/api/subsidy_income_detail/disable', opt).subscribe((res: ApiData) => {
       if (res.code === 200) {
         this.msg.success('禁用成功');
-        this.getProjectIncomeList();
+        this.getsubsidyIncomeList();
       }
     });
   }
@@ -215,8 +200,9 @@ export class ProjectIncomeTypeAmountComponent implements OnInit {
   setForm() {
     console.log(this.editDataInfo);
     this.validateIncomeForm.patchValue({
-      tax_id: this.editDataInfo.tax.id,
-      income: this.editDataInfo.income
+      income: this.editDataInfo.income,
+      is_bill: this.editDataInfo.is_bill,
+      tax_rate: this.editDataInfo.tax_rate
     });
   }
 }

@@ -15,8 +15,9 @@ export class SubsidyIncomeCComponent implements OnInit {
   @Input() incomeList:any[];
 
   @Output() listValueChange:EventEmitter<any> = new EventEmitter();
+  @Output() incomeChange:EventEmitter<any> = new EventEmitter();
 
-  partACompanyList:any[] = [];
+  customerCompany:any[] = [];
 
   constructor(
     private modalService: NzModalService,
@@ -24,10 +25,10 @@ export class SubsidyIncomeCComponent implements OnInit {
     private settingsConfigService: SettingsConfigService
   ) {
     // 获取甲方、乙方 单位列表
-    this.settingsConfigService.get('/api/company/all').subscribe((res: ApiData) => {
+    this.settingsConfigService.get('/api/company/customer/all').subscribe((res: ApiData) => {
       if (res.code === 200) {
         let data: any[] = res.data.company;
-        this.partACompanyList = data.sort((a: any, b: any) => a.sequence - b.sequence)
+        this.customerCompany = data.sort((a: any, b: any) => a.sequence - b.sequence)
           .filter(v => v.active);
       }
     });
@@ -55,7 +56,7 @@ export class SubsidyIncomeCComponent implements OnInit {
       nzMaskClosable: false,
       nzComponentParams: {
         projectId: this.projectId,
-        partACompanyList: this.partACompanyList,
+        customerCompany: this.customerCompany,
         data: data
       },
       nzFooter: null
@@ -85,5 +86,10 @@ export class SubsidyIncomeCComponent implements OnInit {
 
   cancel():void {}
 
+  staticOpt:any = null;
+  incomeStatisticsChange(option:any) {
+    this.staticOpt = option;
+    this.incomeChange.emit(option);
+  }
 
 }

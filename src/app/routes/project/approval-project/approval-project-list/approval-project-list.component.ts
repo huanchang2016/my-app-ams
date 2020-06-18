@@ -18,16 +18,16 @@ export class ApprovalProjectListComponent implements OnInit, OnDestroy {
   private router$: Subscription;
   tabs: any[] = [
     {
-      key: 'my',
-      tab: '该我审批'
-    },
-    {
       key: 'pending',
       tab: '待审批'
     },
     {
       key: 'finished',
       tab: '已审批'
+    },
+    {
+      key: 'my',
+      tab: '该我审批'
     }
   ];
 

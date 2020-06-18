@@ -1,0 +1,45 @@
+<page-header [title]="title">
+
+  <!-- [breadcrumb]="breadcrumb" [action]="action" [extra]="extra" -->
+
+  <ng-template #title>
+    <span>合同：</span>
+    <!-- <span class="">合同名称</span>
+    <span class="text-primary text-xs mx-lg" [class.text-error]="project.info?.project_status.name === '已提交，已通过'"
+      [class.text-error]="project.info?.project_status.name === '已提交，未通过'">{{ project.info?.project_status.name }}</span> -->
+  </ng-template>
+
+  <ng-template #breadcrumb>
+    <nz-breadcrumb>
+      <nz-breadcrumb-item><a [routerLink]="['/dashboard']">首页</a></nz-breadcrumb-item>
+      <nz-breadcrumb-item>合同管理</nz-breadcrumb-item>
+      <nz-breadcrumb-item>合同预览</nz-breadcrumb-item>
+    </nz-breadcrumb>
+  </ng-template>
+
+  <ng-template #action>
+    <!-- <button nz-button (click)="printCurrentModal('print-box',  project.info?.name)">打印</button>
+    <button nz-button nz-dropdown [nzDropdownMenu]="opMenu" class="mx-sm">
+      下载 <i nz-icon nzType="download" nzTheme="outline"></i>
+    </button>
+    <nz-dropdown-menu #opMenu="nzDropdownMenu">
+      <ul nz-menu>
+        <li nz-menu-item (click)="downloadFile('pdf')"><i nz-icon nzType="file-pdf" nzTheme="outline"></i> .pdf</li>
+        <li nz-menu-item (click)="downloadFile('image')"><i nz-icon nzType="file-excel" nzTheme="outline"></i> .image
+        </li>
+      </ul>
+    </nz-dropdown-menu>
+
+    <a *ngIf="project.info?.draft" nz-button [nzType]="'primary'" [routerLink]="['/project/edit', projectId]">编辑</a>
+
+    <a nz-popconfirm nz-button [nzType]="'primary'" *ngIf="project.info?.draft"
+      nzPopconfirmTitle="请确认项目信息全部填写完整，无误后确认提交！！！" (nzOnConfirm)="submitProject()" (nzOnCancel)="cancel()">
+      提交项目
+    </a> -->
+  </ng-template>
+
+</page-header>
+
+<nz-card>
+  contract view works!  contractId is {{ contractId }}
+</nz-card>

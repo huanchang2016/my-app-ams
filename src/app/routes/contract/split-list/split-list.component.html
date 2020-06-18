@@ -1,0 +1,83 @@
+<ng-container *ngIf="listTotalAmount > 0">
+  <button nz-button (click)="openTplModal(tplTitle, tplContent, tplFooter, $event)" nzType="primary"
+    class="mb-sm">分割合同</button>
+
+  <span class="ml-md">剩余可分割金额：<span class="font-weight-bold text-error">{{ listTotalAmount | _currency }}</span></span>
+</ng-container>
+<nz-table #basicTable [nzData]="dataSet" [nzLoading]="dataSet.length === 0 && loading" [nzShowPagination]="false">
+  <thead>
+    <tr>
+      <th>序号</th>
+      <th>划分对象</th>
+      <th>分割金额</th>
+      <th>使用金额</th>
+      <th nzWidth="100px">操作</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of basicTable.data; let i = index">
+      <td>{{ i + 1 }}</td>
+      <td>
+        <div>单位：{{ data.company.name }}</div>
+        <div>部门：{{ data.department.name }}</div>
+      </td>
+      <td>{{ data.amount | _currency }}</td>
+      <td>{{ data.use_amount | _currency }}</td>
+      <td>
+        <a (click)="openTplModal(tplTitle, tplContent, tplFooter, $event, data)"><i nz-icon nzType="edit"
+            nzTheme="outline"></i></a>
+        <nz-divider nzType="vertical"></nz-divider>
+        <a nz-popconfirm nzPopconfirmTitle="确定禁用当前合同类型？" (nzOnConfirm)="disabled(data.id)" (nzOnCancel)="cancel()"
+          class="text-error text-nowrap">禁用</a>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>
+
+
+
+<ng-template #tplTitle>
+  <span>{{ editDataInfo ? '编辑': '添加'}}分割合同</span>
+</ng-template>
+<ng-template #tplContent>
+  <div class="modal-form">
+    <form nz-form [formGroup]="validateForm">
+      <nz-form-item>
+        <nz-form-label nzFor="company_id" nzRequired>所属单位</nz-form-label>
+        <nz-form-control nzErrorTip="请选择合同所属单位">
+          <nz-select style="width: 100%;" id="company_id" nzShowSearch [nzDisabled]="editDataInfo"
+            nzPlaceHolder="请选择合同所属单位" formControlName="company_id" (ngModelChange)="selectedCompanyChange($event)">
+            <ng-container *ngFor="let item of companyList">
+              <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
+            </ng-container>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzFor="department_id" nzRequired>所属部门</nz-form-label>
+        <nz-form-control nzErrorTip="请选择所属部门">
+          <nz-select style="width: 100%;" id="department_id" nzShowSearch [nzDisabled]="editDataInfo"
+            nzPlaceHolder="请选择所属部门" formControlName="department_id" [nzLoading]="departLoading">
+            <ng-container *ngFor="let item of configsOption.department">
+              <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
+            </ng-container>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzFor="amount" nzRequired>分割金额</nz-form-label>
+        <nz-form-control nzErrorTip="项目预算分割金额只能输入数字且最多保留2位小数，且不能超过{{ listTotalAmount }}元">
+          <nz-input-group nzSuffix="元" nzPrefix="￥" style="width: 100%">
+            <input type="text" id="amount" placeholder="填写项目预算分割金额，且不能超过{{ listTotalAmount }}元" formControlName="amount"
+              nz-input />
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+
+    </form>
+  </div>
+</ng-template>
+<ng-template #tplFooter>
+  <button nz-button nzType="default" (click)="closeModal()">取消</button>
+  <button nz-button nzType="primary" (click)="handleOk()" [nzLoading]="submitLoading">确定</button>
+</ng-template>

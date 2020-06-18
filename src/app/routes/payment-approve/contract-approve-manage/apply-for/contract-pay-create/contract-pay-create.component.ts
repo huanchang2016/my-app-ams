@@ -385,8 +385,6 @@ export class ContractPayCreateComponent implements OnInit {
   // 金额大写
   transferNumber: string = '';
   transferAmount(num: number) {
-    console.log(num, 'sldkjfslkjdf');
-
     this.settingsConfigService.post(`/api/finance/transfer`, { num }).subscribe((res: ApiData) => {
       if (res.code === 200) {
         this.transferNumber = res.data.number;

@@ -553,19 +553,19 @@ export class StartupService {
                 // children: [
                 //   {
                 //     text: '草稿',
-                //     link: '/project/my/draft'
+                //     link: '/project/list/draft'
                 //   },
                 //   {
                 //     text: '待审核',
-                //     link: '/project/my/progress'
+                //     link: '/project/list/progress'
                 //   },
                 //   {
                 //     text: '未通过',
-                //     link: '/project/my/refuse'
+                //     link: '/project/list/refuse'
                 //   },
                 //   {
                 //     text: '已通过',
-                //     link: '/project/my/finished'
+                //     link: '/project/list/finished'
                 //   }
                 // ]
               },

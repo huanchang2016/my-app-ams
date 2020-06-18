@@ -1,9 +1,99 @@
-<page-header [action]="phActionTpl">
-  <ng-template #phActionTpl>
-    <button (click)="add()" nz-button nzType="primary">新建</button>
-  </ng-template>
-</page-header>
+<page-header></page-header>
 
-<nz-card>
-  contract list works!
+<nz-card [nzBordered]="false">
+
+    <app-contract-manage-search-form (searchOptionsEmit)="searchOptionsChange($event)" (addContentEmit)="add()">
+    </app-contract-manage-search-form>
+
+    <nz-table #basicTable [nzData]="listOfData" [nzLoading]="loading" class="mt-md hidden-mobile">
+        <thead>
+            <tr>
+                <th>序号</th>
+                <th>名称</th>
+                <th>合同归属</th>
+                <th>合同概要</th>
+                <th>供应商</th>
+                <th>金额</th>
+                <th>是否分割</th>
+                <th class="text-center" nzWidth="200px">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <ng-container *ngFor="let data of basicTable.data; let i = index">
+                <tr>
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ data.name }}</td>
+                    <td>
+                        <div>所属单位：{{ data.company.name }}</div>
+                        <div *ngIf="!data.is_split">所属部门：{{ data.department.name }}</div>
+                    </td>
+                    <td>
+                        <div>合同编号：{{ data.number }}</div>
+                        <div>合同类型：{{ data.contract_category.name }}</div>
+                        <div>起止时间：{{ data.start_time }} 至 {{ data.end_time }}</div>
+                    </td>
+                    <td>
+                        <div>名称：{{ data.supplier.name }}</div>
+                        <div>类型：{{ data.service_category.name }}</div>
+                    </td>
+                    <td>
+                        <div>{{ data.request_amount ? '请示' : '合同' }}金额：{{ data.amount | _currency }}</div>
+                        <div>已使用金额：{{ data.pay_amount | _currency }}</div>
+                        <div *ngIf="data.is_split">已分割金额：{{ data.pay_amount | _currency }}</div>
+                    </td>
+                    <td [innerHTML]="data.is_split | yn"></td>
+                    <td>
+                        <a (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
+                        <nz-divider nzType="vertical"></nz-divider>
+                        <a [routerLink]="['/contract/view', data.id]"><i nz-icon nzType="eye" nzTheme="outline"></i></a>
+                        
+                        <nz-divider nzType="vertical"></nz-divider>
+                        <a nz-popconfirm nzPopconfirmTitle="确定禁用当前合同类型？" (nzOnConfirm)="disabled(data.id)"
+                            (nzOnCancel)="cancel()" class="text-error text-nowrap">禁用</a>
+
+                        <ng-container *ngIf="data.is_split">
+                            <nz-divider nzType="vertical"></nz-divider>
+                            <a (click)="splitContract(data.id)" class="text-nowrap">分割 <i nz-icon nzType="{{ showContractExpand[data.id] ? 'caret-up' : 'caret-down' }}" nzTheme="outline"></i></a>
+                        </ng-container>
+                    </td>
+                </tr>
+
+                <tr *ngIf="showContractExpand[data.id]">
+                    <td colspan="7" class="px0">
+                        <app-contract-split-list [contract_id]="data.id" [maxAmount]="data.amount" [companyList]="companyList"></app-contract-split-list>
+                    </td>
+                </tr>
+            </ng-container>
+        </tbody>
+    </nz-table>
+
+
 </nz-card>
+<div class="hidden-pc mt-md">
+    <div *ngIf="loading && listOfData.length === 0" class="p-md text-center">
+        <nz-spin nzSimple></nz-spin>
+    </div>
+    <div *ngIf="!loading && listOfData.length !== 0">
+        <ng-container *ngFor="let data of listOfData">
+            <nz-card [nzActions]="[actionEdit, actionEllipsis]" class="mt-sm">
+                <nz-skeleton [nzActive]="true" [nzLoading]="loading">
+                    <nz-card-meta [nzTitle]="data.name" [nzDescription]="data.company.name">
+                    </nz-card-meta>
+                </nz-skeleton>
+                <ng-template #actionEdit>
+                    <a acl [acl-ability]="'modify_supplier_service'" (click)="edit(data)"><i nz-icon nzType="edit"
+                            nzTheme="outline"></i></a>
+                </ng-template>
+                <ng-template #actionEllipsis>
+                    <a acl [acl-ability]="'delete_supplier_service'" nz-popconfirm nzPopconfirmTitle="确定禁用当前合同类型？"
+                        (nzOnConfirm)="disabled(data.id)" (nzOnCancel)="cancel()" class="text-error text-nowrap">禁用</a>
+
+                    <!-- <ng-container *ngIf="data.active; else activeFalse"></ng-container>
+                    <ng-template #activeFalse>
+                        <a acl [acl-ability]="'delete_supplier_service'" (click)="enabled(data.id)">启用</a>
+                    </ng-template> -->
+                </ng-template>
+            </nz-card>
+        </ng-container>
+    </div>
+</div>

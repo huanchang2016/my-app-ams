@@ -148,6 +148,16 @@
   </ng-template>
   <ng-container *ngIf="nodeProcess.length !== 0;else nodeProcessLoadingTpl">
     <nz-steps nzDirection="vertical" nzProgressDot class="hidden-pc">
+      <nz-step [nzTitle]="'开票申请'" [nzStatus]="'finish'" [nzDescription]="startDes">
+        <ng-template #startDes>
+          <div class="my-sm">
+            {{ projectDetailInfo?.user.name }}
+          </div>
+          <div>
+            {{ projectDetailInfo?.submit_time }}
+          </div>
+        </ng-template>
+      </nz-step>
       <ng-container *ngFor="let process of nodeProcess">
         <nz-step [nzTitle]="process.node.name"
           [nzStatus]=" process.current ? 'process' : ( !process.finished ? 'wait' : ( !process.agree ?  'error' : 'finish') )"
@@ -176,6 +186,16 @@
     </nz-steps>
     <nz-steps nzProgressDot class="hidden-mobile">
       <ng-container *ngFor="let process of nodeProcess">
+        <nz-step [nzTitle]="'开票申请'" [nzStatus]="'finish'" [nzDescription]="startDes">
+          <ng-template #startDes>
+            <div class="my-sm">
+              {{ projectDetailInfo?.user.name }}
+            </div>
+            <div>
+              {{ projectDetailInfo?.submit_time }}
+            </div>
+          </ng-template>
+        </nz-step>
         <nz-step [nzTitle]="process.node.name"
           [nzStatus]=" process.current ? 'process' : ( !process.finished ? 'wait' : ( !process.agree ?  'error' : 'finish') )"
           [nzDescription]="createDesc">

@@ -1,0 +1,78 @@
+<button nzBlock nz-button nzType="primary" (click)="createTplModal(tplTitle, tplContent, tplFooter, $event)" class="mb-sm">
+    <i nz-icon nzType="plus"></i>
+    添加项目收入
+</button>
+<ng-container *ngIf="projectIncomeList && projectIncomeList.length !== 0">
+    <nz-table #basicTable [nzData]="projectIncomeList" [nzShowPagination]="false">
+        <thead>
+            <tr>
+                <th>序号</th>
+                <th>税目类型</th>
+                <th>含税金额</th>
+                <th>开票税率</th>
+                <th>税金</th>
+                <th>不含税收入</th>
+                <th nzWidth="100px">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let data of basicTable.data; let i = index">
+                <td>{{ i + 1 }}</td>
+                <td>{{ data.tax.name }}</td>
+                <td>{{ data.income | _currency }}</td>
+                <td>{{ data.tax.rate * 100 }} %</td>
+                <td>{{ data.tax_amount | _currency }}</td>
+                <td>{{ data.exclude_tax_income | _currency }}</td>
+                <td>
+                    <a (click)="createTplModal(tplTitle, tplContent, tplFooter, $event, data)"><i nz-icon nzType="edit"
+                            nzTheme="outline"></i></a>
+
+                    <nz-divider nzType="vertical"></nz-divider>
+
+                    <a nz-popconfirm nzPopconfirmTitle="确定禁用当前项目收入类型？" (nzOnConfirm)="confirm(data.tax.id)"
+                        (nzOnCancel)="cancel()" class="text-error"><i nz-icon nzType="delete" nzTheme="outline"></i></a>
+                </td>
+            </tr>
+        </tbody>
+    </nz-table>
+</ng-container>
+
+<ng-template #tplTitle>
+    <span>{{ editDataInfo ? '编辑': '添加'}}项目收入</span>
+</ng-template>
+<ng-template #tplContent>
+    <div class="modal-form">
+        <form nz-form [formGroup]="validateIncomeForm">
+            <nz-form-item>
+                <nz-form-label nzFor="tax_id" nzRequired>收入税目</nz-form-label>
+                <nz-form-control nzErrorTip="请选择项目收入税目">
+                    <nz-select style="width: 100%;" id="tax_id" nzShowSearch nzPlaceHolder="请选择项目收入税目"
+                        formControlName="tax_id">
+                        <ng-container *ngFor="let item of taxList">
+                            <nz-option [nzLabel]="item.name" [nzValue]="item.id" [nzDisabled]="item.active"></nz-option>
+                        </ng-container>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label nzFor="income" nzRequired>收入金额</nz-form-label>
+                <nz-form-control nzErrorTip="项目预算收入金额只能输入数字且最多保留2位小数">
+                    <nz-input-group nzSuffix="元" nzPrefix="￥" style="width: 100%">
+                        <input type="text" id="income" nzPlaceHolder="填写项目预算收入金额" formControlName="income" nz-input />
+                    </nz-input-group>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item *ngIf="currentModalInfo">
+                <div class="text-sm font-weight-bold">
+                    <span>开票方式：{{ currentModalInfo.invoice.name }}</span>
+                    <span class="mx-md">税率：{{ currentModalInfo.rate }} %</span>
+                    <span>税额：{{ currentModalInfo.income | _currency }}</span>
+                </div>
+            </nz-form-item>
+        </form>
+    </div>
+</ng-template>
+<ng-template #tplFooter>
+    <button nz-button nzType="default" (click)="closeModal()">取消</button>
+    <button nz-button nzType="primary" (click)="handleOk()">确定</button>
+</ng-template>

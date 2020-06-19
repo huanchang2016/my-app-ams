@@ -49,7 +49,7 @@ export class AdjustSupplierContractListCComponent implements OnInit {
         data: data,
         serviceCategoryArray: this.serviceCategory
       },
-      nzFooter: []
+      nzFooter: null
     });
 
     // modal.afterOpen.subscribe(() => console.log('[afterOpen] emitted!'));

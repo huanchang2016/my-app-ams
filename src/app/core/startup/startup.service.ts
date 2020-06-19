@@ -468,7 +468,7 @@ export class StartupService {
           return [appData, permissionData];
       })
     ).subscribe(([appData, permissionData]) => {
-      console.log(appData, permissionData);
+      // console.log(appData, permissionData);
       const app: any = {
         name: `财务共享服务中心`,
         description: `全力推进公司业务快速发展，优化流程管理，提高信息化应用效率，提升公司核心竞争力，加大财务管理软件建设与应用力度，天府人资公司菁英软件青年突击队积极对接研发需求，以推动公司信息化水平迈上新台阶，进一步实现办公高效化、规范化、标准化和科学化`

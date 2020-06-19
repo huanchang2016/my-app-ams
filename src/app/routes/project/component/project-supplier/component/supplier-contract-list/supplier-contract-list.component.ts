@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { SettingsConfigService } from 'src/app/routes/service/settings-config.service';
 import { ApiData } from 'src/app/data/interface.data';
@@ -9,13 +9,13 @@ import { HasContractSupplierComponent } from '../has-contract-supplier/has-contr
   templateUrl: './supplier-contract-list.component.html',
   styleUrls: ['./supplier-contract-list.component.less']
 })
-export class SupplierContractListComponent implements OnInit {
+export class SupplierContractListComponent implements OnChanges {
   @Input() projectInfo: any;
-  @Input() supplierInfo: any;
+  @Input() supplierList: any;
   @Input() isView?: boolean = false;
-  @Input() serviceCategory?: any[];
 
   contractList: any[] = [];
+  selectedOption:{ [key:string]: boolean } = {};
 
   loadingContract: boolean = false;
 
@@ -27,28 +27,33 @@ export class SupplierContractListComponent implements OnInit {
 
   }
 
-  ngOnInit() {
-    this.getHasContractDataList();
-    // this.getNoContractDataList();
+  ngOnChanges() {
+    if(this.projectInfo) {
+      this.getDataList();
+    }
   }
 
   addContract(): void {
     this.creatHasContractComponent();
   }
 
+  editContract(data: any): void {
+    this.creatHasContractComponent(data);
+  }
+
   creatHasContractComponent(data?: any): void {
     const modal = this.modalService.create({
-      nzTitle: (!data ? '新增' : '编辑') + '合约预算',
+      nzTitle: (!data ? '新增' : '编辑') + '合约',
       nzWrapClassName: 'modal-lg',
       nzContent: HasContractSupplierComponent,
       nzMaskClosable: false,
       nzComponentParams: {
         data: data,
-        supplierInfo: this.supplierInfo,
+        supplierList: this.supplierList,
         projectInfo: this.projectInfo,
-        serviceCategoryArray: this.serviceCategory
+        selectedOption: this.selectedOption
       },
-      nzFooter: []
+      nzFooter: null
     });
 
     // modal.afterOpen.subscribe(() => console.log('[afterOpen] emitted!'));
@@ -56,24 +61,21 @@ export class SupplierContractListComponent implements OnInit {
     // Return a result when closed
     modal.afterClose.subscribe(result => {
       if (result) {
-        this.getHasContractDataList();
+        this.getDataList();
       }
     });
   }
 
   isShowList:boolean = false;
-  getHasContractDataList() {
-    const opt: any = {
-      project_id: this.projectInfo.id,
-      supplier_id: this.supplierInfo.id
-    };
+  getDataList() {
     this.loadingContract = true;
-    this.settingsConfigService.post(`/api/contract/supplier`, opt).subscribe((res: ApiData) => {
+    this.settingsConfigService.get(`/api/deal/project/${this.projectInfo.id}`).subscribe((res: ApiData) => {
       // console.log(res, 'get contract list  by supplier info!');
       this.loadingContract = false;
       if (res.code === 200) {
-        const conList:any[] = res.data.contract;
-        this.contractList = conList.filter( v => v.active );
+        const data:any[] = res.data.deal;
+        this.contractList = data.filter( v => v.active );
+        this.contractList.forEach( v => this.selectedOption[v.id] = true );
         if(this.contractList.length === 0 && this.isView) {
           this.isShowList = false;
         }else {
@@ -83,18 +85,16 @@ export class SupplierContractListComponent implements OnInit {
     })
   }
 
-  editContract(data: any): void {
-    this.creatHasContractComponent(data);
-  }
 
-  disabled(id: number): void {
+  disabled(data:any): void {
     const obj: any = {
-      contract_ids: [id]
+      deal_id: data.id
     };
-    this.settingsConfigService.post(`/api/contract/disable`, obj).subscribe((res: ApiData) => {
+    this.settingsConfigService.post(`/api/deal/disable`, obj).subscribe((res: ApiData) => {
       if (res.code === 200) {
         this.msg.success('合约禁用成功');
-        this.contractList = this.contractList.filter(v => v.id !== id);
+        this.contractList = this.contractList.filter(v => v.id !== data.id);
+        this.selectedOption[data.id] = false;
       } else {
         this.msg.error(res.error || '禁用失败');
       }

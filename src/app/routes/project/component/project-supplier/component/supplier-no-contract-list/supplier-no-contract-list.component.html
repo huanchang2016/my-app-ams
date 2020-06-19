@@ -1,4 +1,4 @@
-<div class="contract-box hidden-pc" *ngIf="isShowList">
+<div class="contract-box hidden-pc">
     <div class="clearfix">
         <span class="float-left text-primary">未签订合约</span>
         <a (click)="addContract()" *ngIf="!isView" class="float-right">新增非合约</a>
@@ -17,7 +17,7 @@
                 </ng-template>
                 <ng-template #actionDisabled>
                     <a *ngIf="!isView" nz-popconfirm nzPopconfirmTitle="确定禁用当前非合约？"
-                        (nzOnConfirm)="disabled(data.id)" (nzOnCancel)="cancel()" class="text-error">
+                        (nzOnConfirm)="disabled(data)" (nzOnCancel)="cancel()" class="text-error">
                         禁用
                     </a>
                 </ng-template>
@@ -30,20 +30,20 @@
 
 </div>
 
-<div class="contract-box hidden-mobile" *ngIf="isShowList">
+<div class="contract-box hidden-mobile">
 
     <ng-template #treatyAddTemplate>
         <button *ngIf="!isView" class="mr-lg" nz-button [nzType]="'primary'" (click)="addContract()">新增非合约</button>
     </ng-template>
-    <nz-card nzTitle="未签订合约" [nzExtra]="treatyAddTemplate">
+    <nz-card nzTitle="未签订合约" [nzExtra]="treatyAddTemplate" [nzBordered]="false">
 
-        <ng-container *ngIf="treatyList.length !== 0">
-            <nz-table #treatyTable [nzData]="treatyList" nzSize="small" [nzLoading]="loadingTreaty"
+            <nz-table #treatyTable [nzData]="treatyList" nzSize="small" [nzLoading]="loadingTreaty" [nzShowPagination]="false"
                 [nzFrontPagination]="false">
                 <thead>
                     <tr>
                         <th>序号</th>
-                        <th>服务商类型</th>
+                        <th>供应商</th>
+                        <th>服务类型</th>
                         <th>金额（元）</th>
                         <th *ngIf="!isView">操作</th>
                     </tr>
@@ -51,6 +51,7 @@
                 <tbody>
                     <tr *ngFor="let data of treatyTable.data;let i = index">
                         <td>{{ i + 1 }}</td>
+                        <td>{{  data.supplier?.name }}</td>
                         <td>{{  data.service_category?.name }}</td>
                         <td>
                             <span>{{ data.amount | _currency }}</span>
@@ -58,7 +59,7 @@
                         <td *ngIf="!isView">
                             <a (click)="editContract(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
                             <nz-divider nzType="vertical"></nz-divider>
-                            <a nz-popconfirm nzPopconfirmTitle="确定禁用当前非合约？" (nzOnConfirm)="disabled(data.id)"
+                            <a nz-popconfirm nzPopconfirmTitle="确定禁用当前非合约？" (nzOnConfirm)="disabled(data)"
                                 (nzOnCancel)="cancel()" class="text-error">
                                 禁用
                             </a>
@@ -66,6 +67,5 @@
                     </tr>
                 </tbody>
             </nz-table>
-        </ng-container>
     </nz-card>
 </div>

@@ -18,6 +18,7 @@ export class UploadFileAttachmentShowCComponent implements OnInit {
   attachment:any[] = [];
 
   @Input() attachmentUrl:string;
+  @Input() isShowName?:boolean = true;
 
   constructor(
     private settingsConfigService: SettingsConfigService

@@ -1,10 +1,8 @@
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { NzModalRef, NzMessageService } from 'ng-zorro-antd';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
-import { List, ApiData } from 'src/app/data/interface.data';
+import { ApiData } from 'src/app/data/interface.data';
 import { SettingsConfigService } from 'src/app/routes/service/settings-config.service';
-import { filter, map } from 'rxjs/operators';
-import { SettingsService } from '@delon/theme';
 
 @Component({
   selector: 'app-has-contract-supplier',
@@ -32,85 +30,114 @@ import { SettingsService } from '@delon/theme';
 })
 export class HasContractSupplierComponent implements OnInit {
 
-  @Input() data?:any;
-  @Input() projectInfo:any;
-  @Input() supplierInfo:any;
-  @Input() serviceCategoryArray:any[];
+  @Input() data?: any;
+  @Input() projectInfo: any;
+  @Input() supplierList: any;
+  @Input() selectedOption: any;
 
   validateForm: FormGroup; // 基本资料
-  submitLoading:boolean = false;
+  submitLoading: boolean = false;
 
-  contractCategoryList:any[] = [];
+  contractList: any[] = [];
+  splitContractList: any[] = [];
 
-  limtAmount:number;
+  is_split: boolean = true;
+
+  limtAmount: number = 0;
 
   constructor(
     private modal: NzModalRef,
     private fb: FormBuilder,
     private msg: NzMessageService,
-    public settingsConfigService: SettingsConfigService,
-    private settings: SettingsService
-  ) {
-    // 获取合同类型
-    if(this.settings.user.company) {
-      this.settingsConfigService.get(`/api/contract/category/${this.settings.user.company.id}`).subscribe((res:ApiData) => {
-        if(res.code === 200) {
-          this.contractCategoryList = res.data.contract_category;
-        }
-      })
-    }
-  }
+    public settingsConfigService: SettingsConfigService
+  ) { }
 
   ngOnInit() {
-    
-    // 计算 限制金额  重新获取最新的 预算（成本）金额信息计算
-    if(this.projectInfo) {
-      this.settingsConfigService.get(`/api/project/detail/${this.projectInfo.id}`).subscribe((res:ApiData) => {
-        if(res.code === 200) {
-          const info:any = res.data;
-          this.limtAmount = info.budget.cost_amount - info.budget.surplus_cost_amount;
-          if(this.data) {
-            this.limtAmount = this.limtAmount + this.data.amount;
-          }
-        }
-      })
-    }
-
     this.validateForm = this.fb.group({
-      service_category_id: [null, [Validators.required]], // 服务商 类型选择
-      name: [null, [Validators.required]],
-      contract_category_id: [null, [Validators.required]],
-      contract_number: [null, [Validators.required]], // 合约编号
-      contract_time: [null, [Validators.required]],
-      is_amount: [null, [Validators.required]],
-      amount: [null, [Validators.required, this.confirmValidator, Validators.pattern(/^\d+(\.\d{1,2})?$/)]],
-      pay_company: [ null, [Validators.required]],
-      bank_account: [null, [Validators.required]], // Validators.pattern(/^([1-9]{1})(\d{14}|\d{18})$/)
-      bank_name: [null, [Validators.required]]
+      supplier_id: [null, [Validators.required]],
+      contract_id: [null, [Validators.required]],
+      split_contract_id: [null],
+      amount: [null, [Validators.required, this.confirmValidator, Validators.pattern(/^\d+(\.\d{1,2})?$/)]]
     });
 
-    this.getCategoryList();
+    if (this.data) {
+      
+      this.getContractList(this.data.supplier.id);
 
-    if(this.data) {
       console.log(this.data);
       this.validateForm.patchValue({
-        name: this.data.name,
-        contract_category_id: this.data.contract_category ? this.data.contract_category.id : null,
-        service_category_id: this.data.service_category.id,
-        contract_number: this.data.number,
-        contract_time: {
-          start: this.data.start_time,
-          end: this.data.end_time
-        },
-        is_amount: this.data.contract_amount ? 'A' : 'B',
-        amount: this.data.contract_amount ? this.data.contract_amount : this.data.request_amount,
-        pay_company: this.data.pay_company,
-        bank_account: this.data.bank_account,
-        bank_name: this.data.bank_name
+        supplier_id: this.data.supplier.id,
+        contract_id: this.data.contract.id,
+        split_contract_id: this.data.split_contract ? this.data.split_contract.id : null,
+        amount: this.data.amount
       });
-      
-      this.getAttachment();
+      if(this.data.split_contract) {
+        this.getSplitContractList(this.data.contract.id);
+        this.is_split = true;
+        this.limtAmount = Number((this.data.split_contract.amount - this.data.use_amount + this.data.amount).toFixed(2));
+        this.limtAmount = this.limtAmount > this.data.split_contract.amount ? this.data.split_contract.amount : this.limtAmount;
+      }else {
+        this.is_split = false;
+        this.limtAmount = Number((this.data.contract.amount - this.data.contract.pay_amount + this.data.amount).toFixed(2));
+        this.limtAmount = this.limtAmount > this.data.contract.amount ? this.data.contract.amount : this.limtAmount;
+      }
     }
+  }
+  supplierChange(supplier_id: number):void {
+    if (supplier_id) {
+      this.validateForm.patchValue({
+        contract_id: null,
+        split_contract_id: null
+      })
+      this.getContractList(supplier_id);
+    }
+  }
+  contractChange(contract_id: number):void {
+    if (contract_id) {
+
+      this.validateForm.patchValue({
+        split_contract_id: null
+      })
+      const currentContract:any = this.contractList.filter(v => v.id === contract_id)[0];
+      this.is_split = currentContract.is_split;
+
+      if (this.is_split) {
+        this.getSplitContractList(contract_id);
+
+        this.validateForm.get('split_contract_id')!.setValidators(Validators.required);
+        this.validateForm.get('split_contract_id')!.markAsDirty();
+      } else {
+        this.validateForm.get('split_contract_id')!.clearValidators();
+        this.validateForm.get('split_contract_id')!.markAsPristine();
+
+        // 合同不能分割到部门时，计算合同金额上限
+        this.limtAmount = Number((currentContract.amount - currentContract.pay_amount).toFixed(2));
+      }
+      this.validateForm.get('split_contract_id')!.updateValueAndValidity();
+
+    }
+  }
+  splitContractChange(split_contract_id: number):void {
+    if (split_contract_id) { // 分割合同值变化时，计算合同金额上限。
+      const currentSplitContract:any = this.splitContractList.filter(v => v.id === split_contract_id)[0];
+      console.log(currentSplitContract, 'split contract')
+      this.limtAmount = Number((currentSplitContract.amount - currentSplitContract.use_amount).toFixed(2));
+    }
+  }
+  
+  getContractList(id: number) {
+    this.settingsConfigService.get(`/api/contract/supplier/${id}`).subscribe((res: ApiData) => {
+      if (res.code === 200) {
+        this.contractList = res.data.contract;
+      }
+    })
+  }
+  getSplitContractList(id: number) {
+    this.settingsConfigService.get(`/api/split_contract/contract/${id}`).subscribe((res: ApiData) => {
+      if (res.code === 200) {
+        this.splitContractList = res.data.split_contract;
+      }
+    })
   }
 
   confirmValidator = (control: FormControl): { [s: string]: boolean } => {
@@ -122,182 +149,67 @@ export class HasContractSupplierComponent implements OnInit {
     return {};
   };
 
-  attachmentError:boolean = false;
   submitForm(): void {
     for (const i in this.validateForm.controls) {
       this.validateForm.controls[i].markAsDirty();
       this.validateForm.controls[i].updateValueAndValidity();
     }
-    if(this.validateForm.valid && this.attachment.length !== 0) {
-      let value:any = this.validateForm.value;
+    if (this.validateForm.valid) {
+      const value: any = this.validateForm.value;
 
       this.submitLoading = true;
-      if(this.data) {
+      if (this.data) {
         //  请求编辑 接口
-        let option:any = {
-          contract_id: this.data.id,
-          service_category_id: value.service_category_id,
-          name: value.name,
-          contract_category_id: value.contract_category_id,
-          contract_number: value.contract_number,
-          start_time: value.contract_time.start,
-          end_time: value.contract_time.end,
-          pay_company: value.pay_company,
-          bank_account: value.bank_account,
-          bank_name: value.bank_name
+        const option: any = {
+          deal_id: this.data.id,
+          amount: +value.amount
         };
-        let amountT = {};
-        if(this.validateForm.value.is_amount === 'A') {
-          amountT = {
-            contract_amount: +value.amount
-          };
-        }else {
-          amountT = {
-            request_amount: +value.amount
-          };
-        }
-        option = Object.assign(option, amountT);
-        console.log(option);
         this.editContract(option);
-      }else {
+      } else {
         //  请求 新增接口
-        let opt:any = {
+        const opt: any = {
           project_id: this.projectInfo.id,
-          supplier_id: this.supplierInfo.id,
-          service_category_id: value.service_category_id,
-          name: value.name,
-          contract_category_id: value.contract_category_id,
-          contract_number: value.contract_number,
-          start_time: value.contract_time.start,
-          end_time: value.contract_time.end,
-          pay_company: value.pay_company,
-          bank_account: value.bank_account,
-          bank_name: value.bank_name
+          contract_id: value.contract_id,
+          split_contract_id: value.split_contract_id,
+          amount: +value.amount
         };
-        let amountT = {};
-        if(this.validateForm.value.is_amount === 'A') {
-          amountT = {
-            contract_amount: +value.amount
-          };
-        }else {
-          amountT = {
-            request_amount: +value.amount
-          };
-        }
-        opt = Object.assign(opt, amountT);
-        console.log(opt);
         this.addContract(opt);
       }
     } else {
-      if(this.attachment.length === 0) {
-        this.attachmentError = true;
-      }
       this.msg.warning('信息填写不完整');
     }
   }
 
-  
-  addContract(opt:any) {
-    this.settingsConfigService.post('/api/contract/create', opt).subscribe((res:ApiData) => {
+
+  addContract(opt: any) {
+    this.settingsConfigService.post('/api/deal/create', opt).subscribe((res: ApiData) => {
       console.log(res);
       // this.submitLoading = false;
-      if(res.code === 200) {
-        // this.msg.success('创建成功');
-        this.bindAttachment(res.data);
-      }else {
+      if (res.code === 200) {
+        this.msg.success('创建成功');
+      } else {
         this.submitLoading = false;
         this.msg.error(res.error || '创建失败');
       }
     });
   }
-  editContract(opt:any) {
-    this.settingsConfigService.post('/api/contract/update', opt).subscribe((res:ApiData) => {
+  editContract(opt: any) {
+    this.settingsConfigService.post('/api/deal/update', opt).subscribe((res: ApiData) => {
       console.log(res);
       this.submitLoading = false;
-      if(res.code === 200) {
+      if (res.code === 200) {
         this.msg.success('更新成功');
         this.destroyModal({});
-      }else {
+      } else {
         this.submitLoading = false;
         this.msg.error(res.error || '更新失败');
       }
     });
   }
 
-  destroyModal(data:any = null): void {
+  destroyModal(data: any = null): void {
     this.modal.destroy(data);
   }
 
-  
-  // 附件上传
-  attachment:any[] = [];
-  isAttachmentChange:boolean = false;
-  attachmentChange(option:any) {
-    this.attachment.push(option);
-    this.isAttachmentChange = !this.isAttachmentChange;
-    if(this.data) {
-      this.bindAttachment(this.data, true);
-    }
-    if(this.attachment.length !== 0) {
-      this.attachmentError = false;
-    }
-  }
-
-  bindAttachment(contractInfo:any, isRefer:boolean = false) {
-    const opt:any = {
-      attachment_ids: this.attachment.map(v => v.id),
-      project_id: this.projectInfo.id,
-      contract_id: contractInfo.id,
-      is_basic: false
-    };
-    console.log(opt);
-    this.settingsConfigService.post('/api/attachment/bind', opt).subscribe((res:ApiData) => {
-      console.log(res);
-      this.submitLoading = false;
-      if(res.code === 200) {
-        if(this.data) {
-          if(isRefer) {
-            this.msg.success('附件绑定成功');
-          }
-          this.getAttachment();
-        }else {
-         this.destroyModal({});
-        }
-      } else {
-        this.msg.error(res.error || '附件绑定失败')
-      }
-    })
-  }
-
-  getAttachment() {
-    this.settingsConfigService.get(`/api/attachment/contract/${this.data.id}`).subscribe((res:ApiData) => {
-      console.log('项目 基础附件：', res);
-      if(res.code === 200) {
-        this.attachment = res.data.attachment;
-      }
-    })
-  }
-
-
-  attachmentCategory:List[] = [];
-  getCategoryList() {
-    const opt:any = {
-      is_project: false,
-      is_contract: true,
-      is_pay: false,
-      is_bill: false
-    };
-    this.settingsConfigService.post('/api/attachment/category/list', opt).pipe(
-      filter(v => v.code === 200),
-      map(v => v.data)
-    ).subscribe( data => {
-      const cateArrData:any[] = data.attachment_category;
-      this.attachmentCategory = cateArrData.sort((a:any, b:any) => a.sequence - b.sequence).map( v => {
-        return { id: v.id, name: v.name }
-      });
-
-    });
-    
-  }
 
 }

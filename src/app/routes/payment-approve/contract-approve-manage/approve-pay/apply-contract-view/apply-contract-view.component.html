@@ -122,60 +122,7 @@
     </ng-template>
   </nz-table>
 </div>
-<!-- 
-<nz-card nzTitle="成本支付" *ngIf="selectedContract" class="mt-md hidden-mobile">
 
-  <nz-table #costSelectTable [nzData]="listOfData" [nzFrontPagination]="false">
-    <thead>
-      <tr>
-        <th>序号</th>
-        <th>成本类型</th>
-        <th>本期支付（元）</th>
-        <th nzWidth="250px">预算统计</th>
-        <th>描述</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let data of costSelectTable.data; let i = index">
-        <td>{{ i + 1}}</td>
-        <td>{{ data.cost.cost_category.name }}</td>
-        <td class="text-success">{{ data.amount | _currency }}</td>
-        <td>
-          <sv-container size="small" col="1">
-            <sv label="预算支付"><span class="text-error">{{ data.cost.amount | _currency }}</span></sv>
-            <sv label="累计支付"><span class="text-success">{{ data.cost.pay_amount | _currency }}</span></sv>
-            <sv label="剩余支付"><span
-                class="text-primary">{{ (data.cost.amount - data.cost.pay_amount) | _currency }}</span></sv>
-          </sv-container>
-        </td>
-        <td>
-          <span [innerHTML]="data.remark | showTextareaContent"></span>
-        </td>
-      </tr>
-    </tbody>
-  </nz-table>
-
-</nz-card>
-
-<nz-card [nzTitle]="'成本支付'" *ngIf="listOfData.length !== 0" class="mt-md hidden-pc">
-
-  <ng-container *ngFor="let data of listOfData">
-    <sv-container size="small" [title]="data.cost.cost_category.name" class="py-sm">
-      <sv label="总计支付"><span class="font-weight-bold">{{ data.cost.amount | _currency }}</span></sv>
-      <sv label="累计支付"><span class="text-success">{{ data.cost.pay_amount | _currency }}</span></sv>
-      <sv label="剩余支付"><span class="text-primary">{{ (data.cost.amount - data.cost.pay_amount) | _currency }}</span>
-      </sv>
-      <sv label="本期支付"><strong class="text-error">{{ data.amount | _currency }}</strong></sv>
-      <sv label="描述"><span [innerHTML]="data.remark | showTextareaContent"></span></sv>
-    </sv-container>
-
-  </ng-container>
-</nz-card>
-
-<nz-card nzTitle="附件" *ngIf="contract_pay_id" class="mt-md">
-  <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/contract_pay/' + contract_pay_id">
-  </app-upload-file-attachment-show-c>
-</nz-card> -->
 <!-- 支付流程进展： 草稿 不显示 -->
 <nz-card [nzBordered]="false" class="mt-md" [nzTitle]="workflowStatusTitle" *ngIf="contractInfo && !contractInfo.draft">
   <ng-template #workflowStatusTitle>
@@ -184,6 +131,16 @@
   </ng-template>
   <ng-container *ngIf="nodeProcess.length !== 0;else nodeProcessLoadingTpl">
     <nz-steps nzDirection="vertical" nzProgressDot class="hidden-pc">
+      <nz-step [nzTitle]="'合约支付申请'" [nzStatus]="'finish'" [nzDescription]="startDes">
+        <ng-template #startDes>
+          <div class="my-sm">
+            {{ projectInfo?.user.name }}
+          </div>
+          <div>
+            {{ projectInfo?.submit_time }}
+          </div>
+        </ng-template>
+      </nz-step>
       <ng-container *ngFor="let process of nodeProcess">
         <nz-step [nzTitle]="process.node.name"
           [nzStatus]=" process.current ? 'process' : ( !process.finished ? 'wait' : ( !process.agree ?  'error' : 'finish') )"
@@ -211,6 +168,16 @@
         [nzStatus]=" !progressInfo.finished ? 'wait' : ( progressInfo.agree ? 'finish' : 'error' ) "></nz-step>
     </nz-steps>
     <nz-steps nzProgressDot class="hidden-mobile">
+      <nz-step [nzTitle]="'合约支付申请'" [nzStatus]="'finish'" [nzDescription]="startDes">
+        <ng-template #startDes>
+          <div class="my-sm">
+            {{ projectInfo?.user.name }}
+          </div>
+          <div>
+            {{ projectInfo?.submit_time }}
+          </div>
+        </ng-template>
+      </nz-step>
       <ng-container *ngFor="let process of nodeProcess">
         <nz-step [nzTitle]="process.node.name"
           [nzStatus]=" process.current ? 'process' : ( !process.finished ? 'wait' : ( !process.agree ?  'error' : 'finish') )"

@@ -34,6 +34,7 @@ export class GlobalSettingsService {
 
       this.taskOption.totalTaskNumber = this.taskOption.projectNumber + this.taskOption.contractNumber + this.taskOption.treatyNumber + this.taskOption.billNumber;
 
+      console.log(this.taskOption);
     });
   }
 }

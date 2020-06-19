@@ -32,26 +32,27 @@ export class NoContractSupplierComponent implements OnInit {
 
   @Input() data?:any;
   @Input() projectInfo:any;
-  @Input() supplierInfo:any;
-  @Input() serviceCategoryArray:any[];
+  @Input() selectedOption:{ [key:string] : boolean };
+  @Input() supplierList:any[];
 
   validateForm: FormGroup; // 基本资料
   submitLoading:boolean = false;
   limtAmount:number;
+
+  serviceCategoryList:any[] = [];
   
   constructor(
     private modal: NzModalRef,
     private fb: FormBuilder,
     private msg: NzMessageService,
     public settingsConfigService: SettingsConfigService
-  ) {
-    
-  }
+  ) { }
 
   ngOnInit() {
-    
-    // 计算 限制金额  重新获取最新的 预算（成本）金额信息计算
+    console.log(this.selectedOption)
     if(this.projectInfo) {
+      this.getServiceCategory();
+      // 计算 限制金额  重新获取最新的 预算（成本）金额信息计算
       this.settingsConfigService.get(`/api/project/detail/${this.projectInfo.id}`).subscribe((res:ApiData) => {
         if(res.code === 200) {
           const info:any = res.data;
@@ -63,6 +64,7 @@ export class NoContractSupplierComponent implements OnInit {
       })
     }
     this.validateForm = this.fb.group({
+      supplier_id: [null, [Validators.required]],
       service_category_id: [null, [Validators.required]],
       amount: [null, [Validators.required, this.confirmValidator, Validators.pattern(/^\d+(\.\d{1,2})?$/)]]
     });
@@ -70,7 +72,8 @@ export class NoContractSupplierComponent implements OnInit {
     if(this.data) {
       console.log(this.data);
       this.validateForm.patchValue({
-        service_category_id: this.data.service_category ? this.data.service_category.id : null,
+        supplier_id: this.data.supplier.id,
+        service_category_id: this.data.service_category.id,
         amount: this.data.amount
       })
     }
@@ -106,7 +109,7 @@ export class NoContractSupplierComponent implements OnInit {
         //  请求 新增接口
         const opt:any = {
           project_id: this.projectInfo.id,
-          supplier_id: this.supplierInfo.id,
+          supplier_id: value.supplier_id,
           service_category_id: value.service_category_id,
           amount: +value.amount
         };
@@ -146,6 +149,16 @@ export class NoContractSupplierComponent implements OnInit {
 
   destroyModal(data:any = null): void {
     this.modal.destroy(data);
+  }
+  
+  getServiceCategory():void {
+    this.settingsConfigService.get(`/api/service/category/${this.projectInfo.company.id}`).subscribe((res:ApiData) => {
+      // console.log(res);
+      if(res.code === 200) {
+        const list:any[] = res.data.service_category;
+        this.serviceCategoryList = list.filter( v => v.active );
+      }
+    });
   }
 
   cancel() {}

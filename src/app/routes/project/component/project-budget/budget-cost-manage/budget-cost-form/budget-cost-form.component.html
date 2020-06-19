@@ -1,11 +1,13 @@
 <div class="cost-item d-flex justify-content-between align-items-center pt-md pb-md">
     <span>{{ data.cost_category.name }}</span>
+    <div class="d-flex align-items-center" style="flex-grow: 1; justify-content: flex-end;">
+        
     <div class="cost-item-value text-center">
         <ng-container *ngIf="isEdit; else isNotEdit">
             <input style="width: 100%;" [(ngModel)]="data.amount" type="text" nzPlaceHolder="填写金额" nz-input />
         </ng-container>
         <ng-template #isNotEdit>
-            <strong>{{ data.amount }}</strong>
+            <strong>{{ data.amount | _currency }}</strong>
         </ng-template>
     </div>
     <div class="cost-item-oper ml-sm">
@@ -19,4 +21,5 @@
             class="text-error ml-sm"><i nz-icon nzType="delete" nzTheme="outline"></i></a>
     </div>
     
+    </div>
 </div>

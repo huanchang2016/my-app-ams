@@ -1,15 +1,14 @@
 <form nz-form [formGroup]="validateForm">
-    <nz-form-item *ngIf="projectInfo" class="mb-0">
-        <nz-form-label>项目名称</nz-form-label>
-        <nz-form-text class="d-flex align-items-center">
-            <strong>{{ projectInfo.name }}</strong>
-        </nz-form-text>
-    </nz-form-item>
-    <nz-form-item *ngIf="supplierInfo" class="mb-0">
-        <nz-form-label>供 应 商</nz-form-label>
-        <nz-form-text class="d-flex align-items-center">
-            <strong>{{ supplierInfo.name }}</strong>
-        </nz-form-text>
+    <nz-form-item>
+        <nz-form-label nzFor="supplier_id" nzRequired>服务商类型</nz-form-label>
+        <nz-form-control nzErrorTip="请选择服务商类型">
+            <nz-select style="width: 100%;" id="supplier_id" nzShowSearch
+                nzPlaceHolder="请选择服务商类型" formControlName="supplier_id" [nzDisabled]="data">
+                <ng-container *ngFor="let item of supplierList">
+                    <nz-option [nzLabel]="item.name" [nzValue]="item.id" [nzDisabled]="selectedOption[item.id]"></nz-option>
+               </ng-container>
+             </nz-select>
+        </nz-form-control>
     </nz-form-item>
     
     <nz-form-item>
@@ -17,7 +16,7 @@
         <nz-form-control nzErrorTip="请选择服务商类型">
             <nz-select style="width: 100%;" id="service_category_id" nzShowSearch
                 nzPlaceHolder="请选择服务商类型" formControlName="service_category_id">
-                <ng-container *ngFor="let item of serviceCategoryArray">
+                <ng-container *ngFor="let item of serviceCategoryList">
                     <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
                </ng-container>
              </nz-select>

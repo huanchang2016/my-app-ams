@@ -1,30 +1,30 @@
 <ng-container *ngIf="attachment && attachment.length !== 0; else emptyTpl">
-    <!-- <div class="category-list">
-
+    <sv-container *ngIf="attachment && attachment.length !== 0" size="small">
         <ng-container *ngFor="let attachmentCategory of attachment">
-            <span class="mr-md point">
-                {{ attachmentCategory.name }}&nbsp;
-                <i *ngIf="attachmentCategory.members.length !== 0" class="text-primary text-md" nz-icon
-                    nzType="check-square" nzTheme="outline"></i>
-                <i *ngIf="attachmentCategory.members.length == 0" class="text-md" nz-icon nzType="border"
-                    nzTheme="outline"></i>
-                &nbsp;
-            </span>
-        </ng-container>
-    </div> -->
-
-                
-    <sv-container *ngIf="attachment && attachment.length !== 0" size="small" class="mt-md">
-        <ng-container *ngFor="let attachmentCategory of attachment">
-            <sv [label]="attachmentCategory.name" [col]="1" *ngIf="attachmentCategory.members.length !== 0">
-                <ng-container *ngFor="let attachment of attachmentCategory.members; let i = index">
-                    <div class="clearfix bg-grey-light-h mb-sm pointer px-xs">
-                        <span>{{ i + 1 }}. </span>
-                        <a href="{{ environment.SERVER_URL + attachment.path }}" class="bg-grey-light-h px-md" target="_blank"><i nz-icon
-                            nzType="link" nzTheme="outline" class="pr-xs"></i> {{ attachment.name }}</a>
-                    </div>
-                </ng-container>
-            </sv>
+            <ng-container *ngIf="isShowName">
+                <sv [label]="attachmentCategory.name" [col]="1" *ngIf="attachmentCategory.members.length !== 0">
+                    <ng-container *ngFor="let attachment of attachmentCategory.members; let i = index">
+                        <div class="clearfix bg-grey-light-h mb-sm pointer px-xs">
+                            <span>{{ i + 1 }}. </span>
+                            <a href="{{ environment.SERVER_URL + attachment.path }}" class="bg-grey-light-h px-md text-nowrap pr-xs"
+                                target="_blank"><i nz-icon nzType="link" nzTheme="outline"></i>
+                                {{ attachment.name }}</a>
+                        </div>
+                    </ng-container>
+                </sv>
+            </ng-container>
+            <ng-container *ngIf="!isShowName">
+                <sv [col]="1" *ngIf="attachmentCategory.members.length !== 0">
+                    <ng-container *ngFor="let attachment of attachmentCategory.members; let i = index">
+                        <div class="clearfix bg-grey-light-h mb-sm pointer px-xs">
+                            <span>{{ i + 1 }}. </span>
+                            <a href="{{ environment.SERVER_URL + attachment.path }}" class="bg-grey-light-h px-md pr-xs text-nowrap"
+                                target="_blank"><i nz-icon nzType="link" nzTheme="outline"></i>
+                                {{ attachment.name }}</a>
+                        </div>
+                    </ng-container>
+                </sv>
+            </ng-container>
         </ng-container>
     </sv-container>
 

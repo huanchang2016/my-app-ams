@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { Component, OnChanges, Input, Output, EventEmitter } from '@angular/core';
 import { SettingsConfigService } from 'src/app/routes/service/settings-config.service';
 import { ApiData } from 'src/app/data/interface.data';
 
@@ -10,27 +10,46 @@ import { ApiData } from 'src/app/data/interface.data';
 })
 export class SubsidyIncomeShowCComponent implements OnChanges {
 
-  @Input() projectId:number;
+  @Input() incomeList:any[];
 
-  incomeList:any[] = [];
+  incomeInfo:any = null;
+
+  subsidyIncomeList:any[] = [];
 
   constructor(
     private settingsConfigService: SettingsConfigService
   ) { }
 
   ngOnChanges(): void {
-    if(this.projectId) {
-      this.getSubsidyIncomeList();
+    if(this.incomeList && this.incomeList.length !== 0) {
+      this.incomeInfo = this.incomeList[0];
+      this.getsubsidyIncomeList(this.incomeInfo.id);
     }
   }
 
-  getSubsidyIncomeList() {
-    // 获取补贴收入
-    this.settingsConfigService.get(`/api/subsidy/income/${this.projectId}`).subscribe((res:ApiData) => {
-      console.log('补贴收入', res);
+  getsubsidyIncomeList(subsidyId:number) {
+    this.settingsConfigService.get(`/api/subsidy_income_detail/subsidy/${subsidyId}`).subscribe((res:ApiData) => {
+      // console.log(res, '通过补贴收入获取详情');
       if(res.code === 200) {
-        this.incomeList = res.data.subsidy_income;
+        this.subsidyIncomeList = res.data.subsidy_income_detail;
+        this.countCostTotal();
       }
     });
+  }
+
+  totalOption:any = {
+    income: 0,
+    tax_amount: 0,
+    exclude_tax_income: 0 // 不含税收入
+  };
+  countCostTotal() {
+    const exclude_tax_income = this.subsidyIncomeList.map( v => v.exclude_tax_income ).reduce( (sum1:number, sum2:number) => sum1 + sum2, 0);
+    const income = this.subsidyIncomeList.map( v => v.income ).reduce( (sum1:number, sum2:number) => sum1 + sum2, 0);
+    const tax_amount = this.subsidyIncomeList.map( v => v.tax_amount ).reduce( (sum1:number, sum2:number) => sum1 + sum2, 0);
+    this.totalOption = {
+      income: income,
+      tax_amount: tax_amount,
+      exclude_tax_income: exclude_tax_income // 不含税收入
+    };
   }
 }

@@ -2,8 +2,6 @@ import { SettingsConfigService } from 'src/app/routes/service/settings-config.se
 import { Component, OnChanges, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { ApiData, List } from 'src/app/data/interface.data';
 import { SettingsService } from '@delon/theme';
-import { zip } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
@@ -21,7 +19,6 @@ export class AdjustBudgetInfoComponent implements OnChanges, OnInit {
 
   budget:any = null;
 
-  partCompanyList:List[] = [];
   
   incomeOpt:any = { // 收入类型确认
     project: true,
@@ -58,8 +55,8 @@ export class AdjustBudgetInfoComponent implements OnChanges, OnInit {
   validateSubsidyForm: FormGroup;
   validateCostForm: FormGroup;
 
-  projectIncome:any = null;
-  subsidyIncome:any = null;
+  projectIncome:any[] = [];
+  subsidyIncome:any[] = [];
 
   ngOnInit(): void {
     const partyB:string = this.settings.user.company ? this.settings.user.company.name : null;
@@ -69,14 +66,13 @@ export class AdjustBudgetInfoComponent implements OnChanges, OnInit {
       partyA_condition: [null ], // 甲方费用支付条件
       partyB: [partyB, [Validators.required]], // 乙方
       partyB_power: [null ], // 乙方服务内容
-      partyB_condition: [null ], // 乙方服务 附加条件
-      pro_income: [ null ] // 项目收入来源 ： 含  类型  金额
+      partyB_condition: [null ] // 乙方服务 附加条件
+      // pro_income: [ null ] // 项目收入来源 ： 含  类型  金额
     });
 
     this.validateSubsidyForm = this.fb.group({
-      appropriation_unit: [null, [Validators.required]], // 拨款名称
+      company_id: [null, [Validators.required]], // 拨款名称
       name: [null, [Validators.required]],
-      amount: [null, [Validators.required]], // 补贴金额
       condition: [null, [Validators.required]],
       calculation_basis: [null, [Validators.required]],
       remark: [null, [Validators.required]]
@@ -165,9 +161,8 @@ export class AdjustBudgetInfoComponent implements OnChanges, OnInit {
         this.projectIncome = res.data.project_revenue;
         if(this.projectIncome.length !== 0) {
           this.incomeOpt.project = true;
-
           // 给  项目收入表单赋值
-          this.setProjectIncomeFormValue();
+          this.setProjectIncomeFormValue(this.projectIncome[0]);
         }
       }
     });
@@ -182,9 +177,8 @@ export class AdjustBudgetInfoComponent implements OnChanges, OnInit {
         this.subsidyIncome = res.data.subsidy_income;
         if(this.subsidyIncome.length !== 0) {
           this.incomeOpt.subsidy = true;
-
           // 给 补贴收入表单赋值
-          this.setSubsidyIncomeFormValue();
+          this.setSubsidyIncomeFormValue(this.subsidyIncome[0]);
         }
       }
     });
@@ -193,7 +187,7 @@ export class AdjustBudgetInfoComponent implements OnChanges, OnInit {
   getBudgetInfo(proId:number):void {
 
 
-    // 获取到了用户的
+    // 获取到了用户的 成本
     this.settingsConfigService.get(`/api/budget/project/${proId}`).subscribe((res:ApiData) => {
       if(res.code === 200) {
         const budget:any = res.data;
@@ -212,13 +206,38 @@ export class AdjustBudgetInfoComponent implements OnChanges, OnInit {
     })
   }
 
-  setProjectIncomeFormValue() {
+  setProjectIncomeFormValue(proIncome:any) {
     console.log('set project income form patchValue!');
+    const partyA:string[] = proIncome.partyA.split('； ');
+    this.validateProjectForm.patchValue({
+      partyA: partyA,
+      partyA_power: proIncome.partyA_power,
+      partyA_condition: proIncome.partyA_condition,
+      // partyB: proIncome.partyB,
+      partyB_power: proIncome.partyB_power,
+      partyB_condition: proIncome.partyB_condition
+      // pro_income: proIncome.pro_income
+    });
+
+    // 获取项目收入来源
   }
 
-  setSubsidyIncomeFormValue() {
-    console.log('set subsidy income form patchValue!');
+  setSubsidyIncomeFormValue(subIncome:any) {
+    console.log('set subsidy income form patchValue!', subIncome);
+    this.validateSubsidyForm.patchValue({
+      company_id: subIncome.company.id,
+      name: subIncome.name,
+      condition: subIncome.condition,
+      calculation_basis: subIncome.calculation_basis,
+      remark: subIncome.remark
+    });
+
+    // 获取补贴收入来源
   }
+
+  partCompanyList:List[] = [];
+  taxList:any[] = [];
+  customerCompany:any[] = [];
 
   getConfigs() {
     // 获取甲方、乙方 单位列表
@@ -229,6 +248,26 @@ export class AdjustBudgetInfoComponent implements OnChanges, OnInit {
           .filter(v => v.active);
       }
     });
+
+    // 获取甲方、乙方 单位列表
+    this.settingsConfigService.get('/api/company/customer/all').subscribe((res: ApiData) => {
+      if (res.code === 200) {
+        let data: any[] = res.data.company;
+        this.customerCompany = data.sort((a: any, b: any) => a.sequence - b.sequence)
+          .filter(v => v.active);
+      }
+    });
+
+    
+    // 获取税目类型列表
+    if(this.settings.user.department) {
+      this.settingsConfigService.get(`/api/tax/department/${this.settings.user.department.id}`).subscribe((res: ApiData) => {
+        if (res.code === 200) {
+          let data: any[] = res.data.tax;
+          this.taxList = data.filter(v => v.active);
+        }
+      });
+    }
   }
 
 

@@ -47,10 +47,10 @@ import { ProjectIncomeShowCComponent } from './project-view/project-income-show-
 import { SubsidyIncomeShowCComponent } from './project-view/subsidy-income-show-c/subsidy-income-show-c.component';
 import { MyProjectListComponent } from './my-project/my-project-list/my-project-list.component';
 import { ApprovalProjectListComponent } from './approval-project/approval-project-list/approval-project-list.component';
-import { ProjectIncomeTypeAndAmountComponent } from './component/project-budget/budget-index/project-income-type-and-amount/project-income-type-and-amount.component';
-import { TypeAmountListComponent } from './component/project-budget/budget-index/project-income-type-and-amount/type-amount-list/type-amount-list.component';
 import { ProjectIncomeTypeAmountComponent } from './component/project-budget/budget-index/project-income-c/project-income-type-amount/project-income-type-amount.component';
-import { SubsidyIncomeTypeAndAmountComponent } from './component/project-budget/budget-index/subsidy-income-c/subsidy-income-type-and-amount/subsidy-income-type-and-amount.component';
+import { ProjectIncomeTypeAndAmountComponent } from './project-adjust/adjust-budget-info/project-income-type-and-amount/project-income-type-and-amount.component';
+import { TypeAmountListComponent } from './project-adjust/adjust-budget-info/project-income-type-and-amount/type-amount-list/type-amount-list.component';
+import { SubsidyIncomeTypeAndAmountComponent } from './project-adjust/adjust-budget-info/subsidy-income-type-and-amount/subsidy-income-type-and-amount.component';
 
 const COMPONENTS = [
   DraftListComponent,
@@ -102,7 +102,8 @@ const COMPONENTS_NOROUNT = [
   SubsidyIncomeShowCComponent,
   ProjectIncomeTypeAndAmountComponent,
   TypeAmountListComponent,
-  ProjectIncomeTypeAmountComponent
+  ProjectIncomeTypeAmountComponent,
+  SubsidyIncomeTypeAndAmountComponent
 ];
 
 @NgModule({
@@ -112,8 +113,7 @@ const COMPONENTS_NOROUNT = [
   ],
   declarations: [
     ...COMPONENTS,
-    ...COMPONENTS_NOROUNT,
-    SubsidyIncomeTypeAndAmountComponent
+    ...COMPONENTS_NOROUNT
   ],
   entryComponents: COMPONENTS_NOROUNT
 })

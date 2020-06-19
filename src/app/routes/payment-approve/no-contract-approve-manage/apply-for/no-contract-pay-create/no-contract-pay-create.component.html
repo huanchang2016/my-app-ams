@@ -264,6 +264,16 @@
   </ng-template>
   <ng-container *ngIf="nodeProcess.length !== 0;else nodeProcessLoadingTpl">
     <nz-steps nzDirection="vertical" nzProgressDot class="hidden-pc">
+      <nz-step [nzTitle]="'非合约支付申请'" [nzStatus]="'finish'" [nzDescription]="startDes">
+        <ng-template #startDes>
+          <div class="my-sm">
+            {{ projectInfo?.user.name }}
+          </div>
+          <div>
+            {{ projectInfo?.submit_time }}
+          </div>
+        </ng-template>
+      </nz-step>
       <ng-container *ngFor="let process of nodeProcess">
         <nz-step [nzTitle]="process.node.name"
           [nzStatus]=" process.current ? 'process' : ( !process.finished ? 'wait' : ( !process.agree ?  'error' : 'finish') )"
@@ -291,6 +301,16 @@
         [nzStatus]=" !progressInfo.finished ? 'wait' : ( progressInfo.agree ? 'finish' : 'error' ) "></nz-step>
     </nz-steps>
     <nz-steps nzProgressDot class="hidden-mobile">
+      <nz-step [nzTitle]="'非合约支付申请'" [nzStatus]="'finish'" [nzDescription]="startDes">
+        <ng-template #startDes>
+          <div class="my-sm">
+            {{ projectInfo?.user.name }}
+          </div>
+          <div>
+            {{ projectInfo?.submit_time }}
+          </div>
+        </ng-template>
+      </nz-step>
       <ng-container *ngFor="let process of nodeProcess">
         <nz-step [nzTitle]="process.node.name"
           [nzStatus]=" process.current ? 'process' : ( !process.finished ? 'wait' : ( !process.agree ?  'error' : 'finish') )"

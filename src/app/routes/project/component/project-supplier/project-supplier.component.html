@@ -3,67 +3,20 @@
   
   <app-project-info-show-c [projectInfo]="projectInfo"></app-project-info-show-c>
 
-  <nz-card>
-    <div class="operate mb-md">
-
+  <!-- <nz-card nzTitle="合约" [extra]="contractAddTpl">
+    <ng-template #contractAddTpl>
       <button class="mr-lg" nz-button [nzType]="'primary'" (click)="addSupplier()">新增</button>
+    </ng-template>
 
-      <!-- <button nz-button [disabled]="numberOfChecked === 0" [nzType]="'danger'" [nzLoading]="isOperating"
-        (click)="deletedSelectList()">删除</button> -->
+  </nz-card> -->
 
-    </div>
+  <app-supplier-contract-list [projectInfo]="projectInfo" [supplierList]="supplierList"></app-supplier-contract-list>
 
-    <nz-table #basicTable [nzFrontPagination]="false" [nzData]="listOfAllData">
-      <thead>
-        <tr>
-          <!-- <th nzShowCheckbox [(nzChecked)]="isAllDisplayDataChecked" [nzIndeterminate]="isIndeterminate"
-            (nzCheckedChange)="checkAll($event)" class="text-left"></th> -->
-          <th>序号</th>
-          <th>供应商名称</th>
-          <th>编号</th>
-          <th>操作</th>
-        </tr>
-      </thead>
-      <tbody>
-        <ng-container *ngFor="let data of basicTable.data; let i = index">
-          <tr>
-            <!-- <td nzShowCheckbox [(nzChecked)]="mapOfCheckedId[data.id]" [nzDisabled]="data.disabled"
-              (nzCheckedChange)="refreshStatus()" class="text-left"></td> -->
-            <td>{{ i + 1 }}</td>
-            <td>{{ data.name }}</td>
-            <td>{{ data.supplier_code }}</td>
-            <td>
-              <a (click)="showContract(data.id)">合约<i nz-icon
-                  nzType="{{ showContractExpand[data.id] ? 'caret-up' : 'caret-down' }}" nzTheme="outline"></i></a>
-              <nz-divider nzType="vertical"></nz-divider>
-              <a (click)="showNoContract(data.id)">非合约<i nz-icon
-                  nzType="{{ showNoContractExpand[data.id] ? 'caret-up' : 'caret-down' }}" nzTheme="outline"></i></a>
-              <nz-divider nzType="vertical"></nz-divider>
-              <a (click)="editSupplier(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
-              <nz-divider nzType="vertical"></nz-divider>
-              <a nz-popconfirm nzPopconfirmTitle="确定删除当前供应商？" (nzOnConfirm)="deleted(data.id)" (nzOnCancel)="cancel()"
-                class="text-error"><i nz-icon nzType="delete" nzTheme="outline"></i></a>
-            </td>
-          </tr>
-          <tr *ngIf="showContractExpand[data.id]" style="background-color: #f1f1f1;">
-            <td colspan="4">
-              <app-supplier-contract-list [projectInfo]="projectInfo" [supplierInfo]="data"
-                [serviceCategory]="serviceCategory"></app-supplier-contract-list>
-            </td>
-          </tr>
-          <tr *ngIf="showNoContractExpand[data.id]" style="background-color: #f1f1f1;">
-            <td colspan="4">
-              <app-supplier-no-contract-list [projectInfo]="projectInfo" [supplierInfo]="data"
-                [serviceCategory]="serviceCategory"></app-supplier-no-contract-list>
-            </td>
-          </tr>
-        </ng-container>
-      </tbody>
-    </nz-table>
+  <app-supplier-no-contract-list [projectInfo]="projectInfo" [supplierList]="supplierList"></app-supplier-no-contract-list>
 
-    <div class="steps-operate mt-md mb-md text-right">
-      <a nz-button (click)="prevSteps()">上一步</a>
-      <button nz-button nzType="primary" (click)="nextSteps()">下一步</button>
-    </div>
-  </nz-card>
+
+  <div class="steps-operate mt-md mb-md text-right">
+    <a nz-button (click)="prevSteps()">上一步</a>
+    <button nz-button nzType="primary" (click)="nextSteps()">下一步</button>
+  </div>
 </div>

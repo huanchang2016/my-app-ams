@@ -69,8 +69,9 @@
             </div>
         </div>
 
-        <div nz-col [nzSpan]="24">
-            <app-project-income-type-and-amount formControlName="pro_income"></app-project-income-type-and-amount>
+        <div nz-col [nzSpan]="24" *ngIf="projectIncome.length !== 0">
+            <app-project-income-type-and-amount [revenueId]="projectIncome[0].id" [taxList]="taxList"></app-project-income-type-and-amount>
+            <!-- <app-project-income-type-amount></app-project-income-type-amount> -->
         </div>
     
     </form>
@@ -83,11 +84,11 @@
         <div nz-row [nzGutter]="24">
             <div nz-col [nzSm]="12" [nzXs]="24">
                 <nz-form-item>
-                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="appropriation_unit" nzRequired>拨款单位</nz-form-label>
+                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="company_id" nzRequired>拨款单位</nz-form-label>
                     <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请选择拨款单位">
-                        <nz-select style="width: 100%;" nzMode="multiple" id="appropriation_unit" nzPlaceHolder="请选择拨款单位" formControlName="appropriation_unit">
-                            <ng-container *ngFor="let item of partCompanyList">
-                                <nz-option [nzLabel]="item.name" [nzValue]="item.name"></nz-option>
+                        <nz-select style="width: 100%;" nzShowSearch id="company_id" nzPlaceHolder="请选择拨款单位" formControlName="company_id">
+                            <ng-container *ngFor="let item of customerCompany">
+                                <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
                             </ng-container>
                         </nz-select>
                     </nz-form-control>
@@ -103,16 +104,6 @@
                 </nz-form-item>
             </div>
             
-            <div nz-col [nzSm]="12" [nzXs]="24">
-                <nz-form-item>
-                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="amount" nzRequired>补贴金额</nz-form-label>
-                    <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请输入补贴金额">
-                        <nz-input-group nzSuffix="RMB" nzPrefix="￥" style="width: 100%;">
-                            <input type="text" nz-input formControlName="amount" placeholder="请输入补贴金额" id="amount" />
-                          </nz-input-group>
-                    </nz-form-control>
-                </nz-form-item>
-            </div>
             <div nz-col [nzSm]="12" [nzXs]="24">
     
                 <nz-form-item>

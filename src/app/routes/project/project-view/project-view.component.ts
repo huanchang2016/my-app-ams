@@ -19,8 +19,7 @@ export class ProjectViewComponent implements OnInit {
   projectId:number = null;
   project:any = {
     info: null,
-    budget: null,
-    supplier: []
+    budget: null
   };
 
   showContractExpand:{ [key: string]: boolean } = {}; // 供应商 合约展示
@@ -164,14 +163,20 @@ export class ProjectViewComponent implements OnInit {
     this.settingsConfigService.get(`/api/project/detail/${id}`).subscribe((res:ApiData) => {
       if(res.code === 200) {
         this.project['info'] = res.data;
-        this.getBudgetInfo(this.project.info.id);
-        this.getSupplierInfo(this.project.info.id);
+        this.getDataList(); // 获取项目下所有相关信息数据
         if(!res.data.draft) { // 非草稿时 获取流程  获取项目操作日志
           this.getWorkflow(res.data.id);
           this.getProjectLog(this.projectId);
         }
       }
     })
+  }
+
+  getDataList() { // 获取项目下所有相关信息数据
+    const id:number = this.project.info.id;
+    this.getBudgetInfo(id);
+    this.getContractAndTreatyList(id);
+    this.getIncomeList(id);
   }
 
   logLoading:boolean = true;
@@ -202,18 +207,37 @@ export class ProjectViewComponent implements OnInit {
       }
     })
   }
+
+  proIncomeList:any[] = [];
+  subIncomeList:any[] = [];
+  getIncomeList(proId:number) {
+    // 获取项目收入
+    this.settingsConfigService.get(`/api/project/revenue/${proId}`).subscribe((res:ApiData) => {
+      // console.log('项目收入', res);
+      if(res.code === 200) {
+        this.proIncomeList = res.data.project_revenue;
+      }
+    });
+    // 获取补贴收入
+    this.settingsConfigService.get(`/api/subsidy/income/${proId}`).subscribe((res:ApiData) => {
+      // console.log('补贴收入', res);
+      if(res.code === 200) {
+        this.subIncomeList = res.data.subsidy_income;
+      }
+    });
+  }
   
   contractList:any[] = []; // 项目下的合约列表
   treatyList:any[] = []; // 项目下的非合约列表
-  getSupplierInfo(proId:number):void {
-    this.settingsConfigService.get(`/api/contract/project/${proId}`).subscribe((res:ApiData) => {
-      // console.log('项目下的所有 合约 列表', res);
+  getContractAndTreatyList(proId:number):void {
+    this.settingsConfigService.get(`/api/deal/project/${proId}`).subscribe((res:ApiData) => {
+      console.log('项目下的所有 合约 列表', res);
       if(res.code === 200) {
-        this.contractList = res.data.contract;
+        this.contractList = res.data.deal;
       }
     })
     this.settingsConfigService.get(`/api/treaty/${proId}`).subscribe((res:ApiData) => {
-      // console.log('项目下的所有 非合约 列表', res);
+      console.log('项目下的所有 非合约 列表', res);
       if(res.code === 200) {
         this.treatyList = res.data.treaty;
       }

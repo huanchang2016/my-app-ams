@@ -15,6 +15,7 @@
                 <th>供应商</th>
                 <th>金额</th>
                 <th>是否分割</th>
+                <th>附件</th>
                 <th class="text-center" nzWidth="200px">操作</th>
             </tr>
         </thead>
@@ -42,6 +43,9 @@
                         <div *ngIf="data.is_split">已分割金额：{{ data.pay_amount | _currency }}</div>
                     </td>
                     <td [innerHTML]="data.is_split | yn"></td>
+                    <td>
+                        <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/contract/' + data.id" [isShowName]="false"></app-upload-file-attachment-show-c>
+                    </td>
                     <td>
                         <a (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
                         <nz-divider nzType="vertical"></nz-divider>

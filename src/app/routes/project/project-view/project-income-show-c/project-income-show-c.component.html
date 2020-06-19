@@ -1,30 +1,3 @@
-<!-- <nz-table [nzData]="[1]" nzBordered [nzFrontPagination]="false">
-    <thead>
-        <tr>
-            <th colspan="2">科目</th>
-            <th style="width: 250px;">单位名称</th>
-            <th>权责界定</th>
-            <th>费用及支付条件</th>
-        </tr>
-    </thead>
-    <tbody>
-        <ng-container *ngFor="let data of incomeList; let i = index">
-            <tr>
-                <td rowspan="2" style="width: 80px;">{{ i + 1 }}</td>
-                <td style="width: 100px;">甲方</td>
-                <td>{{ data.partyA }}</td>
-                <td><span [innerHTML]="data.partyA_power | showTextareaContent"></span></td>
-                <td><span [innerHTML]="data.partyA_condition | showTextareaContent"></span></td>
-            </tr>
-            <tr>
-                <td style="width: 100px;">乙方</td>
-                <td>{{ data.partyB }}</td>
-                <td><span [innerHTML]="data.partyB_power | showTextareaContent"></span></td>
-                <td><span [innerHTML]="data.partyB_condition | showTextareaContent"></span></td>
-            </tr>
-        </ng-container>
-    </tbody>
-</nz-table> -->
 <ng-container *ngIf="incomeInfo">
     <nz-table [nzTitle]="'项目收入'" [nzData]="[1]" nzBordered [nzFrontPagination]="false" [nzFooter]="incomeFooterTpl">
     <thead>
@@ -54,24 +27,32 @@
         <tr>
             <td colspan="6" class="text-center">收入来源</td>
         </tr>
-        <tr>
-            <td>序号</td>
-            <td colspan="3">收入类型</td>
-            <td colspan="2">收入金额</td>
-        </tr>
-        <tr>
-            <td>1</td>
-            <td colspan="3">研发技术 服务</td>
-            <td colspan="2">1000000.00元</td>
-        </tr>
-        <tr>
-            <td>2</td>
-            <td colspan="3">软件 视频 服务</td>
-            <td colspan="2">500000.00元</td>
-        </tr>
+        
+        <ng-container *ngIf="projectIncomeList.length !== 0">
+            <tr>
+                <td>序号</td>
+                <td>税目类型</td>
+                <td>含税金额</td>
+                <td>开票税率</td>
+                <td>税金</td>
+                <td>不含税收入</td>
+            </tr>
+            <ng-container *ngFor="let data of projectIncomeList; let i = index">
+                <tr>
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ data.tax.name }}</td>
+                    <td>{{ data.income | _currency }}</td>
+                    <td>{{ data.tax.rate * 100 }} %</td>
+                    <td>{{ data.tax_amount | _currency }}</td>
+                    <td>{{ data.exclude_tax_income | _currency }}</td>
+                </tr>
+            </ng-container>
+        </ng-container>
         <ng-template #incomeFooterTpl>
-            <div class="text-right font-weight-bold">
-                合计： <span class="ml-md">1500000.00 元整</span>
+            <div class="text-right font-weight-bold" *ngIf="totalOption">
+                <span class="font-weight-bold">含税收入： {{ totalOption.income | _currency }}</span>
+                <span class="font-weight-bold mx-md">税金合计： {{ totalOption.tax_amount | _currency }}</span>
+                <span class="font-weight-bold">不含税收入： {{ totalOption.exclude_tax_income | _currency }}</span>
             </div>
         </ng-template>
     </tbody>

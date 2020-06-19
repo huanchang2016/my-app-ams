@@ -1,20 +1,52 @@
-<nz-table #incomeTable [nzData]="incomeList" [nzFrontPagination]="false">
-    <thead>
-        <tr>
-            <th>序号</th>
-            <th nzWidth="200px">补贴名称</th>
-            <th>申请条件</th>
-            <th>测算依据</th>
-            <th>备注</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let data of incomeTable.data; let i = index">
-            <td>{{ i + 1 }}</td>
-            <td>{{ data.name }}</td>
-            <td><span [innerHTML]="data.condition | showTextareaContent"></span></td>
-            <td><span [innerHTML]="data.calculation_basis | showTextareaContent"></span></td>
-            <td><span [innerHTML]="data.remark | showTextareaContent"></span></td>
-        </tr>
-    </tbody>
-</nz-table>
+<ng-container *ngIf="incomeInfo">
+    <nz-table #incomeTable [nzTitle]="'补贴收入'" nzBordered [nzData]="[1]" [nzShowPagination]="false" [nzFooter]="footerTpl">
+        <thead>
+            <tr>
+                <th>拨款单位</th>
+                <th nzWidth="200px">补贴名称</th>
+                <th colspan="2">申请条件</th>
+                <th>测算依据</th>
+                <th>备注</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ incomeInfo.company.name }}</td>
+                <td>{{ incomeInfo.name }}</td>
+                <td colspan="2"><span [innerHTML]="incomeInfo.condition | showTextareaContent"></span></td>
+                <td><span [innerHTML]="incomeInfo.calculation_basis | showTextareaContent"></span></td>
+                <td><span [innerHTML]="incomeInfo.remark | showTextareaContent"></span></td>
+            </tr>
+            <tr>
+                <td colspan="6" class="text-center">收入来源</td>
+            </tr>
+            <ng-container *ngIf="subsidyIncomeList.length !== 0">
+                <tr>
+                    <td>序号</td>
+                    <td>补贴金额</td>
+                    <td>是否开票</td>
+                    <td>开票税率</td>
+                    <td>税金</td>
+                    <td>不含税补贴</td>
+                </tr>
+                <ng-container *ngFor="let data of subsidyIncomeList; let i = index">
+                    <tr>
+                        <td>{{ i + 1 }}</td>
+                        <td>{{ data.income | _currency }}</td>
+                        <td>{{ data.is_bill ? '是' : '否' }}</td>
+                        <td>{{ data.tax_rate * 100 }}%</td>
+                        <td>{{ data.tax_amount | _currency }}</td>
+                        <td>{{ data.exclude_tax_income | _currency }}</td>
+                    </tr>
+                </ng-container>
+            </ng-container>
+        </tbody>
+    </nz-table>
+    <ng-template #footerTpl>
+        <div class="text-right" *ngIf="totalOption">
+            <span class="font-weight-bold">含税收入： {{ totalOption.income | _currency }}</span>
+            <span class="font-weight-bold mx-md">税金合计： {{ totalOption.tax_amount | _currency }}</span>
+            <span class="font-weight-bold">不含税收入： {{ totalOption.exclude_tax_income | _currency }}</span>
+        </div>
+    </ng-template>
+</ng-container>

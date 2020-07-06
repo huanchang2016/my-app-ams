@@ -68,9 +68,9 @@ export class ProjectAdjustComponent implements OnInit {
     console.log('info changed, parent c is geted', this.logJson);
   }
   // 预算信息发生变化
-  logBudgetChange(info:any) {
-    this.logJson.info = info;
-    console.log('info changed, parent c is geted', this.logJson);
+  logBudgetChange(budget:any) {
+    this.logJson.budget = budget;
+    console.log('budget changed, parent c is geted', this.logJson);
   }
 
   getDataInfo(id:number):void {

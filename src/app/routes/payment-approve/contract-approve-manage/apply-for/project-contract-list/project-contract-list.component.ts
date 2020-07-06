@@ -48,7 +48,7 @@ export class ProjectContractListComponent implements OnInit {
   }
 
   getContractList():void {
-    this.settingsConfigService.get(`/api/contract/project/${this.projectId}`).subscribe((res:ApiData) => {
+    this.settingsConfigService.get(`/api/deal/project/${this.projectId}`).subscribe((res:ApiData) => {
       if(res.code === 200) {
         this.contractList = res.data.contract;
       }

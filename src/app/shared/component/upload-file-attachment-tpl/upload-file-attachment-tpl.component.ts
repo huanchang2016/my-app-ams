@@ -61,6 +61,7 @@ export class UploadFileAttachmentTplComponent implements OnChanges, OnInit, OnDe
     this.validateForm = this.fb.group({
       file_name: [null, [Validators.required]],
       file_type: [null, [Validators.required]],
+      page_nums: [0, [Validators.required, Validators.pattern(/^[1-9]+[0-9]*$/), Validators.min(1)]],
       file: [null, [Validators.required]]
     });
   }
@@ -100,6 +101,7 @@ export class UploadFileAttachmentTplComponent implements OnChanges, OnInit, OnDe
 
       fileOption.append('name', object.file_name);
       fileOption.append('category_id', object.file_type);
+      fileOption.append('page_nums', object.page_nums);
       fileOption.append('attachment', object.file[0]);
 
       this.uploadAttachment$ = this.settingsService.post('/api/attachment/create', fileOption).subscribe((res: ApiData) => {

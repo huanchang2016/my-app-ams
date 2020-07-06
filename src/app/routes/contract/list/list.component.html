@@ -8,7 +8,7 @@
     <nz-table #basicTable [nzData]="listOfData" [nzLoading]="loading" class="mt-md hidden-mobile">
         <thead>
             <tr>
-                <th>序号</th>
+                <th nzWidth="80px">序号</th>
                 <th>名称</th>
                 <th>合同归属</th>
                 <th>合同概要</th>
@@ -63,7 +63,7 @@
                 </tr>
 
                 <tr *ngIf="showContractExpand[data.id]">
-                    <td colspan="7" class="px0">
+                    <td colspan="9" class="px0">
                         <app-contract-split-list [contract_id]="data.id" [maxAmount]="data.amount" [companyList]="companyList"></app-contract-split-list>
                     </td>
                 </tr>

@@ -54,6 +54,9 @@ export class WorkflowFormComponent implements OnInit {
     if(this.data) {
       //  如果存在 data， 那么需要给表单设置
       this.setFormValue(this.data);
+      
+      this.getDepartmentAndWorkflowCategory(this.companyId);
+      this.getUserList(this.companyId);
     }else {
       this.validateForm.get('company_id').setValidators(Validators.required);
       this.validateForm.get('department_id').setValidators(Validators.required);
@@ -135,7 +138,7 @@ export class WorkflowFormComponent implements OnInit {
 
     this.validateForm.get('company_id').disable();
     this.validateForm.get('department_id').disable();
-    this.validateForm.get('execute_user_id').disable();
+    // this.validateForm.get('execute_user_id').disable();
     this.validateForm.get('workflow_category_id').disable();
     this.validateForm.get('is_large').disable();
   }

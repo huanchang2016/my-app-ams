@@ -5,8 +5,8 @@
       <nz-breadcrumb-item><a [routerLink]="['/dashboard']">首页</a></nz-breadcrumb-item>
       <nz-breadcrumb-item>非合约支付管理</nz-breadcrumb-item>
       <nz-breadcrumb-item>非合约支付申请</nz-breadcrumb-item>
-      <nz-breadcrumb-item><a [routerLink]="['/approve/no-contract/apply/draft']">项目列表</a></nz-breadcrumb-item>
-      <nz-breadcrumb-item><a [routerLink]="['/approve/no-contract/apply/pay', projectId]">项目非合约支付管理</a>
+      <nz-breadcrumb-item><a [routerLink]="['/approve/no-contract/list']">项目列表</a></nz-breadcrumb-item>
+      <nz-breadcrumb-item><a [routerLink]="['/approve/no-contract/list/apply/pay', projectId]">项目非合约支付管理</a>
       </nz-breadcrumb-item>
       <nz-breadcrumb-item>{{ pageTitle }}</nz-breadcrumb-item>
     </nz-breadcrumb>
@@ -64,12 +64,12 @@
       <div nz-row [nzGutter]="24">
         <div nz-col [nzMd]="12" [nzSm]="24">
           <nz-form-item>
-            <nz-form-label nzFor="treaty_id" nzRequired>非合约名称</nz-form-label>
-            <nz-form-control nzErrorTip="请选择非合约名称">
+            <nz-form-label nzFor="treaty_id" nzRequired>服务商类型</nz-form-label>
+            <nz-form-control nzErrorTip="请选择服务商类型">
               <nz-select style="width: 100%;" id="treaty_id" nzShowSearch [nzDisabled]="isEditCost"
-                nzPlaceHolder="请选择非合约名称" formControlName="treaty_id">
+                nzPlaceHolder="请选择服务商类型" formControlName="treaty_id" (ngModelChange)="treatyChange($event)">
                 <ng-container *ngFor="let item of treatyListArr">
-                  <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
+                  <nz-option [nzLabel]="item.supplier.name + '（' + item.service_category.name + '）'" [nzValue]="item.id"></nz-option>
                 </ng-container>
               </nz-select>
             </nz-form-control>
@@ -150,7 +150,15 @@
 
   </nz-card>
 
-  <nz-card nzTitle="非合约成本支付" [nzExtra]="costTpl" class="mt-md">
+  <nz-card [nzTitle]="costTitleTpl" [nzExtra]="costTpl" class="mt-md" *ngIf="currentTreaty">
+
+    <ng-template #costTitleTpl>
+      <span>非合约成本支付</span>
+      <ng-container *ngIf="currentTreaty">
+        <span class="mx-md text-sm">总金额：<span class="text-primary">{{ currentTreaty.amount | _currency }}</span></span>
+        <span class="text-sm">剩余可支付金额：<span class="text-error">{{ currentTreaty.amount - currentTreaty.use_amount | _currency }}</span></span>
+      </ng-container>
+    </ng-template>
     <ng-template #costTpl>
       <button nz-button [nzType]="'primary'" *ngIf="!treatypayInfo || treatypayInfo.draft"
         (click)="addPaymentCost(tplTitle, tplContent, tplFooter, $event)">新增成本支付</button>
@@ -159,7 +167,7 @@
       <nz-table #costSelectTable [nzData]="listOfData" [nzFrontPagination]="false">
         <thead>
           <tr>
-            <th>序号</th>
+            <th nzWidth="80px">序号</th>
             <th>摘要</th>
             <th>费用类型</th>
             <th>本期支付（元）</th>
@@ -250,9 +258,9 @@
       </ng-container>
     </div>
   </nz-card>
-  <ng-container *ngIf="!treatypayInfo || treatypayInfo.draft">
+  <!-- <ng-container *ngIf="!treatypayInfo || treatypayInfo.draft">
     <div class="my-md p-md bg-warning text-md"><span class="text-error">*</span>以上信息需全部填写，才可以保存非合约支付信息</div>
-  </ng-container>
+  </ng-container> -->
 </div>
 
 <!-- 流程进展 -->
@@ -381,7 +389,7 @@
         <nz-form-control [nzErrorTip]="errorAmountTpl">
           <nz-input-group nzSuffix="元" nzPrefix="￥" style="width: 100%">
             <input type="text" id="amount"
-              [placeholder]="'填写成本支付金额' +  (currentSelectCost ? '，不得超过' + (currentSelectCost.max - currentSelectCost.pay_amount) + '元' : '') "
+              [placeholder]="'填写成本支付金额' +  (max_pay_amount !== 0 ? '，不得超过' + max_pay_amount + '元' : '') "
               formControlName="amount" nz-input />
           </nz-input-group>
           <ng-template #errorAmountTpl let-control>
@@ -389,7 +397,7 @@
               请填写支付成本金额，只需填写数字
             </ng-container>
             <ng-container *ngIf="control.hasError('confirm')">
-              当前成本支付金额不能超过 {{ currentSelectCost.max - currentSelectCost.pay_amount }}
+              当前成本支付金额不能超过 {{ max_pay_amount }} 元
             </ng-container>
           </ng-template>
         </nz-form-control>

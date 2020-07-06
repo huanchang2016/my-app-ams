@@ -22,6 +22,10 @@ export class NoContractApplyForListComponent implements OnInit, OnDestroy {
       tab: '审批中'
     },
     {
+      key: 'excute',
+      tab: '待执行'
+    },
+    {
       key: 'pass',
       tab: '已通过'
     },

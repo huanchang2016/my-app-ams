@@ -16,6 +16,7 @@ export class SupplierContractListComponent implements OnChanges {
 
   contractList: any[] = [];
   selectedOption:{ [key:string]: boolean } = {};
+  selectedSplitOption:{ [key:string]: boolean } = {};
 
   loadingContract: boolean = false;
 
@@ -51,7 +52,8 @@ export class SupplierContractListComponent implements OnChanges {
         data: data,
         supplierList: this.supplierList,
         projectInfo: this.projectInfo,
-        selectedOption: this.selectedOption
+        selectedOption: this.selectedOption,
+        selectedSplitOption: this.selectedSplitOption
       },
       nzFooter: null
     });
@@ -75,7 +77,18 @@ export class SupplierContractListComponent implements OnChanges {
       if (res.code === 200) {
         const data:any[] = res.data.deal;
         this.contractList = data.filter( v => v.active );
-        this.contractList.forEach( v => this.selectedOption[v.id] = true );
+        this.contractList.forEach( v => {
+           /******
+            *  如果不时分割合同，记录已选合同
+            *   是分割合同，则记录分割合同  split_id
+            * ******/
+          if(!v.split_contract) {
+            this.selectedOption[v.contract.id] = true;
+          } else {
+            this.selectedSplitOption[v.split_contract.id] = true;
+          }
+          
+        } );
         if(this.contractList.length === 0 && this.isView) {
           this.isShowList = false;
         }else {

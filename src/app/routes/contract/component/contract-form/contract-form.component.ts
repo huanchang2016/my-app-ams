@@ -128,7 +128,14 @@ export class ContractContractFormComponent implements OnInit {
       this.validateForm.controls[i].markAsDirty();
       this.validateForm.controls[i].updateValueAndValidity();
     }
-    if(this.validateForm.valid && this.attachment.length !== 0) {
+
+    if(this.attachmentCategory.length !== this.attachment.length) {
+      this.msg.error('附件内容未全部上传');
+      this.attachmentError = true;
+      return;
+    }
+
+    if(this.validateForm.valid) {
       let value:any = this.validateForm.value;
 
       this.submitLoading = true;
@@ -169,7 +176,7 @@ export class ContractContractFormComponent implements OnInit {
         let opt:any = {
           supplier_id: value.supplier_id,
           company_id: value.company_id,
-          department_id: this.data.is_split ? null : value.department_id,
+          department_id: value.is_split ? null : value.department_id,
           service_category_id: value.service_category_id,
           contract_category_id: value.contract_category_id,
           name: value.name,
@@ -197,9 +204,6 @@ export class ContractContractFormComponent implements OnInit {
         this.addContract(opt);
       }
     } else {
-      if(this.attachment.length === 0) {
-        this.attachmentError = true;
-      }
       this.msg.warning('信息填写不完整');
     }
   }
@@ -240,6 +244,7 @@ export class ContractContractFormComponent implements OnInit {
   // 附件上传
   attachment:any[] = [];
   isAttachmentChange:boolean = false;
+
   attachmentChange(option:any) {
     this.attachment.push(option);
     this.isAttachmentChange = !this.isAttachmentChange;

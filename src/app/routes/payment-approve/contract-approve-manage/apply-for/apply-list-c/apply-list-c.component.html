@@ -38,7 +38,7 @@
                 [(nzChecked)]="mapOfCheckedId[data.id]"
                 (nzCheckedChange)="refreshStatus()"
             ></td>
-            <td>{{ data.contract.name }}</td>
+            <td>{{ data.deal.contract.name }}</td>
             <td class="text-error">{{ data.amount | currency: 'CNY' }}</td>
             <td>
                 <sv-container size="small" col="1">
@@ -70,12 +70,12 @@
                 <nz-skeleton [nzActive]="true" [nzLoading]="false">
                     <nz-card-meta [nzTitle]="contractTitleTpl"></nz-card-meta>
                     <ng-template #contractTitleTpl>
-                        <span>{{ data.contract.name }}</span>
+                        <span>{{ data.deal.contract.name }}</span>
                         <span class="text-primary text-xs ml-md" [class.text-error]="data.pay_status?.name === '未通过'" [class.text-success]="data.pay_status?.name === '已通过'">{{ data.pay_status?.name }}</span>
                     </ng-template>
                     <div class="pt-md">
                         <sv-container size="small">
-                            <sv label="合同名称"><span class="font-weight-bold">{{ data.contract.name }}</span></sv>
+                            <!-- <sv label="合同名称"><span class="font-weight-bold">{{ data.contract.name }}</span></sv> -->
                             <sv label="支付金额"><span class="font-weight-bold text-error">{{ data.amount | currency: 'CNY' }}</span></sv>
                             <sv label="项目名称"><span class="font-weight-bold">{{ data.project.name }}</span></sv>
                             <sv label="创 建 人 "><span class="text-success">{{ data.user.name }}</span></sv>

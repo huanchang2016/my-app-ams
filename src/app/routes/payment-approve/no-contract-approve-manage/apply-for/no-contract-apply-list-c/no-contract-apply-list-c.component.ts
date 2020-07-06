@@ -54,7 +54,7 @@ export class NoContractApplyListCComponent implements OnInit {
   }
 
   view(data:any) {
-    this.router.navigateByUrl(`/approve/no-contract/apply/pay/edit/${data.project.id}?treaty_pay_id=${data.id}`);
+    this.router.navigateByUrl(`/approve/no-contract/list/apply/pay/edit/${data.project.id}?treaty_pay_id=${data.id}`);
   }
 
   pageIndexChange($event:number) {

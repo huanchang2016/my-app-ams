@@ -26,7 +26,7 @@
 
   <app-project-info-show-tpl [projectInfo]="projectInfo"></app-project-info-show-tpl>
 
-  <a nz-button [nzType]="'primary'" [routerLink]="['/approve/contract/apply/pay/create', projectId]"
+  <a nz-button [nzType]="'primary'" [routerLink]="['/approve/list/apply/pay/create', projectId]"
     class="my-md">新增合约支付</a>
 
 </page-header>
@@ -35,7 +35,7 @@
   <nz-table #basicTable [nzData]="listOfData" [nzFrontPagination]="false">
     <thead>
       <tr>
-        <th>序号</th>
+        <th nzWidth="80px">序号</th>
         <th>合同名称</th>
         <th>合同编号</th>
         <th>支付金额（元）</th>
@@ -45,11 +45,11 @@
     <tbody>
       <tr *ngFor="let data of basicTable.data; let i = index">
         <td>{{ i + 1 }}</td>
-        <td>{{ data.contract.name }}</td>
-        <td>{{ data.number }}</td>
+        <td>{{ data.deal.contract.name }}</td>
+        <td>{{ data.deal.contract.number }}</td>
         <td class="text-error">{{ data.amount | currency: "CNY" }}</td>
         <td>
-          <a [routerLink]="['/approve/contract/apply/pay/edit', projectId]"
+          <a [routerLink]="['/approve/list/apply/pay/edit', projectId]"
             [queryParams]="{contract_pay_id: data.id }"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
           
           <nz-divider nzType="vertical"></nz-divider>
@@ -71,16 +71,16 @@
   <ng-container *ngFor="let data of listOfData">
     <nz-card [nzActions]="[actionEdit, actionDelete, actionSubmit]" class="mt-md">
       <nz-skeleton [nzActive]="true" [nzLoading]="false">
-        <nz-card-meta [nzTitle]="data.contract.name"></nz-card-meta>
+        <nz-card-meta [nzTitle]="data.deal.contract.name"></nz-card-meta>
         <div class="pt-md">
           <sv-container size="small">
-            <sv label="合同编号">{{ data.number }}</sv>
+            <sv label="合同编号">{{ data.deal.contract.number }}</sv>
             <sv label="支付金额"><span class="text-error font-weight-bold">{{ data.amount | currency: "CNY" }}</span></sv>
           </sv-container>
         </div>
       </nz-skeleton>
       <ng-template #actionEdit>
-        <a [routerLink]="['/approve/contract/apply/pay/edit', projectId]"
+        <a [routerLink]="['/approve/list/apply/pay/edit', projectId]"
           [queryParams]="{contract_pay_id: data.id }"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
       </ng-template>
       <ng-template #actionDelete>

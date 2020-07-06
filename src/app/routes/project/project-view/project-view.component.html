@@ -83,10 +83,11 @@
         <nz-table #basicTable [nzData]="[1]" [nzShowPagination]="false" [nzFrontPagination]="false">
           <thead>
             <tr>
-              <th nzWidth="300px">项目</th>
+              <th>项目</th>
               <th>客户单位</th>
               <th nzWidth="250px">项目情况</th>
-              <th nzWidth="250px">预计执行时间</th>
+              <th>项目进度计划</th>
+              <th>项目计划执行时间</th>
               <th>附件</th>
             </tr>
           </thead>
@@ -110,6 +111,9 @@
                   <sv label="执行人">{{ project.info?.user.name }}</sv>
                   <sv label="客户来源">{{ project.info?.origin?.code.code_name + project.info?.origin.name }}</sv>
                 </sv-container>
+              </td>
+              <td>
+                <div [innerHTML]="project.info?.progress | showTextareaContent"></div>
               </td>
               <td>{{ project.info?.plan_execution_start_time }} - {{ project.info?.plan_execution_end_time }}</td>
               <td>
@@ -161,7 +165,7 @@
 
     </sv-container>
 
-    <sv-container class="mb-lg mt-sm" [title]="proContractTpl">
+    <sv-container class="mb-lg mt-mb" [title]="proContractTpl">
       <ng-template #proContractTpl>
         <span class="font-weight-bold text-md">四、合约/非合约</span>
       </ng-template>
@@ -173,7 +177,7 @@
                 [nzFrontPagination]="false">
                 <thead>
                   <tr>
-                    <th>序号</th>
+                    <th nzWidth="80px">序号</th>
                     <th>供应商</th>
                     <th>合同</th>
                     <th>分割情况</th>
@@ -227,7 +231,7 @@
                 [nzFrontPagination]="false">
                 <thead>
                   <tr>
-                    <th>序号</th>
+                    <th nzWidth="80px">序号</th>
                     <th>供应商</th>
                     <th>服务类型</th>
                     <th>金额（元）</th>

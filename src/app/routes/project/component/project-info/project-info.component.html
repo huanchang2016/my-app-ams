@@ -81,6 +81,17 @@
         </div>
         <div nz-col [nzSpan]="24">
             <nz-form-item>
+                <nz-form-label nzFor="progress">项目进度</nz-form-label>
+                <nz-form-control>
+                    <textarea nz-input id="progress" class="progress" placeholder="请填写项目进度，如：&#10; 1. xxxx时间段，完成项目中xxx模块内容； &#10; 2. xxxx时间完成了项目xxx内容；" formControlName="progress" [nzAutosize]="{ minRows: 4, maxRows: 8 }"></textarea>
+                    <!-- <ng-template #textareaTpl>
+                        
+                    </ng-template> -->
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="24">
+            <nz-form-item>
                 <nz-form-label>项目附件</nz-form-label>
                 <nz-form-control>
                     <!-- <app-upload-file [Attachment]="attachment" [AttachmentCategory]="attachmentCategory" [isAttachmentChange]="isAttachmentChange" (attachmentChange)="attachmentChange($event)"></app-upload-file> -->

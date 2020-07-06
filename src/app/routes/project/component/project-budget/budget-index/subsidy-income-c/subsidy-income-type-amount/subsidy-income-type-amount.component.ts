@@ -5,14 +5,13 @@ import { SettingsConfigService } from 'src/app/routes/service/settings-config.se
 import { SettingsService } from '@delon/theme';
 import { ApiData } from 'src/app/data/interface.data';
 
-
 @Component({
-  selector: 'app-subsidy-income-type-and-amount',
-  templateUrl: './subsidy-income-type-and-amount.component.html',
+  selector: 'app-subsidy-income-type-amount',
+  templateUrl: './subsidy-income-type-amount.component.html',
   styles: [
   ]
 })
-export class SubsidyIncomeTypeAndAmountComponent implements OnInit {
+export class SubsidyIncomeTypeAmountComponent implements OnInit {
 
   @Input() subsidyId:number;
   @Output() incomeStatisticsChange:EventEmitter<any> = new EventEmitter();
@@ -93,10 +92,9 @@ export class SubsidyIncomeTypeAndAmountComponent implements OnInit {
 
   validateIncomeForm:FormGroup;
 
-  createTplModal(tplTitle: TemplateRef<{}>, tplContent: TemplateRef<{}>, tplFooter: TemplateRef<{}>, e: MouseEvent, data?:any, index?:number): void {
+  createTplModal(tplTitle: TemplateRef<{}>, tplContent: TemplateRef<{}>, tplFooter: TemplateRef<{}>, e: MouseEvent, data?:any): void {
     if(data) {
       this.editDataInfo = data;
-      this.editIndex = index;
       this.setForm();
     }
     e.preventDefault();
@@ -116,7 +114,6 @@ export class SubsidyIncomeTypeAndAmountComponent implements OnInit {
 
   closeModal(): void {
     this.editDataInfo = null;
-    this.editIndex = -1;
     this.tplModal.destroy();
     this.validateIncomeForm.reset();
   }
@@ -130,11 +127,11 @@ export class SubsidyIncomeTypeAndAmountComponent implements OnInit {
     this.total = this.subsidyIncomeList.map( v => v.exclude_tax_income ).reduce( (sum1:number, sum2:number) => sum1 + sum2, 0);
     const sub_income = this.subsidyIncomeList.map( v => v.income ).reduce( (sum1:number, sum2:number) => sum1 + sum2, 0);
     const tax_amount = this.subsidyIncomeList.map( v => v.tax_amount ).reduce( (sum1:number, sum2:number) => sum1 + sum2, 0);
-    this.staticOpt = {
+    this.incomeStatisticsChange.emit({
       sub_income,
       tax_amount,
       exclude_tax_income: this.total // 不含税收入
-    };
+    });
   }
   submitForm(): void {
     for (const key in this.validateIncomeForm.controls) {
@@ -143,48 +140,57 @@ export class SubsidyIncomeTypeAndAmountComponent implements OnInit {
     }
     if(this.validateIncomeForm.valid) {
       const value = this.validateIncomeForm.value;
-      
-      
-      const income = +value.income;
-      const is_bill = this.is_bill.value;
-      const tax_rate = is_bill ? this.tax_rate.value : 0;
-      const tax_amount = is_bill ? (income * tax_rate) : 0;
-      const exclude_tax_income = income - tax_amount;
 
       const opt = {
-        income: Number(value.income),
-        is_bill: this.is_bill.value,
-        tax_rate: this.tax_rate.value,
-        tax_amount: tax_amount,
-        exclude_tax_income: exclude_tax_income
+        income: +value.income,
+        is_bill: value.is_bill,
+        tax_rate: this.is_bill.value ? this.tax_rate.value : 0
       };
       
-      if(this.editDataInfo && this.editIndex !== -1) {
-        this.subsidyIncomeList = this.subsidyIncomeList.map( (v:any, i:number) => {
-          if(this.editIndex === i) {
-            v = Object.assign(v, opt);
-          }
-
-          return v;
-        });
+      if(this.editDataInfo) {
+        this.edit(opt);
       }else {
-        this.subsidyIncomeList = [...this.subsidyIncomeList, opt];
+        this.create(opt);
       }
-      console.log('opt', opt, value);
-      this.countCostTotal();
-      this.closeModal();
-      this.incomeStatisticsChange.emit({ subsidy_income_detail: this.subsidyIncomeList });
     }
   }
 
+  
+  create(obj:any) {
+    const opt:any = Object.assign(obj, { subsidy_income_id: this.subsidyId })
+    this.settingsConfigService.post(`/api/subsidy_income_detail/create`, opt).subscribe((res:ApiData) => {
+      console.log(res);
+      if(res.code === 200) {
+        this.msg.success('添加成功');
+        this.getsubsidyIncomeList();
+        this.closeModal();
+      }
+    });
+  }
 
   editDataInfo:any = null;
-  editIndex:number = -1;
-  
-  confirm(index:number):void {
-    this.subsidyIncomeList.splice(index, 1);
-    this.countCostTotal();
-    this.incomeStatisticsChange.emit({ project_revenue_detail: this.subsidyIncomeList });
+
+  edit(obj:any) {
+    const opt:any = Object.assign(obj, { subsidy_income_detail_id: this.editDataInfo.id })
+    this.settingsConfigService.post(`/api/subsidy_income_detail/update`, opt).subscribe((res:ApiData) => {
+      console.log(res);
+      if(res.code === 200) {
+        this.msg.success('添加成功');
+        this.getsubsidyIncomeList();
+        this.closeModal();
+      }
+    });
+  }
+
+
+  confirm(id:number):void {
+    const opt:any = { subsidy_income_detail_id: id };
+    this.settingsConfigService.post('/api/subsidy_income_detail/disable', opt).subscribe((res: ApiData) => {
+      if (res.code === 200) {
+        this.msg.success('禁用成功');
+        this.getsubsidyIncomeList();
+      }
+    });
   }
 
   cancel():void {}

@@ -37,11 +37,11 @@ export class BillReminderInvoicesListComponent implements OnInit {
   }
 
   add() :void {
-    this.router.navigateByUrl('/bill/apply/invoices/add?project_id=' + this.projectId );
+    this.router.navigateByUrl('/bill/project/invoices/add?project_id=' + this.projectId );
   }
 
   edit(data:any): void {
-    this.router.navigateByUrl(`/bill/apply/invoices/edit/${data.id}?project_id=${this.projectId}`);
+    this.router.navigateByUrl(`/bill/project/invoices/edit/${data.id}?project_id=${this.projectId}`);
   }
 
   

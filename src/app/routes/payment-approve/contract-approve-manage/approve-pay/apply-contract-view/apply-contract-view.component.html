@@ -42,29 +42,29 @@
       </tr> -->
       <tr>
         <td class="font-weight-bold">合同编号</td>
-        <td colspan="2">{{ selectedContract?.number }}</td>
+        <td colspan="2">{{ selectedContract?.contract.number }}</td>
         <td class="font-weight-bold">收款单位</td>
-        <td colspan="2">{{ selectedContract?.pay_company }}</td>
+        <td colspan="2">{{ selectedContract?.contract.pay_company }}</td>
       </tr>
       <tr>
         <td class="font-weight-bold">合同类型</td>
-        <td colspan="2">合同类型 我不知道怎么填类型</td>
+        <td colspan="2">{{ selectedContract?.contract.contract_category.name }}</td>
         <td class="font-weight-bold">开户银行</td>
-        <td colspan="2">{{ selectedContract?.bank_name }}</td>
+        <td colspan="2">{{ selectedContract?.contract.bank_name }}</td>
       </tr>
       <tr>
         <td class="font-weight-bold">合同名称</td>
-        <td colspan="2">{{ selectedContract?.name }}</td>
+        <td colspan="2">{{ selectedContract?.contract.name }}</td>
         <td class="font-weight-bold">银行账号</td>
-        <td colspan="2">{{ selectedContract?.bank_account }}</td>
+        <td colspan="2">{{ selectedContract?.contract.bank_account }}</td>
       </tr>
       <tr>
         <td class="font-weight-bold">合同单位</td>
         <td colspan="5">{{ selectedContract?.supplier?.name }}</td>
       </tr>
       <tr>
-        <td class="font-weight-bold">{{ selectedContract?.contract_amount ? '合同总价金额' : '请示金额上限' }}</td>
-        <td colspan="5">{{ selectedContract?.amount | _currency }}</td>
+        <td class="font-weight-bold">{{ selectedContract?.contract.contract_amount ? '合同总价金额' : '请示金额上限' }}</td>
+        <td colspan="5">{{ selectedContract?.contract.amount | _currency }}</td>
       </tr>
       <tr>
         <td class="font-weight-bold">摘要</td>
@@ -105,8 +105,8 @@
         <td colspan="2">{{ costTotalPay | n2c }}</td>
         <td class="font-weight-bold">合同支付比例</td>
         <td>
-          <ng-container *ngIf="selectedContract?.amount">
-            {{ countPercent(selectedContract.amount) }}
+          <ng-container *ngIf="selectedContract?.contract.amount">
+            {{ countPercent(selectedContract.contract.amount) }}
           </ng-container>
         </td>
       </tr>

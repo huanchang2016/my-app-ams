@@ -17,7 +17,7 @@
                     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="partyA" nzRequired>甲方</nz-form-label>
                     <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请选择甲方单位">
                         <nz-select style="width: 100%;" nzMode="multiple" id="partyA" nzPlaceHolder="请选择甲方单位"
-                            formControlName="partyA">
+                            formControlName="partyA" (ngModelChange)="proValueChange($event, 'partyA')">
                             <ng-container *ngFor="let item of partCompanyList">
                                 <nz-option [nzLabel]="item.name" [nzValue]="item.name"></nz-option>
                             </ng-container>
@@ -27,14 +27,14 @@
                 <nz-form-item>
                     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="partyA_power">甲方权责界定</nz-form-label>
                     <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请填写甲方权责界定描述">
-                        <textarea nz-input id="partyA_power" placeholder="请填写甲方权责界定描述" formControlName="partyA_power"
+                        <textarea nz-input id="partyA_power" placeholder="请填写甲方权责界定描述" (ngModelChange)="proValueChange($event, 'partyA_power')" formControlName="partyA_power"
                             [nzAutosize]="{ minRows: 4, maxRows: 6 }"></textarea>
                     </nz-form-control>
                 </nz-form-item>
                 <nz-form-item>
                     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="partyA_condition">甲方费用支付条件</nz-form-label>
                     <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请填写甲方费用支付条件">
-                        <textarea nz-input id="partyA_condition" placeholder="请填写甲方费用支付条件"
+                        <textarea nz-input id="partyA_condition" placeholder="请填写甲方费用支付条件" (ngModelChange)="proValueChange($event, 'partyA_condition')"
                             formControlName="partyA_condition" [nzAutosize]="{ minRows: 4, maxRows: 6 }"></textarea>
                     </nz-form-control>
                 </nz-form-item>
@@ -55,7 +55,7 @@
                 <nz-form-item>
                     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="partyB_power">乙方服务内容</nz-form-label>
                     <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请填写乙方服务内容">
-                        <textarea nz-input id="partyB_power" placeholder="请填写乙方服务内容" formControlName="partyB_power"
+                        <textarea nz-input id="partyB_power" placeholder="请填写乙方服务内容" (ngModelChange)="proValueChange($event, 'partyB_power')" formControlName="partyB_power"
                             [nzAutosize]="{ minRows: 4, maxRows: 6 }"></textarea>
                     </nz-form-control>
                 </nz-form-item>
@@ -63,14 +63,14 @@
                     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="partyB_condition">相关附加条件</nz-form-label>
                     <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请填写乙方服务相关附加条件">
                         <textarea nz-input id="partyB_condition" placeholder="请填写乙方服务相关附加条件"
-                            formControlName="partyB_condition" [nzAutosize]="{ minRows: 4, maxRows: 6 }"></textarea>
+                            formControlName="partyB_condition" [nzAutosize]="{ minRows: 4, maxRows: 6 }" (ngModelChange)="proValueChange($event, 'partyB_condition')"></textarea>
                     </nz-form-control>
                 </nz-form-item>
             </div>
         </div>
 
         <div nz-col [nzSpan]="24" *ngIf="projectIncome.length !== 0">
-            <app-project-income-type-and-amount [revenueId]="projectIncome[0].id" [taxList]="taxList"></app-project-income-type-and-amount>
+            <app-project-income-type-and-amount [revenueId]="projectIncome[0].id" [taxList]="taxList" (incomeStatisticsChange)="incomeStatisticsChange($event, 'project')"></app-project-income-type-and-amount>
             <!-- <app-project-income-type-amount></app-project-income-type-amount> -->
         </div>
     
@@ -86,7 +86,7 @@
                 <nz-form-item>
                     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="company_id" nzRequired>拨款单位</nz-form-label>
                     <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请选择拨款单位">
-                        <nz-select style="width: 100%;" nzShowSearch id="company_id" nzPlaceHolder="请选择拨款单位" formControlName="company_id">
+                        <nz-select style="width: 100%;" nzShowSearch id="company_id" (ngModelChange)="subValueChange($event, 'company_id')" nzPlaceHolder="请选择拨款单位" formControlName="company_id">
                             <ng-container *ngFor="let item of customerCompany">
                                 <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
                             </ng-container>
@@ -99,7 +99,7 @@
                 <nz-form-item>
                     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="name" nzRequired>补贴名称</nz-form-label>
                     <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请输入补贴名称">
-                        <input nz-input id="name" formControlName="name" placeholder="请输入补贴名称" />
+                        <input nz-input id="name" (ngModelChange)="subValueChange($event, 'name')" formControlName="name" placeholder="请输入补贴名称" />
                     </nz-form-control>
                 </nz-form-item>
             </div>
@@ -112,6 +112,7 @@
                         <textarea
                             nz-input
                             id="condition"
+                            (ngModelChange)="subValueChange($event, 'condition')"
                             placeholder="请填写申请条件"
                             formControlName="condition"
                             [nzAutosize]="{ minRows: 2, maxRows: 6 }"
@@ -126,6 +127,7 @@
                         <textarea
                             nz-input
                             id="calculation_basis"
+                            (ngModelChange)="subValueChange($event, 'calculation_basis')"
                             placeholder="请填写测算依据，如： 根据《***》文件，***标准，测算出补贴为**元。"
                             formControlName="calculation_basis"
                             [nzAutosize]="{ minRows: 2, maxRows: 6 }"
@@ -140,12 +142,16 @@
                         <textarea
                             nz-input
                             id="remark"
+                            (ngModelChange)="subValueChange($event, 'remark')"
                             placeholder="请填写备注说明"
                             formControlName="remark"
                             [nzAutosize]="{ minRows: 2, maxRows: 6 }"
                         ></textarea>
                     </nz-form-control>
                 </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="24" *ngIf="subsidyIncome.length !== 0">
+                <app-subsidy-income-type-and-amount [subsidyId]="subsidyIncome[0].id" (incomeStatisticsChange)="incomeStatisticsChange($event, 'subsidy')"></app-subsidy-income-type-and-amount>
             </div>
         </div>
     

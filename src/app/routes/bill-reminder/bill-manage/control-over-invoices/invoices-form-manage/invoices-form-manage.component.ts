@@ -1,10 +1,11 @@
-import { debounceTime, filter, map } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd';
 import { ApiData, List } from 'src/app/data/interface.data';
 import { SettingsConfigService } from 'src/app/routes/service/settings-config.service';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { zip } from 'rxjs';
 
 @Component({
   selector: 'app-invoices-form-manage',
@@ -22,19 +23,19 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class InvoicesFormManageComponent implements OnInit {
 
-  customer_id:any = null;
-  customer:any = null;
+  // customer_id:any = null;
+  // customer:any = null;
+  income_id:any = null;
+
+  project_revenue:any[] = [];
+  subsidy_income:any[] = [];
+
 
   projectId: number = null;
   billId: number = null;
   billInfo: any = null;
   projectDetailInfo: any;
   billCategoryArray: any[] = [];
-  taxArray: any[] = []; // 税目类型
-  taxFeeArray: any[] = []; // 税目子类 名称
-
-  taxFeeCount: number = 0;
-
   validateForm: FormGroup;
 
   submitLoading: boolean = false;
@@ -69,41 +70,45 @@ export class InvoicesFormManageComponent implements OnInit {
     this.validateForm = this.fb.group({
 
       bill_category_id: [null, [Validators.required]],
-      // tax_id: [null, [Validators.required]],
+      income_type: ['project', [Validators.required]],
+      project_revenue_id: [null, [Validators.required]],
+      subsidy_income_id: [null, [Validators.required]],
       amount: [null, [Validators.required, Validators.pattern(/^(([1-9]\d*|0)(\.\d{1,})?)$|(0\.0?([1-9]\d?))$/)]],
       bill_period_time: [null, [Validators.required]],
-      fees: [null],
+      // fees: [null],
       remark: [null],
-      customer_contract_code: [null, [Validators.required]] // 合同编号
+      customer_contract_code: [null] // 合同编号
       // mail: [null, [Validators.email]],
       // company_id: [ this.companyId, [Validators.required] ]
     });
 
-    this.validateForm.get('fees').valueChanges.pipe(debounceTime(300)).subscribe((fees: any) => {
-      if (fees) {
-        if (fees.length !== 0) {
-          this.taxFeeCount = fees.reduce((total: number, currentValue: any) => {
-            return total + currentValue.amount;
-          }, 0)
-          this.validateForm.get('amount').setValue(this.taxFeeCount);
-        }
-      }
-    })
   }
 
-  customerValueChange():void {
-    [this.customer] = this.projectDetailInfo.customer.filter( v => v.id === this.customer_id);
+  income_type:string = 'project';
+  incomeTypeChange(type: string) {
+    this.income_type = type;
+  }
+
+  maxIncome:number = 0;
+
+  proIncomeValueChange(id:number) {
+    const pro_ = this.project_revenue.filter( v => v.id === id)[0];
+    console.log(pro_)
+    this.maxIncome = pro_.income;
+  }
+  subIncomeValueChange(id:number) {
+    const sub_ = this.subsidy_income.filter( v => v.id === id)[0];
+    console.log(sub_)
+    this.maxIncome = sub_.income;
   }
 
   submitForm(): void {
-    // for (const i in this.validateForm.controls) {
-    //   this.validateForm.controls[i].markAsDirty();
-    //   this.validateForm.controls[i].updateValueAndValidity();
-    // }
+    for (const i in this.validateForm.controls) {
+      this.validateForm.controls[i].markAsDirty();
+      this.validateForm.controls[i].updateValueAndValidity();
+    }
 
-    console.log(this.validateForm, 'count', this.taxFeeCount);
-
-    if (this.validateForm.valid && this.customer) {
+    if (this.validateForm.valid) {
       this.submitLoading = true;
       // this.destroyModal(this.validateForm.value);
       if (this.billId) {
@@ -133,11 +138,11 @@ export class InvoicesFormManageComponent implements OnInit {
 
     let option: any = {
       project_id: this.projectId,
-      customer_id: this.customer.id,
+      // customer_id: this.customer.id,
       bill_category_id: opt.bill_category_id,
       bill_period_start_time: opt.bill_period_time.start,
       bill_period_end_time: opt.bill_period_time.end,
-      amount: opt.fees.length !== 0 ? this.taxFeeCount : +opt.amount,
+      // amount: opt.fees.length !== 0 ? this.taxFeeCount : +opt.amount,
       fees: opt.fees,
       remark: opt.remark,
       customer_contract_code: opt.customer_contract_code
@@ -158,11 +163,11 @@ export class InvoicesFormManageComponent implements OnInit {
 
     let option: any = {
       bill_id: this.billId,
-      customer_id: this.customer_id,
+      // customer_id: this.customer_id,
       bill_category_id: opt.bill_category_id,
       bill_period_start_time: opt.bill_period_time.start,
       bill_period_end_time: opt.bill_period_time.end,
-      amount: opt.fees.length !== 0 ? this.taxFeeCount : +opt.amount,
+      // amount: opt.fees.length !== 0 ? this.taxFeeCount : +opt.amount,
       fees: opt.fees,
       remark: opt.remark,
       customer_contract_code: opt.customer_contract_code
@@ -172,7 +177,7 @@ export class InvoicesFormManageComponent implements OnInit {
       this.submitLoading = false;
       if (res.code === 200) {
         this.msg.success('更新成功');
-        this.router.navigateByUrl(`/bill/apply/invoices/list/${this.projectId}`);
+        this.router.navigateByUrl(`/bill/project/invoices/list/${this.projectId}`);
       } else {
         this.msg.error(res.error || '更新失败');
       }
@@ -200,8 +205,8 @@ export class InvoicesFormManageComponent implements OnInit {
       if (res.code === 200) {
         this.billInfo = res.data;
         this.setFormValue(this.billInfo);
-        this.customer_id = this.billInfo.customer.id;
-        this.customerValueChange();
+        // this.customer_id = this.billInfo.customer.id;
+        // this.incomeValueChange();
       }
     })
   }
@@ -222,9 +227,7 @@ export class InvoicesFormManageComponent implements OnInit {
       console.log('projectDetailInfo, ', res.data);
       if (res.code === 200) {
         this.projectDetailInfo = res.data;
-        this.getTaxInCompany(this.projectDetailInfo.company.id);
-        // 发票的服务名称和项目是创建时已经绑定好了的，所以同一项目下的发票 服务名称不可改变
-        this.getSubTaxFees(this.projectDetailInfo.budget.tax.id);
+        this.getIncomeConfigs(this.projectDetailInfo.id);
       }
     })
 
@@ -236,35 +239,21 @@ export class InvoicesFormManageComponent implements OnInit {
       }
     })
   }
+  getIncomeConfigs(id:number) {
+    zip(
+      this.settingsConfigService.get(`/api/project_revenue_detail/project/${id}`),
+      this.settingsConfigService.get(`/api/subsidy_income_detail/project/${id}`)
+    ).pipe(
+      map( ([a, b]) => [a.data.project_revenue_detail, b.data.subsidy_income_detail])
+    ).subscribe(([project_revenue_detail, subsidy_income_detail]) => {
+      this.project_revenue = project_revenue_detail;
+      const subsidy_list:any[] = subsidy_income_detail;
 
-  getTaxInCompany(id: number): void {
-    this.settingsConfigService.get(`/api/tax/company/${id}`).subscribe((res: ApiData) => {
-      console.log(res.data);
-      if (res.code === 200) {
-        this.taxArray = res.data.tax;
-      }
-    });
+      this.subsidy_income = subsidy_list.filter( v => v.is_bill);
+      console.log(this.project_revenue, this.subsidy_income)
+    })
   }
 
-  getSubTaxFees(id: number) {
-
-    this.settingsConfigService.get(`/api/tax/fee/${id}`).subscribe((res: ApiData) => {
-      console.log(res.data);
-      if (res.code === 200) {
-        let data: any[] = res.data.tax_fee;
-        if (data.length !== 0) {
-          this.taxFeeArray = data.filter(v => v.active).sort((a: any, b: any) => a.sequence - b.sequence);
-          this.validateForm.get('amount').disable();
-          this.validateForm.get('amount').setValue(0);
-        } else {
-          this.taxFeeArray = [];
-          this.validateForm.get('fees').setValue([]);
-          this.validateForm.get('amount').enable();
-        }
-
-      }
-    });
-  }
 
   cancel() {}
 
@@ -299,7 +288,7 @@ export class InvoicesFormManageComponent implements OnInit {
           this.getAttachment();
         } else {
           this.msg.success('保存成功');
-          this.router.navigateByUrl(`/bill/apply/invoices/list/${this.projectId}`);
+          this.router.navigateByUrl(`/bill/project/invoices/list/${this.projectId}`);
         }
       } else {
         this.msg.error(res.error || '附件绑定失败')

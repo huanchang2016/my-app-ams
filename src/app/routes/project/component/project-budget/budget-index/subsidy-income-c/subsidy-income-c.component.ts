@@ -89,6 +89,7 @@ export class SubsidyIncomeCComponent implements OnInit {
   staticOpt:any = null;
   incomeStatisticsChange(option:any) {
     this.staticOpt = option;
+    console.log(this.staticOpt);
     this.incomeChange.emit(option);
   }
 

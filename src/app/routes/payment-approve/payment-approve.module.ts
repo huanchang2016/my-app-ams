@@ -53,6 +53,8 @@ import { ExcuteContractPayListComponent } from './contract-approve-manage/excute
 import { NoContractApplyForListComponent } from './no-contract-approve-manage/apply-for/no-contract-apply-for-list/no-contract-apply-for-list.component';
 import { NoContractApprovePayListComponent } from './no-contract-approve-manage/approve-pay/no-contract-approve-pay-list/no-contract-approve-pay-list.component';
 import { NoContractExcutePayListComponent } from './no-contract-approve-manage/excute-pay/no-contract-excute-pay-list/no-contract-excute-pay-list.component';
+import { ContractPayPendExecuteComponent } from './contract-approve-manage/apply-for/contract-pay-pend-execute/contract-pay-pend-execute.component';
+import { NoContractPayPendExecuteComponent } from './no-contract-approve-manage/apply-for/no-contract-pay-pend-execute/no-contract-pay-pend-execute.component';
 
 const COMPONENTS = [
   // 有合约  合约审批管理
@@ -87,9 +89,11 @@ const COMPONENTS = [
   // 合约支付 执行情况
   ContractExcuteNotStartComponent,
   ContractExcuteFinishedComponent,
+  ContractPayPendExecuteComponent,
   // 无合约执行情况
   NoContractExcuteNotStartComponent,
-  NoContractExcuteFinishedComponent
+  NoContractExcuteFinishedComponent,
+  NoContractPayPendExecuteComponent
 ];
 const COMPONENTS_NOROUNT = [
   ApproveSearchOptionComponent,

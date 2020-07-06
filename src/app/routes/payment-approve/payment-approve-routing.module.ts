@@ -52,24 +52,32 @@ import { ContractApprovePayListComponent } from './contract-approve-manage/appro
 import { ContractApplyForListComponent } from './contract-approve-manage/apply-for/contract-apply-for-list/contract-apply-for-list.component';
 import { ExcuteContractPayListComponent } from './contract-approve-manage/excute-pay/excute-contract-pay-list/excute-contract-pay-list.component';
 import { NoContractApplyForListComponent } from './no-contract-approve-manage/apply-for/no-contract-apply-for-list/no-contract-apply-for-list.component';
+import { ContractPayPendExecuteComponent } from './contract-approve-manage/apply-for/contract-pay-pend-execute/contract-pay-pend-execute.component';
+import { NoContractPayPendExecuteComponent } from './no-contract-approve-manage/apply-for/no-contract-pay-pend-execute/no-contract-pay-pend-execute.component';
 
 const routes: Routes = [
   // 合约支付列表（草稿、进行中、提交审批通过（未通过））
   // { path: 'contract/apply/draft', component: ApproveNotStartedComponent },
-  { path: 'contract/project/list', component: ApproveNotStartedComponent },
+  // { path: 'contract/project/list', component: ApproveNotStartedComponent },
+  { path: 'list', component: ApproveNotStartedComponent },
+  { path: 'list/apply/pay/:id', component: ProjectContractListComponent, data: { title: '项目合约支付列表' } },
+  { path: 'list/apply/pay/create/:id', component: ContractPayCreateComponent, data: { title: '创建合约支付' } },
+  { path: 'list/apply/pay/edit/:id', component: ContractPayCreateComponent, data: { title: '编辑合约支付' } },
+  
   { path: 'contract/apply', component: ContractApplyForListComponent,
     children: [
       { path: '', redirectTo: 'in_progress', pathMatch: 'full' },
       { path: 'in_progress', component: MyApplyForInprogressComponent, data: { title: '审批中' } },
+      { path: 'excute', component: ContractPayPendExecuteComponent, data: { title: '待执行' } },
       { path: 'pass', component: MyApplyForPassComponent, data: { title: '已通过' } },
       { path: 'refuse', component: MyApplyForRefuseComponent, data: { title: '未通过' } }
     ],
     data: { title: '合约支付申请管理' }
   },
   // 合约支付流程申请  创建/编辑/提交
-  { path: 'contract/apply/pay/:id', component: ProjectContractListComponent, data: { title: '项目合约支付列表' } },
-  { path: 'contract/apply/pay/create/:id', component: ContractPayCreateComponent, data: { title: '创建合约支付' } },
-  { path: 'contract/apply/pay/edit/:id', component: ContractPayCreateComponent, data: { title: '编辑合约支付' } },
+  // { path: 'contract/apply/pay/:id', component: ProjectContractListComponent, data: { title: '项目合约支付列表' } },
+  // { path: 'contract/apply/pay/create/:id', component: ContractPayCreateComponent, data: { title: '创建合约支付' } },
+  // { path: 'contract/apply/pay/edit/:id', component: ContractPayCreateComponent, data: { title: '编辑合约支付' } },
   
   // 支付审批（该我审批、待我审批、审批完成）列表
   { path: 'contract/pay', component: ContractApprovePayListComponent,
@@ -142,20 +150,21 @@ const routes: Routes = [
   { path: 'contract/pay/view/:id', component: ApplyContractViewComponent, data: { title: '合约支付详情查看' } },
     
   // 无合约  支付申请管理
-  { path: 'no-contract/project/list', component: NoContractNotStartedComponent },
+  { path: 'no-contract/list', component: NoContractNotStartedComponent },
+  { path: 'no-contract/list/apply/pay/:id', component: ProjectNoContractListComponent, data: { title: '非合约项目支付列表' } },
+  { path: 'no-contract/list/apply/pay/create/:id', component: NoContractPayCreateComponent, data: { title: '创建非合约非合约支付' } },
+  { path: 'no-contract/list/apply/pay/edit/:id', component: NoContractPayCreateComponent, data: { title: '编辑非合约非合约支付' } },
+
 
   { path: 'no-contract/apply', component: NoContractApplyForListComponent,
     children: [
       { path: '', redirectTo: 'in_progress', pathMatch: 'full' },
       { path: 'in_progress', component: NoContractProjectProgressComponent },
+      { path: 'excute', component: NoContractPayPendExecuteComponent },
       { path: 'pass', component: NoContractApplyPassComponent },
       { path: 'refuse', component: NoContractApplyRefuseComponent },
     ]
   },
-  { path: 'no-contract/apply/pay/:id', component: ProjectNoContractListComponent, data: { title: '非合约项目支付列表' } },
-  { path: 'no-contract/apply/pay/create/:id', component: NoContractPayCreateComponent, data: { title: '创建非合约非合约支付' } },
-  { path: 'no-contract/apply/pay/edit/:id', component: NoContractPayCreateComponent, data: { title: '编辑非合约非合约支付' } },
-
   // 无合约 支付审批管理
   { path: 'no-contract/pay', component: NoContractApprovePayListComponent,
     children: [

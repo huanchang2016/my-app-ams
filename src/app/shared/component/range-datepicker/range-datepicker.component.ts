@@ -29,7 +29,7 @@ export class RangeDatepickerComponent implements ControlValueAccessor {
 
   writeValue(obj: any): void {
     if(obj) {
-      this.rangeDate = [obj.start, obj.end];
+      this.rangeDate = [new Date(obj.start), new Date(obj.end)];
     }
   }
 

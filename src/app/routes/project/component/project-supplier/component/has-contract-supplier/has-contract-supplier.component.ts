@@ -33,7 +33,10 @@ export class HasContractSupplierComponent implements OnInit {
   @Input() data?: any;
   @Input() projectInfo: any;
   @Input() supplierList: any;
-  @Input() selectedOption: any;
+  @Input() selectedOption: { [key:string]: boolean };
+  @Input() selectedSplitOption: { [key:string]: boolean };
+
+  split_selected:{ [key:string]: boolean } = {};
 
   validateForm: FormGroup; // 基本资料
   submitLoading: boolean = false;
@@ -132,6 +135,8 @@ export class HasContractSupplierComponent implements OnInit {
       }
     })
   }
+
+
   getSplitContractList(id: number) {
     this.settingsConfigService.get(`/api/split_contract/contract/${id}`).subscribe((res: ApiData) => {
       if (res.code === 200) {
@@ -184,11 +189,11 @@ export class HasContractSupplierComponent implements OnInit {
   addContract(opt: any) {
     this.settingsConfigService.post('/api/deal/create', opt).subscribe((res: ApiData) => {
       console.log(res);
-      // this.submitLoading = false;
+      this.submitLoading = false;
       if (res.code === 200) {
         this.msg.success('创建成功');
+        this.destroyModal(res.data);
       } else {
-        this.submitLoading = false;
         this.msg.error(res.error || '创建失败');
       }
     });
@@ -201,7 +206,6 @@ export class HasContractSupplierComponent implements OnInit {
         this.msg.success('更新成功');
         this.destroyModal({});
       } else {
-        this.submitLoading = false;
         this.msg.error(res.error || '更新失败');
       }
     });

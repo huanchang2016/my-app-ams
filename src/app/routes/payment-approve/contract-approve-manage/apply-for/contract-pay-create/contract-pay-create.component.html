@@ -26,10 +26,12 @@
       <button *ngIf="!contractInfo || contractInfo.draft" nz-button [nzType]="'dashed'" (click)="submitPayAmount()"
         [nzLoading]="submitLoading" class="ml-xs">保存合约支付</button>
 
-      <button *ngIf="!contractInfo || contractInfo.draft" nz-popconfirm nz-button [nzType]="'primary'" class="ml-xs"
-        nzPopconfirmTitle="请确认合约支付信息填写完整，无误后继续提交！！！" (nzOnConfirm)="submitContractPay()" (nzOnCancel)="cancel()">
-        提交支付申请
-      </button>
+        <ng-container *ngIf="!contractInfo || contractInfo.draft">
+          <button *ngIf="contract_pay_id" nz-popconfirm nz-button [nzType]="'primary'" class="ml-xs"
+            nzPopconfirmTitle="请确认合约支付信息填写完整，无误后继续提交！！！" (nzOnConfirm)="submitContractPay()" (nzOnCancel)="cancel()">
+            提交支付申请
+          </button>
+        </ng-container>
     </ng-container>
 
   </ng-template>
@@ -43,21 +45,27 @@
       <nz-select style="min-width: 300px;" nzShowSearch nzPlaceHolder="请选择支付合同" [nzDisabled]="contract_pay_id"
         [(ngModel)]="contract_id" (ngModelChange)="contractValueChange()">
         <ng-container *ngFor="let item of contractList">
-          <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
+          <nz-option [nzLabel]="item.contract.name + (item.split_contract ? '（分割合同）' : '')" [nzValue]="item.contract.id"></nz-option>
         </ng-container>
       </nz-select>
     </ng-template>
 
     <sv-container size="small" col="2" *ngIf="selectedContract;else notSelectedContract">
       <!-- <sv label="供应商客户编号"><strong>{{ selectedContract.name }}</strong></sv> -->
-      <sv label="合同名称">{{ selectedContract.name }}</sv>
-      <sv label="收款单位">{{ selectedContract.pay_company }}</sv>
-      <sv label="合同金额"><span class="text-error mr-md">{{ selectedContract.amount | _currency }}</span> 大写：<span
-          class="font-weight-bold">{{ transferNumber }}</span></sv>
-      <sv label="开户银行">{{ selectedContract.bank_name }}</sv>
-      <sv label="合同单位"><strong>{{ selectedContract.supplier?.name }}</strong></sv>
-      <sv label="银行账号">{{ selectedContract.bank_account }}</sv>
-      <sv label="合同编号">{{ selectedContract.number }}</sv>
+      <sv label="合同名称">{{ selectedContract.contract.name }}</sv>
+      <sv label="收款单位">{{ selectedContract.contract.pay_company }}</sv>
+      <sv label="合同编号">{{ selectedContract.contract.number }}</sv>
+      <sv label="开户银行">{{ selectedContract.contract.bank_name }}</sv>
+      <sv label="合同单位"><strong>{{ selectedContract.contract.supplier?.name }}</strong></sv>
+      <sv label="银行账号">{{ selectedContract.contract.bank_account }}</sv>
+      <sv label="合同金额"><span class="text-error mr-md">{{ selectedContract.contract.amount | _currency }}</span></sv>
+      <sv label="已使用金额"><span class="text-error mr-md">{{ selectedContract.contract.use_amount | _currency }}</span></sv>
+      <ng-container *ngIf="selectedContract.contract.is_split">
+        <sv-title>分割合同</sv-title>
+        <!-- <sv col="3" label="分割合同"><span class="text-primary">是</span></sv> -->
+        <sv col="3" label="分割总金额"><span class="text-error mr-md">{{ selectedContract.split_contract.amount | _currency }}</span></sv>
+        <sv col="3" label="已使用分割金额"><span class="text-error mr-md">{{ selectedContract.split_contract.use_amount | _currency }}</span></sv>
+      </ng-container>
     </sv-container>
     <ng-template #notSelectedContract>
       <div class="text-center my-lg text-grey text-lg">暂未选择合同</div>
@@ -75,7 +83,7 @@
       <nz-table #costSelectTable [nzData]="listOfData" [nzFrontPagination]="false">
         <thead>
           <tr>
-            <th>序号</th>
+            <th nzWidth="80px">序号</th>
             <th>成本类型</th>
             <th>本期支付（元）</th>
             <th nzWidth="250px">支付统计</th>
@@ -90,7 +98,7 @@
             <td class="text-success">{{ data.amount | _currency}}</td>
             <td>
               <sv-container size="small" col="1">
-                <sv label="总计支付"><span class="text-error">{{ data.cost.amount | currency: 'CNY' }}</span></sv>
+                <sv label="预算金额"><span class="text-error">{{ data.cost.amount | currency: 'CNY' }}</span></sv>
                 <sv label="累计支付"><span class="text-success">{{ data.cost.pay_amount | currency: 'CNY' }}</span></sv>
                 <sv label="剩余支付"><span
                     class="text-primary">{{ (data.cost.amount - data.cost.pay_amount) | currency: 'CNY' }}</span></sv>

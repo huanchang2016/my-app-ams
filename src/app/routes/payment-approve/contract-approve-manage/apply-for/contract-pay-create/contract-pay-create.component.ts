@@ -101,14 +101,14 @@ export class ContractPayCreateComponent implements OnInit {
   };
 
   contractValueChange() {
-    [this.selectedContract] = this.contractList.filter(v => v.id === this.contract_id);
-    this.transferAmount(this.selectedContract.amount);
+    [this.selectedContract] = this.contractList.filter(v => v.contract.id === this.contract_id);
   }
 
   getContractList(): void { // 通过项目获取合约
-    this.settingsConfigService.get(`/api/contract/project/${this.projectId}`).subscribe((res: ApiData) => {
+    this.settingsConfigService.get(`/api/deal/project/${this.projectId}`).subscribe((res: ApiData) => {
+      console.log('contract list deal: ', res);
       if (res.code === 200) {
-        this.contractList = res.data.contract;
+        this.contractList = res.data.deal;
         // 如果有 contract_pay_id 参数， 则表示为编辑 合约支付
         this.activatedRoute.queryParams.subscribe(params => {
           if (params && params['contract_pay_id']) {
@@ -131,10 +131,8 @@ export class ContractPayCreateComponent implements OnInit {
         console.log(res, '合约支付信息');
         if (res.code === 200) {
           this.contractInfo = res.data;
-          this.contract_id = res.data.contract.id;
-          [this.selectedContract] = this.contractList.filter(v => v.id === this.contract_id);
-          this.transferAmount(this.selectedContract.amount);
-
+          this.contract_id = res.data.deal.contract.id;
+          [this.selectedContract] = this.contractList.filter(v => v.contract.id === this.contract_id);
           if (!this.contractInfo.draft) {
             this.getWorkflow();
           }
@@ -292,7 +290,7 @@ export class ContractPayCreateComponent implements OnInit {
     });
     const option: any = {
       project_id: this.projectId,
-      contract_id: this.contract_id,
+      deal_id: this.contract_id,
       payment: payment
     };
     this.settingsConfigService.post('/api/contract/pay/create', option).subscribe((res: ApiData) => {
@@ -302,6 +300,8 @@ export class ContractPayCreateComponent implements OnInit {
         // this.router.navigateByUrl(`/approve/contract/apply/pay/${this.projectId}`);
 
         this.bindAttachment(res.data.id);
+      }else {
+        this.submitLoading = false;
       }
     });
   }
@@ -323,7 +323,7 @@ export class ContractPayCreateComponent implements OnInit {
       this.submitLoading = false;
       if (res.code === 200) {
         this.msg.success('更新成功');
-        this.router.navigateByUrl(`/approve/contract/apply/pay/${this.projectId}`);
+        this.router.navigateByUrl(`/approve/list/apply/pay/${this.projectId}`);
       }
     });
   }
@@ -372,13 +372,19 @@ export class ContractPayCreateComponent implements OnInit {
   }
 
   submitContractPay(): void {
-    console.log(this.contract_pay_id, '合约支付信息提交')
+    console.log(this.contract_pay_id, '合约支付信息提交');
+    if(this.contract_pay_id) {
+      this.submit();
+    }
+    
+  }
+  submit():void {
     this.settingsConfigService.post('/api/contract_pay/submit', { contract_pay_id: this.contract_pay_id }).subscribe((res: ApiData) => {
       console.log(res);
       this.submitLoading = false;
       if (res.code === 200) {
         this.msg.success('支付信息提交成功');
-        this.router.navigateByUrl(`/approve/contract/apply/pay/${this.projectId}`);
+        this.router.navigateByUrl(`/approve/list/apply/pay/${this.projectId}`);
       }
     });
   }
@@ -422,7 +428,7 @@ export class ContractPayCreateComponent implements OnInit {
           this.getAttachment();
         } else {
           this.msg.success('提交成功');
-          this.router.navigateByUrl(`/approve/contract/apply/pay/${this.projectId}`);
+          this.router.navigateByUrl(`/approve/list/apply/pay/${this.projectId}`);
         }
       } else {
         this.msg.error(res.error || '附件绑定失败')

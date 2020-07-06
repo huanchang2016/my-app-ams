@@ -28,8 +28,8 @@ export class ProductSearchOptionComponent implements OnInit {
   ngOnInit(): void {
     this.validateForm = this.fb.group({
       company_id: [ null ], // 单位
-      name: [ null ], // 名称
-      active: [ true ] // 是否有效
+      name: [ null ] // 名称
+      // active: [ true ] // 是否有效
     });
 
     // 请求获取 上层数据， 如： 职位事公司下的数据
@@ -51,21 +51,20 @@ export class ProductSearchOptionComponent implements OnInit {
      * *****/
     this.companyValueChange.emit({company_id: id});
     this.validateForm.patchValue({
-      name: '',
-      active: true
+      name: ''
+      // active: true
     });
   }
 
   submit() {
     let option:any = this.validateForm.value;
-    console.log(option);
     this.searchOptionsEmit.emit(option);
   }
 
   resetForm(): void {
     this.validateForm.patchValue({
-      name: '',
-      active: true
+      name: ''
+      // active: true
     });
     this.searchOptionsEmit.emit(null)
   }

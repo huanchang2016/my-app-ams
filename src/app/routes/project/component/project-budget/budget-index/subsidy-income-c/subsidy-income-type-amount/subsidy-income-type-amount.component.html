@@ -3,7 +3,7 @@
     添加补贴收入
 </button>
 <ng-container *ngIf="subsidyIncomeList && subsidyIncomeList.length !== 0">
-    <nz-table #basicTable [nzData]="subsidyIncomeList" [nzFooter]="footerTpl" [nzShowPagination]="false">
+    <nz-table #basicTable [nzData]="subsidyIncomeList" [nzShowPagination]="false">
         <thead>
             <tr>
                 <th nzWidth="80px">序号</th>
@@ -24,23 +24,19 @@
                 <td>{{ data.tax_amount | _currency }}</td>
                 <td>{{ data.exclude_tax_income | _currency }}</td>
                 <td>
-                    <a (click)="createTplModal(tplTitle, tplContent, tplFooter, $event, data, i)"><i nz-icon nzType="edit"
-                            nzTheme="outline"></i></a>
+                    <a (click)="createTplModal(tplTitle, tplContent, tplFooter, $event, data)">
+                        <i nz-icon nzType="edit" nzTheme="outline"></i>
+                    </a>
 
                     <nz-divider nzType="vertical"></nz-divider>
 
-                    <a nz-popconfirm nzPopconfirmTitle="确定禁用当前补贴收入类型？" (nzOnConfirm)="confirm(i)"
-                        (nzOnCancel)="cancel()" class="text-error"><i nz-icon nzType="delete" nzTheme="outline"></i></a>
+                    <a nz-popconfirm nzPopconfirmTitle="确定禁用当前补贴收入类型？" (nzOnConfirm)="confirm(data.id)"
+                        (nzOnCancel)="cancel()" class="text-error">
+                        <i nz-icon nzType="delete" nzTheme="outline"></i>
+                    </a>
                 </td>
             </tr>
         </tbody>
-        <ng-template #footerTpl>
-            <div class="text-right" *ngIf="staticOpt">
-                <span class="font-weight-bold">含税收入： {{ staticOpt.sub_income | _currency }}</span>
-                <span class="font-weight-bold mx-md">税金合计： {{ staticOpt.tax_amount | _currency }}</span>
-                <span class="font-weight-bold">不含税收入： {{ staticOpt.exclude_tax_income | _currency }}</span>
-            </div>
-        </ng-template>
     </nz-table>
 </ng-container>
 

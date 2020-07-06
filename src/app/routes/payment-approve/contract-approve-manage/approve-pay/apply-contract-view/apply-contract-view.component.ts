@@ -67,9 +67,9 @@ export class ApplyContractViewComponent implements OnInit {
   }
 
   getContractList():void { // 通过项目获取合约
-    this.settingsConfigService.get(`/api/contract/project/${this.projectId}`).subscribe((res:ApiData) => {
+    this.settingsConfigService.get(`/api/deal/project/${this.projectId}`).subscribe((res:ApiData) => {
       if(res.code === 200) {
-        this.contractList = res.data.contract;
+        this.contractList = res.data.deal;
         console.log(this.contractList, 'contractList ');
         this.getContractPayDetail();
       }
@@ -82,8 +82,9 @@ export class ApplyContractViewComponent implements OnInit {
           console.log(res, '合约支付信息');
           if(res.code === 200) {
             this.contractInfo = res.data;
-            this.contract_id = res.data.contract.id;
-            [this.selectedContract] = this.contractList.filter( v => v.id === this.contract_id);
+            this.contract_id = res.data.deal.contract.id;
+            [this.selectedContract] = this.contractList.filter( v => v.contract.id === this.contract_id);
+            console.log('selectedContract', this.selectedContract)
             if(!res.data.draft) { // 非草稿时 获取流程
               this.getWorkflow();
             }

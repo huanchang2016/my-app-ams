@@ -16,7 +16,7 @@
     class="mt-md hidden-mobile">
     <thead>
         <tr>
-            <th>序号</th>
+            <th nzWidth="80px">序号</th>
             <th>发票类型</th>
             <th>金额(元)</th>
             <th>客户信息</th>
@@ -50,7 +50,7 @@
                 <span [innerHTML]="data.remark | showTextareaContent"></span>
             </td>
             <td>
-                <a [routerLink]=" !isApprove ? ['/bill/apply/invoices/view', data.id] : ['/bill/approve/view', data.id]" [queryParams]="{ project_id: data.project.id }"><i nz-icon nzType="eye" nzTheme="outline"></i></a>
+                <a [routerLink]=" !isApprove ? ['/bill/project/invoices/view', data.id] : ['/bill/approve/view', data.id]" [queryParams]="{ project_id: data.project.id }"><i nz-icon nzType="eye" nzTheme="outline"></i></a>
             </td>
         </tr>
     </tbody>
@@ -79,7 +79,7 @@
                     </div>
                 </nz-skeleton>
                 <ng-template #actionEdit>
-                    <a [routerLink]=" !isApprove ? ['/bill/apply/invoices/view', data.id] : ['/bill/approve/view', data.id]" [queryParams]="{ project_id: data.project.id }"><i nz-icon nzType="eye" nzTheme="outline"></i></a>
+                    <a [routerLink]=" !isApprove ? ['/bill/project/invoices/view', data.id] : ['/bill/approve/view', data.id]" [queryParams]="{ project_id: data.project.id }"><i nz-icon nzType="eye" nzTheme="outline"></i></a>
                 </ng-template>
             </nz-card>
         </ng-container>

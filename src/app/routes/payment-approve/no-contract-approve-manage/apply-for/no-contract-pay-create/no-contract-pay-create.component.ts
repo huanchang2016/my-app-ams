@@ -124,9 +124,19 @@ export class NoContractPayCreateComponent implements OnInit {
     this.validateCostForm.get('cost_id').valueChanges.subscribe((cost_id: number) => {
       if (cost_id) {
         this.currentSelectCost = this.costArr.filter(v => v.id === cost_id)[0];
+        console.log(this.currentSelectCost, 'currentselectCost');
+        this.countMaxAmount();
       }
     });
 
+  }
+
+  max_pay_amount:number = 0;
+  countMaxAmount() {
+    // 计算可以支付的最大金额数
+    const cost_pay:number = this.currentSelectCost.max - this.currentSelectCost.pay_amount;
+    const treaty_pay:number = this.currentTreaty.amount - this.currentTreaty.use_amount;
+    this.max_pay_amount = Math.min(cost_pay, treaty_pay);
   }
 
   currentSelectCost: any = null;
@@ -323,6 +333,8 @@ export class NoContractPayCreateComponent implements OnInit {
         this.createTreatyPay(this.validateTreatyForm.value);
       }
 
+    }else {
+      this.msg.warning('协议支付信息填写不完整');
     }
   }
 
@@ -360,6 +372,12 @@ export class NoContractPayCreateComponent implements OnInit {
 
   }
 
+  currentTreaty:any = null;
+  treatyChange(treaty_id:number) {
+    [this.currentTreaty] = this.treatyListArr.filter( v => v.id === treaty_id);
+    console.log(treaty_id , 'treaty change', this.currentTreaty);
+  }
+
   updateTreatyPay(data: any) {
     const paymentArr: any[] = this.listOfData.map(v => {
       return {
@@ -388,7 +406,7 @@ export class NoContractPayCreateComponent implements OnInit {
       this.submitLoading = false;
       if (res.code === 200) {
         this.msg.success('非合约支付提交成功');
-        this.router.navigateByUrl(`/approve/no-contract/apply/pay/${this.projectId}`);
+        this.router.navigateByUrl(`/approve/no-contract/list/apply/pay/${this.projectId}`);
       } else {
         this.msg.error(res.error || '非合约支付提交失败');
       }
@@ -443,7 +461,7 @@ export class NoContractPayCreateComponent implements OnInit {
       this.submitLoading = false;
       if (res.code === 200) {
         this.msg.success('支付信息提交成功');
-        this.router.navigateByUrl(`/approve/no-contract/apply/pay/${this.projectId}`);
+        this.router.navigateByUrl(`/approve/no-contract/list/apply/pay/${this.projectId}`);
       } else {
         this.msg.error(res.error)
       }
@@ -481,7 +499,7 @@ export class NoContractPayCreateComponent implements OnInit {
           this.getAttachment();
         } else {
           this.msg.success('非合约支付提交成功');
-          this.router.navigateByUrl(`/approve/no-contract/apply/pay/${this.projectId}`);
+          this.router.navigateByUrl(`/approve/no-contract/list/apply/pay/${this.projectId}`);
         }
       } else {
         this.msg.error(res.error || '附件绑定失败')

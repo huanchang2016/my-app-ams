@@ -1,5 +1,5 @@
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { Component, forwardRef, TemplateRef, OnChanges, Input, Output, EventEmitter } from '@angular/core';
+import { Component, forwardRef, TemplateRef, OnChanges, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { NG_VALUE_ACCESSOR, NG_VALIDATORS, ControlValueAccessor, AbstractControl, ValidationErrors, FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { NzModalService, NzModalRef } from 'ng-zorro-antd';
 import { SettingsConfigService } from 'src/app/routes/service/settings-config.service';
@@ -22,12 +22,18 @@ import { ApiData } from 'src/app/data/interface.data';
   //   }
   // ]
 })
-export class ProjectIncomeTypeAndAmountComponent implements OnChanges {
+export class ProjectIncomeTypeAndAmountComponent implements OnChanges, OnInit {
 
   @Input() taxList:any[];
   @Input() revenueId:number;
 
   @Output() incomeStatisticsChange:EventEmitter<any> = new EventEmitter();
+
+  staticOpt:any = {
+    pro_income: 0,
+    tax_amount: 0,
+    exclude_tax_income: 0 // 不含税收入
+  };
 
   projectIncomeList:any[] = [];
 
@@ -57,7 +63,6 @@ export class ProjectIncomeTypeAndAmountComponent implements OnChanges {
           invoice: this.currentTax.invoice,
           income: this.income.value * (1 - this.currentTax.rate)
         };
-        console.log(this.currentModalInfo);
       }else {
         this.currentModalInfo = null;
       }
@@ -73,6 +78,10 @@ export class ProjectIncomeTypeAndAmountComponent implements OnChanges {
   }
 
   ngOnChanges() {
+    
+  }
+
+  ngOnInit() {
     if(this.revenueId) {
       this.getProjectIncomeList();
     }
@@ -83,18 +92,9 @@ export class ProjectIncomeTypeAndAmountComponent implements OnChanges {
       console.log(res, '通过项目收入获取详情');
       if(res.code === 200) {
         this.projectIncomeList = res.data.project_revenue_detail;
-        this.countCostTotal();
         this.dealtaxList();
       }
     });
-  }
-  
-  deletedCostItem(i:number, id?:number) {
-    if(id) {
-      this.projectIncomeList.splice(i, 1);
-      this.dealtaxList();
-    }
-    this.countCostTotal();
   }
 
   // 新增 预算成本
@@ -135,11 +135,11 @@ export class ProjectIncomeTypeAndAmountComponent implements OnChanges {
     this.total = this.projectIncomeList.map( v => v.exclude_tax_income ).reduce( (sum1:number, sum2:number) => sum1 + sum2, 0);
     const pro_income = this.projectIncomeList.map( v => v.income ).reduce( (sum1:number, sum2:number) => sum1 + sum2, 0);
     const tax_amount = this.projectIncomeList.map( v => v.tax_amount ).reduce( (sum1:number, sum2:number) => sum1 + sum2, 0);
-    this.incomeStatisticsChange.emit({
+    this.staticOpt = {
       pro_income,
       tax_amount,
       exclude_tax_income: this.total // 不含税收入
-    });
+    };
   }
   submitForm(): void {
     for (const key in this.validateIncomeForm.controls) {
@@ -156,9 +156,17 @@ export class ProjectIncomeTypeAndAmountComponent implements OnChanges {
         return v;
       });
 
-      const opt = { tax: this.currentTax, income: +value.income };
+      const income = +value.income;
+      const tax_amount = this.currentTax.rate * income;
+      const exclude_tax_income =income - tax_amount;
+
+      const opt = {
+        tax: this.currentTax,
+        income: income,
+        tax_amount: tax_amount,
+        exclude_tax_income: exclude_tax_income
+      };
       
-      console.log('opt', this.currentTax, this.projectIncomeList);
       if(this.editDataInfo) {
         this.projectIncomeList = this.projectIncomeList.map( v => {
           if(v.tax.id === this.editDataInfo.tax.id) {
@@ -168,12 +176,15 @@ export class ProjectIncomeTypeAndAmountComponent implements OnChanges {
           return v;
         });
       }else {
-        this.projectIncomeList.push(opt);
+        this.projectIncomeList = [...this.projectIncomeList, opt];
       }
+
+      console.log('opt', this.currentTax, this.projectIncomeList);
 
       this.dealtaxList();
       // this.emitData();
       this.closeModal();
+      this.incomeStatisticsChange.emit({ project_revenue_detail: this.projectIncomeList });
     }
   }
 
@@ -187,7 +198,7 @@ export class ProjectIncomeTypeAndAmountComponent implements OnChanges {
         active: this.checkIsSelectedCost(v.id)
       }
     });
-    console.log(this.taxList)
+    this.countCostTotal();
   }
 
   checkIsSelectedCost(id:number):boolean {
@@ -201,6 +212,7 @@ export class ProjectIncomeTypeAndAmountComponent implements OnChanges {
   confirm(tax_id:number):void {
     this.projectIncomeList = this.projectIncomeList.filter( v => v.tax.id !== tax_id);
     this.dealtaxList();
+    this.incomeStatisticsChange.emit({ project_revenue_detail: this.projectIncomeList });
   }
 
   cancel():void {}

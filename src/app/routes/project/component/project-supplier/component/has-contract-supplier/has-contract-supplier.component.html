@@ -6,7 +6,7 @@
             <nz-select style="width: 100%;" id="supplier_id" nzShowSearch (ngModelChange)="supplierChange($event)"
                 nzPlaceHolder="请选择合同供应商" formControlName="supplier_id" [nzDisabled]="data">
                 <ng-container *ngFor="let item of supplierList">
-                    <nz-option [nzLabel]="item.name" [nzValue]="item.id" [nzDisabled]="selectedOption[item.id]"></nz-option>
+                    <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
                </ng-container>
              </nz-select>
         </nz-form-control>
@@ -18,7 +18,7 @@
             <nz-select style="width: 100%;" id="contract_id" nzShowSearch (ngModelChange)="contractChange($event)"
                 nzPlaceHolder="{{ contractList.length === 0 ? '与该供应商无合同签订' : '请选择合同' }}" formControlName="contract_id" [nzDisabled]="data">
                 <ng-container *ngFor="let item of contractList">
-                    <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
+                    <nz-option [nzLabel]="item.name" [nzValue]="item.id" [nzDisabled]="selectedOption[item.id]"></nz-option>
                </ng-container>
              </nz-select>
         </nz-form-control>
@@ -30,7 +30,7 @@
             <nz-select style="width: 100%;" id="split_contract_id" nzShowSearch (ngModelChange)="splitContractChange($event)"
                 nzPlaceHolder="请选择分割部门" formControlName="split_contract_id" [nzDisabled]="data">
                 <ng-container *ngFor="let item of splitContractList">
-                    <nz-option [nzLabel]="item.department.name" [nzValue]="item.id"></nz-option>
+                    <nz-option [nzLabel]="item.department.name" [nzValue]="item.id" [nzDisabled]="selectedSplitOption[item.id]"></nz-option>
                </ng-container>
              </nz-select>
         </nz-form-control>

@@ -105,12 +105,17 @@
                             如果为空，则直接下一步， 
                             如果不为空，且收入类型并未选择的情况需要删除它们
                     -->
-                    <a nz-popconfirm nz-button nzType="primary" [nzLoading]="submitLoading"
-                        [nzPopconfirmTitle]="popconfirmTitle"
-                        [nzCondition]="switchPopconfirm"
-                        (nzOnConfirm)="confirm()"
-                        (nzOnCancel)="cancel()"
-                        >下一步</a>
+                    <ng-container *ngIf="!incomeOpt.project && !incomeOpt.subsidy ;else nextBtnTpl">
+                        <a nz-button nzType="primary" (click)="confirm()">下一步</a>
+                    </ng-container>
+                    <ng-template #nextBtnTpl>
+                        <a nz-popconfirm nz-button nzType="primary" [nzLoading]="submitLoading"
+                            [nzPopconfirmTitle]="popconfirmTitle"
+                            [nzCondition]="switchPopconfirm"
+                            (nzOnConfirm)="confirm()"
+                            (nzOnCancel)="cancel()"
+                            >下一步</a>
+                    </ng-template>                            
                     <!-- <button nz-button nzType="primary" [nzLoading]="submitLoading" (click)="submitForm()">下一步</button> -->
                 </nz-form-control>
             </nz-form-item>

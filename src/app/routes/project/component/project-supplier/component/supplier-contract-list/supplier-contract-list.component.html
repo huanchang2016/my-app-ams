@@ -51,7 +51,7 @@
         <nz-table #contracTable [nzData]="contractList" nzSize="small" [nzLoading]="loadingContract" [nzShowPagination]="false" [nzFrontPagination]="false">
             <thead>
                 <tr>
-                    <th>序号</th>
+                    <th nzWidth="80px">序号</th>
                     <th>供应商</th>
                     <th>合同</th>
                     <th>分割情况</th>
@@ -79,7 +79,7 @@
                     </td>
                     <td>{{ data.amount | _currency }}</td>
                     <td>
-                        <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/contract/' + data.id" [isShowName]="false"></app-upload-file-attachment-show-c>
+                        <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/contract/' + data.contract.id" [isShowName]="false"></app-upload-file-attachment-show-c>
                     </td>
                     <td *ngIf="!isView">
                         <a (click)="editContract(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>

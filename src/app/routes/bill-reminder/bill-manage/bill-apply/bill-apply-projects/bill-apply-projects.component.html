@@ -17,7 +17,7 @@
     class="mt-md hidden-mobile">
     <thead>
         <tr>
-            <th>序号</th>
+            <th nzWidth="80px">序号</th>
             <th>项目</th>
             <th>类型</th>
             <th>来源</th>
@@ -38,7 +38,7 @@
                 </sv-container>
             </td>
             <td>
-                <a [routerLink]="['/bill/apply/invoices/list', data.id]">发票管理</a>
+                <a [routerLink]="['/bill/project/invoices/list', data.id]">发票管理</a>
             </td>
         </tr>
     </tbody>
@@ -64,7 +64,7 @@
                     </div>
                 </nz-skeleton>
                 <ng-template #actionEdit>
-                    <a [routerLink]="['/bill/apply/invoices/list', data.id]">发票管理</a>
+                    <a [routerLink]="['/bill/project/invoices/list', data.id]">发票管理</a>
                 </ng-template>
             </nz-card>
         </ng-container>

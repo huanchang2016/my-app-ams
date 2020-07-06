@@ -1,13 +1,15 @@
 import { SettingsConfigService } from 'src/app/routes/service/settings-config.service';
-import { Component, OnChanges, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, OnChanges, Input, Output, EventEmitter, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ApiData, List } from 'src/app/data/interface.data';
 import { SettingsService } from '@delon/theme';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-adjust-budget-info',
   templateUrl: './adjust-budget-info.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styles: []
 })
 export class AdjustBudgetInfoComponent implements OnChanges, OnInit {
@@ -19,6 +21,8 @@ export class AdjustBudgetInfoComponent implements OnChanges, OnInit {
 
   budget:any = null;
 
+  pro_income_option:any = {};
+  sub_income_option:any = {};
   
   incomeOpt:any = { // 收入类型确认
     project: true,
@@ -43,11 +47,7 @@ export class AdjustBudgetInfoComponent implements OnChanges, OnInit {
   }
 
   ngOnChanges(){
-    if(this.projectId) {
-      this.getProjectIncomeList();
-      this.getSubsidyIncomeList();
-      this.getBudgetInfo(this.projectId);
-    }
+    
   }
 
   
@@ -58,7 +58,18 @@ export class AdjustBudgetInfoComponent implements OnChanges, OnInit {
   projectIncome:any[] = [];
   subsidyIncome:any[] = [];
 
+  // 表单内容修改后的数据存储
+  project_revenue:any = {};
+  subsidy_revenue:any = {};
+  cost:any[] = [];
+
   ngOnInit(): void {
+    if(this.projectId) {
+      this.getProjectIncomeList();
+      this.getSubsidyIncomeList();
+      this.getBudgetInfo(this.projectId);
+    }
+
     const partyB:string = this.settings.user.company ? this.settings.user.company.name : null;
     this.validateProjectForm = this.fb.group({
       partyA: [null, [Validators.required]],  // 甲方
@@ -81,6 +92,10 @@ export class AdjustBudgetInfoComponent implements OnChanges, OnInit {
     this.validateCostForm = this.fb.group({
       cost: [null, [Validators.required]] // 成本预算
     });
+    this.validateCostForm.valueChanges.pipe(debounceTime(500)).subscribe( _ => {
+      this.cost = this.validateCostForm.value;
+      this.emitBudgetLoginfo();
+    })
 
   }
   
@@ -151,6 +166,52 @@ export class AdjustBudgetInfoComponent implements OnChanges, OnInit {
     console.log(this.incomeOpt, '补贴收入类型 changes');
     
 
+  }
+
+  incomeStatisticsChange(data: any, type:string) {
+    //  收入（项目、补贴） 金额列表发生变化时，保存json 对象
+    if(type === 'project') {
+      this.pro_income_option['income'] = data;
+    }
+    if(type === 'subsidy') {
+      this.sub_income_option['income'] = data;
+    }
+
+    this.emitBudgetLoginfo();
+  }
+
+  proValueChange(data:any, key:string) {
+    let value:any = data;
+    if(key === 'partyA') {
+      value = data.join('； ');
+    }
+    if(value !== this.projectIncome[0][key]) {
+      this.project_revenue[key] = value;
+      this.emitBudgetLoginfo();
+    }
+  }
+  subValueChange(data:any, key:string) {
+    if(data !== this.subsidyIncome[0][key]) {
+      console.log(key, data, 'subsidy change')
+      this.subsidy_revenue[key] = data;
+      this.emitBudgetLoginfo();
+    }
+  }
+
+  emitBudgetLoginfo() {
+    const data = {
+      pro_income: {
+        revenue: this.project_revenue,
+        ...this.pro_income_option
+      },
+      subsidy_revenue:  {
+        revenue: this.subsidy_revenue,
+        ...this.sub_income_option
+      },
+      cost: this.cost
+    };
+
+    this.logInfoChange.emit(data)
   }
 
   getProjectIncomeList() {

@@ -74,7 +74,8 @@ export class ProjectInfoComponent implements OnChanges, OnInit {
       origin_id: [null],
       plan_time: [null],
       // actual_time: [null],
-      description: [null]
+      description: [null],
+      progress: [null]
     });
     if (this.data) {
       this.setFormValue(this.data);
@@ -145,7 +146,8 @@ export class ProjectInfoComponent implements OnChanges, OnInit {
         //   start: opt.actual_execution_start_time,
         //   end: opt.actual_execution_end_time
         // },
-        description: opt.description
+        description: opt.description,
+        progress: opt.progress
       });
     }
   }

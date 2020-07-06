@@ -28,12 +28,11 @@ import { BillApplyListComponent } from './bill-manage/bill-apply/bill-apply-list
 import { BillApproveListComponent } from './bill-manage/bill-approve/bill-approve-list/bill-approve-list.component';
 
 const routes: Routes = [
-  { path: 'apply/project/list', component: BillApplyProjectsComponent },
+  { path: 'project', component: BillApplyProjectsComponent },
   // 项目下的开票申请列表
-  { path: 'apply/invoices/list/:id', component: BillReminderInvoicesListComponent, data: { title: '项目发票'} },
-  { path: 'apply/invoices/add', component: InvoicesFormManageComponent, data: { title: '新增项目发票'} },
-  { path: 'apply/invoices/edit/:id', component: InvoicesFormManageComponent, data: { title: '编辑项目发票'} },
-
+  { path: 'project/invoices/list/:id', component: BillReminderInvoicesListComponent, data: { title: '项目发票'} },
+  { path: 'project/invoices/add', component: InvoicesFormManageComponent, data: { title: '新增项目发票'} },
+  { path: 'project/invoices/edit/:id', component: InvoicesFormManageComponent, data: { title: '编辑项目发票'} },
   { path: 'apply', component: BillApplyListComponent,
     children: [
       { path: '', redirectTo: 'in_progress', pathMatch: 'full' },

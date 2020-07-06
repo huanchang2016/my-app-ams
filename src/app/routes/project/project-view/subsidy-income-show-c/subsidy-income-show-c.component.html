@@ -1,5 +1,5 @@
 <ng-container *ngIf="incomeInfo">
-    <nz-table #incomeTable [nzTitle]="'补贴收入'" nzBordered [nzData]="[1]" [nzShowPagination]="false" [nzFooter]="footerTpl">
+    <nz-table #incomeTable [nzTitle]="'补贴收入明细'" nzBordered [nzData]="[1]" [nzShowPagination]="false" [nzFooter]="footerTpl">
         <thead>
             <tr>
                 <th>拨款单位</th>
@@ -17,9 +17,9 @@
                 <td><span [innerHTML]="incomeInfo.calculation_basis | showTextareaContent"></span></td>
                 <td><span [innerHTML]="incomeInfo.remark | showTextareaContent"></span></td>
             </tr>
-            <tr>
+            <!-- <tr>
                 <td colspan="6" class="text-center">收入来源</td>
-            </tr>
+            </tr> -->
             <ng-container *ngIf="subsidyIncomeList.length !== 0">
                 <tr>
                     <td>序号</td>

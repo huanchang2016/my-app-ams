@@ -1,11 +1,11 @@
-<page-header [title]="'项目合约支付管理'" [breadcrumb]="breadcrumb" [action]="actionBtn">
+<page-header [title]="'项目非合约支付管理'" [breadcrumb]="breadcrumb" [action]="actionBtn">
 
   <ng-template #breadcrumb>
     <nz-breadcrumb>
       <nz-breadcrumb-item><a [routerLink]="['/dashboard']">首页</a></nz-breadcrumb-item>
       <nz-breadcrumb-item>非合约支付管理</nz-breadcrumb-item>
       <nz-breadcrumb-item>非合约支付申请</nz-breadcrumb-item>
-      <nz-breadcrumb-item><a [routerLink]="['/approve/no-contract/apply/draft']">项目列表</a></nz-breadcrumb-item>
+      <nz-breadcrumb-item><a [routerLink]="['/approve/no-contract/list']">项目列表</a></nz-breadcrumb-item>
       <nz-breadcrumb-item>项目非合约支付管理</nz-breadcrumb-item>
     </nz-breadcrumb>
   </ng-template>
@@ -25,7 +25,7 @@
   </sv-container> -->
   <app-project-info-show-tpl [projectInfo]="projectInfo"></app-project-info-show-tpl>
 
-  <a nz-button [nzType]="'primary'" [routerLink]="['/approve/no-contract/apply/pay/create', projectId]"
+  <a nz-button [nzType]="'primary'" [routerLink]="['/approve/no-contract/list/apply/pay/create', projectId]"
     class="my-md">新增非合约支付</a>
 
 </page-header>
@@ -34,31 +34,39 @@
   <nz-table #basicTable [nzData]="listOfData" [nzFrontPagination]="false">
     <thead>
       <tr>
-        <th>序号</th>
-        <th>非合约名称</th>
-        <th>非合约编号</th>
-        <th>收款单位</th>
-        <th>支付金额（元）</th>
+        <th nzWidth="80px">序号</th>
+        <th nzWidth="250px">支付对象</th>
+        <th>编号</th>
+        <th nzWidth="300px">收款信息</th>
+        <th nzWidth="160px">支付金额（元）</th>
         <th nzWidth="200px">冲抵情况</th>
-        <th>操作</th>
+        <th nzWidth="250px">操作</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let data of basicTable.data; let i = index">
         <td>{{ i + 1 }}</td>
-        <td>{{ data.treaty.name }}</td>
+        <td>
+          {{ data.treaty.supplier.name }} <span class="ml-sm text-primary text-sm">（{{ data.treaty.service_category.name }}）</span>
+        </td>
         <td>{{ data.number }}</td>
-        <td>{{ data.pay_company }}</td>
+        <td>
+          <sv-container size="small" col="1">
+            <sv label="单位">{{ data.pay_company }}</sv>
+            <sv label="银行">{{ data.bank_name }}</sv>
+            <sv label="账号">{{ data.bank_account }}</sv>
+          </sv-container>
+        </td>
         <td class="text-error">{{ data.amount | currency: 'CNY' }}</td>
         <td>
           <sv-container size="small" col="1">
-            <sv label="冲销借款"><span>{{ data.is_business_card ? '有' : '无' }}</span></sv>
+            <sv label="冲销借款"><span>{{ data.if_write_off ? '有' : '无' }}</span></sv>
             <sv label="冲抵金额"><span class="text-error">{{ data.if_write_off ? data.write_off_amount + '元' : '-' }}</span>
             </sv>
           </sv-container>
         </td>
         <td>
-          <a [routerLink]="['/approve/no-contract/apply/pay/edit', projectId]"
+          <a [routerLink]="['/approve/no-contract/list/apply/pay/edit', projectId]"
             [queryParams]="{treaty_pay_id: data.id }"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
           <nz-divider nzType="vertical"></nz-divider>
           <a nz-popconfirm nzPopconfirmTitle="确认禁用当前合约支付?" (nzOnConfirm)="disabled(data.id)" (nzOnCancel)="cancel()"
@@ -99,7 +107,7 @@
         </div>
       </nz-skeleton>
       <ng-template #actionEdit>
-        <a [routerLink]="['/approve/no-contract/apply/pay/edit', projectId]" class="text-nowrap"
+        <a [routerLink]="['/approve/no-contract/list/apply/pay/edit', projectId]" class="text-nowrap"
             [queryParams]="{treaty_pay_id: data.id }"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
       </ng-template>
       <ng-template #actionEllipsis>

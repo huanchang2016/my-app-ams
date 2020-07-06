@@ -88,6 +88,8 @@ export class ProjectBudgetComponent implements OnInit {
     const isProjectIncome:boolean = this.projectIncome.length !== 0;
     const isSubsidyIncome:boolean = this.subsidyIncome.length !== 0;
 
+    console.log(this.incomeOpt, isProjectIncome, isSubsidyIncome, this.proIncomeOpt, this.subIncomeOpt, 'submit');
+    
     if(!this.incomeOpt.project && !this.incomeOpt.subsidy ) {
       this.msg.warning('收入类型未选择');
       return;
@@ -264,9 +266,7 @@ export class ProjectBudgetComponent implements OnInit {
   }
 
   confirm() {
-
     if(this.switchPopconfirm || (this.incomeOpt.project && this.incomeOpt.subsidy ) || (!this.incomeOpt.project && !this.incomeOpt.subsidy )) {
-      console.log('submit budget info!')
       this.submitForm();
     }else {
       if(!this.incomeOpt.project && this.projectIncome.length !== 0) {

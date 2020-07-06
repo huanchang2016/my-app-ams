@@ -107,7 +107,7 @@ export class StartupService {
             children: [
               {
                 text: '支付项目',
-                link: '/approve/contract/project/list'
+                link: '/approve/list'
               },
               {
                 text: '支付申请',
@@ -174,7 +174,7 @@ export class StartupService {
             children: [
               {
                 text: '支付项目',
-                link: '/approve/no-contract/project/list'
+                link: '/approve/no-contract/list'
               },
               {
                 text: '支付申请',
@@ -244,7 +244,7 @@ export class StartupService {
             children: [
               {
                 text: '开票项目',
-                link: '/bill/apply/project/list'
+                link: '/bill/project'
               },
               {
                 text: '开票申请',
@@ -596,7 +596,7 @@ export class StartupService {
             children: [
               {
                 text: '支付项目',
-                link: '/approve/contract/project/list'
+                link: '/approve/list'
               },
               {
                 text: '支付申请',
@@ -663,7 +663,7 @@ export class StartupService {
             children: [
               {
                 text: '支付项目',
-                link: '/approve/no-contract/project/list'
+                link: '/approve/no-contract/list'
               },
               {
                 text: '支付申请',
@@ -729,7 +729,7 @@ export class StartupService {
             children: [
               {
                 text: '开票项目',
-                link: '/bill/apply/project/list'
+                link: '/bill/project'
               },
               {
                 text: '开票申请',

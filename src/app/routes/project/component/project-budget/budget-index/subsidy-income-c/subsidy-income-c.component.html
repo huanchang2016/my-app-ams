@@ -6,7 +6,7 @@
     </ng-template>
 
     <ng-container *ngFor="let data of incomeList">
-        <nz-table #incomeTable [nzData]="[1]" [nzShowPagination]="false" [nzFooter]="footerTpl">
+        <nz-table #incomeTable [nzData]="[1]" [nzFooter]="footerTpl" [nzShowPagination]="false">
             <thead>
                 <tr>
                     <th>拨款单位</th>
@@ -36,17 +36,17 @@
                 </tr>
                 <tr>
                     <td colspan="6">
-                        <app-subsidy-income-type-and-amount [subsidyId]="data.id" (incomeStatisticsChange)="incomeStatisticsChange($event)"></app-subsidy-income-type-and-amount>
+                        <app-subsidy-income-type-amount [subsidyId]="data.id" (incomeStatisticsChange)="incomeStatisticsChange($event)"></app-subsidy-income-type-amount>
                     </td>
                 </tr>
             </tbody>
+            <ng-template #footerTpl>
+                <div class="text-right" *ngIf="staticOpt">
+                    <span class="font-weight-bold">含税收入： {{ staticOpt.sub_income | _currency }}</span>
+                    <span class="font-weight-bold mx-md">税金合计： {{ staticOpt.tax_amount | _currency }}</span>
+                    <span class="font-weight-bold">不含税收入： {{ staticOpt.exclude_tax_income | _currency }}</span>
+                </div>
+            </ng-template>
         </nz-table>
-        <ng-template #footerTpl>
-            <div class="text-right" *ngIf="staticOpt">
-                <span class="font-weight-bold">含税收入： {{ staticOpt.sub_income | _currency }}</span>
-                <span class="font-weight-bold mx-md">税金合计： {{ staticOpt.tax_amount | _currency }}</span>
-                <span class="font-weight-bold">不含税收入： {{ staticOpt.exclude_tax_income | _currency }}</span>
-            </div>
-        </ng-template>
     </ng-container>
 </nz-card>

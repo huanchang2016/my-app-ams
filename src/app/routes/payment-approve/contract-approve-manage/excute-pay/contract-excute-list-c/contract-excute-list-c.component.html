@@ -17,7 +17,7 @@
     class="mt-md hidden-mobile">
     <thead>
         <tr>
-            <th>序号</th>
+            <th nzWidth="80px">序号</th>
             <th>合同名称</th>
             <th>支付金额（元）</th>
             <th>项目信息</th>
@@ -28,7 +28,7 @@
     <tbody>
         <tr *ngFor="let data of ajaxTable.data; let i = index">
             <td>{{ i + 1 }}</td>
-            <td>{{ data.contract.name }}</td>
+            <td>{{ data.deal.contract.name }}</td>
             <td class="text-error">{{ data.amount | _currency }}</td>
             <td>
                 <sv-container size="small" col="1">
@@ -58,7 +58,7 @@
                 <nz-skeleton [nzActive]="true" [nzLoading]="false">
                     <nz-card-meta [nzTitle]="contractTitleTpl"></nz-card-meta>
                     <ng-template #contractTitleTpl>
-                        <span>{{ data.contract.name }}</span>
+                        <span>{{ data.deal.contract.name }}</span>
                         <span class="text-primary text-xs ml-md" [class.text-error]="data.pay_status?.name === '未通过'" [class.text-success]="data.pay_status?.name === '已通过'">{{ data.pay_status?.name }}</span>
                     </ng-template>
                     <div class="pt-md">

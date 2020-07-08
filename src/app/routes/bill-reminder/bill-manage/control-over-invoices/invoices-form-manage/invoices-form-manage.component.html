@@ -1,111 +1,217 @@
 <page-header [title]="'发票编辑'" [breadcrumb]="breadcrumb" [action]="actionBtn">
+  <ng-template #breadcrumb>
+    <nz-breadcrumb>
+      <nz-breadcrumb-item><a [routerLink]="['/dashboard']">首页</a></nz-breadcrumb-item>
+      <nz-breadcrumb-item>账务管理</nz-breadcrumb-item>
+      <nz-breadcrumb-item>开票管理</nz-breadcrumb-item>
+      <nz-breadcrumb-item><a [routerLink]="['/bill/project']">开票项目</a></nz-breadcrumb-item>
+      <nz-breadcrumb-item><a [routerLink]="['/bill/project/invoices/list', projectId]">项目发票</a></nz-breadcrumb-item>
+      <nz-breadcrumb-item>发票编辑</nz-breadcrumb-item>
+    </nz-breadcrumb>
+  </ng-template>
 
-    <ng-template #breadcrumb>
-        <nz-breadcrumb>
-            <nz-breadcrumb-item><a [routerLink]="['/dashboard']">首页</a></nz-breadcrumb-item>
-            <nz-breadcrumb-item>账务管理</nz-breadcrumb-item>
-            <nz-breadcrumb-item>开票管理</nz-breadcrumb-item>
-            <nz-breadcrumb-item><a [routerLink]="['/bill/project']">开票项目</a></nz-breadcrumb-item>
-            <nz-breadcrumb-item><a [routerLink]="['/bill/project/invoices/list', projectId]">项目发票</a></nz-breadcrumb-item>
-            <nz-breadcrumb-item>发票编辑</nz-breadcrumb-item>
-        </nz-breadcrumb>
-    </ng-template>
+  <ng-template #actionBtn>
+    <ng-container>
+      <button nz-button [nzType]="'dashed'" (click)="submitForm()" [nzLoading]="submitLoading" class="ml-xs">
+        保存
+      </button>
 
-    <ng-template #actionBtn>
-        <ng-container>
-            <button nz-button [nzType]="'dashed'" (click)="submitForm()" [nzLoading]="submitLoading"
-                class="ml-xs">保存</button>
-
-            <button nz-popconfirm nz-button [nzType]="'primary'" class="ml-xs"
-                nzPopconfirmTitle="请确认发票开具信息填写完整，无误后继续提交！！！" (nzOnConfirm)="submitBillInfo()" (nzOnCancel)="cancel()">
-                提交
-            </button>
-        </ng-container>
-
-    </ng-template>
+      <button
+        nz-popconfirm
+        nz-button
+        [nzType]="'primary'"
+        class="ml-xs"
+        nzPopconfirmTitle="请确认发票开具信息填写完整，无误后继续提交！！！"
+        (nzOnConfirm)="submitBillInfo()"
+        (nzOnCancel)="cancel()"
+      >
+        提交
+      </button>
+    </ng-container>
+  </ng-template>
 
   <app-project-info-show-tpl [projectInfo]="projectDetailInfo"></app-project-info-show-tpl>
-
-
 </page-header>
 
 <nz-card nzTitle="开具发票" class="mt-md">
-    <form nz-form [formGroup]="validateForm">
-        <div nz-row [nzGutter]="24">
-            <div nz-col [nzSpan]="12">
-                <nz-form-item class="form-item-box">
-                    <nz-form-label nzFor="bill_category_id" nzRequired>发票类型</nz-form-label>
-                    <nz-form-control nzErrorTip="请选择开具发票类型">
-                        <nz-select style="width: 100%;" id="bill_category_id" nzShowSearch nzPlaceHolder="请选择开具发票类型"
-                            formControlName="bill_category_id">
-                            <ng-container *ngFor="let item of billCategoryArray">
-                                <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
-                            </ng-container>
-                        </nz-select>
-                    </nz-form-control>
-                </nz-form-item>
-            </div>
+  <form nz-form [formGroup]="validateForm">
+    <div nz-row [nzGutter]="24">
+      <div nz-col [nzSpan]="12">
+        <nz-form-item class="form-item-box">
+          <nz-form-label nzFor="customer_category" nzRequired>客户名称</nz-form-label>
+          <nz-form-control nzErrorTip="请选择客户名称">
+            <nz-select
+              style="width: 100%;"
+              id="customer_category"
+              nzShowSearch
+              nzPlaceHolder="请选择客户名称"
+              formControlName="customer_category"
+            >
+              <ng-container *ngFor="let item of billCategoryArray">
+                <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
+              </ng-container>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="12">
+        <nz-form-item class="form-item-box">
+          <nz-form-label nzFor="taxpayer_no" nzRequired>纳税人编号</nz-form-label>
+          <nz-form-control nzErrorTip="请填写开票纳税人编号">
+            <input nz-input id="taxpayer_no" placeholder="填写纳税人编号" formControlName="taxpayer_no" />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+    <div nz-row [nzGutter]="24">
+      <div nz-col [nzSpan]="12">
+        <nz-form-item class="form-item-box">
+          <nz-form-label nzRequired>单位地址</nz-form-label>
+          <nz-form-control nzErrorTip="请填写开票人单位地址">
+            <input nz-input id="unit_address" placeholder="填写开票人单位地址" formControlName="unit_address" />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="12">
+        <nz-form-item class="form-item-box">
+          <nz-form-label nzFor="opening_bank" nzRequired>开户行</nz-form-label>
+          <nz-form-control nzErrorTip="请填写开户行">
+            <input nz-input id="opening_bank" placeholder="填写开户行" formControlName="opening_bank" />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+    <div nz-row [nzGutter]="24">
+      <div nz-col [nzSpan]="12">
+        <nz-form-item class="form-item-box">
+          <nz-form-label nzFor="bank_account" nzRequired>银行账号</nz-form-label>
+          <nz-form-control nzErrorTip="请填写开票人银行账号">
+            <input nz-input id="bank_account" placeholder="填写开票人银行账号" formControlName="bank_account" />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="12">
+        <nz-form-item class="form-item-box">
+          <nz-form-label nzFor="apply_amount" nzRequired>结算金额</nz-form-label>
+          <nz-form-control nzErrorTip="请填写结算金额">
+            <nz-input-group nzSuffix="元" nzPrefix="￥" style="width: 100%;">
+              <input
+                type="text"
+                id="apply_amount"
+                placeholder="填写结算金额{{ maxIncome > 0 ? '，金额不得超过' + maxIncome + '元' : '' }}"
+                formControlName="apply_amount"
+                nz-input
+              />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+    <div nz-row [nzGutter]="24">
+      <div nz-col [nzSpan]="12">
+        <nz-form-item class="form-item-box">
+          <nz-form-label nzFor="bill_category_id" nzRequired>发票类型</nz-form-label>
+          <nz-form-control nzErrorTip="请选择开具发票类型">
+            <nz-select
+              style="width: 100%;"
+              id="bill_category_id"
+              nzShowSearch
+              nzPlaceHolder="请选择开具发票类型"
+              formControlName="bill_category_id"
+            >
+              <ng-container *ngFor="let item of billCategoryArray">
+                <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
+              </ng-container>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
 
-            <div nz-col [nzSpan]="12">
-                <nz-form-item class="form-item-box">
-                    <nz-form-label nzFor="income_type" nzRequired>收入类型</nz-form-label>
-                    <nz-form-control nzErrorTip="请选择收入类型">
-                        <nz-radio-group formControlName="income_type" (ngModelChange)="incomeTypeChange($event)">
-                            <label nz-radio [nzValue]="'project'">项目收入</label>
-                            <label nz-radio [nzValue]="'subsidy'">补贴收入</label>
-                        </nz-radio-group>
-                    </nz-form-control>
-                </nz-form-item>
-            </div>
-            <div nz-col [nzSpan]="12">
-                <nz-form-item class="form-item-box">
-                    <nz-form-label nzRequired>开票税目</nz-form-label>
-                    <nz-form-control nzErrorTip="请选择开具发票的开票税目">
-                        <nz-select *ngIf="income_type === 'project'" style="min-width: 300px;" id="project_revenue_id" formControlName="project_revenue_id" (ngModelChange)="proIncomeValueChange($event)" nzPlaceHolder="请选择收入类型" nzShowSearch>
-                            <ng-container *ngFor="let item of project_revenue">
-                                <nz-option [nzLabel]="item.tax.name" [nzValue]="item.id"></nz-option>
-                            </ng-container>
-                        </nz-select>
-                        <nz-select *ngIf="income_type === 'subsidy'" style="min-width: 300px;" id="subsidy_income_id" formControlName="subsidy_income_id" (ngModelChange)="subIncomeValueChange($event)" nzPlaceHolder="请选择收入类型" nzShowSearch>
-                            <ng-container *ngFor="let item of subsidy_income">
-                                <nz-option [nzLabel]="item.subsidy_income.name" [nzValue]="item.id"></nz-option>
-                            </ng-container>
-                        </nz-select>
-                    </nz-form-control>
-                </nz-form-item>
-            </div>
+      <div nz-col [nzSpan]="12">
+        <nz-form-item class="form-item-box">
+          <nz-form-label nzFor="income_type" nzRequired>收入类型</nz-form-label>
+          <nz-form-control nzErrorTip="请选择收入类型">
+            <nz-radio-group formControlName="income_type" (ngModelChange)="incomeTypeChange($event)">
+              <label nz-radio [nzValue]="'project'">项目收入</label>
+              <label nz-radio [nzValue]="'subsidy'">补贴收入</label>
+            </nz-radio-group>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="12">
+        <nz-form-item class="form-item-box">
+          <nz-form-label nzRequired>开票税目</nz-form-label>
+          <nz-form-control nzErrorTip="请选择开具发票的开票税目">
+            <nz-select
+              *ngIf="income_type === 'project'"
+              style="min-width: 300px;"
+              id="project_revenue_id"
+              formControlName="project_revenue_id"
+              (ngModelChange)="proIncomeValueChange($event)"
+              nzPlaceHolder="请选择收入类型"
+              nzShowSearch
+            >
+              <ng-container *ngFor="let item of project_revenue">
+                <nz-option [nzLabel]="item.tax.name" [nzValue]="item.id"></nz-option>
+              </ng-container>
+            </nz-select>
+            <nz-select
+              *ngIf="income_type === 'subsidy'"
+              style="min-width: 300px;"
+              id="subsidy_income_id"
+              formControlName="subsidy_income_id"
+              (ngModelChange)="subIncomeValueChange($event)"
+              nzPlaceHolder="请选择收入类型"
+              nzShowSearch
+            >
+              <ng-container *ngFor="let item of subsidy_income">
+                <nz-option [nzLabel]="item.subsidy_income.name" [nzValue]="item.id"></nz-option>
+              </ng-container>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
 
-            <div nz-col [nzSpan]="12">
-                <nz-form-item class="form-item-box">
-                    <nz-form-label nzFor="bill_period_time">所属日期</nz-form-label>
-                    <nz-form-control>
-                        <app-range-datepicker id="bill_period_time" formControlName="bill_period_time">
-                        </app-range-datepicker>
-                    </nz-form-control>
-                </nz-form-item>
-            </div>
+      <div nz-col [nzSpan]="12">
+        <nz-form-item class="form-item-box">
+          <nz-form-label nzFor="bill_period_time">所属日期</nz-form-label>
+          <nz-form-control>
+            <app-range-datepicker id="bill_period_time" formControlName="bill_period_time"> </app-range-datepicker>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
 
-            <div nz-col [nzSpan]="12">
-                <nz-form-item class="form-item-box">
-                    <nz-form-label nzFor="amount" nzRequired>实际开票金额</nz-form-label>
-                    <nz-form-control nzErrorTip="请填写实际开票金额开票金额">
-                        <nz-input-group nzSuffix="元" nzPrefix="￥" style="width: 100%">
-                            <input type="text" id="amount" placeholder="填写实际开票金额{{ maxIncome > 0 ? '，金额不得超过' + maxIncome + '元' : ''}}" formControlName="amount" nz-input />
-                        </nz-input-group>
-                    </nz-form-control>
-                </nz-form-item>
-            </div>
-            <div nz-col [nzSpan]="12">
-                <nz-form-item class="form-item-box">
-                    <nz-form-label nzFor="customer_contract_code">合同编号</nz-form-label>
-                    <nz-form-control nzErrorTip="请填写开票所属合同编号">
-                        <input nz-input id="customer_contract_code" placeholder="填写发票开具的合同编号/如无合同则不填写"
-                            formControlName="customer_contract_code" />
-                    </nz-form-control>
-                </nz-form-item>
-            </div>
-        </div>
-        <!-- <ng-container *ngIf="taxFeeArray.length !== 0">
+      <div nz-col [nzSpan]="12">
+        <nz-form-item class="form-item-box">
+          <nz-form-label nzFor="amount" nzRequired>实际开票金额</nz-form-label>
+          <nz-form-control nzErrorTip="请填写实际开票金额开票金额">
+            <nz-input-group nzSuffix="元" nzPrefix="￥" style="width: 100%;">
+              <input
+                type="text"
+                id="amount"
+                placeholder="填写实际开票金额{{ maxIncome > 0 ? '，金额不得超过' + maxIncome + '元' : '' }}"
+                formControlName="amount"
+                nz-input
+              />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="12">
+        <nz-form-item class="form-item-box">
+          <nz-form-label nzFor="customer_contract_code">合同编号</nz-form-label>
+          <nz-form-control nzErrorTip="请填写开票所属合同编号">
+            <input
+              nz-input
+              id="customer_contract_code"
+              placeholder="填写发票开具的合同编号/如无合同则不填写"
+              formControlName="customer_contract_code"
+            />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+    <!-- <ng-container *ngIf="taxFeeArray.length !== 0">
             <nz-form-item class="form-item-box">
                 <nz-form-label nzFor="fees" nzRequired>税目明细</nz-form-label>
                 <nz-form-control>
@@ -115,22 +221,29 @@
             </nz-form-item>
         </ng-container> -->
 
-        
+    <nz-form-item class="form-item-box">
+      <nz-form-label nzFor="remark">发票备注</nz-form-label>
+      <nz-form-control>
+        <textarea
+          nz-input
+          id="remark"
+          placeholder="填写发票开具备注信息，如无则不填"
+          formControlName="remark"
+          [nzAutosize]="{ minRows: 2, maxRows: 6 }"
+        ></textarea>
+      </nz-form-control>
+    </nz-form-item>
 
-        <nz-form-item class="form-item-box">
-            <nz-form-label nzFor="remark">发票备注</nz-form-label>
-            <nz-form-control>
-                <textarea nz-input id="remark" placeholder="填写发票开具备注信息，如无则不填" formControlName="remark"
-                    [nzAutosize]="{ minRows: 2, maxRows: 6 }"></textarea>
-            </nz-form-control>
-        </nz-form-item>
-
-        <nz-form-item class="form-item-box">
-            <nz-form-label>发票附件</nz-form-label>
-            <nz-form-control>
-                <app-upload-file-attachment-tpl [Attachment]="attachment" [AttachmentCategory]="attachmentCategory"
-    [isAttachmentChange]="isAttachmentChange" (attachmentChange)="attachmentChange($event)"></app-upload-file-attachment-tpl>
-            </nz-form-control>
-        </nz-form-item>
-    </form>
+    <nz-form-item class="form-item-box">
+      <nz-form-label>发票附件</nz-form-label>
+      <nz-form-control>
+        <app-upload-file-attachment-tpl
+          [Attachment]="attachment"
+          [AttachmentCategory]="attachmentCategory"
+          [isAttachmentChange]="isAttachmentChange"
+          (attachmentChange)="attachmentChange($event)"
+        ></app-upload-file-attachment-tpl>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
 </nz-card>

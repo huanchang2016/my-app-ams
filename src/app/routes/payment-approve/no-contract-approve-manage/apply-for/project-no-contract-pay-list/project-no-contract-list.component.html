@@ -47,12 +47,12 @@
       <tr *ngFor="let data of basicTable.data; let i = index">
         <td>{{ i + 1 }}</td>
         <td>
-          {{ data.treaty.supplier.name }} <span class="ml-sm text-primary text-sm">（{{ data.treaty.service_category.name }}）</span>
+          {{ data.pay_company }}
         </td>
         <td>{{ data.number }}</td>
         <td>
           <sv-container size="small" col="1">
-            <sv label="单位">{{ data.pay_company }}</sv>
+            <!-- <sv label="用户">{{ data.pay_company }}</sv> -->
             <sv label="银行">{{ data.bank_name }}</sv>
             <sv label="账号">{{ data.bank_account }}</sv>
           </sv-container>
@@ -90,19 +90,19 @@
     <nz-card [nzTitle]="treatyTitltTpl" [nzActions]="[ actionEdit, actionEllipsis]" class="mt-md">
       <nz-skeleton [nzActive]="true" [nzLoading]="false">
         <ng-template #treatyTitltTpl>
-          <span>{{ data.treaty.name }}</span>
+          <span>{{ data.pay_company }}</span>
         </ng-template>
         <div class="pt-md">
           <sv-container size="small">
             <sv label="非合约编号">{{data.number }}</sv>
-            <sv label="收款单位">{{ data.pay_company }}</sv>
+            <!-- <sv label="收款用户">{{ data.pay_company }}</sv> -->
             <sv label="冲抵情况">
               <span *ngIf="data.if_write_off;else notWriteOff">{{ data.write_off_amount | currency: 'CNY' }}</span>
               <ng-template #notWriteOff>
                 <span class="text-primary">无冲抵金额</span>
               </ng-template>
             </sv>
-            <sv label="支付金额"><span class="text-primary">{{ data.treaty.amount | currency: 'CNY' }}</span></sv>
+            <sv label="支付金额"><span>{{ data.amount | currency: 'CNY' }}</span></sv>
           </sv-container>
         </div>
       </nz-skeleton>

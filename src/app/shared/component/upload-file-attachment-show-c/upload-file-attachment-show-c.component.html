@@ -8,7 +8,7 @@
                             <span>{{ i + 1 }}. </span>
                             <a href="{{ environment.SERVER_URL + attachment.path }}" class="bg-grey-light-h px-md text-nowrap pr-xs"
                                 target="_blank"><i nz-icon nzType="link" nzTheme="outline"></i>
-                                {{ attachment.name }}</a>
+                                {{ attachment.name }}<span class="ml-md">（<span class="text-error">{{ attachment.page_nums }}</span> 页）</span></a>
                         </div>
                     </ng-container>
                 </sv>
@@ -20,7 +20,7 @@
                             <span>{{ i + 1 }}. </span>
                             <a href="{{ environment.SERVER_URL + attachment.path }}" class="bg-grey-light-h px-md pr-xs text-nowrap"
                                 target="_blank"><i nz-icon nzType="link" nzTheme="outline"></i>
-                                {{ attachment.name }}</a>
+                                {{ attachment.name }}<span class="ml-md">（<span class="text-error">{{ attachment.page_nums }}</span> 页）</span></a>
                         </div>
                     </ng-container>
                 </sv>

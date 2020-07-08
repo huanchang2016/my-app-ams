@@ -23,7 +23,7 @@
                 <div class="clearfix bg-grey-light-h mb-sm pointer px-xs">
                     <span class="mr-md font-weigth-bold float-left">{{ i + 1 }}. </span>
                     <a href="{{ environment.SERVER_URL + attachment.path }}" class="float-left" target="_blank"><i
-                            nz-icon nzType="link" nzTheme="outline" class="pr-xs"></i> {{ attachment.name }}</a>
+                            nz-icon nzType="link" nzTheme="outline" class="pr-xs"></i> {{ attachment.name }} <span class="ml-md">（<span class="text-error">{{ attachment.page_nums }}</span> 页）</span></a>
                     <a nz-popconfirm nzPopconfirmTitle="确定删除当前附件？"
                         (nzOnConfirm)="deletedAttachment(attachment.id, attachmentCategory.id)" (nzOnCancel)="cancel()"
                         class="text-error float-right text-danger-h"><i nz-icon nzType="delete"
@@ -47,9 +47,9 @@
             </nz-form-item>
             <nz-form-item>
                 <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="page_nums">附件页数</nz-form-label>
-                <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="附件页数必填!">
+                <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="附件页数必填，且只需要填写数字即可!">
                     <nz-input-group nzSuffix="张">
-                        <input type="text" nz-input formControlName="page_nums" id="page_nums" placeholder="附件页数，如：5 " />
+                        <input type="text" nz-input formControlName="page_nums" id="page_nums" placeholder="附件页数，只需要填写数字即可。如：5 " />
                       </nz-input-group>
                 </nz-form-control>
             </nz-form-item>

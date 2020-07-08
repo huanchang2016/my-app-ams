@@ -69,14 +69,16 @@ export class NoContractPayCreateComponent implements OnInit {
     })
 
   }
+  saveLoading: boolean = false;
   submitLoading: boolean = false;
 
   validateTreatyForm: FormGroup;
 
   ifWriteOff: boolean = false;
+
   ngOnInit() {
     this.validateTreatyForm = this.fb.group({
-      treaty_id: new FormControl({ value: null, disabled: this.treaty_pay_id ? true : false }, Validators.required),
+      // treaty_id: new FormControl({ value: null, disabled: this.treaty_pay_id ? true : false }, Validators.required),
       pay_company: [null, [Validators.required]],
       bank_account: [null, [Validators.required]],
       bank_name: [null, [Validators.required]],
@@ -97,32 +99,36 @@ export class NoContractPayCreateComponent implements OnInit {
         this.validateTreatyForm.get('write_off_amount').setValue(0);
         this.validateTreatyForm.get('write_off_amount').disable();
       }
-      // if(if_write_off) {
-      //   this.validateTreatyForm.patchValue({
-      //     write_off_amount: null
-      //   })
-      //   this.validateTreatyForm.get('write_off_amount').setValidators(Validators.required);
-      // }else {
-      //   this.validateTreatyForm.patchValue({
-      //     write_off_amount: 0
-      //   })
-      // }
+      
     });
 
 
     this.validateCostForm = this.fb.group({
+      treaty_id: [null, [Validators.required]],
       abstract: [null, [Validators.required]],
       cost_id: [null, [Validators.required]],
       amount: [null, [Validators.required, this.confirmationAmountValidator]],
-      card_number: [null, [Validators.required, Validators.pattern(/[1-9][0-9]{8,}/)]],
-      account_name: [null, [Validators.required]],
-      is_business_card: [null],
+      // card_number: [null, [Validators.required, Validators.pattern(/[1-9][0-9]{8,}/)]],
+      // account_name: [null, [Validators.required]],
+      // is_business_card: [null],
       remark: [null]
+    });
+    
+    // 当成本类型发生变化时，支付金额也有限制输入
+    this.validateCostForm.get('treaty_id').valueChanges.subscribe((treaty_id: number) => {
+      if (treaty_id) {
+        [this.currentTreaty] = this.treatyListArr.filter( v => v.id === treaty_id);
+        console.log(treaty_id , 'treaty change', this.currentTreaty);
+        this.countMaxAmount();
+        this.changeCostItemStatus();
+      }
     });
 
     // 当成本类型发生变化时，支付金额也有限制输入
     this.validateCostForm.get('cost_id').valueChanges.subscribe((cost_id: number) => {
       if (cost_id) {
+        console.log(cost_id, 'cost -id');
+        
         this.currentSelectCost = this.costArr.filter(v => v.id === cost_id)[0];
         console.log(this.currentSelectCost, 'currentselectCost');
         this.countMaxAmount();
@@ -131,15 +137,45 @@ export class NoContractPayCreateComponent implements OnInit {
 
   }
 
+  changeCostItemStatus() {
+    /***
+     * 供应商发生变化, 将当前供应商选择的成本类型设置为 disabled
+     * ******/
+    if(this.listOfData.length !== 0) {
+      this.costArr = this.costArr.map(v => {
+        // if (v.id === value.cost_id) {
+        //   v.disabled = true;
+        // }
+        
+        
+        if(this.supplierCostFind(v.id)) {
+          v.disabled = true;
+        }else {
+          v.disabled = false;
+        }
+        return v;
+      });
+      console.log(this.costArr);
+      
+    }
+    
+  }
+
+  supplierCostFind(cost_id:number): boolean {
+    const supplier:any[] = this.listOfData.filter(v => v.treaty.id === this.currentTreaty.id);
+    return supplier.filter( v => v.cost.id === cost_id).length > 0;
+  }
+
   max_pay_amount:number = 0;
   countMaxAmount() {
     // 计算可以支付的最大金额数
-    const cost_pay:number = this.currentSelectCost.max - this.currentSelectCost.pay_amount;
-    const treaty_pay:number = this.currentTreaty.amount - this.currentTreaty.use_amount;
+    const cost_pay:number = this.currentSelectCost ? this.currentSelectCost.max - this.currentSelectCost.pay_amount : 0;
+    const treaty_pay:number = this.currentTreaty ? this.currentTreaty.amount - this.currentTreaty.use_amount : 0;
     this.max_pay_amount = Math.min(cost_pay, treaty_pay);
   }
 
   currentSelectCost: any = null;
+  currentTreaty:any = null;
   confirmationAmountValidator = (control: FormControl): { [s: string]: boolean } => {
     if (!this.currentSelectCost) {
       return { required: true };
@@ -196,7 +232,7 @@ export class NoContractPayCreateComponent implements OnInit {
   }
   setTreatyForm(data: any): void {
     this.validateTreatyForm.patchValue({
-      treaty_id: data.treaty.id,
+      // treaty_id: data.treaty.id,
       pay_company: data.pay_company,
       bank_account: data.bank_account,
       bank_name: data.bank_name,
@@ -251,12 +287,6 @@ export class NoContractPayCreateComponent implements OnInit {
   edit(tplTitle: TemplateRef<{}>, tplContent: TemplateRef<{}>, tplFooter: TemplateRef<{}>, data: any): void {
     // 将 之前 禁用的 成本类型  disabled  ===> false
     this.isEditCost = true;
-    this.costArr = this.costArr.map(v => {
-      if (v.id === data.cost.id) {
-        v.disabled = false;
-      }
-      return v;
-    })
     this.resetForm(data);
     this.tplModal = this.modalService.create({
       nzTitle: tplTitle,
@@ -280,6 +310,7 @@ export class NoContractPayCreateComponent implements OnInit {
   }
 
   isEditCost: boolean = false;
+  editCostData:any = null;
 
   submitCostForm(): void {
     for (const key in this.validateCostForm.controls) {
@@ -290,28 +321,37 @@ export class NoContractPayCreateComponent implements OnInit {
       const value: any = this.validateCostForm.value;
 
       // 添加成本预算后， 当前 成本类型就变成不可选
-      this.costArr = this.costArr.map(v => {
-        if (v.id === value.cost_id) {
-          v.disabled = true;
-        }
-        return v;
-      });
+      // this.costArr = this.costArr.map(v => {
+      //   if (v.id === value.cost_id) {
+      //     v.disabled = true;
+      //   }
+      //   return v;
+      // });
 
       let remark: string = value.remark || '';
       // 列表渲染数据
       const selectCost: any = this.costlist.filter(v => v.id === value.cost_id)[0];
+      const selectTreay: any = this.treatyListArr.filter(v => v.id === value.treaty_id)[0];
 
-      let _list: any[] = this.listOfData.filter(v => v.cost.id !== value.cost_id);
+      let _list: any[] = this.listOfData.filter(v => {
+        if(v.cost.id === value.cost_id && v.treaty.id === value.treaty_id) {
+         return false;
+        }
+        return v;
+      });
 
+      console.log(value);
       _list.push({
+        treaty_payment_id: this.isEditCost && this.editCostData.id ? this.editCostData.id : null,
+        treaty: selectTreay,
         abstract: value.abstract,
         cost: selectCost,
         amount: Number(value.amount),
-        remark: remark.trim(),
-        card_number: value.card_number,
-        account_name: value.account_name,
-        is_business_card: value.is_business_card
-      })
+        remark: remark.trim()
+        // card_number: value.card_number,
+        // account_name: value.account_name,
+        // is_business_card: value.is_business_card
+      });
 
       this.listOfData = [..._list];
       console.log(this.listOfData)
@@ -326,7 +366,7 @@ export class NoContractPayCreateComponent implements OnInit {
     }
     console.log(this.validateTreatyForm.value, '无合约协议表单数据');
     if (this.validateTreatyForm.valid && this.listOfData.length !== 0) {
-      this.submitLoading = true;
+      this.saveLoading = true;
       if (this.treaty_pay_id) {
         this.updateTreatyPay(this.validateTreatyForm.value);
       } else {
@@ -341,17 +381,18 @@ export class NoContractPayCreateComponent implements OnInit {
   createTreatyPay(data: any): void {
     const paymentArr: any[] = this.listOfData.map(v => {
       return {
+        treaty_id: v.treaty.id,
         abstract: v.abstract,
         cost_id: v.cost.id,
         amount: v.amount,
-        card_number: v.card_number,
-        account_name: v.account_name,
-        is_business_card: v.is_business_card ? v.is_business_card : false,
+        // card_number: v.card_number,
+        // account_name: v.account_name,
+        // is_business_card: v.is_business_card ? v.is_business_card : false,
         remark: v.remark
       }
     });
     let obj: any = {
-      treaty_id: data.treaty_id,
+      // treaty_id: data.treaty_id,
       project_id: this.projectId,
       pay_company: data.pay_company,
       bank_account: data.bank_account,
@@ -362,7 +403,7 @@ export class NoContractPayCreateComponent implements OnInit {
     };
     this.settingsConfigService.post(`/api/treaty/pay/create`, obj).subscribe((res: ApiData) => {
       console.log(res, '新增无合约非合约支付')
-      this.submitLoading = false;
+      this.saveLoading = false;
       if (res.code === 200) {
         this.bindAttachment(res.data.id);
       } else {
@@ -372,22 +413,18 @@ export class NoContractPayCreateComponent implements OnInit {
 
   }
 
-  currentTreaty:any = null;
-  treatyChange(treaty_id:number) {
-    [this.currentTreaty] = this.treatyListArr.filter( v => v.id === treaty_id);
-    console.log(treaty_id , 'treaty change', this.currentTreaty);
-  }
 
   updateTreatyPay(data: any) {
     const paymentArr: any[] = this.listOfData.map(v => {
       return {
         treaty_payment_id: v.id ? v.id : null,
+        treaty_id: v.treaty.id,
         abstract: v.abstract,
         cost_id: v.cost.id,
         amount: v.amount,
-        card_number: v.card_number,
-        account_name: v.account_name,
-        is_business_card: v.is_business_card,
+        // card_number: v.card_number,
+        // account_name: v.account_name,
+        // is_business_card: v.is_business_card,
         remark: v.remark
       }
     });
@@ -403,14 +440,32 @@ export class NoContractPayCreateComponent implements OnInit {
 
     this.settingsConfigService.post(`/api/treaty/pay/update`, obj).subscribe((res: ApiData) => {
       console.log(res, '编辑无合约非合约支付审批单')
-      this.submitLoading = false;
+      this.saveLoading = false;
       if (res.code === 200) {
-        this.msg.success('非合约支付提交成功');
-        this.router.navigateByUrl(`/approve/no-contract/list/apply/pay/${this.projectId}`);
+        if(this.submitLoading) {
+          this.submit(res.data.id);
+        }else {
+          this.msg.success('保存成功');
+          this.router.navigateByUrl(`/approve/no-contract/list/apply/pay/${this.projectId}`);
+        }
+        
       } else {
-        this.msg.error(res.error || '非合约支付提交失败');
+        this.msg.error(res.error || '保存失败');
       }
     })
+  }
+
+  submit(id:number) {
+    this.settingsConfigService.post('/api/treaty_pay/submit', { treaty_pay_id: id }).subscribe((res: ApiData) => {
+      console.log(res);
+      this.submitLoading = false;
+      if (res.code === 200) {
+        this.msg.success('支付信息提交成功');
+        this.router.navigateByUrl(`/approve/no-contract/list/apply/pay/${this.projectId}`);
+      } else {
+        this.msg.error(res.error)
+      }
+    });
   }
 
 
@@ -422,7 +477,8 @@ export class NoContractPayCreateComponent implements OnInit {
         name: v.cost_category.name,
         max: v.amount,
         pay_amount: v.pay_amount,
-        disabled: this.checkIsSelectedCost(v.id)
+        disabled: false // edit 
+        // disabled: this.checkIsSelectedCost(v.id)
       }
     });
     console.log(this.costArr);
@@ -439,13 +495,16 @@ export class NoContractPayCreateComponent implements OnInit {
 
   delete(id: number): void {
     this.listOfData = this.listOfData.filter(v => v.cost.id !== id);
-    this.msg.success('支付成本删除成功!');
+    this.msg.success('删除成功!');
   }
 
   resetForm(opt: any): void {
+    console.log(opt);
+    this.editCostData = opt;
     this.validateCostForm.patchValue({
+      treaty_id: opt.treaty.id,
       abstract: opt.abstract,
-      cost_id: opt.cost.cost_category.id,
+      cost_id: opt.cost.id,
       amount: opt.amount,
       card_number: opt.card_number,
       account_name: opt.account_name,
@@ -455,17 +514,10 @@ export class NoContractPayCreateComponent implements OnInit {
   }
 
   submitContractPay(): void {
-    console.log(this.treaty_pay_id, '非合约支付信息提交')
-    this.settingsConfigService.post('/api/treaty_pay/submit', { treaty_pay_id: this.treaty_pay_id }).subscribe((res: ApiData) => {
-      console.log(res);
-      this.submitLoading = false;
-      if (res.code === 200) {
-        this.msg.success('支付信息提交成功');
-        this.router.navigateByUrl(`/approve/no-contract/list/apply/pay/${this.projectId}`);
-      } else {
-        this.msg.error(res.error)
-      }
-    });
+    console.log(this.treaty_pay_id, '非合约支付信息提交');
+    // 提交信息前, 需要先保存数据
+    this.submitLoading = true;
+    this.submitTreatyForm();
   }
 
 
@@ -490,7 +542,7 @@ export class NoContractPayCreateComponent implements OnInit {
     console.log(opt);
     this.settingsConfigService.post('/api/attachment/bind', opt).subscribe((res: ApiData) => {
       console.log(res);
-      this.submitLoading = false;
+      this.saveLoading = false;
       if (res.code === 200) {
         if (this.treaty_pay_id) {
           if (isRefer) {
@@ -498,8 +550,12 @@ export class NoContractPayCreateComponent implements OnInit {
           }
           this.getAttachment();
         } else {
-          this.msg.success('非合约支付提交成功');
-          this.router.navigateByUrl(`/approve/no-contract/list/apply/pay/${this.projectId}`);
+          if(this.submitLoading) {
+            this.submit(res.data.id);
+          }else {
+            this.msg.success('保存成功');
+            this.router.navigateByUrl(`/approve/no-contract/list/apply/pay/${this.projectId}`);
+          }
         }
       } else {
         this.msg.error(res.error || '附件绑定失败')

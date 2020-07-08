@@ -40,6 +40,8 @@ export class ContractPayCreateComponent implements OnInit {
 
   costArr: any[] = []; // 所有的成本列表  需要通过预算（通过项目） 获取
 
+  summary:string = ''; // 合同支付 摘要信息
+
   pageTitle: string = '';
 
   constructor(
@@ -132,6 +134,7 @@ export class ContractPayCreateComponent implements OnInit {
         if (res.code === 200) {
           this.contractInfo = res.data;
           this.contract_id = res.data.deal.contract.id;
+          this.summary = this.contractInfo.summary; // 合约支付摘要
           [this.selectedContract] = this.contractList.filter(v => v.contract.id === this.contract_id);
           if (!this.contractInfo.draft) {
             this.getWorkflow();
@@ -269,10 +272,9 @@ export class ContractPayCreateComponent implements OnInit {
 
   submitPayAmount() {
     this.submitLoading = true;
-    console.log('contract_id: ', this.contract_id, 'project_id: ', this.projectId, 'payment: ', this.listOfData);
+    console.log('contract_id: ', this.contract_id, '摘要信息', this.summary, 'project_id: ', this.projectId, 'payment: ', this.listOfData);
 
     if (!this.contract_pay_id) {
-
       this.createContractPay();
     } else {
       this.updateContractPay();
@@ -291,6 +293,7 @@ export class ContractPayCreateComponent implements OnInit {
     const option: any = {
       project_id: this.projectId,
       deal_id: this.contract_id,
+      summary: this.summary,
       payment: payment
     };
     this.settingsConfigService.post('/api/contract/pay/create', option).subscribe((res: ApiData) => {
@@ -316,6 +319,7 @@ export class ContractPayCreateComponent implements OnInit {
     });
     const opt: any = {
       contract_pay_id: this.contract_pay_id,
+      summary: this.summary,
       payment: payMent
     };
     this.settingsConfigService.post('/api/contract/pay/update', opt).subscribe((res: ApiData) => {

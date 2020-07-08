@@ -22,7 +22,7 @@
         </li>
       </ul>
     </nz-dropdown-menu>
-    <ng-container *ngIf="selectedContract && listOfData.length !== 0 ">
+    <ng-container *ngIf="selectedContract && summary && listOfData.length !== 0 ">
       <button *ngIf="!contractInfo || contractInfo.draft" nz-button [nzType]="'dashed'" (click)="submitPayAmount()"
         [nzLoading]="submitLoading" class="ml-xs">保存合约支付</button>
 
@@ -154,6 +154,12 @@
 
   </nz-card>
 
+  <!-- 合同支付摘要信息 -->
+  <nz-card nzTitle="支付摘要" [nzBordered]="false" *ngIf="!contractInfo || contractInfo.draft" class="mt-md">
+    <textarea nz-input id="summary" placeholder="填写合同支付摘要信息" [(ngModel)]="summary" [nzAutosize]="{ minRows: 3, maxRows: 6 }"></textarea>
+  </nz-card>
+
+  <!-- 附件显示 -->
   <nz-card nzTitle="附件" [nzBordered]="false" *ngIf="contractInfo && !contractInfo.draft" class="mt-md">
     <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/contract_pay/' + contractInfo.id">
     </app-upload-file-attachment-show-c>

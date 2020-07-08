@@ -68,7 +68,9 @@
       </tr>
       <tr>
         <td class="font-weight-bold">摘要</td>
-        <td colspan="5">摘要内容信息显示</td>
+        <td colspan="5">
+          <div [innerHtml]="contractInfo?.summary | showTextareaContent"></div>
+        </td>
       </tr>
       <tr>
         <td colspan="6" class="text-right font-weight-bold">单位: 元(人民币)</td>

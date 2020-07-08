@@ -12,10 +12,6 @@
     </nz-breadcrumb>
   </ng-template>
 
-  <!-- <ng-container *ngIf="validateTreatyForm.valid && listOfData.length !== 0;else InvalidReferTpl">
-  <button nz-button [nzType]="'primary'" (click)="submitTreatyForm()" [nzLoading]="submitLoading"
-    class="mt-lg">保存非合约支付</button>
-</ng-container> -->
   <ng-template #actionBtn>
     <button nz-button (click)="printCurrentModal('print-box',  projectInfo?.name)">打印</button>
     <button nz-button nz-dropdown [nzDropdownMenu]="opMenu" class="mx-sm">
@@ -30,7 +26,7 @@
     </nz-dropdown-menu>
     <ng-container *ngIf="listOfData.length !== 0 ">
       <button *ngIf="!treatypayInfo || treatypayInfo.draft" nz-button [nzType]="'dashed'" (click)="submitTreatyForm()"
-        [nzLoading]="submitLoading">保存非合约支付</button>
+        [nzLoading]="saveLoading">保存非合约支付</button>
 
       <ng-container *ngIf="treaty_pay_id">
         <a *ngIf="!treatypayInfo || treatypayInfo.draft" nz-popconfirm nz-button [nzType]="'primary'" class="mx-sm"
@@ -44,15 +40,6 @@
   </ng-template>
 
 
-  <!-- <sv-container size="small" col="2">
-    <sv label="项目名称"><strong>{{ projectInfo?.name }}</strong></sv>
-    <sv label="客户">
-      <app-customer-company-show-list-c [customer]="projectInfo?.customer"></app-customer-company-show-list-c>
-    </sv>
-    <sv label="负责部门">{{ projectInfo?.department?.name }}</sv>
-    <sv label="创建时间">{{ projectInfo?.create_time | date: 'yyyy/MM/dd HH:mm:ss' }}</sv>
-    <sv label="项目创建人">{{ projectInfo?.user.name }}</sv>
-  </sv-container> -->
   <app-project-info-show-tpl [projectInfo]="projectInfo"></app-project-info-show-tpl>
 
 </page-header>
@@ -64,44 +51,12 @@
       <div nz-row [nzGutter]="24">
         <div nz-col [nzMd]="12" [nzSm]="24">
           <nz-form-item>
-            <nz-form-label nzFor="treaty_id" nzRequired>服务商类型</nz-form-label>
-            <nz-form-control nzErrorTip="请选择服务商类型">
-              <nz-select style="width: 100%;" id="treaty_id" nzShowSearch [nzDisabled]="isEditCost"
-                nzPlaceHolder="请选择服务商类型" formControlName="treaty_id" (ngModelChange)="treatyChange($event)">
-                <ng-container *ngFor="let item of treatyListArr">
-                  <nz-option [nzLabel]="item.supplier.name + '（' + item.service_category.name + '）'" [nzValue]="item.id"></nz-option>
-                </ng-container>
-              </nz-select>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col [nzMd]="12" [nzSm]="24">
-          <nz-form-item>
-            <nz-form-label nzFor="pay_company" nzRequired>收款单位</nz-form-label>
-            <nz-form-control nzErrorTip="请填写收款人或单位名称">
+            <nz-form-label nzFor="pay_company" nzRequired>收款单位(个人)</nz-form-label>
+            <nz-form-control nzErrorTip="请填写收款单位（个人）名称">
               <input type="text" id="pay_company" formControlName="pay_company" placeHolder="收款单位（个人）名称" nz-input />
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzMd]="12" [nzSm]="24">
-          <nz-form-item>
-            <nz-form-label nzFor="bank_account" nzRequired>银行账号</nz-form-label>
-            <nz-form-control nzErrorTip="请填写收款人或单位银行账号">
-              <input type="text" id="bank_account" formControlName="bank_account" placeHolder="请填写收款银行账号" nz-input />
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col [nzMd]="12" [nzSm]="24">
-          <nz-form-item>
-            <nz-form-label nzFor="bank_name" nzRequired>银行名称</nz-form-label>
-            <nz-form-control nzErrorTip="请填写收款银行名称">
-              <input type="text" id="bank_name" formControlName="bank_name" placeHolder="请填写收款银行名称" nz-input />
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-
-
-
         <div nz-col [nzMd]="12" [nzSm]="24">
           <nz-form-item>
             <nz-form-label nzFor="if_write_off" nzRequired>是否冲销借款</nz-form-label>
@@ -115,6 +70,15 @@
         </div>
         <div nz-col [nzMd]="12" [nzSm]="24">
           <nz-form-item>
+            <nz-form-label nzFor="bank_name" nzRequired>银行名称</nz-form-label>
+            <nz-form-control nzErrorTip="请填写收款银行名称">
+              <input type="text" id="bank_name" formControlName="bank_name" placeHolder="请填写收款银行名称" nz-input />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        
+        <div nz-col [nzMd]="12" [nzSm]="24">
+          <nz-form-item>
             <nz-form-label nzFor="write_off_amount" [nzRequired]="ifWriteOff">冲抵金额</nz-form-label>
             <nz-form-control nzErrorTip="请填写冲销个人借款金额">
               <nz-input-group nzSuffix="元" nzPrefix="￥" style="width: 100%">
@@ -124,6 +88,16 @@
             </nz-form-control>
           </nz-form-item>
         </div>
+        
+        <div nz-col [nzMd]="12" [nzSm]="24">
+          <nz-form-item>
+            <nz-form-label nzFor="bank_account" nzRequired>银行账号</nz-form-label>
+            <nz-form-control nzErrorTip="请填写收款人或单位银行账号">
+              <input type="text" id="bank_account" formControlName="bank_account" placeHolder="请填写收款银行账号" nz-input />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
         <div nz-col [nzSm]="24">
           <nz-form-item>
             <nz-form-label>附件资料</nz-form-label>
@@ -150,14 +124,14 @@
 
   </nz-card>
 
-  <nz-card [nzTitle]="costTitleTpl" [nzExtra]="costTpl" class="mt-md" *ngIf="currentTreaty">
+  <nz-card [nzTitle]="costTitleTpl" [nzExtra]="costTpl" class="mt-md">
 
     <ng-template #costTitleTpl>
       <span>非合约成本支付</span>
-      <ng-container *ngIf="currentTreaty">
+      <!-- <ng-container *ngIf="currentTreaty">
         <span class="mx-md text-sm">总金额：<span class="text-primary">{{ currentTreaty.amount | _currency }}</span></span>
         <span class="text-sm">剩余可支付金额：<span class="text-error">{{ currentTreaty.amount - currentTreaty.use_amount | _currency }}</span></span>
-      </ng-container>
+      </ng-container> -->
     </ng-template>
     <ng-template #costTpl>
       <button nz-button [nzType]="'primary'" *ngIf="!treatypayInfo || treatypayInfo.draft"
@@ -172,7 +146,7 @@
             <th>费用类型</th>
             <th>本期支付（元）</th>
             <th nzWidth="250px">支付统计</th>
-            <th>收款信息</th>
+            <!-- <th>收款信息</th> -->
             <th>描述</th>
             <th *ngIf="!treatypayInfo || treatypayInfo.draft">操作</th>
           </tr>
@@ -186,16 +160,15 @@
               <span nz-tooltip [nzTooltipTitle]="data.cost.cost_category.description" class="text-md ml-sm">
                 <i nz-icon nzType="exclamation-circle" nzTheme="outline"></i></span>
             </td>
-            <td class="text-error">{{ data.amount | currency: 'CNY' }}</td>
+            <td>{{ data.amount | currency: 'CNY' }}</td>
             <td>
               <sv-container size="small" col="1">
-                <sv label="总计支付"><span class="text-error">{{ data.cost.amount | currency: 'CNY' }}</span></sv>
-                <sv label="累计支付"><span class="text-success">{{ data.cost.pay_amount | currency: 'CNY' }}</span></sv>
-                <sv label="剩余支付"><span
-                    class="text-primary">{{ (data.cost.amount - data.cost.pay_amount) | currency: 'CNY' }}</span></sv>
+                <sv label="预算金额"><span>{{ data.cost.amount | currency: 'CNY' }}</span></sv>
+                <sv label="累计支付"><span>{{ data.cost.pay_amount | currency: 'CNY' }}</span></sv>
+                <sv label="剩余支付"><span>{{ (data.cost.amount - data.cost.pay_amount) | currency: 'CNY' }}</span></sv>
               </sv-container>
             </td>
-            <td>
+            <!-- <td>
               <div>
                 <span>商务卡：</span><strong>{{ data.is_business_card ? '是' : '否' }}</strong>
               </div>
@@ -205,7 +178,7 @@
               <div>
                 <strong>卡&nbsp;&nbsp; 号：</strong><span>{{ data.card_number }}</span>
               </div>
-            </td>
+            </td> -->
             <td>
               <span [innerHTML]="data.remark | showTextareaContent"></span>
             </td>
@@ -233,14 +206,14 @@
             <div class="pt-md">
               <sv-container size="small">
                 <sv label="费用类型">{{ data.cost.cost_category.name }}</sv>
-                <sv label="总计支付"><span class="text-error">{{ data.cost.amount | currency: 'CNY' }}</span></sv>
+                <sv label="预算金额支付"><span class="text-error">{{ data.cost.amount | currency: 'CNY' }}</span></sv>
                 <sv label="累计支付"><span class="text-success">{{ data.cost.pay_amount | currency: 'CNY' }}</span></sv>
                 <sv label="剩余支付"><span
                     class="text-primary">{{ (data.cost.amount - data.cost.pay_amount) | currency: 'CNY' }}</span></sv>
 
-                <sv label="商务卡"><strong>{{ data.is_business_card ? '是' : '否' }}</strong></sv>
+                <!-- <sv label="商务卡"><strong>{{ data.is_business_card ? '是' : '否' }}</strong></sv>
                 <sv label="收款人">{{ data.account_name }}</sv>
-                <sv label="卡&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号">{{ data.card_number }}</sv>
+                <sv label="卡&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号">{{ data.card_number }}</sv> -->
                 <sv label="本期支付"><span class="text-error font-weight-bold">{{ data.amount | currency: 'CNY' }}</span>
                 </sv>
               </sv-container>
@@ -373,6 +346,20 @@
           <input type="text" id="abstract" formControlName="abstract" placeHolder="填写成本摘要信息" nz-input />
         </nz-form-control>
       </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzFor="treaty_id" nzRequired>供应商</nz-form-label>
+        <nz-form-control nzErrorTip="请选择供应商">
+          <nz-select style="width: 100%;" id="treaty_id" nzShowSearch [nzDisabled]="isEditCost"
+            nzPlaceHolder="请选择供应商" formControlName="treaty_id">
+            <ng-container *ngFor="let item of treatyListArr">
+              <nz-option [nzLabel]="item.supplier.name" [nzValue]="item.id"></nz-option>
+            </ng-container>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      
+      
       <nz-form-item>
         <nz-form-label nzFor="cost_id" nzRequired>成本类型</nz-form-label>
         <nz-form-control nzErrorTip="请选择成本类型">
@@ -403,7 +390,7 @@
         </nz-form-control>
       </nz-form-item>
 
-      <nz-form-item>
+      <!-- <nz-form-item>
         <nz-form-label nzFor="card_number" nzRequired>银行卡号</nz-form-label>
         <nz-form-control nzErrorTip="请填写收款人或单位银行卡号">
           <input type="text" id="card_number" formControlName="card_number" placeHolder="请填写收款银行卡号" nz-input />
@@ -420,7 +407,7 @@
         <nz-form-control>
           <label nz-checkbox formControlName="is_business_card"></label>
         </nz-form-control>
-      </nz-form-item>
+      </nz-form-item> -->
       <nz-form-item>
         <nz-form-label nzFor="remark">支付备注</nz-form-label>
         <nz-form-control>

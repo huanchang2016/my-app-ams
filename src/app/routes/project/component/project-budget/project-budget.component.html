@@ -8,55 +8,16 @@
         <label nz-checkbox [(ngModel)]="incomeOpt.subsidy" (ngModelChange)="incomeTypeChange()">补贴收入</label>
     </div>
     <div class="project-income-box mb-md" *ngIf="incomeOpt.project">
-        <app-project-income-c [projectId]="projectInfo?.id" [incomeList]="projectIncome"
+        <app-project-income-c [projectInfo]="projectInfo" [incomeList]="projectIncome"
             (listValueChange)="listValueChange($event)" (incomeChange)="proIncomeChange($event)"></app-project-income-c>
     </div>
     <div class="subsidy-income-box mb-md" *ngIf="incomeOpt.subsidy">
-        <app-subsidy-income-c [projectId]="projectInfo?.id" [incomeList]="subsidyIncome"
+        <app-subsidy-income-c [projectInfo]="projectInfo" [incomeList]="subsidyIncome"
         (listValueChange)="listValueChange($event)" (incomeChange)="subIncomeChange($event)"></app-subsidy-income-c>
     </div>
     <nz-card>
         <form nz-form [formGroup]="validateForm">
             <div nz-row [nzGutter]="24" nzType="flex">
-                <!-- <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="12">
-                    <div nz-row>
-                        <div nz-col [nzSpan]="24" *ngIf="incomeOpt.project">
-                            <nz-form-item>
-                                <nz-form-label nzFor="tax_id" nzRequired>项目预算类型</nz-form-label>
-                                <nz-form-control nzErrorTip="请选择项目收入预算类型">
-                                    <nz-select style="width: 100%;" id="tax_id" nzShowSearch nzPlaceHolder="请选择项目收入预算类型"
-                                        formControlName="tax_id" (ngModelChange)="budgetChange()">
-                                        <ng-container *ngFor="let item of taxArray">
-                                            <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
-                                        </ng-container>
-                                    </nz-select>
-                                </nz-form-control>
-                            </nz-form-item>
-                        </div>
-                        <div nz-col [nzSpan]="24" *ngIf="incomeOpt.project">
-                            <nz-form-item>
-                                <nz-form-label nzFor="income" nzRequired>项目收入金额</nz-form-label>
-                                <nz-form-control nzErrorTip="项目预算收入只能输入数字且最多保留2位小数">
-                                    <nz-input-group nzSuffix="元" nzPrefix="￥" style="width: 100%">
-                                        <input type="text" id="income" formControlName="income" placeholder="填写项目收入预算金额"
-                                            nz-input />
-                                    </nz-input-group>
-                                </nz-form-control>
-                            </nz-form-item>
-                        </div>
-                        <div nz-col [nzSpan]="24" *ngIf="incomeOpt.subsidy">
-                            <nz-form-item>
-                                <nz-form-label nzFor="subsidy_income" nzRequired>补贴收入金额</nz-form-label>
-                                <nz-form-control nzErrorTip="补贴收入只能输入数字且最多保留2位小数">
-                                    <nz-input-group nzSuffix="元" nzPrefix="￥" style="width: 100%">
-                                        <input type="text" id="subsidy_income" formControlName="subsidy_income" placeholder="填写补贴收入预算金额"
-                                            nz-input />
-                                    </nz-input-group>
-                                </nz-form-control>
-                            </nz-form-item>
-                        </div>
-                    </div>
-                </div> -->
                 <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="12">
                     <div nz-row>
                         <div nz-col [nzSpan]="24" class="cost-title font-weight-bold text-md mb-sm">

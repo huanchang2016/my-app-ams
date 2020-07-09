@@ -9,7 +9,11 @@
     <tbody>
         <tr>
             <td>单位名称</td>
-            <td colspan="2">{{ incomeInfo.partyA }}</td>
+            <td colspan="2">
+                <ng-container *ngFor="let customer of incomeInfo.customers; let i = index">
+                    <div>{{ customer.name }}；</div>
+                </ng-container>
+            </td>
             <td colspan="3">{{ incomeInfo.partyB }}</td>
         </tr>
         <tr>

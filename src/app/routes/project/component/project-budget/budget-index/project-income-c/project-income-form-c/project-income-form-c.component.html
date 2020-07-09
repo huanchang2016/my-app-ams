@@ -3,11 +3,11 @@
         <div class="font-weight-bold text-md">甲方信息</div>
     </nz-form-item>
     <nz-form-item>
-        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="partyA" nzRequired>甲方</nz-form-label>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="customer_ids" nzRequired>甲方</nz-form-label>
         <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请选择甲方单位">
-            <nz-select style="width: 100%;" nzMode="multiple" id="partyA" nzPlaceHolder="请选择甲方单位" formControlName="partyA">
-                <ng-container *ngFor="let item of partACompanyList">
-                    <nz-option [nzLabel]="item.name" [nzValue]="item.name"></nz-option>
+            <nz-select style="width: 100%;" nzMode="multiple" id="customer_ids" nzPlaceHolder="请选择甲方单位" formControlName="customer_ids">
+                <ng-container *ngFor="let item of projectInfo?.customer">
+                    <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
                 </ng-container>
             </nz-select>
         </nz-form-control>
@@ -41,12 +41,8 @@
     </nz-form-item>
     <nz-form-item>
         <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="partyB" nzRequired>乙方</nz-form-label>
-        <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请选择乙方单位">
-            <nz-select style="width: 100%;" id="partyB" nzShowSearch nzPlaceHolder="请选择乙方单位" nzDisabled formControlName="partyB">
-                <ng-container *ngFor="let item of partACompanyList">
-                    <nz-option [nzLabel]="item.name" [nzValue]="item.name"></nz-option>
-                </ng-container>
-            </nz-select>
+        <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请填写乙方单位">
+            <input nz-input placeholder="请填写乙方单位" formControlName="partyB" [disabled]="true" />
         </nz-form-control>
     </nz-form-item>
     <nz-form-item>

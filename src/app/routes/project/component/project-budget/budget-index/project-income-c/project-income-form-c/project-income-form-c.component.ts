@@ -19,9 +19,8 @@ import { SettingsService } from '@delon/theme';
 })
 export class ProjectIncomeFormCComponent implements OnChanges, OnDestroy {
 
-  @Input() projectId:number;
+  @Input() projectInfo:any;
   @Input() data:any;
-  @Input() partACompanyList:any[];
 
   validateForm: FormGroup;
 
@@ -39,7 +38,7 @@ export class ProjectIncomeFormCComponent implements OnChanges, OnDestroy {
   ngOnInit(): void {
     const partyB:string = this.settings.user.company ? this.settings.user.company.name : null;
     this.validateForm = this.fb.group({
-      partyA: [null, [Validators.required]],  // 甲方
+      customer_ids: [null, [Validators.required]],  // 甲方
       partyA_power: [null ],  // 甲方权责界定
       partyA_condition: [null ], // 甲方费用支付条件
       partyB: [partyB, [Validators.required]], // 乙方
@@ -64,7 +63,7 @@ export class ProjectIncomeFormCComponent implements OnChanges, OnDestroy {
       // this.destroyModal(this.validateForm.value);
       const option = this.validateForm.value;
       const value = {
-        partyA: option.partyA.join('； '),
+        customer_ids: option.customer_ids,
         partyA_power: option.partyA_power,
         partyA_condition: option.partyA_condition,
         partyB: option.partyB,
@@ -83,7 +82,7 @@ export class ProjectIncomeFormCComponent implements OnChanges, OnDestroy {
     }
   }
   create(value:any) {
-    const opt = Object.assign(value, { project_id: this.projectId });
+    const opt = Object.assign(value, { project_id: this.projectInfo.id });
 
     this.settingsConfigService.post('/api/project/revenue/create', opt).subscribe((res:ApiData) => {
       console.log(res, 'create success!');
@@ -113,8 +112,9 @@ export class ProjectIncomeFormCComponent implements OnChanges, OnDestroy {
   }
 
   setFormValue(data:any) :void {
+    const cus_ids:number[] = data.customers.map( v => v.id );
     this.validateForm.patchValue({
-      partyA: data.partyA.split('； '),
+      customer_ids: cus_ids,
       partyA_power: data.partyA_power,
       partyA_condition: data.partyA_condition,
       partyB: data.partyB,

@@ -3,7 +3,7 @@
         <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="company_id" nzRequired>拨款单位</nz-form-label>
         <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请选择拨款单位">
             <nz-select style="width: 100%;" nzShowSearch id="company_id" nzPlaceHolder="请选择拨款单位" formControlName="company_id">
-                <ng-container *ngFor="let item of customerCompany">
+                <ng-container *ngFor="let item of projectInfo?.customer">
                     <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
                 </ng-container>
             </nz-select>

@@ -1,11 +1,13 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { Subscription, Observable } from 'rxjs';
+import { Subscription, Observable, from } from 'rxjs';
 import { _HttpClient } from '@delon/theme';
 import { List, ApiData } from 'src/app/data/interface.data';
 import { SettingsConfigService } from 'src/app/routes/service/settings-config.service';
 import { environment } from '@env/environment';
+import { distinct } from 'rxjs/operators';
+import { type } from 'os';
 
 @Component({
   selector: 'app-upload-file-attachment-tpl',
@@ -13,7 +15,7 @@ import { environment } from '@env/environment';
   styles: [
     `
       .category-list {
-        line-height: 32px;
+        line-height: 40px;
       }
     `
   ]
@@ -31,6 +33,8 @@ export class UploadFileAttachmentTplComponent implements OnChanges, OnInit, OnDe
   @Output() attachmentChange: EventEmitter<any> = new EventEmitter();
 
   @Output() attachmentIdsChange?:EventEmitter<any> = new EventEmitter();
+
+  @Output() isAllFillUpload?:EventEmitter<boolean> = new EventEmitter();
 
   attachmentArray: any[] = [];
 
@@ -51,9 +55,21 @@ export class UploadFileAttachmentTplComponent implements OnChanges, OnInit, OnDe
 
   ngOnChanges(changes: SimpleChanges) {
     // console.log(changes);
-    if (this.AttachmentCategory && this.Attachment) {
+    const typeLength:number = this.AttachmentCategory.length;
+    if (typeLength !== 0 && this.Attachment) {
       // 过滤处理 附件，将附件根据类型不同来分类展示
       this.selectAttachment();
+      console.log(typeLength, this.Attachment, 'attacthment list and category')
+      let _len:number = 0;
+      if(this.Attachment.length !== 0) {
+        const attachment_ids:number[] = this.Attachment.map( v => v.attachment_category.id );
+        from(attachment_ids).pipe(
+          distinct()
+        ).subscribe( _ => _len++ );
+      }
+      
+      this.isAllFillUpload.emit(typeLength === _len);
+      
     }
   }
 

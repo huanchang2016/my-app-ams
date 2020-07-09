@@ -11,7 +11,7 @@ import { SubsidyIncomeFormCComponent } from './subsidy-income-form-c/subsidy-inc
   ]
 })
 export class SubsidyIncomeCComponent implements OnInit {
-  @Input() projectId:number;
+  @Input() projectInfo:any;
   @Input() incomeList:any[];
 
   @Output() listValueChange:EventEmitter<any> = new EventEmitter();
@@ -55,8 +55,7 @@ export class SubsidyIncomeCComponent implements OnInit {
       nzWrapClassName: 'modal-lg',
       nzMaskClosable: false,
       nzComponentParams: {
-        projectId: this.projectId,
-        customerCompany: this.customerCompany,
+        projectInfo: this.projectInfo,
         data: data
       },
       nzFooter: null

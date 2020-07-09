@@ -19,9 +19,8 @@ import { SettingsService } from '@delon/theme';
 })
 export class SubsidyIncomeFormCComponent implements OnChanges, OnDestroy {
 
-  @Input() projectId:number;
+  @Input() projectInfo:any;
   @Input() data:any;
-  @Input() customerCompany:any[];
 
   validateForm: FormGroup;
 
@@ -75,7 +74,7 @@ export class SubsidyIncomeFormCComponent implements OnChanges, OnDestroy {
     }
   }
   create(value:any) {
-    const opt = Object.assign(value, { project_id: this.projectId });
+    const opt = Object.assign(value, { project_id: this.projectInfo.id });
 
     this.settingsConfigService.post('/api/subsidy/income/create', opt).subscribe((res:ApiData) => {
       console.log(res, 'create success!');

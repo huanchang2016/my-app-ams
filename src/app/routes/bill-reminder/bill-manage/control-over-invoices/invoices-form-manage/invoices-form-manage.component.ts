@@ -5,7 +5,6 @@ import { ApiData, List } from 'src/app/data/interface.data';
 import { SettingsConfigService } from 'src/app/routes/service/settings-config.service';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { zip } from 'rxjs';
 
 @Component({
   selector: 'app-invoices-form-manage',
@@ -33,15 +32,8 @@ export class InvoicesFormManageComponent implements OnInit {
   ) {
     this.projectId = +this.activatedRoute.snapshot.queryParams.project_id;
     console.log('发票新增火编辑 pages, ', this.projectId);
-    this.activatedRoute.params.subscribe((params: Params) => {
-      if (params && params.id) {
-        this.billId = +params.id;
-        console.log(this.billId, 'billId');
-        this.getBillInfo();
-        this.getBillFees();
-        this.getAttachment();
-      }
-    });
+    this.getIncomeConfigs(this.projectId);
+    
   }
 
   // customer_id:any = null;
@@ -78,29 +70,88 @@ export class InvoicesFormManageComponent implements OnInit {
 
   initForm(): void {
     this.validateForm = this.fb.group({
-      // 新增内容
-      customer_category: [null, [Validators.required]],
-      taxpayer_no: [null, [Validators.required]],
-      unit_address: [null, [Validators.required]],
-      opening_bank: [null, [Validators.required]],
-      bank_account: [null, [Validators.required]],
-      apply_amount: [null, [Validators.required, Validators.pattern(/^(([1-9]\d*|0)(\.\d{1,})?)$|(0\.0?([1-9]\d?))$/)]],
-      //
-      bill_category_id: [null, [Validators.required]],
-      income_type: ['project', [Validators.required]],
-      project_revenue_id: [null, [Validators.required]],
-      subsidy_income_id: [null, [Validators.required]],
+      income_type: [ this.income_type, [Validators.required]],
+      project_group_id: [ null, [Validators.required] ], // 项目收入 客户单位
+      project_tax_id: [ null, [Validators.required] ], // 项目收入 开票税目类型
+      subsidy_group_id: [ null ], // 补贴收入 拨款单位
+      subsidy_tax_id: [ null ], // 补贴收入 开票税目金额
+
+      bill_category_id: [null, [Validators.required]],// 发票类型
+
+      // apply_amount: [null, [Validators.required, Validators.pattern(/^(([1-9]\d*|0)(\.\d{1,})?)$|(0\.0?([1-9]\d?))$/)]],
+
       amount: [null, [Validators.required, Validators.pattern(/^(([1-9]\d*|0)(\.\d{1,})?)$|(0\.0?([1-9]\d?))$/)]],
+
       bill_period_time: [null, [Validators.required]],
-      // fees: [null],
-      remark: [null],
       customer_contract_code: [null], // 合同编号
-      // mail: [null, [Validators.email]],
-      // company_id: [ this.companyId, [Validators.required] ]
+      remark: [null]
     });
   }
   incomeTypeChange(type: string) {
     this.income_type = type;
+    this.currentSelectedTaxAmount = null;
+    if(type === 'project') {
+      this.validateForm.patchValue({
+        subsidy_group_id: null,
+        subsidy_tax_id: null
+      });
+      if(this.projectGroup.length === 0) {
+        this.getProjectIncomeConfig(this.projectId);
+      }else {
+        if(this.projectGroup.length === 1) {
+          this.validateForm.patchValue({
+            project_group_id: this.projectGroup[0].id
+          });
+          this.currentSelectedProjectCompany = this.projectGroup[0];
+          this.projectGroupChange(this.currentSelectedProjectCompany.id);
+        }
+      }
+
+      this.validateForm.get('subsidy_group_id')!.clearValidators();
+      this.validateForm.get('subsidy_group_id')!.markAsPristine();
+      this.validateForm.get('subsidy_tax_id')!.clearValidators();
+      this.validateForm.get('subsidy_tax_id')!.markAsPristine();
+
+      this.validateForm.get('project_group_id')!.setValidators(Validators.required);
+      this.validateForm.get('project_group_id')!.markAsDirty();
+      this.validateForm.get('project_tax_id')!.setValidators(Validators.required);
+      this.validateForm.get('project_tax_id')!.markAsDirty();
+
+    }else {
+      this.validateForm.patchValue({
+        project_group_id: null,
+        project_tax_id: null
+      });
+      if(this.subsidyGroup.length === 0) {
+        this.getSubsidyIncomeConfig(this.projectId);
+      }else {
+        if(this.subsidyGroup.length === 1) {
+          this.validateForm.patchValue({
+            subsidy_group_id: this.subsidyGroup[0].id
+          });
+          this.currentSelectedSubsidyCompany = this.subsidyGroup[0];
+          this.subsidyGroupChange(this.currentSelectedSubsidyCompany.id);
+        }
+      }
+
+      this.validateForm.get('subsidy_group_id')!.setValidators(Validators.required);
+      this.validateForm.get('subsidy_group_id')!.markAsDirty();
+      this.validateForm.get('subsidy_tax_id')!.setValidators(Validators.required);
+      this.validateForm.get('subsidy_tax_id')!.markAsDirty();
+      
+      this.validateForm.get('project_group_id')!.clearValidators();
+      this.validateForm.get('project_group_id')!.markAsPristine();
+      this.validateForm.get('project_tax_id')!.clearValidators();
+      this.validateForm.get('project_tax_id')!.markAsPristine();
+
+    }
+
+    this.validateForm.get('subsidy_group_id')!.updateValueAndValidity();
+    this.validateForm.get('subsidy_tax_id')!.updateValueAndValidity();
+
+    this.validateForm.get('project_group_id')!.updateValueAndValidity();
+    this.validateForm.get('project_tax_id')!.updateValueAndValidity();
+
   }
 
   proIncomeValueChange(id: number) {
@@ -151,14 +202,17 @@ export class InvoicesFormManageComponent implements OnInit {
 
     const option: any = {
       project_id: this.projectId,
-      // customer_id: this.customer.id,
+      project_revenue_id: this.income_type === 'project' ? this.currentSelectedProjectCompany.project_revenue_id : null,
+      subsidy_income_id: this.income_type === 'subsidy' ? this.currentSelectedSubsidyCompany.subsidy_income_id : null,
       bill_category_id: opt.bill_category_id,
       bill_period_start_time: opt.bill_period_time.start,
       bill_period_end_time: opt.bill_period_time.end,
-      // amount: opt.fees.length !== 0 ? this.taxFeeCount : +opt.amount,
-      fees: opt.fees,
+      customer_id: this.income_type === 'project' ? this.currentSelectedProjectCompany.id : this.currentSelectedSubsidyCompany.id, // 客户单位
+      tax_id: this.currentSelectedTaxAmount.tax ? this.currentSelectedTaxAmount.tax.id : null,
+      subsidy_income_detail_id: !this.currentSelectedTaxAmount.tax ? this.currentSelectedTaxAmount.id : null,
       remark: opt.remark,
-      customer_contract_code: opt.customer_contract_code,
+      amount: opt.amount,
+      customer_contract_code: opt.customer_contract_code
     };
 
     this.settingsConfigService.post('/api/bill/create', option).subscribe((res: ApiData) => {
@@ -176,14 +230,17 @@ export class InvoicesFormManageComponent implements OnInit {
 
     const option: any = {
       bill_id: this.billId,
-      // customer_id: this.customer_id,
+      project_revenue_id: this.income_type === 'project' ? this.currentSelectedProjectCompany.project_revenue_id : null,
+      subsidy_income_id: this.income_type === 'subsidy' ? this.currentSelectedSubsidyCompany.subsidy_income_id : null,
       bill_category_id: opt.bill_category_id,
       bill_period_start_time: opt.bill_period_time.start,
       bill_period_end_time: opt.bill_period_time.end,
-      // amount: opt.fees.length !== 0 ? this.taxFeeCount : +opt.amount,
-      fees: opt.fees,
+      customer_id: this.income_type === 'project' ? this.currentSelectedProjectCompany.id : this.currentSelectedSubsidyCompany.id, // 客户单位
+      tax_id: this.income_type === 'project' ? this.currentSelectedTaxAmount.tax.id : null,
+      subsidy_income_detail_id: this.income_type === 'subsidy' ? this.currentSelectedTaxAmount.id : null,
       remark: opt.remark,
-      customer_contract_code: opt.customer_contract_code,
+      amount: opt.amount,
+      customer_contract_code: opt.customer_contract_code
     };
 
     this.settingsConfigService.post('/api/bill/update', option).subscribe((res: ApiData) => {
@@ -199,9 +256,14 @@ export class InvoicesFormManageComponent implements OnInit {
 
   setFormValue(data: any): void {
     console.log(data);
+    this.income_type = data.project_revenue_detail ? 'project' : 'subsidy';
     this.validateForm.patchValue({
-      //
-      customer_category: data.customer_category,
+      //project_revenue_detail
+      income_type: this.income_type,
+      project_group_id: this.income_type === 'project' ? data.customer.id : null,
+      project_tax_id: this.income_type === 'project' ? data.tax.id : null,
+      subsidy_group_id: this.income_type === 'subsidy' ?  data.customer.id :null,
+      subsidy_tax_id: this.income_type === 'subsidy' ? data.subsidy_income_detail.id : null,
       taxpayer_no: data.taxpayer_no,
       unit_address: data.unit_address,
       opening_bank: data.opening_bank,
@@ -226,21 +288,19 @@ export class InvoicesFormManageComponent implements OnInit {
       if (res.code === 200) {
         this.billInfo = res.data;
         this.setFormValue(this.billInfo);
-        // this.customer_id = this.billInfo.customer.id;
-        // this.incomeValueChange();
       }
     });
   }
-  getBillFees(): void {
-    this.settingsConfigService.get(`/api/bill/fee/${this.billId}`).subscribe((res: ApiData) => {
-      console.log('bill fee, ', res.data);
-      if (res.code === 200) {
-        this.validateForm.patchValue({
-          fees: res.data.bill_fee,
-        });
-      }
-    });
-  }
+  // getBillFees(): void {
+  //   this.settingsConfigService.get(`/api/bill/fee/${this.billId}`).subscribe((res: ApiData) => {
+  //     console.log('bill fee, ', res.data);
+  //     if (res.code === 200) {
+  //       this.validateForm.patchValue({
+  //         fees: res.data.bill_fee,
+  //       });
+  //     }
+  //   });
+  // }
 
   getConfigs(): void {
     // 获取客户单位 信息详情
@@ -248,7 +308,6 @@ export class InvoicesFormManageComponent implements OnInit {
       console.log('projectDetailInfo, ', res.data);
       if (res.code === 200) {
         this.projectDetailInfo = res.data;
-        this.getIncomeConfigs(this.projectDetailInfo.id);
       }
     });
 
@@ -260,19 +319,146 @@ export class InvoicesFormManageComponent implements OnInit {
       }
     });
   }
-  getIncomeConfigs(id: number) {
-    zip(
-      this.settingsConfigService.get(`/api/project_revenue_detail/project/${id}`),
-      this.settingsConfigService.get(`/api/subsidy_income_detail/project/${id}`),
-    )
-      .pipe(map(([a, b]) => [a.data.project_revenue_detail, b.data.subsidy_income_detail]))
-      .subscribe(([project_revenue_detail, subsidy_income_detail]) => {
-        this.project_revenue = project_revenue_detail;
-        const subsidy_list: any[] = subsidy_income_detail;
 
-        this.subsidy_income = subsidy_list.filter((v) => v.is_bill);
-        console.log(this.project_revenue, this.subsidy_income);
-      });
+  projectGroup:any[] = [];
+  subsidyGroup:any[] = [];
+  // 已选择的客户单位 或者 拨款单位
+  currentSelectedProjectCompany:any = null;
+  currentSelectedSubsidyCompany:any = null;
+  // 已选择的 收入 税目   或者 拨款金额及税率
+  currentSelectedTaxAmount:any = null;
+  getIncomeConfigs(id: number) {
+    this.getProjectIncomeConfig(id);
+    this.getSubsidyIncomeConfig(id);
+    // 获取客户单位（项目收入单位，补贴单位）， 再获取开票信息
+    this.activatedRoute.params.subscribe((params: Params) => {
+      if (params && params.id) {
+        this.billId = +params.id;
+        console.log(this.billId, 'billId');
+        this.getBillInfo();
+        this.getAttachment();
+      }
+    });
+  }
+  getProjectIncomeConfig(id:number) {
+    // 获取项目收入
+    this.projectGroup = [];
+    this.settingsConfigService.get(`/api/project/revenue/${id}`).subscribe((res:ApiData) => {
+      console.log('项目收入  分组获取', res);
+      if(res.code === 200) {
+        const project_revenue:any[] = res.data.project_revenue;
+        if(project_revenue.length !== 0) {
+          project_revenue.forEach(revenue => {
+           const customers = revenue.customers.map( v => Object.assign(v, { project_revenue_id: revenue.id }));
+           this.projectGroup = [...this.projectGroup, ...customers];
+          });
+          console.log(this.projectGroup, 'this.projectGroup')
+
+          if(this.projectGroup.length === 1) {
+            this.validateForm.patchValue({
+              project_group_id: this.projectGroup[0].id
+            });
+            this.currentSelectedProjectCompany = this.projectGroup[0];
+          }
+        }
+      }
+    });
+  }
+  getSubsidyIncomeConfig(id:number) {
+    // 获取补贴收入
+    this.subsidyGroup = [];
+    this.settingsConfigService.get(`/api/subsidy/income/${id}`).subscribe((res:ApiData) => {
+      console.log('补贴收入subsidyGroupsubsidyGroup', res);
+      if(res.code === 200) {
+        const subsidy_income:any[] = res.data.subsidy_income;
+        if(subsidy_income.length !== 0) {
+          this.subsidyGroup = subsidy_income.map( v => Object.assign(v.company, { subsidy_income_id: v.id }) );
+          
+          console.log(this.subsidyGroup, 'this.subsidyGroup')
+          
+          if(this.subsidyGroup.length === 1) {
+            this.validateForm.patchValue({
+              subsidy_group_id: this.subsidyGroup[0].id
+            });
+            // this.subsidyGroupChange(this.subsidyGroup[0].id)
+            this.currentSelectedSubsidyCompany = this.subsidyGroup[0];
+          }
+        }
+      }
+    });
+  }
+
+  projectTaxList:any[] = [];
+  projectGroupChange(id:number) {
+    if(!id) {
+      return;
+    }
+    const selectedPorjectGroup = this.projectGroup.filter( v => v.id === id)[0];
+    console.log('选择的客户单位', selectedPorjectGroup);
+    this.currentSelectedProjectCompany = selectedPorjectGroup;
+    
+    this.settingsConfigService.get(`/api/project_revenue_detail/revenue/${selectedPorjectGroup.project_revenue_id}`).subscribe((res:ApiData) => {
+      console.log(res, '通过项目收入获取详情');
+      if(res.code === 200) {
+        this.projectTaxList = res.data.project_revenue_detail;
+        if(this.projectTaxList.length === 1) {
+          this.validateForm.patchValue({
+            project_tax_id: this.projectTaxList[0].tax.id
+          });
+          this.currentSelectedTaxAmount = this.projectTaxList[0];
+        }else {
+          const project_tax_id = this.validateForm.get('project_tax_id').value;
+          if(project_tax_id && this.projectTaxList.length !== 0) {
+            this.currentSelectedTaxAmount = this.projectTaxList.filter( v=> v.tax.id === project_tax_id)[0];
+          }
+        }
+      }
+    });
+  }
+  subsidyTaxList:any[] = [];
+  subsidyGroupChange(id:number) {
+    if(!id) {
+      return;
+    }
+    const selectedSubsidyGroup = this.subsidyGroup.filter( v => v.id === id)[0];
+    console.log('选择的拨款单位', selectedSubsidyGroup);
+    this.currentSelectedSubsidyCompany = selectedSubsidyGroup;
+    
+    this.settingsConfigService.get(`/api/subsidy_income_detail/subsidy/${selectedSubsidyGroup.subsidy_income_id}`).subscribe((res:ApiData) => {
+      console.log(res, '通过补贴收入获取详情');
+      if(res.code === 200) {
+        const subsidy_income_detail:any[] = res.data.subsidy_income_detail;
+        this.subsidyTaxList = subsidy_income_detail.filter( v => v.is_bill );
+        if(this.subsidyTaxList.length === 1) {
+          this.validateForm.patchValue({
+            subsidy_tax_id: this.subsidyTaxList[0].id
+          });
+          this.currentSelectedTaxAmount = this.subsidyTaxList[0];
+        }else {
+          const subsidy_tax_id = this.validateForm.get('subsidy_tax_id').value;
+          if(subsidy_tax_id && this.subsidyTaxList.length !== 0) {
+            this.currentSelectedTaxAmount = this.subsidyTaxList.filter( v=> v.id === subsidy_tax_id)[0];
+          }
+        }
+      }
+    });
+  }
+
+  projectTaxChange(id:number) {
+    if(!id) {
+      return;
+    }
+    const tax = this.projectTaxList.filter( v => v.tax.id === id)[0];
+    this.currentSelectedTaxAmount = tax; 
+    console.log('选择的项目金额的税目和金额', this.currentSelectedTaxAmount);
+  }
+  subsidyTaxChange(id:number) {
+    if(!id) {
+      return;
+    }
+    const tax = this.subsidyTaxList.filter( v => v.id === id)[0];
+    this.currentSelectedTaxAmount = tax;
+    console.log('选择的拨款金额和税率', this.currentSelectedTaxAmount);
   }
 
   cancel() {}
@@ -340,5 +526,9 @@ export class InvoicesFormManageComponent implements OnInit {
             return { id: v.id, name: v.name };
           });
       });
+  }
+  isAllUpload:boolean = false;
+  isAllFillUpload(isAllUpload:boolean) {
+    this.isAllUpload = isAllUpload;
   }
 }

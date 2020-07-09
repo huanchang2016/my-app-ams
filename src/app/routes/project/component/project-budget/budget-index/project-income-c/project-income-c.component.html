@@ -27,7 +27,11 @@
             <tbody>
                 <tr>
                     <td class="font-weight-bold">名称</td>
-                    <td>{{ data.partyA }}</td>
+                    <td>
+                        <ng-container *ngFor="let customer of data.customers; let i = index">
+                            <div>{{ customer.name }}；</div>
+                        </ng-container>
+                    </td>
                     <td class="font-weight-bold">名称</td>
                     <td>{{ data.partyB }}</td>
 

@@ -12,7 +12,7 @@ import { SettingsService } from '@delon/theme';
   ]
 })
 export class ProjectIncomeCComponent implements OnChanges, OnInit {
-  @Input() projectId:number;
+  @Input() projectInfo:any;
   @Input() incomeList:any[];
 
   @Output() listValueChange:EventEmitter<any> = new EventEmitter();
@@ -54,8 +54,7 @@ export class ProjectIncomeCComponent implements OnChanges, OnInit {
       nzWrapClassName: 'modal-lg',
       nzMaskClosable: false,
       nzComponentParams: {
-        projectId: this.projectId,
-        partACompanyList: this.partACompanyList,
+        projectInfo: this.projectInfo,
         data: data
       },
       nzFooter: null

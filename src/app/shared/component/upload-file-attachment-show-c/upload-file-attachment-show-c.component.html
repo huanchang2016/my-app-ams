@@ -5,8 +5,8 @@
                 <sv [label]="attachmentCategory.name" [col]="1" *ngIf="attachmentCategory.members.length !== 0">
                     <ng-container *ngFor="let attachment of attachmentCategory.members; let i = index">
                         <div class="clearfix bg-grey-light-h mb-sm pointer px-xs">
-                            <span>{{ i + 1 }}. </span>
-                            <a href="{{ environment.SERVER_URL + attachment.path }}" class="bg-grey-light-h px-md text-nowrap pr-xs"
+                            <span>{{ i + 1 }}.</span>
+                            <a href="{{ environment.SERVER_URL + attachment.path }}" class="bg-grey-light-h px-md pr-xs"
                                 target="_blank"><i nz-icon nzType="link" nzTheme="outline"></i>
                                 {{ attachment.name }}<span class="ml-md">（<span class="text-error">{{ attachment.page_nums }}</span> 页）</span></a>
                         </div>
@@ -17,8 +17,8 @@
                 <sv [col]="1" *ngIf="attachmentCategory.members.length !== 0">
                     <ng-container *ngFor="let attachment of attachmentCategory.members; let i = index">
                         <div class="clearfix bg-grey-light-h mb-sm pointer px-xs">
-                            <span>{{ i + 1 }}. </span>
-                            <a href="{{ environment.SERVER_URL + attachment.path }}" class="bg-grey-light-h px-md pr-xs text-nowrap"
+                            <span>{{ i + 1 }}.</span>
+                            <a href="{{ environment.SERVER_URL + attachment.path }}" class="bg-grey-light-h px-md pr-xs"
                                 target="_blank"><i nz-icon nzType="link" nzTheme="outline"></i>
                                 {{ attachment.name }}<span class="ml-md">（<span class="text-error">{{ attachment.page_nums }}</span> 页）</span></a>
                         </div>

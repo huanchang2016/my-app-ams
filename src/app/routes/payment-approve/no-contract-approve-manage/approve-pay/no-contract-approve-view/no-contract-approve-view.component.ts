@@ -12,7 +12,11 @@ import html2canvas from 'html2canvas';
 @Component({
   selector: 'app-no-contract-approve-view',
   templateUrl: './no-contract-approve-view.component.html',
-  styles: []
+  styles: [`
+    #print-box {
+      max-width: 1000px;
+    }
+  `]
 })
 export class NoContractApproveViewComponent implements OnInit {
   listOfData: any[] = [];

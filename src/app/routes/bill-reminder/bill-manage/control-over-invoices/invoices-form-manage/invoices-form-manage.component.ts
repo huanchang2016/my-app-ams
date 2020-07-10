@@ -527,8 +527,4 @@ export class InvoicesFormManageComponent implements OnInit {
           });
       });
   }
-  isAllUpload:boolean = false;
-  isAllFillUpload(isAllUpload:boolean) {
-    this.isAllUpload = isAllUpload;
-  }
 }

@@ -292,7 +292,7 @@ export class ContractPayCreateComponent implements OnInit {
     });
     const option: any = {
       project_id: this.projectId,
-      deal_id: this.contract_id,
+      deal_id: this.selectedContract.id,
       summary: this.summary,
       payment: payment
     };

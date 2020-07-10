@@ -70,7 +70,7 @@ export class ProjectNoContractListComponent implements OnInit {
         this.msg.success('支付信息提交成功');
         this.listOfData = this.listOfData.filter( v => v.id !== id);
       }else {
-        this.msg.error(res.error)
+        this.msg.error(res.error || '提交失败')
       }
     });
   }

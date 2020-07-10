@@ -5,7 +5,7 @@
       <nz-breadcrumb-item><a [routerLink]="['/dashboard']">首页</a></nz-breadcrumb-item>
       <nz-breadcrumb-item>合约支付管理</nz-breadcrumb-item>
       <nz-breadcrumb-item>合约支付申请</nz-breadcrumb-item>
-      <nz-breadcrumb-item><a [routerLink]="['/approve/contract/apply/draft']">项目列表</a></nz-breadcrumb-item>
+      <nz-breadcrumb-item><a [routerLink]="['/approve/list']">项目列表</a></nz-breadcrumb-item>
       <nz-breadcrumb-item><a [routerLink]="['/approve/contract/apply/pay', projectId]">项目合约支付管理</a></nz-breadcrumb-item>
       <nz-breadcrumb-item>{{ pageTitle }}</nz-breadcrumb-item>
     </nz-breadcrumb>
@@ -70,6 +70,11 @@
     <ng-template #notSelectedContract>
       <div class="text-center my-lg text-grey text-lg">暂未选择合同</div>
     </ng-template>
+    <div *ngIf="selectedContract" class="py-sm">
+        <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/contract/' + selectedContract.id">
+      </app-upload-file-attachment-show-c>
+    </div>
+
 
   </nz-card>
 

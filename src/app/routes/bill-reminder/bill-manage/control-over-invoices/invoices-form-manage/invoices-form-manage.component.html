@@ -201,12 +201,12 @@
     </nz-form-item>
 
     <nz-form-item class="form-item-box">
-      <nz-form-label nzRequired>发票附件</nz-form-label>
+      <nz-form-label>发票附件</nz-form-label>
       <nz-form-control>
         <app-upload-file-attachment-tpl [Attachment]="attachment" [AttachmentCategory]="attachmentCategory"
-          [isAttachmentChange]="isAttachmentChange" (attachmentChange)="attachmentChange($event)" (isAllFillUpload)="isAllFillUpload($event)">
+          [isAttachmentChange]="isAttachmentChange" (attachmentChange)="attachmentChange($event)">
         </app-upload-file-attachment-tpl>
-        <p class="text-error" *ngIf="!isAllUpload">各个类型的附件都必须上传</p>
+        <!-- <p class="text-error" *ngIf="!isAllUpload">各个类型的附件都必须上传</p> -->
       </nz-form-control>
     </nz-form-item>
   </form>

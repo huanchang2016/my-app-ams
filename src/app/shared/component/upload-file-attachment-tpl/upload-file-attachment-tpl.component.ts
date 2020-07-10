@@ -59,18 +59,22 @@ export class UploadFileAttachmentTplComponent implements OnChanges, OnInit, OnDe
     if (typeLength !== 0 && this.Attachment) {
       // 过滤处理 附件，将附件根据类型不同来分类展示
       this.selectAttachment();
-      console.log(typeLength, this.Attachment, 'attacthment list and category')
-      let _len:number = 0;
-      if(this.Attachment.length !== 0) {
-        const attachment_ids:number[] = this.Attachment.map( v => v.attachment_category.id );
-        from(attachment_ids).pipe(
-          distinct()
-        ).subscribe( _ => _len++ );
-      }
-      
-      this.isAllFillUpload.emit(typeLength === _len);
       
     }
+  }
+
+  emitIsAllUpload() {
+    const typeLength:number = this.AttachmentCategory.length;
+    let _len:number = 0;
+    if(this.Attachment.length !== 0) {
+      const attachment_ids:number[] = this.Attachment.map( v => v.attachment_category.id );
+      from(attachment_ids).pipe(
+        distinct()
+      ).subscribe( _ => _len++ );
+    }
+    
+    console.log('typeLength === _len', typeLength === _len, this.AttachmentCategory, this.Attachment);
+    this.isAllFillUpload.emit(typeLength === _len);
   }
 
   ngOnInit(): void {
@@ -81,6 +85,7 @@ export class UploadFileAttachmentTplComponent implements OnChanges, OnInit, OnDe
       file: [null, [Validators.required]]
     });
   }
+
 
   showModal1(category_id:number): void {
     this.validateForm.patchValue({
@@ -153,6 +158,7 @@ export class UploadFileAttachmentTplComponent implements OnChanges, OnInit, OnDe
 
   cancel(): void { }
 
+   count:number = 0;
   selectAttachment() {
     this.attachmentArray = [];
 

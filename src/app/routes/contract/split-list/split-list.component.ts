@@ -18,23 +18,6 @@ import { SettingsConfigService } from 'src/app/routes/service/settings-config.se
 })
 export class ContractSplitListComponent implements OnChanges, OnInit, OnDestroy {
 
-  @Input() contract_id:number;
-  @Input() maxAmount:number;
-  @Input() companyList:any[] = [];
-
-  dataSet:any[] = [];
-  loading:boolean = true;
-  departLoading:boolean = false;
-  submitLoading:boolean = false;
-
-  requestList$:Observable<ApiData>;
-
-  getDataList$:Subscription;
-  
-  validateForm:FormGroup;
-
-  listTotalAmount:number = 0;
-
   constructor(
     private fb: FormBuilder,
     private msg: NzMessageService,
@@ -42,15 +25,41 @@ export class ContractSplitListComponent implements OnChanges, OnInit, OnDestroy 
     private modalService: NzModalService
   ) { }
 
+  @Input() contract_id: number;
+  @Input() is_view: boolean = false;
+  @Input() maxAmount: number;
+  @Input() companyList: any[] = [];
+
+  dataSet: any[] = [];
+  loading: boolean = true;
+  departLoading: boolean = false;
+  submitLoading: boolean = false;
+
+  requestList$: Observable<ApiData>;
+
+  getDataList$: Subscription;
+
+  validateForm: FormGroup;
+
+  listTotalAmount: number = 0;
+
+  // 新增 预算成本
+  tplModal: NzModalRef;
+
+  editDataInfo: any;
+  configsOption: any = {
+    department: []
+  };
+
   ngOnChanges() {
-    if(this.contract_id) {
+    if (this.contract_id) {
       this.requestList$ = this.settingsConfigService.get(`/api/split_contract/contract/${this.contract_id}`);
       this.getDatalis();
     }
   }
 
   ngOnInit() {
-    
+
     this.validateForm = this.fb.group({
       company_id: [null, [Validators.required]],
       department_id: [null, [Validators.required]],
@@ -58,13 +67,8 @@ export class ContractSplitListComponent implements OnChanges, OnInit, OnDestroy 
     });
   }
 
-  // 新增 预算成本
-  tplModal: NzModalRef;
-
-  editDataInfo:any;
-
-  openTplModal(tplTitle: TemplateRef<{}>, tplContent: TemplateRef<{}>, tplFooter: TemplateRef<{}>, e: MouseEvent, data?:any): void {
-    if(data) {
+  openTplModal(tplTitle: TemplateRef<{}>, tplContent: TemplateRef<{}>, tplFooter: TemplateRef<{}>, e: MouseEvent, data?: any): void {
+    if (data) {
       this.editDataInfo = data;
       this.setForm();
     }
@@ -90,69 +94,69 @@ export class ContractSplitListComponent implements OnChanges, OnInit, OnDestroy 
       this.validateForm.controls[key].updateValueAndValidity();
     }
     const value = this.validateForm.value;
-    
+
     console.log('opt', value);
-    if(this.validateForm.valid) {
+    if (this.validateForm.valid) {
       this.submitLoading = true;
-      if(this.editDataInfo) {
+      if (this.editDataInfo) {
         this.edit(value);
-      }else {
+      } else {
         this.create(value);
       }
     }
   }
 
-  create(data:any):void {
+  create(data: any): void {
     const opt = {
       contract_id: this.contract_id,
       company_id: data.company_id,
       department_id: data.department_id,
       amount: +data.amount
     };
-    this.settingsConfigService.post('/api/split_contract/create', opt).subscribe((res:ApiData) => {
+    this.settingsConfigService.post('/api/split_contract/create', opt).subscribe((res: ApiData) => {
       console.log('add split contract', res);
       this.submitLoading = false;
-      if(res.code === 200) {
+      if (res.code === 200) {
         this.msg.success('创建成功');
         this.getDatalis();
         this.closeModal();
-      }else {
+      } else {
         this.msg.error(res.error || '创建失败');
       }
     })
   }
 
-  edit(data:any):void {
+  edit(data: any): void {
     const opt = {
       split_contract_id: this.editDataInfo.id,
       amount: +data.amount
     };
-    this.settingsConfigService.post('/api/split_contract/update', opt).subscribe((res:ApiData) => {
+    this.settingsConfigService.post('/api/split_contract/update', opt).subscribe((res: ApiData) => {
       console.log('update split contract', res);
       this.submitLoading = false;
-      if(res.code === 200) {
+      if (res.code === 200) {
         this.msg.success('更新成功');
         this.getDatalis();
         this.closeModal();
-      }else {
+      } else {
         this.msg.error(res.error || '更新失败');
       }
     })
   }
 
-  disabled(id:number):void {
+  disabled(id: number): void {
     this.settingsConfigService.post('/api/split_contract/disable', { split_contract_id: id })
-        .subscribe((res:ApiData) => {
-          if(res.code === 200) {
-            this.msg.success('禁用成功');
-            this.dataSet = this.dataSet.filter( v => v.id !== id);
-          }else {
-            this.msg.error(res.error || '禁用失败')
-          }
-    });
+      .subscribe((res: ApiData) => {
+        if (res.code === 200) {
+          this.msg.success('禁用成功');
+          this.dataSet = this.dataSet.filter(v => v.id !== id);
+        } else {
+          this.msg.error(res.error || '禁用失败')
+        }
+      });
   }
 
-  cancel() {}
+  cancel() { }
 
   setForm() {
     console.log(this.editDataInfo);
@@ -162,23 +166,20 @@ export class ContractSplitListComponent implements OnChanges, OnInit, OnDestroy 
       amount: this.editDataInfo.amount
     });
   }
-  
+
   closeModal(): void {
     this.editDataInfo = null;
     this.tplModal.destroy();
     this.validateForm.reset();
   }
 
-  selectedCompanyChange(id:number) {
-    if(id) {
+  selectedCompanyChange(id: number) {
+    if (id) {
       this.getConfigs(id);
     }
   }
-  configsOption:any = {
-    department: []
-  };
 
-  getConfigs(companyId:number) {
+  getConfigs(companyId: number) {
     // 根据单位id  获取  部门  服务商类型  合同类型
     this.departLoading = true;
     this.settingsConfigService.get(`/api/department/${companyId}`).pipe(
@@ -194,23 +195,23 @@ export class ContractSplitListComponent implements OnChanges, OnInit, OnDestroy 
   getDatalis() {
     this.loading = true;
     this.getDataList$ = this.requestList$.pipe(
-          map(v => v.data)
-        ).subscribe( data => {
-          this.loading = false;
-          console.log(data, 'split_contract');
-          this.dataSet = data.split_contract;
-          this.countMaxTotal();
-        });
+      map(v => v.data)
+    ).subscribe(data => {
+      this.loading = false;
+      console.log(data, 'split_contract');
+      this.dataSet = data.split_contract;
+      this.countMaxTotal();
+    });
   }
 
   countMaxTotal() {
-    if(this.dataSet && this.dataSet.length !== 0) {
-      const total:number = this.dataSet.map(item => item.amount).reduce( (a, b) => a + b, 0);
+    if (this.dataSet && this.dataSet.length !== 0) {
+      const total: number = this.dataSet.map(item => item.amount).reduce((a, b) => a + b, 0);
       this.listTotalAmount = Number((this.maxAmount - total).toFixed(2));
-      if(this.editDataInfo) {
+      if (this.editDataInfo) {
         this.listTotalAmount += this.editDataInfo.amount;
       }
-    }else {
+    } else {
       this.listTotalAmount = this.maxAmount;
     }
   }

@@ -47,14 +47,14 @@
         <td>{{ i + 1 }}</td>
         <td>{{ data.deal.contract.name }}</td>
         <td>{{ data.deal.contract.number }}</td>
-        <td class="text-error">{{ data.amount | currency: "CNY" }}</td>
+        <td>{{ data.amount | currency: "CNY" }}</td>
         <td>
-          <a [routerLink]="['/approve/list/apply/pay/edit', projectId]"
-            [queryParams]="{contract_pay_id: data.id }"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
-          
+          <a [routerLink]="['/approve/list/apply/pay/edit', projectId]" [queryParams]="{contract_pay_id: data.id }"><i
+              nz-icon nzType="edit" nzTheme="outline"></i></a>
+
           <nz-divider nzType="vertical"></nz-divider>
-          <a nz-popconfirm nzPopconfirmTitle="确认禁用当前合约支付?" (nzOnConfirm)="disabled(data.id)" (nzOnCancel)="cancel()"
-            class="text-error">禁用</a>
+          <a nz-popconfirm nzPopconfirmTitle="确认禁用当前合约支付?" (nzOnConfirm)="disabled(data.id)"
+            (nzOnCancel)="cancel()">禁用</a>
           <nz-divider nzType="vertical"></nz-divider>
 
           <a nz-popconfirm nzPopconfirmTitle="请确认合约支付信息填写完整，无误后继续提交！！！" (nzOnConfirm)="submitContractPay(data.id)"
@@ -75,17 +75,17 @@
         <div class="pt-md">
           <sv-container size="small">
             <sv label="合同编号">{{ data.deal.contract.number }}</sv>
-            <sv label="支付金额"><span class="text-error font-weight-bold">{{ data.amount | currency: "CNY" }}</span></sv>
+            <sv label="支付金额"><span class=" font-weight-bold">{{ data.amount | currency: "CNY" }}</span></sv>
           </sv-container>
         </div>
       </nz-skeleton>
       <ng-template #actionEdit>
-        <a [routerLink]="['/approve/list/apply/pay/edit', projectId]"
-          [queryParams]="{contract_pay_id: data.id }"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
+        <a [routerLink]="['/approve/list/apply/pay/edit', projectId]" [queryParams]="{contract_pay_id: data.id }"><i
+            nz-icon nzType="edit" nzTheme="outline"></i></a>
       </ng-template>
       <ng-template #actionDelete>
-        <a nz-popconfirm nzPopconfirmTitle="确认禁用当前合约支付?" (nzOnConfirm)="disabled(data.id)" (nzOnCancel)="cancel()"
-          class="text-error">禁用</a>
+        <a nz-popconfirm nzPopconfirmTitle="确认禁用当前合约支付?" (nzOnConfirm)="disabled(data.id)"
+          (nzOnCancel)="cancel()">禁用</a>
       </ng-template>
       <ng-template #actionSubmit>
         <a nz-popconfirm nzPopconfirmTitle="请确认合约支付信息填写完整，无误后继续提交！！！" (nzOnConfirm)="submitContractPay(data.id)"

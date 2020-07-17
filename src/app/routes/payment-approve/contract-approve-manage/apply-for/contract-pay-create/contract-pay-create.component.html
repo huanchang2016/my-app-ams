@@ -22,16 +22,16 @@
         </li>
       </ul>
     </nz-dropdown-menu>
-    <ng-container *ngIf="selectedContract && summary && listOfData.length !== 0 ">
+    <ng-container *ngIf="selectedFlag && summary && listOfData.length !== 0 ">
       <button *ngIf="!contractInfo || contractInfo.draft" nz-button [nzType]="'dashed'" (click)="submitPayAmount()"
         [nzLoading]="submitLoading" class="ml-xs">保存合约支付</button>
 
-        <ng-container *ngIf="!contractInfo || contractInfo.draft">
-          <button *ngIf="contract_pay_id" nz-popconfirm nz-button [nzType]="'primary'" class="ml-xs"
-            nzPopconfirmTitle="请确认合约支付信息填写完整，无误后继续提交！！！" (nzOnConfirm)="submitContractPay()" (nzOnCancel)="cancel()">
-            提交支付申请
-          </button>
-        </ng-container>
+      <ng-container *ngIf="!contractInfo || contractInfo.draft">
+        <button *ngIf="contract_pay_id" nz-popconfirm nz-button [nzType]="'primary'" class="ml-xs"
+          nzPopconfirmTitle="请确认合约支付信息填写完整，无误后继续提交！！！" (nzOnConfirm)="submitContractPay()" (nzOnCancel)="cancel()">
+          提交支付申请
+        </button>
+      </ng-container>
     </ng-container>
 
   </ng-template>
@@ -40,12 +40,19 @@
 
 </page-header>
 <div id="print-box">
+  <!-- 合同支付摘要信息 -->
+  <nz-card nzTitle="支付摘要" [nzBordered]="false" *ngIf="!contractInfo || contractInfo.draft" class="mt-md">
+    <textarea nz-input id="summary" placeholder="填写合同支付摘要信息" [(ngModel)]="summary"
+      [nzAutosize]="{ minRows: 3, maxRows: 6 }"></textarea>
+  </nz-card>
+
   <nz-card nzTitle="项目合同" [nzBordered]="false" [nzExtra]="contractTpl">
     <ng-template #contractTpl>
       <nz-select style="min-width: 300px;" nzShowSearch nzPlaceHolder="请选择支付合同" [nzDisabled]="contract_pay_id"
         [(ngModel)]="contract_id" (ngModelChange)="contractValueChange()">
         <ng-container *ngFor="let item of contractList">
-          <nz-option [nzLabel]="item.contract.name + (item.split_contract ? '（分割合同）' : '')" [nzValue]="item.contract.id"></nz-option>
+          <nz-option [nzLabel]="item.contract.name + (item.split_contract ? '（分割合同）' : '')"
+            [nzValue]="item.contract.id"></nz-option>
         </ng-container>
       </nz-select>
     </ng-template>
@@ -58,13 +65,21 @@
       <sv label="开户银行">{{ selectedContract.contract.bank_name }}</sv>
       <sv label="合同单位"><strong>{{ selectedContract.contract.supplier?.name }}</strong></sv>
       <sv label="银行账号">{{ selectedContract.contract.bank_account }}</sv>
-      <sv label="合同金额"><span class="text-error mr-md">{{ selectedContract.contract.amount | _currency }}</span></sv>
-      <sv label="已使用金额"><span class="text-error mr-md">{{ selectedContract.contract.use_amount | _currency }}</span></sv>
+      <sv label="合同金额"><span class="mr-md">{{ selectedContract.contract.amount | _currency }}</span></sv>
+      <sv label="已使用金额"><span class="mr-md">{{ selectedContract.contract.use_amount | _currency }}</span></sv>
+      <sv label="合同附件">
+        <div>
+          <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/contract/' + contract_id"
+            [isShowName]="false"></app-upload-file-attachment-show-c>
+        </div>
+      </sv>
       <ng-container *ngIf="selectedContract.contract.is_split">
         <sv-title>分割合同</sv-title>
         <!-- <sv col="3" label="分割合同"><span class="text-primary">是</span></sv> -->
-        <sv col="3" label="分割总金额"><span class="text-error mr-md">{{ selectedContract.split_contract.amount | _currency }}</span></sv>
-        <sv col="3" label="已使用分割金额"><span class="text-error mr-md">{{ selectedContract.split_contract.use_amount | _currency }}</span></sv>
+        <sv col="3" label="分割总金额"><span class="mr-md">{{ selectedContract.split_contract.amount | _currency }}</span>
+        </sv>
+        <sv col="3" label="已使用分割金额"><span
+            class="mr-md">{{ selectedContract.split_contract.use_amount | _currency }}</span></sv>
       </ng-container>
     </sv-container>
     <ng-template #notSelectedContract>
@@ -72,8 +87,15 @@
     </ng-template>
 
   </nz-card>
+  <nz-card nzTitle="  " [nzBordered]="false" [nzExtra]="costTpl" class="mt-md">
+    <ng-template #costTpl>
+      <button *ngIf="!contractInfo || contractInfo.draft" nz-button [disabled]="saveDisable" [nzType]="'primary'"
+        (click)="submitSum()">保存</button>
+    </ng-template>
+  </nz-card>
 
-  <nz-card nzTitle="成本支付" [nzBordered]="false" [nzExtra]="costTpl" class="mt-md" *ngIf="selectedContract">
+  <!-- 成本支付 -->
+  <nz-card nzTitle="成本支付" [nzBordered]="false" [nzExtra]="costTpl" class="mt-md" *ngIf="selectedFlag">
     <ng-template #costTpl>
       <button *ngIf="!contractInfo || contractInfo.draft" nz-button [nzType]="'primary'"
         (click)="addPaymentCost(tplTitle, tplContent, tplFooter, $event)">新增成本支付</button>
@@ -95,24 +117,23 @@
           <tr *ngFor="let data of costSelectTable.data; let i = index">
             <td>{{ i + 1}}</td>
             <td>{{ data.cost.cost_category.name }}</td>
-            <td class="text-success">{{ data.amount | _currency}}</td>
+            <td>{{ data.amount | _currency}}</td>
             <td>
               <sv-container size="small" col="1">
-                <sv label="预算金额"><span class="text-error">{{ data.cost.amount | currency: 'CNY' }}</span></sv>
-                <sv label="累计支付"><span class="text-success">{{ data.cost.pay_amount | currency: 'CNY' }}</span></sv>
-                <sv label="剩余支付"><span
-                    class="text-primary">{{ (data.cost.amount - data.cost.pay_amount) | currency: 'CNY' }}</span></sv>
+                <sv label="预算金额"><span>{{ data.cost.amount | currency: 'CNY' }}</span></sv>
+                <sv label="累计支付"><span>{{ data.cost.pay_amount | currency: 'CNY' }}</span></sv>
+                <sv label="剩余支付"><span>{{ (data.cost.amount - data.cost.pay_amount) | currency: 'CNY' }}</span></sv>
               </sv-container>
             </td>
             <td>
               <span [innerHTML]="data.remark | showTextareaContent"></span>
             </td>
             <td *ngIf="!contractInfo || contractInfo.draft">
-              <a (click)="edit(tplTitle, tplContent, tplFooter, data)"><i nz-icon nzType="edit"
+              <a (click)="edit(tplTitle, tplContent, tplFooter, data, i)"><i nz-icon nzType="edit"
                   nzTheme="outline"></i></a>
               <nz-divider nzType="vertical"></nz-divider>
               <a nz-popconfirm nzPopconfirmTitle="确认删除当前成本支付?" (nzOnConfirm)="delete(data.cost.id)"
-                (nzOnCancel)="cancel()" class="text-error">删除</a>
+                (nzOnCancel)="cancel()">删除</a>
             </td>
           </tr>
         </tbody>
@@ -120,7 +141,7 @@
     </div>
 
     <div class="hidden-pc">
-      <ng-container *ngFor="let data of listOfData">
+      <ng-container *ngFor="let data of listOfData; let i = index">
         <nz-card [nzActions]=" (!contractInfo || contractInfo.draft) ? [actionEdit, actionDelete] : [] " class="mt-md">
           <nz-skeleton [nzActive]="true" [nzLoading]="false">
             <nz-card-meta [nzTitle]="treatyTitltTpl"></nz-card-meta>
@@ -129,11 +150,11 @@
             </ng-template>
             <div class="pt-md">
               <sv-container size="small">
-                <sv label="总计支付"><span class="text-error">{{ data.cost.amount | currency: 'CNY' }}</span></sv>
-                <sv label="累计支付"><span class="text-success">{{ data.cost.pay_amount | currency: 'CNY' }}</span></sv>
+                <sv label="总计支付"><span>{{ data.cost.amount | currency: 'CNY' }}</span></sv>
+                <sv label="累计支付"><span>{{ data.cost.pay_amount | currency: 'CNY' }}</span></sv>
                 <sv label="剩余支付"><span
                     class="text-primary">{{ (data.cost.amount - data.cost.pay_amount) | currency: 'CNY' }}</span></sv>
-                <sv label="本期支付"><span class="text-error font-weight-bold">{{ data.amount | currency: 'CNY' }}</span>
+                <sv label="本期支付"><span class="font-weight-bold">{{ data.amount | currency: 'CNY' }}</span>
                 </sv>
                 <sv label="描述"><span [innerHTML]="data.remark | showTextareaContent"></span></sv>
               </sv-container>
@@ -141,11 +162,12 @@
           </nz-skeleton>
 
           <ng-template #actionEdit>
-            <a (click)="edit(tplTitle, tplContent, tplFooter, data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
+            <a (click)="edit(tplTitle, tplContent, tplFooter, data, i)"><i nz-icon nzType="edit"
+                nzTheme="outline"></i></a>
           </ng-template>
           <ng-template #actionDelete>
             <a nz-popconfirm nzPopconfirmTitle="确认删除当前成本支付?" (nzOnConfirm)="delete(data.cost.id)"
-              (nzOnCancel)="cancel()" class="text-error">删除</a>
+              (nzOnCancel)="cancel()">删除</a>
           </ng-template>
         </nz-card>
       </ng-container>
@@ -154,9 +176,87 @@
 
   </nz-card>
 
-  <!-- 合同支付摘要信息 -->
-  <nz-card nzTitle="支付摘要" [nzBordered]="false" *ngIf="!contractInfo || contractInfo.draft" class="mt-md">
-    <textarea nz-input id="summary" placeholder="填写合同支付摘要信息" [(ngModel)]="summary" [nzAutosize]="{ minRows: 3, maxRows: 6 }"></textarea>
+  <!-- 发票台账 -->
+  <nz-card nzTitle="发票台账" [nzBordered]="false" [nzExtra]="costTpl" class="mt-md" *ngIf="listOfData.length>0">
+    <ng-template #costTpl>
+      <button *ngIf="!contractInfo || contractInfo.draft" nz-button [nzType]="'primary'"
+        (click)="addBillTicket(billTitle, billContent, billFooter, $event)">新增发票台账</button>
+    </ng-template>
+
+    <div class="hidden-mobile">
+      <nz-table #taxSelectTable [nzData]="listOfTax" [nzFrontPagination]="false">
+        <thead>
+          <tr>
+            <th nzWidth="80px">序号</th>
+            <th>费用类型</th>
+            <th>出票单位</th>
+            <th nzWidth="250px">发票类型</th>
+            <th>发票金额（不含税）</th>
+            <th>税额</th>
+            <th *ngIf="!contractInfo || contractInfo.draft">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of taxSelectTable.data; let i = index">
+            <td>{{ i + 1}}</td>
+            <td>{{ data.cost.cost_category.name }}</td>
+            <td>{{ data.amount | _currency}}</td>
+            <td>
+              <sv-container size="small" col="1">
+                <sv label="预算金额"><span>{{ data.cost.amount | currency: 'CNY' }}</span></sv>
+                <sv label="累计支付"><span>{{ data.cost.pay_amount | currency: 'CNY' }}</span></sv>
+                <sv label="剩余支付"><span>{{ (data.cost.amount - data.cost.pay_amount) | currency: 'CNY' }}</span></sv>
+              </sv-container>
+            </td>
+            <td>
+              <span [innerHTML]="data.remark | showTextareaContent"></span>
+            </td>
+            <td *ngIf="!contractInfo || contractInfo.draft">
+              <a (click)="addBillTicket(billTitle, billContent, billFooter, data)"><i nz-icon nzType="edit"
+                  nzTheme="outline"></i></a>
+              <nz-divider nzType="vertical"></nz-divider>
+              <a nz-popconfirm nzPopconfirmTitle="确认删除当前成本支付?" (nzOnConfirm)="delete(data.cost.id)"
+                (nzOnCancel)="cancel()">删除</a>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </div>
+
+    <div class="hidden-pc">
+      <ng-container *ngFor="let data of listOfTax; let i = index">
+        <nz-card [nzActions]=" (!contractInfo || contractInfo.draft) ? [actionEdit, actionDelete] : [] " class="mt-md">
+          <nz-skeleton [nzActive]="true" [nzLoading]="false">
+            <nz-card-meta [nzTitle]="treatyTitltTpl"></nz-card-meta>
+            <ng-template #treatyTitltTpl>
+              <span>{{ data.cost.cost_category.name }}</span>
+            </ng-template>
+            <div class="pt-md">
+              <sv-container size="small">
+                <sv label="总计支付"><span>{{ data.cost.amount | currency: 'CNY' }}</span></sv>
+                <sv label="累计支付"><span>{{ data.cost.pay_amount | currency: 'CNY' }}</span></sv>
+                <sv label="剩余支付"><span
+                    class="text-primary">{{ (data.cost.amount - data.cost.pay_amount) | currency: 'CNY' }}</span></sv>
+                <sv label="本期支付"><span class="font-weight-bold">{{ data.amount | currency: 'CNY' }}</span>
+                </sv>
+                <sv label="描述"><span [innerHTML]="data.remark | showTextareaContent"></span></sv>
+              </sv-container>
+            </div>
+          </nz-skeleton>
+
+          <ng-template #actionEdit>
+            <a (click)="editBillTicket(billTitle, billContent, billFooter, data, i)"><i nz-icon nzType="edit"
+                nzTheme="outline"></i></a>
+          </ng-template>
+          <ng-template #actionDelete>
+            <a nz-popconfirm nzPopconfirmTitle="确认删除当前成本支付?" (nzOnConfirm)="delete(data.cost.id)"
+              (nzOnCancel)="cancel()">删除</a>
+          </ng-template>
+        </nz-card>
+      </ng-container>
+    </div>
+    <!-- edit -->
+
   </nz-card>
 
   <!-- 附件显示 -->
@@ -326,4 +426,98 @@
 <ng-template #tplFooter>
   <button nz-button nzType="default" (click)="closeModal()">取消</button>
   <button nz-button nzType="primary" (click)="handleOk()">确定</button>
+</ng-template>
+
+<!-- 发票台账新增 modal -->
+
+<ng-template #billTitle>
+  <span>添加发票台账</span>
+</ng-template>
+<ng-template #billContent>
+  <div class="modal-form">
+    <form nz-form [formGroup]="validateBillForm">
+      <nz-form-item>
+        <nz-form-label nzFor="contract_payment_id" nzRequired>成本类型</nz-form-label>
+        <nz-form-control nzErrorTip="请选择成本类型">
+          <nz-select style="width: 100%;" id="contract_payment_id" nzShowSearch [nzDisabled]="isEditCost"
+            nzPlaceHolder="请选择成本类型" formControlName="contract_payment_id">
+            <ng-container *ngFor="let item of costArr">
+              <nz-option [nzLabel]="item.name" [nzValue]="item.id" [nzDisabled]="item.disabled"></nz-option>
+            </ng-container>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzFor="bill_category_id" nzRequired>发票类型</nz-form-label>
+        <nz-form-control nzErrorTip="请选择发票类型">
+          <nz-select style="width: 100%;" id="bill_category_id" nzShowSearch [nzDisabled]="isEditCost"
+            nzPlaceHolder="请选择发票类型" formControlName="bill_category_id">
+            <ng-container *ngFor="let item of taxArr">
+              <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
+            </ng-container>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzFor="exclude_tax_amount" nzRequired>除税金额</nz-form-label>
+        <nz-form-control [nzErrorTip]="errorAmountTpl">
+          <nz-input-group nzSuffix="元" nzPrefix="￥" style="width: 100%">
+            <input type="text" id="exclude_tax_amount"
+              [placeholder]="'填写除税金额' +  (currentSelectCost ? '，不得超过' + (currentSelectCost.max - currentSelectCost.pay_amount > selectedContract.amount ? selectedContract.amount : (currentSelectCost.max - currentSelectCost.pay_amount)) + '元' : '') "
+              formControlName="exclude_tax_amount" nz-input />
+          </nz-input-group>
+          <ng-template #errorAmountTpl let-control>
+            <ng-container *ngIf="control.hasError('required')">
+              请填写除税金额，只需填写数字
+            </ng-container>
+            <ng-container *ngIf="control.hasError('confirm')">
+              当前除税金额不能超过
+              {{ currentSelectCost.max - currentSelectCost.pay_amount > selectedContract.amount ? selectedContract.amount : (currentSelectCost.max - currentSelectCost.pay_amount) }}
+            </ng-container>
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzFor="tax_amount" nzRequired>税金</nz-form-label>
+        <nz-form-control [nzErrorTip]="errorAmountTpl">
+          <nz-input-group nzSuffix="元" nzPrefix="￥" style="width: 100%">
+            <input type="text" id="tax_amount"
+              [placeholder]="'填写税金' +  (currentSelectCost ? '，不得超过' + (currentSelectCost.max - currentSelectCost.pay_amount > selectedContract.amount ? selectedContract.amount : (currentSelectCost.max - currentSelectCost.pay_amount)) + '元' : '') "
+              formControlName="tax_amount" nz-input />
+          </nz-input-group>
+          <ng-template #errorAmountTpl let-control>
+            <ng-container *ngIf="control.hasError('required')">
+              请填写税金，只需填写数字
+            </ng-container>
+            <ng-container *ngIf="control.hasError('confirm')">
+              当前税金不能超过
+              {{ currentSelectCost.max - currentSelectCost.pay_amount > selectedContract.amount ? selectedContract.amount : (currentSelectCost.max - currentSelectCost.pay_amount) }}
+            </ng-container>
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzFor="amount" nzRequired>总金额</nz-form-label>
+        <nz-form-control [nzErrorTip]="errorAmountTpl">
+          <nz-input-group nzSuffix="元" nzPrefix="￥" style="width: 100%">
+            <input type="text" id="amount"
+              [placeholder]="'填写总金额' +  (currentSelectCost ? '，不得超过' + (currentSelectCost.max - currentSelectCost.pay_amount > selectedContract.amount ? selectedContract.amount : (currentSelectCost.max - currentSelectCost.pay_amount)) + '元' : '') "
+              formControlName="amount" nz-input />
+          </nz-input-group>
+          <ng-template #errorAmountTpl let-control>
+            <ng-container *ngIf="control.hasError('required')">
+              请填总金额，只需填写数字
+            </ng-container>
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+
+    </form>
+  </div>
+</ng-template>
+<ng-template #billFooter>
+  <button nz-button nzType="default" (click)="closeTaxModal()">取消</button>
+  <button nz-button nzType="primary" (click)="sureOk()">确定</button>
 </ng-template>

@@ -1,4 +1,4 @@
-<ng-container *ngIf="listTotalAmount > 0">
+<ng-container *ngIf="listTotalAmount > 0 && !is_view">
   <button nz-button (click)="openTplModal(tplTitle, tplContent, tplFooter, $event)" nzType="primary"
     class="mb-sm">分割合同</button>
 
@@ -28,7 +28,7 @@
             nzTheme="outline"></i></a>
         <nz-divider nzType="vertical"></nz-divider>
         <a nz-popconfirm nzPopconfirmTitle="确定禁用当前合同类型？" (nzOnConfirm)="disabled(data.id)" (nzOnCancel)="cancel()"
-          class="text-error text-nowrap">禁用</a>
+          class=" text-nowrap">禁用</a>
       </td>
     </tr>
   </tbody>

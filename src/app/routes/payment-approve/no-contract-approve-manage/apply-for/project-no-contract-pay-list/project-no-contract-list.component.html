@@ -57,11 +57,11 @@
             <sv label="账号">{{ data.bank_account }}</sv>
           </sv-container>
         </td>
-        <td class="text-error">{{ data.amount | currency: 'CNY' }}</td>
+        <td>{{ data.amount | currency: 'CNY' }}</td>
         <td>
           <sv-container size="small" col="1">
             <sv label="冲销借款"><span>{{ data.if_write_off ? '有' : '无' }}</span></sv>
-            <sv label="冲抵金额"><span class="text-error">{{ data.if_write_off ? data.write_off_amount + '元' : '-' }}</span>
+            <sv label="冲抵金额"><span>{{ data.if_write_off ? data.write_off_amount + '元' : '-' }}</span>
             </sv>
           </sv-container>
         </td>
@@ -69,12 +69,12 @@
           <a [routerLink]="['/approve/no-contract/list/apply/pay/edit', projectId]"
             [queryParams]="{treaty_pay_id: data.id }"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
           <nz-divider nzType="vertical"></nz-divider>
-          <a nz-popconfirm nzPopconfirmTitle="确认禁用当前合约支付?" (nzOnConfirm)="disabled(data.id)" (nzOnCancel)="cancel()"
-            class="text-error">禁用</a>
-            <ng-container *ngIf="data.draft">
-              <nz-divider nzType="vertical"></nz-divider>
-              <a nz-popconfirm nz-button [nzType]="'primary'"
-              nzPopconfirmTitle="请确认非合约支付信息填写完整，无误后继续提交！！！" (nzOnConfirm)="submitContractPay(data.id)" (nzOnCancel)="cancel()">
+          <a nz-popconfirm nzPopconfirmTitle="确认禁用当前合约支付?" (nzOnConfirm)="disabled(data.id)"
+            (nzOnCancel)="cancel()">禁用</a>
+          <ng-container *ngIf="data.draft">
+            <nz-divider nzType="vertical"></nz-divider>
+            <a nz-popconfirm nz-button [nzType]="'primary'" nzPopconfirmTitle="请确认非合约支付信息填写完整，无误后继续提交！！！"
+              (nzOnConfirm)="submitContractPay(data.id)" (nzOnCancel)="cancel()">
               提交申请
             </a>
           </ng-container>
@@ -108,11 +108,11 @@
       </nz-skeleton>
       <ng-template #actionEdit>
         <a [routerLink]="['/approve/no-contract/list/apply/pay/edit', projectId]" class="text-nowrap"
-            [queryParams]="{treaty_pay_id: data.id }"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
+          [queryParams]="{treaty_pay_id: data.id }"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
       </ng-template>
       <ng-template #actionEllipsis>
         <a nz-popconfirm nzPopconfirmTitle="确认禁用当前合约支付?" (nzOnConfirm)="disabled(data.id)" (nzOnCancel)="cancel()"
-            class="text-error text-nowrap">禁用</a>
+          class="text-nowrap">禁用</a>
       </ng-template>
     </nz-card>
   </ng-container>

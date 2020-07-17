@@ -44,27 +44,31 @@
                     </td>
                     <td [innerHTML]="data.is_split | yn"></td>
                     <td>
-                        <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/contract/' + data.id" [isShowName]="false"></app-upload-file-attachment-show-c>
+                        <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/contract/' + data.id"
+                            [isShowName]="false"></app-upload-file-attachment-show-c>
                     </td>
                     <td>
                         <a (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
                         <nz-divider nzType="vertical"></nz-divider>
                         <a [routerLink]="['/contract/view', data.id]"><i nz-icon nzType="eye" nzTheme="outline"></i></a>
-                        
+
                         <nz-divider nzType="vertical"></nz-divider>
                         <a nz-popconfirm nzPopconfirmTitle="确定禁用当前合同类型？" (nzOnConfirm)="disabled(data.id)"
                             (nzOnCancel)="cancel()" class="text-error text-nowrap">禁用</a>
 
                         <ng-container *ngIf="data.is_split">
                             <nz-divider nzType="vertical"></nz-divider>
-                            <a (click)="splitContract(data.id)" class="text-nowrap">分割 <i nz-icon nzType="{{ showContractExpand[data.id] ? 'caret-up' : 'caret-down' }}" nzTheme="outline"></i></a>
+                            <a (click)="splitContract(data.id)" class="text-nowrap">分割 <i nz-icon
+                                    nzType="{{ showContractExpand[data.id] ? 'caret-up' : 'caret-down' }}"
+                                    nzTheme="outline"></i></a>
                         </ng-container>
                     </td>
                 </tr>
 
                 <tr *ngIf="showContractExpand[data.id]">
                     <td colspan="9" class="px0">
-                        <app-contract-split-list [contract_id]="data.id" [maxAmount]="data.amount" [companyList]="companyList"></app-contract-split-list>
+                        <app-contract-split-list [contract_id]="data.id" [maxAmount]="data.amount"
+                            [companyList]="companyList"></app-contract-split-list>
                     </td>
                 </tr>
             </ng-container>

@@ -1,0 +1,57 @@
+<nz-table #basicTable [nzData]="" [nzLoading]="" class="mt-md hidden-mobile">
+    <thead>
+        <tr>
+            <th nzWidth="80px">序号</th>
+            <th>费用类别</th>
+            <th>本期支付金额</th>
+            <th>附件</th>
+            <th class="text-center" nzWidth="200px">操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        <ng-container *ngFor="let data of basicTable.data; let i = index">
+            <tr>
+                <td>{{ i + 1 }}</td>
+                <td>{{ data.name }}</td>
+                <td>
+                    <div>所属单位：{{ data.company.name }}</div>
+                    <div *ngIf="!data.is_split">所属部门：{{ data.department.name }}</div>
+                </td>
+                <td>
+                    <div>合同编号：{{ data.number }}</div>
+                    <div>合同类型：{{ data.contract_category.name }}</div>
+                    <div>起止时间：{{ data.start_time }} 至 {{ data.end_time }}</div>
+                </td>
+                <td>
+                    <div>名称：{{ data.supplier.name }}</div>
+                    <div>类型：{{ data.service_category.name }}</div>
+                </td>
+                <td>
+                    <div>{{ data.request_amount ? '请示' : '合同' }}金额：{{ data.amount | _currency }}</div>
+                    <div>已使用金额：{{ data.pay_amount | _currency }}</div>
+                    <div *ngIf="data.is_split">已分割金额：{{ data.pay_amount | _currency }}</div>
+                </td>
+                <td [innerHTML]="data.is_split | yn"></td>
+                <td>
+                    <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/contract/' + data.id"
+                        [isShowName]="false"></app-upload-file-attachment-show-c>
+                </td>
+                <td>
+
+                </td>
+            </tr>
+
+            <!-- <tr *ngIf="showContractExpand[data.id]">
+                <td colspan="9" class="px0">
+                    <app-contract-split-list [contract_id]="data.id" [maxAmount]="data.amount"
+                        [companyList]="companyList"></app-contract-split-list>
+                </td>
+            </tr> -->
+        </ng-container>
+    </tbody>
+    <nz-form-item nz-row>
+        <nz-form-control [nzSpan]="24" [nzOffset]="12">
+            <button nz-button nzType="primary">保存</button>
+        </nz-form-control>
+    </nz-form-item>
+</nz-table>

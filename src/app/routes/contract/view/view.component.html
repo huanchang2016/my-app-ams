@@ -1,9 +1,9 @@
-<page-header [title]="title">
+<page-header [title]="title" [breadcrumb]="breadcrumb">
 
   <!-- [breadcrumb]="breadcrumb" [action]="action" [extra]="extra" -->
 
   <ng-template #title>
-    <span>合同：</span>
+    <span>合同详情：</span>
     <!-- <span class="">合同名称</span>
     <span class="text-primary text-xs mx-lg" [class.text-error]="project.info?.project_status.name === '已提交，已通过'"
       [class.text-error]="project.info?.project_status.name === '已提交，未通过'">{{ project.info?.project_status.name }}</span> -->
@@ -13,33 +13,116 @@
     <nz-breadcrumb>
       <nz-breadcrumb-item><a [routerLink]="['/dashboard']">首页</a></nz-breadcrumb-item>
       <nz-breadcrumb-item>合同管理</nz-breadcrumb-item>
-      <nz-breadcrumb-item>合同预览</nz-breadcrumb-item>
+      <nz-breadcrumb-item>合同列表</nz-breadcrumb-item>
+      <nz-breadcrumb-item>合同详情</nz-breadcrumb-item>
     </nz-breadcrumb>
-  </ng-template>
-
-  <ng-template #action>
-    <!-- <button nz-button (click)="printCurrentModal('print-box',  project.info?.name)">打印</button>
-    <button nz-button nz-dropdown [nzDropdownMenu]="opMenu" class="mx-sm">
-      下载 <i nz-icon nzType="download" nzTheme="outline"></i>
-    </button>
-    <nz-dropdown-menu #opMenu="nzDropdownMenu">
-      <ul nz-menu>
-        <li nz-menu-item (click)="downloadFile('pdf')"><i nz-icon nzType="file-pdf" nzTheme="outline"></i> .pdf</li>
-        <li nz-menu-item (click)="downloadFile('image')"><i nz-icon nzType="file-excel" nzTheme="outline"></i> .image
-        </li>
-      </ul>
-    </nz-dropdown-menu>
-
-    <a *ngIf="project.info?.draft" nz-button [nzType]="'primary'" [routerLink]="['/project/edit', projectId]">编辑</a>
-
-    <a nz-popconfirm nz-button [nzType]="'primary'" *ngIf="project.info?.draft"
-      nzPopconfirmTitle="请确认项目信息全部填写完整，无误后确认提交！！！" (nzOnConfirm)="submitProject()" (nzOnCancel)="cancel()">
-      提交项目
-    </a> -->
   </ng-template>
 
 </page-header>
 
-<nz-card>
-  contract view works!  contractId is {{ contractId }}
-</nz-card>
+<div class="print-box" id="print-box" #printBox>
+
+  <!-- modify start -->
+  <nz-card [nzTitle]="printerTitle" [nzBordered]="false" class="mb-md">
+    <ng-template #printerTitle>
+      <!-- <ng-container *ngIf="isPrinter;else noPrinter">
+        <div class="clearfix">
+          <div class="float-left title-logo">
+            <img src="/assets/imgs/export_logo.png" alt="天府人资">
+          </div>
+          <div class="float-right title-name text-right">我们以扎根新区、深耕新区、服务新区为己任，秉承拓荒牛精神，以专业优质的服务，致力于推动各类
+            人才向天府新区聚集，打造天府新区人才高地，成就天府新区人力资源服务第一品牌。</div>
+        </div>
+      </ng-container> -->
+      <div class="plan-title text-center text-lg font-weight-bold bg-white">{{ contractInfo?.name }}</div>
+    </ng-template>
+    <sv-container class="mb-lg" [title]="contractName">
+      <ng-template #contractName>
+        <span class="font-weight-bold text-md">一、合同名称</span>
+      </ng-template>
+      <sv col="1">
+        <div [innerHTML]="contractInfo?.name | showTextareaContent"></div>
+      </sv>
+    </sv-container>
+    <sv-container class="mb-lg" [title]="contractBelong">
+      <ng-template #contractBelong>
+        <span class="font-weight-bold text-md">二、合同归属</span>
+      </ng-template>
+      <sv col="1">
+        <div>
+          <span>所属单位：</span>{{contractInfo?.company.name}}</div>
+      </sv>
+    </sv-container>
+    <sv-container class="mb-lg" [title]="contractAbstract">
+      <ng-template #contractAbstract>
+        <span class="font-weight-bold text-md">三、合同概要</span>
+      </ng-template>
+      <sv col="1">
+        <div>
+          <div>1.合同编号：{{contractInfo?.number}}</div>
+          <div>2.合同类型：{{contractInfo?.contract_category.name}}</div>
+          <div>3.起止时间：{{contractInfo?.start_time}}至{{contractInfo?.end_time}}</div>
+        </div>
+      </sv>
+    </sv-container>
+    <sv-container class="mb-lg" [title]="supplier">
+      <ng-template #supplier>
+        <span class="font-weight-bold text-md">四、供应商</span>
+      </ng-template>
+      <sv col="1">
+        <div>
+          <div>名称：{{contractInfo?.supplier.name}}</div>
+          <div>供应商类型：{{contractInfo?.service_category.name}}</div>
+          <div>银行账号：{{contractInfo?.bank_account}}</div>
+          <div>银行名：{{contractInfo?.bank_name}}</div>
+        </div>
+      </sv>
+    </sv-container>
+    <sv-container class="mb-lg" [title]="amount">
+      <ng-template #amount>
+        <span class="font-weight-bold text-md">五、金额</span>
+      </ng-template>
+      <sv col="1">
+        <div>
+          <div>1.请示金额：{{ contractInfo?.amount | _currency }}</div>
+          <div>2.已使用金额：{{ contractInfo?.pay_amount| _currency }}</div>
+          <div *ngIf="contractInfo?.is_split">3.已分割金额：{{ contractInfo?.pay_amount | _currency }}</div>
+        </div>
+      </sv>
+    </sv-container>
+    <sv-container class="mb-lg" [title]="is_split">
+      <ng-template #is_split>
+        <span class="font-weight-bold text-md">六、是否分割</span>
+      </ng-template>
+      <sv col="1">
+        <div>
+          <div *ngIf="contractInfo?.is_split">
+            <!-- <nz-divider nzType="vertical"></nz-divider> -->
+            <div>
+              <app-contract-split-list [contract_id]="contractId" [maxAmount]="contractInfo?.amount"
+                [companyList]="companyList" [is_view]="true">
+              </app-contract-split-list>
+            </div>
+          </div>
+          <div *ngIf="!contractInfo?.is_split">
+            <div>否</div>
+          </div>
+        </div>
+      </sv>
+    </sv-container>
+    <sv-container class="mb-lg" [title]="attachment">
+      <ng-template #attachment>
+        <span class="font-weight-bold text-md">七、附件</span>
+      </ng-template>
+      <sv col="1">
+        <div>
+          <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/contract/' + contractId"
+            [isShowName]="false"></app-upload-file-attachment-show-c>
+        </div>
+      </sv>
+    </sv-container>
+
+  </nz-card>
+
+
+</div>

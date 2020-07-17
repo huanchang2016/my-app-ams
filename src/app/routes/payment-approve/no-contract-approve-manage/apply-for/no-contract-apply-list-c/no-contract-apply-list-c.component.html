@@ -17,9 +17,9 @@
     <thead>
         <tr>
             <th nzWidth="80px">序号</th>
-            <th>非合约信息</th>
-            <th>项目信息</th>
+            <th>收款信息</th>
             <th>支付信息</th>
+            <th>项目信息</th>
             <th>操作</th>
         </tr>
     </thead>
@@ -28,27 +28,25 @@
             <td>{{ i + 1 }}</td>
             <td>
                 <sv-container size="small" col="1">
-                    <sv label="非合约名称"><span class="font-weight-bold">{{ data.treaty.name }}</span></sv>
-                    <sv label="非合约单位"><span class="font-weight-bold">{{ data.treaty.company.name }}</span></sv>
-                    <sv label="非合约金额"><span class="text-primary">{{ data.treaty.amount | currency: 'CNY' }}</span></sv>
-                    <sv label="抵扣金额">
-                        <span *ngIf="data.if_write_off;else notWriteOff">{{ data.write_off_amount | currency: 'CNY' }}</span>
-                        <ng-template #notWriteOff>
-                            <span class="text-primary">无冲抵金额</span>
-                        </ng-template>
-                    </sv>
-                    
+                    <sv label="收款单位/个人"><span class="font-weight-bold">{{ data.pay_company }}</span></sv>
+                    <sv label="银行名称"><span>{{ data.bank_name }}</span></sv>
+                    <sv label="银行账号"><span>{{ data.bank_account }}</span></sv>
                 </sv-container>
             </td>
-            <td>{{ data.project?.name }}</td>
             <td>
                 <sv-container size="small" col="1">
-                    <sv label="收款单位"><span class="font-weight-bold">{{ data.pay_company }}</span></sv>
-                    <sv label="银行名称"><span class="font-weight-bold">{{ data.bank_name }}</span></sv>
-                    <sv label="银行账号"><span class="text-success">{{ data.bank_account }}</span></sv>
-                    <sv label="支付金额"><span class="text-error font-weight-bold">{{ data.amount | currency: 'CNY' }}</span></sv>
+                    <sv label="成本总额"><span>{{ data.before_deduct_amount | _currency }}</span></sv>
+                    <sv label="抵扣情况">
+                        <span *ngIf="data.if_write_off;else notWriteOff">{{ data.write_off_amount | currency: 'CNY' }}</span>
+                        <ng-template #notWriteOff>
+                            <span class="font-weight-bold">无冲抵</span>
+                        </ng-template>
+                    </sv>
+                    <sv label="待支付金额"><span>{{ data.amount | _currency }}</span></sv>
                 </sv-container>
+                
             </td>
+            <td>{{ data.project?.name }}</td>
             <td>
                 <!-- <nz-divider nzType="vertical"></nz-divider> -->
                 <a (click)="view(data)"><i nz-icon nzType="eye" nzTheme="outline"></i></a>
@@ -66,22 +64,22 @@
                 <nz-skeleton [nzActive]="true" [nzLoading]="false">
                     <nz-card-meta [nzTitle]="treatyTitltTpl"></nz-card-meta>
                     <ng-template #treatyTitltTpl>
-                        <span>{{ data.treaty.name }}</span>
-                        <span class="text-primary text-xs ml-md" [class.text-error]="data.pay_status?.name === '未通过'" [class.text-success]="data.pay_status?.name === '已通过'">{{ data.pay_status?.name }}</span>
+                        <span>{{ data.pay_company }}</span>
                     </ng-template>
                     <div class="pt-md">
-                        <sv-container size="small">
-                            <sv label="非合约名称"><span class="font-weight-bold">{{ data.treaty.name }}</span></sv>
-                            <sv label="非合约单位"><span class="font-weight-bold">{{ data.treaty.company.name }}</span></sv>
-                            <sv label="非合约金额"><span class="text-primary">{{ data.treaty.amount | currency: 'CNY' }}</span></sv>
-                            <sv label="抵扣金额">
+                        <sv-container size="small" col="1">
+                            <!-- <sv label="收款单位/个人"><span class="font-weight-bold">{{ data.pay_company }}</span></sv> -->
+                            <sv label="银行名称"><span>{{ data.bank_name }}</span></sv>
+                            <sv label="银行账号"><span>{{ data.bank_account }}</span></sv>
+                            <sv label="成本总额"><span>{{ data.before_deduct_amount | _currency }}</span></sv>
+                            <sv label="抵扣情况">
                                 <span *ngIf="data.if_write_off;else notWriteOff">{{ data.write_off_amount | currency: 'CNY' }}</span>
                                 <ng-template #notWriteOff>
-                                    <span class="text-primary">无冲抵金额</span>
+                                    <span class="font-weight-bold">无冲抵</span>
                                 </ng-template>
                             </sv>
-                            <sv label="收款单位"><span class="font-weight-bold">{{ data.pay_company }}</span></sv>
-                            <sv label="支付金额"><span class="text-error font-weight-bold">{{ data.amount | currency: 'CNY' }}</span></sv>
+                            <sv label="待支付金额"><span>{{ data.amount | _currency }}</span></sv>
+                            <sv label="项目名称"><span>{{ data.project?.name }}</span></sv>
                         </sv-container>
                     </div>
                 </nz-skeleton>

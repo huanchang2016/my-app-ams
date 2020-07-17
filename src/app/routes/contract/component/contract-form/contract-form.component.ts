@@ -3,8 +3,8 @@ import { NzModalRef, NzMessageService } from 'ng-zorro-antd';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { List, ApiData } from 'src/app/data/interface.data';
 import { SettingsConfigService } from 'src/app/routes/service/settings-config.service';
-import { filter, map } from 'rxjs/operators';
-import { zip } from 'rxjs';
+import { filter, map, distinct } from 'rxjs/operators';
+import { zip, from } from 'rxjs';
 
 @Component({
   selector: 'app-contract-contract-form',
@@ -82,6 +82,7 @@ export class ContractContractFormComponent implements OnInit {
       this.validateForm.patchValue({
         supplier_id: this.data.supplier.id,
         company_id: this.data.company.id,
+        is_split: this.data.is_split,
         department_id: this.data.is_split ? null : this.data.department.id,
         name: this.data.name,
         contract_category_id: this.data.contract_category ? this.data.contract_category.id : null,
@@ -123,15 +124,15 @@ export class ContractContractFormComponent implements OnInit {
   };
 
   attachmentError:boolean = false;
+
   submitForm(): void {
     for (const i in this.validateForm.controls) {
       this.validateForm.controls[i].markAsDirty();
       this.validateForm.controls[i].updateValueAndValidity();
     }
-
-    if(this.attachmentCategory.length !== this.attachment.length) {
+    
+    if(this.attachmentError) {
       this.msg.error('附件内容未全部上传');
-      this.attachmentError = true;
       return;
     }
 
@@ -252,8 +253,24 @@ export class ContractContractFormComponent implements OnInit {
       this.bindAttachment(this.data, true);
     }
     if(this.attachment.length !== 0) {
-      this.attachmentError = false;
+      this.isAllUploadFile();
+    }else {
+      this.attachmentError = true;
     }
+  }
+  
+  isAllUploadFile() {
+    const typeLength:number = this.attachmentCategory.length;
+    let _len:number = 0;
+    if(this.attachment.length !== 0) {
+      const attachment_ids:number[] = this.attachment.map( v => v.attachment_category.id );
+      from(attachment_ids).pipe(
+        distinct()
+      ).subscribe( _ => _len++ );
+    }
+
+    this.attachmentError = typeLength > _len;
+    
   }
 
   bindAttachment(contractInfo:any, isRefer:boolean = false) {
@@ -286,6 +303,9 @@ export class ContractContractFormComponent implements OnInit {
       console.log('项目 基础附件：', res);
       if(res.code === 200) {
         this.attachment = res.data.attachment;
+        if(this.attachmentCategory.length !== 0) {
+          this.isAllUploadFile();
+        }
       }
     })
   }

@@ -463,7 +463,7 @@ export class NoContractPayCreateComponent implements OnInit {
         this.msg.success('支付信息提交成功');
         this.router.navigateByUrl(`/approve/no-contract/list/apply/pay/${this.projectId}`);
       } else {
-        this.msg.error(res.error)
+        this.msg.error(res.error || '提交失败')
       }
     });
   }
@@ -591,6 +591,15 @@ export class NoContractPayCreateComponent implements OnInit {
       });
 
     });
+  }
+
+  treatyCostTotal(arr:any[]):number {
+    let total:number = 0;
+    if(arr && arr.length !== 0) {
+      total = arr.map(item => item.amount).reduce( (a, b) => a + b, 0);
+    }
+    
+    return total;
   }
 
   // 流程进程信息

@@ -5,28 +5,28 @@
     <app-contract-manage-search-form (searchOptionsEmit)="searchOptionsChange($event)" (addContentEmit)="add()">
     </app-contract-manage-search-form>
 
-    <nz-table #basicTable [nzData]="listOfData" [nzLoading]="loading" class="mt-md hidden-mobile">
+    <nz-table #basicTable [nzData]="listOfData" [nzLoading]="loading" class="mt-md hidden-mobile" [nzScroll]="{ x: '1800px' }">
         <thead>
             <tr>
-                <th nzWidth="80px">序号</th>
-                <th>名称</th>
+                <th nzWidth="80px" nzLeft>序号</th>
+                <th nzLeft>名称</th>
                 <th>合同归属</th>
                 <th>合同概要</th>
-                <th>供应商</th>
+                <th nzWidth="300px">供应商</th>
                 <th>金额</th>
-                <th>是否分割</th>
-                <th>附件</th>
-                <th class="text-center" nzWidth="200px">操作</th>
+                <th nzWidth="80px">分割</th>
+                <th nzWidth="140px">附件</th>
+                <th nzRight nzWidth="120px">操作</th>
             </tr>
         </thead>
         <tbody>
             <ng-container *ngFor="let data of basicTable.data; let i = index">
                 <tr>
-                    <td>{{ i + 1 }}</td>
-                    <td>{{ data.name }}</td>
+                    <td nzLeft>{{ i + 1 }}</td>
+                    <td nzLeft>{{ data.name }}</td>
                     <td>
-                        <div>所属单位：{{ data.company.name }}</div>
-                        <div *ngIf="!data.is_split">所属部门：{{ data.department.name }}</div>
+                        <div>单位：{{ data.company.name }}</div>
+                        <div *ngIf="!data.is_split">部门：{{ data.department.name }}</div>
                     </td>
                     <td>
                         <div>合同编号：{{ data.number }}</div>
@@ -34,7 +34,7 @@
                         <div>起止时间：{{ data.start_time }} 至 {{ data.end_time }}</div>
                     </td>
                     <td>
-                        <div>名称：{{ data.supplier.name }}</div>
+                        <div class="text-nowrap">名称：{{ data.supplier.name }}</div>
                         <div>类型：{{ data.service_category.name }}</div>
                     </td>
                     <td>
@@ -43,24 +43,39 @@
                         <div *ngIf="data.is_split">已分割金额：{{ data.pay_amount | _currency }}</div>
                     </td>
                     <td [innerHTML]="data.is_split | yn"></td>
+<<<<<<< HEAD
                     <td>
                         <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/contract/' + data.id"
                             [isShowName]="false"></app-upload-file-attachment-show-c>
+=======
+                    <td class="px0">
+                        <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/contract/' + data.id" [isShowName]="false"></app-upload-file-attachment-show-c>
+>>>>>>> d4f300a2bd5844a713b538ac0c1e180a855dcd6f
                     </td>
-                    <td>
+                    <td nzRight>
                         <a (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
+<<<<<<< HEAD
                         <nz-divider nzType="vertical"></nz-divider>
                         <a [routerLink]="['/contract/view', data.id]"><i nz-icon nzType="eye" nzTheme="outline"></i></a>
 
                         <nz-divider nzType="vertical"></nz-divider>
+=======
+                        
+                        <a class="mx-sm" [routerLink]="['/contract/view', data.id]"><i nz-icon nzType="eye" nzTheme="outline"></i></a>
+                        
+>>>>>>> d4f300a2bd5844a713b538ac0c1e180a855dcd6f
                         <a nz-popconfirm nzPopconfirmTitle="确定禁用当前合同类型？" (nzOnConfirm)="disabled(data.id)"
-                            (nzOnCancel)="cancel()" class="text-error text-nowrap">禁用</a>
+                            (nzOnCancel)="cancel()" class="text-error text-nowrap mr-sm">禁用</a>
 
                         <ng-container *ngIf="data.is_split">
+<<<<<<< HEAD
                             <nz-divider nzType="vertical"></nz-divider>
                             <a (click)="splitContract(data.id)" class="text-nowrap">分割 <i nz-icon
                                     nzType="{{ showContractExpand[data.id] ? 'caret-up' : 'caret-down' }}"
                                     nzTheme="outline"></i></a>
+=======
+                            <a (click)="splitContract(data.id)" class="text-nowrap">分割 <i nz-icon nzType="{{ showContractExpand[data.id] ? 'caret-up' : 'caret-down' }}" nzTheme="outline"></i></a>
+>>>>>>> d4f300a2bd5844a713b538ac0c1e180a855dcd6f
                         </ng-container>
                     </td>
                 </tr>

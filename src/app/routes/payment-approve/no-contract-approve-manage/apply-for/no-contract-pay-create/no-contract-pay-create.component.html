@@ -100,7 +100,7 @@
 
         <div nz-col [nzSm]="24">
           <nz-form-item>
-            <nz-form-label>附件资料</nz-form-label>
+            <nz-form-label style="line-height: 40px;">附件资料</nz-form-label>
             <nz-form-control>
 
               <ng-container *ngIf="treatypayInfo && !treatypayInfo.draft">
@@ -143,9 +143,15 @@
           <tr>
             <th nzWidth="80px">序号</th>
             <th>摘要</th>
-            <th>费用类型</th>
+            <th nzWidth="300px">服务单位</th>
             <th>本期支付（元）</th>
-            <th nzWidth="250px">支付统计</th>
+            <th>
+              <span>类型支付总计</span>
+              <span nz-tooltip [nzTooltipTitle]="'当前成本已经使用非合约支付的总金额'" class="text-md ml-sm">
+                <i nz-icon nzType="exclamation-circle" nzTheme="outline"></i>
+              </span>
+            </th>
+            <th nzWidth="320px">成本类型</th>
             <!-- <th>收款信息</th> -->
             <th>描述</th>
             <th *ngIf="!treatypayInfo || treatypayInfo.draft">操作</th>
@@ -155,18 +161,29 @@
           <tr *ngFor="let data of costSelectTable.data; let i = index">
             <td>{{ i + 1}}</td>
             <td>{{ data.abstract }}</td>
-            <td class="text-nowrap">
-              <span>{{ data.cost.cost_category.name }}</span>
-              <span nz-tooltip [nzTooltipTitle]="data.cost.cost_category.description" class="text-md ml-sm">
-                <i nz-icon nzType="exclamation-circle" nzTheme="outline"></i></span>
+            <td>
+              <sv-container size="small" col="1">
+                <sv label="单位名称"><span>{{ data.treaty.supplier.name }}</span></sv>
+                <sv label="预算金额"><span>{{ data.treaty.amount | currency: 'CNY' }}</span></sv>
+              </sv-container>
             </td>
             <td>{{ data.amount | currency: 'CNY' }}</td>
             <td>
+              {{ treatyCostTotal(data.treaty_cost) | _currency }}
+            </td>
+            <td>
               <sv-container size="small" col="1">
-                <sv label="预算金额"><span>{{ data.cost.amount | currency: 'CNY' }}</span></sv>
-                <sv label="累计支付"><span>{{ data.cost.pay_amount | currency: 'CNY' }}</span></sv>
-                <sv label="剩余支付"><span>{{ (data.cost.amount - data.cost.pay_amount) | currency: 'CNY' }}</span></sv>
+                <sv label="类型名称">
+                  <span>{{ data.cost.cost_category.name }}</span>
+                  <span nz-tooltip [nzTooltipTitle]="data.cost.cost_category.description" class="text-md ml-sm">
+                    <i nz-icon nzType="exclamation-circle" nzTheme="outline"></i>
+                  </span>
+                </sv>
+                <sv label="预算总金额"><span>{{ data.cost.amount | currency: 'CNY' }}</span></sv>
+                <sv label="已使用金额"><span>{{ data.cost.pay_amount | currency: 'CNY' }}</span></sv>
+                <sv label="剩余使用"><span>{{ (data.cost.amount - data.cost.pay_amount) | currency: 'CNY' }}</span></sv>
               </sv-container>
+              
             </td>
             <!-- <td>
               <div>

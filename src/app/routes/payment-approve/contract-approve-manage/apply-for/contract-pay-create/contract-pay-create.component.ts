@@ -59,15 +59,20 @@ export class ContractPayCreateComponent implements OnInit {
   contractInfo: any = null;  // 合同信息
   contract_id: number = null; //  选择的合同id
   single_contract_id: number = null; //  选择的合同id
-  contract_payment_id: number = null;
+  contract_payment_id: number = null;  //  合同支付详情id
+  contract_payment_tax_id: number = null;  //  合同支付税目id
   selectedContract: any = null;
   selectedFlag = false;  // 选择显示标杆
   contractList: any[] = [];
   saveDisable = false;  //  保存按钮标杆
 
+  amount_flag = false;  //  总金额标杆
+
   costArr: any[] = []; // 所有的成本列表  需要通过预算（通过项目） 获取
 
   taxArr: any[] = [];
+
+  amount: number = null;
 
   summary = ''; // 合同支付 摘要信息
 
@@ -75,6 +80,8 @@ export class ContractPayCreateComponent implements OnInit {
   submitLoading = false;
 
   currentSelectCost: any = null;
+
+  currentSelectTax: any = {};
 
   // 新增 成本支付
   tplModal: NzModalRef;
@@ -87,6 +94,7 @@ export class ContractPayCreateComponent implements OnInit {
   validateBillForm: FormGroup;
 
   isEditCost = false;
+
   // 金额大写
   transferNumber = '';
 
@@ -133,7 +141,33 @@ export class ContractPayCreateComponent implements OnInit {
     this.validateCostForm.get('cost_id').valueChanges.subscribe((cost_id: number) => {
       if (cost_id) {
         this.currentSelectCost = this.costArr.filter(v => v.id === cost_id)[0];
-        console.log(this.currentSelectCost)
+        console.log('currentSelectCost', this.currentSelectCost);
+      }
+    });
+    console.log('validateBillForm', this.validateBillForm);
+    this.validateBillForm.get('exclude_tax_amount').valueChanges.subscribe((exclude_tax_amount: number) => {
+      if (exclude_tax_amount) {
+        exclude_tax_amount = Number(exclude_tax_amount) || 0;
+        this.validateBillForm.get('tax_amount').valueChanges.subscribe((tax_amount: number) => {
+          if (tax_amount) {
+            this.amount_flag = true;
+            tax_amount = Number(tax_amount) || 0;
+            this.amount = exclude_tax_amount + tax_amount;
+            this.validateBillForm.patchValue({
+              amount: this.amount,
+            });
+          }
+        });
+      }
+    });
+    this.validateBillForm.get('amount').valueChanges.subscribe((amount: number) => {
+      if (amount) {
+        amount = Number(amount) || 0;
+        this.validateBillForm.patchValue({
+          amount: this.amount,
+          exclude_tax_amount: 0,
+          tax_amount: 0,
+        });
       }
     });
   }
@@ -214,11 +248,12 @@ export class ContractPayCreateComponent implements OnInit {
   }
 
   getContractTax() {
+    console.log('this.contract_pay_id', this.contract_pay_id);
     this.settingsConfigService.get(`/api/contract/payment/tax/${this.contract_pay_id}`)
       .subscribe((res: ApiData) => {
-        console.log(res, '合约支付税目');
+        console.log(res, '合约支付税目列表');
         if (res.code === 200) {
-          const contractTax: any[] = res.data.contract_payment;
+          const contractTax: any[] = res.data.contract_payment_tax;
           this.listOfTax = contractTax;
           console.log('getContractTax listOfTax', this.listOfTax)
         }
@@ -304,10 +339,12 @@ export class ContractPayCreateComponent implements OnInit {
       nzOnOk: () => console.log('Click ok')
     });
     console.log('发票台账costArr', this.costArr)
+    this.getContractPayment();
+    this.listOfData.map(v => { this.contract_payment_id = v.id })
+    // this.currentSelectTax = this.listOfData.filter(v => v.cost.id === id).length > 0;
   }
   editBillTicket(billTitle: TemplateRef<{}>, billContent: TemplateRef<{}>, billFooter: TemplateRef<{}>, data: any, i): void {
     this.isEditCost = true;
-    console.log('edittax', data);
     // this.taxArr = this.taxArr.map(v => {
     //   if (v.id === data.cost.id) {
     //     v.disabled = true;
@@ -316,6 +353,9 @@ export class ContractPayCreateComponent implements OnInit {
     // })
     // console.log('taxArr',this.taxArr);
     this.contract_payment_id = this.listOfTax[i].id;
+    this.contract_payment_tax_id = data.id;
+    console.log('contract_payment_tax_id', this.contract_payment_tax_id);
+    console.log('editBillTicket data', data);
     this.resetTaxForm(data);
     this.billModal = this.modalService.create({
       nzTitle: billTitle,
@@ -525,6 +565,24 @@ export class ContractPayCreateComponent implements OnInit {
     this.msg.success('支付成本删除成功!');
   }
 
+  deleteTax(id: number): void {
+    // let paymentId = null;
+    // this.listOfTax.length !== 1 ? paymentId = this.listOfTax[id - 1].id : paymentId = this.listOfTax[0].id
+    // console.log('delete', paymentId)
+    console.log('deleteid', id)
+    console.log('listOfData', this.listOfTax)
+    this.settingsConfigService.post('/api/contract/payment/tax/disable', { contract_payment_tax_id: id }).subscribe((res: ApiData) => {
+      console.log('create res', res.data);
+      if (res.code === 200) {
+        console.log('禁用合同支付税目  成功');
+        this.listOfTax = this.listOfTax.filter(v => v.id !== id);
+      } else {
+        this.submitLoading = false;
+      }
+    });
+    this.msg.success('合同支付税目删除成功!');
+  }
+
   resetForm(opt: any): void {
     this.validateCostForm.patchValue({
       cost_id: opt.cost.id,
@@ -534,10 +592,12 @@ export class ContractPayCreateComponent implements OnInit {
   }
 
   resetTaxForm(opt: any): void {
-    this.validateCostForm.patchValue({
-      cost_id: opt.cost.id,
+    this.validateBillForm.patchValue({
+      contract_payment_id: opt.contract_payment.cost.cost_category.id,
+      bill_category_id: opt.bill_category.id,
+      exclude_tax_amount: opt.exclude_tax_amount,
+      tax_amount: opt.tax_amount,
       amount: opt.amount,
-      remark: opt.remark
     });
   }
 
@@ -633,6 +693,7 @@ export class ContractPayCreateComponent implements OnInit {
         console.log(res, 'getTaxCategoryList 获取所有开票类型');
         // res.data.bill_category
         this.taxArr = res.data.bill_category
+        console.log('taxArr', this.taxArr);
       }
     })
   }
@@ -861,18 +922,17 @@ export class ContractPayCreateComponent implements OnInit {
         tax_amount: Number(value.tax_amount),
         amount: Number(value.amount),
         index: value.bill_category_id,
-        // cost_id: selectCost.id,
-        // amount: Number(value.amount),
-        // remark: remark.trim()
+      }
+      const editArray = {
+        contract_payment_tax_id: this.contract_payment_tax_id,
+        bill_category_id: value.bill_category_id,
+        exclude_tax_amount: Number(value.exclude_tax_amount),
+        tax_amount: Number(value.tax_amount),
+        amount: Number(value.amount),
+        index: value.bill_category_id,
       }
       console.log('createArray', createArray);
-      const editArray = {
-        // contract_payment_id: this.contract_payment_id,
-        // cost_id: selectCost.id,
-        // amount: Number(value.amount),
-        // remark: remark.trim()
-      }
-
+      console.log('editArray', editArray);
       console.log('isEditCost', this.isEditCost);
       if (!this.isEditCost) {
         this.createContractTax(createArray);
@@ -886,14 +946,24 @@ export class ContractPayCreateComponent implements OnInit {
   createContractTax(option) {
     this.settingsConfigService.post('/api/contract/payment/tax/create', option).subscribe((res: ApiData) => {
       if (res.code === 200) {
+        this.amount_flag = false;
         console.log('createContractTax res', res.data);
         console.log('创建合同支付税目  成功');
+        this.getContractTax();
+        console.log('currentSelectTax', this.currentSelectTax);
       }
     });
   }
 
   editContractTax(option) {
-
+    this.amount_flag = false;
+    this.settingsConfigService.post('/api/contract/payment/tax/update', option).subscribe((res: ApiData) => {
+      if (res.code === 200) {
+        console.log('editContractTax res', res.data);
+        console.log('修改合同支付税目  成功');
+        this.getContractTax();
+      }
+    });
   }
 
 }

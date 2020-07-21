@@ -206,7 +206,7 @@
               <sv-container size="small" col="1">
                 <sv label="除税金额"><span>{{ data.exclude_tax_amount | currency: 'CNY' }}</span></sv>
                 <sv label="税金"><span>{{ data.tax_amount | currency: 'CNY' }}</span></sv>
-                <sv label="总金额"><span>{{ (data.exclude_tax_amount + data.tax_amount) | currency: 'CNY' }}</span></sv>
+                <sv label="总金额"><span>{{ data.amount | currency: 'CNY' }}</span></sv>
               </sv-container>
             </td>
             <td *ngIf="!contractInfo || contractInfo.draft">
@@ -465,49 +465,49 @@
       </nz-form-item>
 
       <nz-form-item>
+        <nz-form-label nzFor="radioValue" nzRequired>是否开票</nz-form-label>
+        <nz-form-control nzErrorTip="请选择发票类型">
+          <nz-radio-group id="radioValue" formControlName="radioValue">
+            <label nz-radio nzValue="1" (ngModelChange)="requiredChange($event)">是</label>
+            <label nz-radio nzValue="0" (ngModelChange)="requiredChange($event)">否</label>
+          </nz-radio-group>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item *ngIf="this.validateBillForm.get('radioValue').value==='1'">
         <nz-form-label nzFor="exclude_tax_amount" nzRequired>除税金额</nz-form-label>
-        <nz-form-control [nzErrorTip]="errorAmountTpl">
+        <nz-form-control [nzErrorTip]="errorExcludeTaxAmount">
           <nz-input-group nzSuffix="元" nzPrefix="￥" style="width: 100%">
-            <input type="text" id="exclude_tax_amount" [disabled]=""
-              [placeholder]="'填写除税金额' +  (currentSelectCost ? '，不得超过' + (currentSelectCost.max - currentSelectCost.pay_amount > selectedContract.amount ? selectedContract.amount : (currentSelectCost.max - currentSelectCost.pay_amount)) + '元' : '') "
+            <input type="text" id="exclude_tax_amount" [disabled]="" placeholder="填写除税金额"
               formControlName="exclude_tax_amount" nz-input />
           </nz-input-group>
-          <ng-template #errorAmountTpl let-control>
+          <ng-template #errorExcludeTaxAmount let-control>
             <ng-container *ngIf="control.hasError('required')">
               请填写除税金额，只需填写数字
             </ng-container>
-            <ng-container *ngIf="control.hasError('confirm')">
-              当前除税金额不能超过
-              {{ currentSelectCost.max - currentSelectCost.pay_amount > selectedContract.amount ? selectedContract.amount : (currentSelectCost.max - currentSelectCost.pay_amount) }}
-            </ng-container>
           </ng-template>
         </nz-form-control>
       </nz-form-item>
-      <nz-form-item>
+
+      <nz-form-item *ngIf="this.validateBillForm.get('radioValue').value==='1'">
         <nz-form-label nzFor="tax_amount" nzRequired>税金</nz-form-label>
-        <nz-form-control [nzErrorTip]="errorAmountTpl">
+        <nz-form-control [nzErrorTip]="errorTaxAmount">
           <nz-input-group nzSuffix="元" nzPrefix="￥" style="width: 100%">
-            <input type="text" id="tax_amount"
-              [placeholder]="'填写税金' +  (currentSelectCost ? '，不得超过' + (currentSelectCost.max - currentSelectCost.pay_amount > selectedContract.amount ? selectedContract.amount : (currentSelectCost.max - currentSelectCost.pay_amount)) + '元' : '') "
-              formControlName="tax_amount" nz-input />
+            <input type="text" id="tax_amount" placeholder="请填写税金" formControlName="tax_amount" nz-input />
           </nz-input-group>
-          <ng-template #errorAmountTpl let-control>
+          <ng-template #errorTaxAmount let-control>
             <ng-container *ngIf="control.hasError('required')">
               请填写税金，只需填写数字
             </ng-container>
-            <ng-container *ngIf="control.hasError('confirm')">
-              当前税金不能超过
-              {{ currentSelectCost.max - currentSelectCost.pay_amount > selectedContract.amount ? selectedContract.amount : (currentSelectCost.max - currentSelectCost.pay_amount) }}
-            </ng-container>
           </ng-template>
         </nz-form-control>
       </nz-form-item>
-      <nz-form-item>
-        <nz-form-label nzFor="amount" nzRequired>总金额</nz-form-label>
+
+      <nz-form-item *ngIf="this.validateBillForm.get('radioValue').value==='0'">
+        <nz-form-label nzFor="amount" [nzRequired]="validateBillForm.get('required')?.value">总金额</nz-form-label>
         <nz-form-control [nzErrorTip]="errorAmountTpl">
           <nz-input-group nzSuffix="元" nzPrefix="￥" style="width: 100%">
-            <input type="text" id="amount" placeholder="填写总金额" [disabled]="amount_flag" formControlName="amount"
-              nz-input />
+            <input type="text" id="amount" placeholder="填写总金额" formControlName="amount" nz-input />
           </nz-input-group>
           <ng-template #errorAmountTpl let-control>
             <ng-container *ngIf="control.hasError('required')">
@@ -516,6 +516,21 @@
           </ng-template>
         </nz-form-control>
       </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzFor="index" nzRequired>序号</nz-form-label>
+        <nz-form-control [nzErrorTip]="errorIndex">
+          <nz-input-group style="width: 100%">
+            <input type="text" id="index" placeholder="填写序号" formControlName="index" nz-input />
+          </nz-input-group>
+          <ng-template #errorIndex let-control>
+            <ng-container *ngIf="control.hasError('required')">
+              请填序号，只需填写数字
+            </ng-container>
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+
 
     </form>
   </div>

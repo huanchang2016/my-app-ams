@@ -57,13 +57,21 @@ export class ContractPayCreateComponent implements OnInit {
   contract_pay_id: number = null;
 
   contractInfo: any = null;  // 合同信息
+
   contract_id: number = null; //  选择的合同id
+
   single_contract_id: number = null; //  选择的合同id
+
   contract_payment_id: number = null;  //  合同支付详情id
+
   contract_payment_tax_id: number = null;  //  合同支付税目id
+
   selectedContract: any = null;
+
   selectedFlag = false;  // 选择显示标杆
+
   contractList: any[] = [];
+
   saveDisable = false;  //  保存按钮标杆
 
   amount_flag = false;  //  总金额标杆
@@ -72,11 +80,17 @@ export class ContractPayCreateComponent implements OnInit {
 
   taxArr: any[] = [];
 
-  amount: number = null;
+  amount: number = null;  //  总金额
+
+  exclude_tax_amount: number = null;  //  除税金额
+
+  tax_amount: number = null;  //  税金
+
 
   summary = ''; // 合同支付 摘要信息
 
   pageTitle = '';
+
   submitLoading = false;
 
   currentSelectCost: any = null;
@@ -100,6 +114,7 @@ export class ContractPayCreateComponent implements OnInit {
 
   // 附件上传
   attachment: any[] = [];
+
   isAttachmentChange = false;
 
   attachmentCategory: List[] = [];
@@ -107,8 +122,11 @@ export class ContractPayCreateComponent implements OnInit {
 
   // 流程进程信息
   progressInfo: any = null;
+
   nodeProcess: any[] = [];
+
   currentNodeProcess: any = null;
+
   isCurrentCheck = false;
 
   checkOption: any = {
@@ -117,6 +135,7 @@ export class ContractPayCreateComponent implements OnInit {
   }
 
   isPrinter = false;
+
   pdfPosition = 0;
 
 
@@ -130,9 +149,11 @@ export class ContractPayCreateComponent implements OnInit {
     this.validateBillForm = this.fb.group({
       contract_payment_id: [null, [Validators.required]],
       bill_category_id: [null, [Validators.required]],
-      exclude_tax_amount: [null, [Validators.required]],
-      tax_amount: [null, [Validators.required]],
-      amount: [null, [Validators.required]],
+      exclude_tax_amount: [null],
+      tax_amount: [null],
+      amount: [null],
+      index: [null, [Validators.required]],
+      radioValue: '1',
     });
     this.getCategoryList();
     this.getTaxCategoryList();
@@ -144,33 +165,20 @@ export class ContractPayCreateComponent implements OnInit {
         console.log('currentSelectCost', this.currentSelectCost);
       }
     });
-    console.log('validateBillForm', this.validateBillForm);
-    this.validateBillForm.get('exclude_tax_amount').valueChanges.subscribe((exclude_tax_amount: number) => {
-      if (exclude_tax_amount) {
-        exclude_tax_amount = Number(exclude_tax_amount) || 0;
-        this.validateBillForm.get('tax_amount').valueChanges.subscribe((tax_amount: number) => {
-          if (tax_amount) {
-            this.amount_flag = true;
-            tax_amount = Number(tax_amount) || 0;
-            this.amount = exclude_tax_amount + tax_amount;
-            this.validateBillForm.patchValue({
-              amount: this.amount,
-            });
-          }
-        });
-      }
-    });
-    this.validateBillForm.get('amount').valueChanges.subscribe((amount: number) => {
-      if (amount) {
-        amount = Number(amount) || 0;
-        this.validateBillForm.patchValue({
-          amount: this.amount,
-          exclude_tax_amount: 0,
-          tax_amount: 0,
-        });
-      }
-    });
+
   }
+  // 动态校验
+  requiredChange(radioValue: string): void {
+    if (radioValue === '1') {
+      this.validateBillForm.get('amount')!.clearValidators();
+      this.validateBillForm.get('amount')!.markAsPristine();
+    } else {
+      this.validateBillForm.get('amount')!.setValidators(Validators.required);
+      this.validateBillForm.get('amount')!.markAsDirty();
+    }
+    this.validateBillForm.get('amount')!.updateValueAndValidity();
+  }
+
   confirmationAmountValidator = (control: FormControl): { [s: string]: boolean } => {
 
     if (!this.currentSelectCost) {
@@ -341,17 +349,9 @@ export class ContractPayCreateComponent implements OnInit {
     console.log('发票台账costArr', this.costArr)
     this.getContractPayment();
     this.listOfData.map(v => { this.contract_payment_id = v.id })
-    // this.currentSelectTax = this.listOfData.filter(v => v.cost.id === id).length > 0;
   }
   editBillTicket(billTitle: TemplateRef<{}>, billContent: TemplateRef<{}>, billFooter: TemplateRef<{}>, data: any, i): void {
     this.isEditCost = true;
-    // this.taxArr = this.taxArr.map(v => {
-    //   if (v.id === data.cost.id) {
-    //     v.disabled = true;
-    //   }
-    //   return v;
-    // })
-    // console.log('taxArr',this.taxArr);
     this.contract_payment_id = this.listOfTax[i].id;
     this.contract_payment_tax_id = data.id;
     console.log('contract_payment_tax_id', this.contract_payment_tax_id);
@@ -382,6 +382,7 @@ export class ContractPayCreateComponent implements OnInit {
     this.isEditCost = false;
     this.billModal.destroy();
     this.validateBillForm.reset();
+    this.validateBillForm.patchValue({ radioValue: '1' });
   }
 
   submitForm(): void {
@@ -598,6 +599,8 @@ export class ContractPayCreateComponent implements OnInit {
       exclude_tax_amount: opt.exclude_tax_amount,
       tax_amount: opt.tax_amount,
       amount: opt.amount,
+      index: opt.index,
+      radioValue: opt.radioValue
     });
   }
 
@@ -891,7 +894,7 @@ export class ContractPayCreateComponent implements OnInit {
   }
 
   sureOk() {
-    this.submitTaxForm()
+    this.submitTaxForm();
   }
 
   submitTaxForm(): void {
@@ -903,34 +906,23 @@ export class ContractPayCreateComponent implements OnInit {
       const value: any = this.validateBillForm.value;
       console.log('value', value);
 
-      // 添加成本预算后， 当前 税目类型就变成不可选
-      // this.taxArr = this.taxArr.map(v => {
-      //   if (v.id === value.cost_id) {
-      //     v.disabled = true;
-      //   }
-      //   return v;
-      // });
-
-      // const remark: string = value.remark || '';
-      // // 列表渲染数据
-      // const selectCost: any = this.costlist.filter(v => v.id === value.index)[0];
-
       const createArray = {
         contract_payment_id: this.contract_payment_id,
         bill_category_id: value.bill_category_id,
         exclude_tax_amount: Number(value.exclude_tax_amount),
         tax_amount: Number(value.tax_amount),
-        amount: Number(value.amount),
-        index: value.bill_category_id,
+        amount: this.validateBillForm.get('radioValue').value === '1' ? Number(value.exclude_tax_amount) + Number(value.tax_amount) : Number(value.amount),
+        index: Number(value.index),
       }
       const editArray = {
         contract_payment_tax_id: this.contract_payment_tax_id,
         bill_category_id: value.bill_category_id,
         exclude_tax_amount: Number(value.exclude_tax_amount),
         tax_amount: Number(value.tax_amount),
-        amount: Number(value.amount),
-        index: value.bill_category_id,
+        amount: this.validateBillForm.get('radioValue').value === '1' ? Number(value.exclude_tax_amount) + Number(value.tax_amount) : Number(value.amount),
+        index: Number(value.index),
       }
+
       console.log('createArray', createArray);
       console.log('editArray', editArray);
       console.log('isEditCost', this.isEditCost);
@@ -946,7 +938,6 @@ export class ContractPayCreateComponent implements OnInit {
   createContractTax(option) {
     this.settingsConfigService.post('/api/contract/payment/tax/create', option).subscribe((res: ApiData) => {
       if (res.code === 200) {
-        this.amount_flag = false;
         console.log('createContractTax res', res.data);
         console.log('创建合同支付税目  成功');
         this.getContractTax();
@@ -956,7 +947,6 @@ export class ContractPayCreateComponent implements OnInit {
   }
 
   editContractTax(option) {
-    this.amount_flag = false;
     this.settingsConfigService.post('/api/contract/payment/tax/update', option).subscribe((res: ApiData) => {
       if (res.code === 200) {
         console.log('editContractTax res', res.data);

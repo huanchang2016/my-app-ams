@@ -70,14 +70,14 @@
             [queryParams]="{treaty_pay_id: data.id }"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
           <nz-divider nzType="vertical"></nz-divider>
           <a nz-popconfirm nzPopconfirmTitle="确认禁用当前合约支付?" (nzOnConfirm)="disabled(data.id)"
-            (nzOnCancel)="cancel()">禁用</a>
-          <ng-container *ngIf="data.draft">
+            (nzOnCancel)="cancel()" class="text-error">禁用</a>
+          <!-- <ng-container *ngIf="data.draft">
             <nz-divider nzType="vertical"></nz-divider>
             <a nz-popconfirm nz-button [nzType]="'primary'" nzPopconfirmTitle="请确认非合约支付信息填写完整，无误后继续提交！！！"
               (nzOnConfirm)="submitContractPay(data.id)" (nzOnCancel)="cancel()">
               提交申请
             </a>
-          </ng-container>
+          </ng-container> -->
         </td>
       </tr>
     </tbody>
@@ -112,7 +112,7 @@
       </ng-template>
       <ng-template #actionEllipsis>
         <a nz-popconfirm nzPopconfirmTitle="确认禁用当前合约支付?" (nzOnConfirm)="disabled(data.id)" (nzOnCancel)="cancel()"
-          class="text-nowrap">禁用</a>
+          class="text-nowrap text-error">禁用</a>
       </ng-template>
     </nz-card>
   </ng-container>

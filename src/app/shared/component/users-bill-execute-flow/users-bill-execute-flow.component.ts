@@ -1,15 +1,21 @@
-import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Component, Input, OnChanges, Output, EventEmitter } from '@angular/core';
 import { SettingsService } from '@delon/theme';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-users-bill-execute-flow',
   templateUrl: './users-bill-execute-flow.component.html',
   styles: [
+    `
+      .check-box {
+        width: 300px;
+      }
+    `
   ]
 })
 export class UsersBillExecuteFlowComponent implements OnChanges {
   @Input() progressInfo:any;
+  @Input() billInfo:any;
 
   @Output() executeChange:EventEmitter<any> = new EventEmitter();
 
@@ -21,17 +27,17 @@ export class UsersBillExecuteFlowComponent implements OnChanges {
   // 执行情况：
   //    如果执行成功，需要填写  发票号码 发票金额(不含税)  税额 
   //    如果 未执行 ，需要填写 不能执行的原因
-  checkOption: any = {
-    is_execute: null,
-    remark: '', // 备注原因
-    bill_number: null, // 发票号码
-    bill_amount: null, // 发票金额
-    bill_tax: null // 发票税额
-  }
+  // checkOption: any = {
+  //   is_execute: 'A',
+  //   remark: '', // 备注原因
+  //   invoice_number: null, // 发票号码
+  //   invoice_amount: null, // 发票金额
+  //   tax_amount: null // 发票税额
+  // }
 
   constructor(
     private settings: SettingsService,
-    private notice: NzNotificationService
+    private fb: FormBuilder
   ) { }
 
   ngOnChanges() {
@@ -42,44 +48,74 @@ export class UsersBillExecuteFlowComponent implements OnChanges {
     }
   }
 
-  submitCheckCurrentProcess() {
-    if(this.checkOption.is_execute === null) {
-      this.notice.error('错误', '是否执行未选择');
-      return;
-    }
+  validateForm!: FormGroup;
 
-    let option:any = {};
+  ngOnInit(): void {
 
-    if(this.checkOption.is_execute === 'A') { // 已执行
-      const bill_number:string = this.checkOption.bill_number.trim();
-      const bill_amount:number = +this.checkOption.bill_number;
-      const bill_tax:number = this.checkOption.bill_tax;
-      if(!bill_number || !bill_amount || !bill_tax) {
-        this.notice.error('信息不完整', '执行后信息填写不完整！');
-        return;
-      }
-      option = {
-        is_execute: true,
-        bill_number,
-        bill_amount,
-        bill_tax
-      }
-    }
+    this.validateForm = this.fb.group({
+      is_execute: ['A', [Validators.required] ],
+      remark: [null ],
+      invoice_number: [null, [Validators.required] ],
+      invoice_amount: [null, [Validators.required, Validators.pattern(/^(([1-9]\d*|0)(\.\d{1,})?)$|(0\.0?([1-9]\d?))$/)] ],
+      tax_amount: [null, [Validators.required, Validators.pattern(/^(([1-9]\d*|0)(\.\d{1,})?)$|(0\.0?([1-9]\d?))$/)] ]
+    });
 
-    if(this.checkOption.is_execute === 'B') { // 未执行
-      const _remark:string = this.checkOption.remark.trim();
-      if(!_remark) {
-        this.notice.error('信息不完整', '未执行的原因不能为空！');
-        return;
+    this.validateForm.get('is_execute').valueChanges.subscribe( val => {
+      if (val === 'B') {
+        this.validateForm.get('invoice_number')!.clearValidators();
+        this.validateForm.get('invoice_number')!.markAsPristine();
+
+        this.validateForm.get('invoice_amount')!.clearValidators();
+        this.validateForm.get('invoice_amount')!.markAsPristine();
+        
+        this.validateForm.get('tax_amount')!.clearValidators();
+        this.validateForm.get('tax_amount')!.markAsPristine();
+
+
+        this.validateForm.get('remark')!.setValidators(Validators.required);
+        this.validateForm.get('remark')!.markAsDirty();
+      } else {
+        this.validateForm.get('invoice_number')!.setValidators(Validators.required);
+        this.validateForm.get('invoice_number')!.markAsDirty();
+        this.validateForm.get('invoice_amount')!.setValidators(Validators.required);
+        this.validateForm.get('invoice_amount')!.markAsDirty();
+        this.validateForm.get('tax_amount')!.setValidators(Validators.required);
+        this.validateForm.get('tax_amount')!.markAsDirty();
+
+        
+        this.validateForm.get('remark')!.clearValidators();
+        this.validateForm.get('remark')!.markAsPristine();
       }
-      option = {
-        is_execute: false,
-        remark: _remark
-      }
-    }
-    
-    this.executeChange.emit(option);
+      this.validateForm!.updateValueAndValidity();
+    });
+
+    this.validateForm.get('invoice_amount').valueChanges.subscribe( v => {
+      const _amount = Number(v) || 0;
+      const _tax_amount = (_amount * this.billInfo.tax_rate).toFixed(2);
+      this.validateForm.patchValue({
+        tax_amount: _tax_amount
+      })
+    })
   }
+
+  
+  submitForm(): void {
+    for (const i in this.validateForm.controls) {
+      this.validateForm.controls[i].markAsDirty();
+      this.validateForm.controls[i].updateValueAndValidity();
+    }
+
+    console.log('submit', this.validateForm);
+
+    if(this.validateForm.valid) {
+      const is_execute = {
+        is_execute: this.validateForm.get('is_execute').value === 'A' ? true : false
+      }
+      const option = Object.assign(this.validateForm.value, is_execute);
+      this.executeChange.emit(option);
+    }
+  }
+
   cancel() { }
 
 }

@@ -88,30 +88,15 @@
           <td colspan="4">{{ billInfo?.customer.bank_name }} / {{ billInfo?.customer.bank_account }}
           </td>
         </tr>
-        <tr *ngIf="billFees.length !== 0">
-          <td class="font-weight-bold">开票明细</td>
-          <td colspan="4" class="p0">
-            <div nz-row>
-              <div nz-col [nzMd]="6" [nzSm]="8" [nzXs]="10" class="border-right text-center p-sm">项目</div>
-              <div nz-col [nzMd]="18" [nzSm]="16" [nzXs]="14" class="p-sm">金额</div>
-              <ng-container *ngFor="let bill of billFees">
-                <div nz-col [nzMd]="6" [nzSm]="8" [nzXs]="10" class="text-center border-top border-right  p-md">{{ bill.tax_fee.name }}</div>
-                <div nz-col [nzMd]="18" [nzSm]="16" [nzXs]="14" class="border-top  p-md">{{ bill.amount | currency: 'CNY' }}</div>
-              </ng-container>
-            </div>
-          </td>
-        </tr>
-        <tr *ngIf="billFees.length === 0">
-          <td class="font-weight-bold">服务名称</td>
-          <td colspan="4">{{ projectDetailInfo?.budget.tax.name }}</td>
-        </tr>
         <tr>
           <td class="font-weight-bold">合计</td>
           <td colspan="4" class="text-error font-weight-bold">{{ billInfo?.amount | currency: 'CNY' }}</td>
         </tr>
         <tr>
           <td class="font-weight-bold">大写</td>
-          <td colspan="4" class="font-weight-bold">{{ transferNumber }}</td>
+          <td colspan="4" class="font-weight-bold">
+            {{ billInfo.amount | n2c }}
+          </td>
         </tr>
         <tr>
           <td class="font-weight-bold">经费所属期</td>
@@ -249,5 +234,5 @@
 </nz-card>
 
 <ng-container *ngIf="progressInfo && progressInfo.execute_user">
-  <app-users-bill-execute-flow [progressInfo]="progressInfo" (executeChange)="executeChange($event)"></app-users-bill-execute-flow>
+  <app-users-bill-execute-flow [progressInfo]="progressInfo" [billInfo]="billInfo" (executeChange)="executeChange($event)"></app-users-bill-execute-flow>
 </ng-container>

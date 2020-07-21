@@ -43,39 +43,24 @@
                         <div *ngIf="data.is_split">已分割金额：{{ data.pay_amount | _currency }}</div>
                     </td>
                     <td [innerHTML]="data.is_split | yn"></td>
-<<<<<<< HEAD
                     <td>
                         <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/contract/' + data.id"
                             [isShowName]="false"></app-upload-file-attachment-show-c>
-=======
-                    <td class="px0">
-                        <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/contract/' + data.id" [isShowName]="false"></app-upload-file-attachment-show-c>
->>>>>>> d4f300a2bd5844a713b538ac0c1e180a855dcd6f
                     </td>
                     <td nzRight>
                         <a (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
-<<<<<<< HEAD
                         <nz-divider nzType="vertical"></nz-divider>
                         <a [routerLink]="['/contract/view', data.id]"><i nz-icon nzType="eye" nzTheme="outline"></i></a>
 
                         <nz-divider nzType="vertical"></nz-divider>
-=======
-                        
-                        <a class="mx-sm" [routerLink]="['/contract/view', data.id]"><i nz-icon nzType="eye" nzTheme="outline"></i></a>
-                        
->>>>>>> d4f300a2bd5844a713b538ac0c1e180a855dcd6f
                         <a nz-popconfirm nzPopconfirmTitle="确定禁用当前合同类型？" (nzOnConfirm)="disabled(data.id)"
                             (nzOnCancel)="cancel()" class="text-error text-nowrap mr-sm">禁用</a>
 
                         <ng-container *ngIf="data.is_split">
-<<<<<<< HEAD
                             <nz-divider nzType="vertical"></nz-divider>
                             <a (click)="splitContract(data.id)" class="text-nowrap">分割 <i nz-icon
                                     nzType="{{ showContractExpand[data.id] ? 'caret-up' : 'caret-down' }}"
                                     nzTheme="outline"></i></a>
-=======
-                            <a (click)="splitContract(data.id)" class="text-nowrap">分割 <i nz-icon nzType="{{ showContractExpand[data.id] ? 'caret-up' : 'caret-down' }}" nzTheme="outline"></i></a>
->>>>>>> d4f300a2bd5844a713b538ac0c1e180a855dcd6f
                         </ng-container>
                     </td>
                 </tr>

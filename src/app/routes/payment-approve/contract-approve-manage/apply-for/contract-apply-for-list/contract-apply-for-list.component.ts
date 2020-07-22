@@ -26,6 +26,10 @@ export class ContractApplyForListComponent implements OnInit, OnDestroy {
       tab: '待执行'
     },
     {
+      key: 'payed',
+      tab: '已付款'
+    },
+    {
       key: 'pass',
       tab: '已通过'
     },

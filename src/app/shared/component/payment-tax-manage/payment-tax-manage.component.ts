@@ -1,9 +1,10 @@
 import { Component, OnInit, Input, TemplateRef, OnChanges } from '@angular/core';
 import { NzMessageService, NzModalService, NzModalRef } from 'ng-zorro-antd';
 import { SettingsConfigService } from 'src/app/routes/service/settings-config.service';
-import { ApiData } from 'src/app/data/interface.data';
+import { ApiData, List } from 'src/app/data/interface.data';
 import { FormGroup, Validators, FormBuilder, FormControl } from '@angular/forms';
 import { EllipsisComponent } from '@delon/abc';
+import { filter, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-payment-tax-manage',
@@ -18,14 +19,15 @@ import { EllipsisComponent } from '@delon/abc';
   `]
 })
 export class PaymentTaxManageComponent implements OnChanges, OnInit {
-  @Input() treaty_pay_id:number;
-  @Input() treatypayInfo:any;
-  @Input() paymentArray:any[];
+  @Input() payInfo?:any;
+  @Input() paymentArray?:any[];
   @Input() billCategoryArray:any[];
+
+  @Input() is_execute_user:boolean = false;
+  @Input() payType?:string = 'treaty';
 
   listOfData: any[] = [];
   validateForm: FormGroup;
-
   
   constructor(
     public msg: NzMessageService,
@@ -33,36 +35,121 @@ export class PaymentTaxManageComponent implements OnChanges, OnInit {
     private settingsConfigService: SettingsConfigService,
     private fb: FormBuilder
   ) {
-    
+    this.getCategoryList();
   }
 
   currentPayment:any = null;
 
   ngOnChanges() {
-    console.log(this.treatypayInfo, 'treatypayInfo', this.paymentArray, 'paymentArray', 'billCategoryArray', this.billCategoryArray)
+    console.log(this.is_execute_user, 'is_execute_user', this.paymentArray, 'paymentArray', 'billCategoryArray', this.billCategoryArray)
+    if(this.is_execute_user && this.payInfo) {
+      // 是执行者访问， 需要展示  附件绑定
+      this.getAttachment();
+    }
+  }
+
+  // 附件上传
+  attachment: any[] = [];
+  isAttachmentChange: boolean = false;
+  attachmentChange(option: any) {
+    this.attachment.push(option);
+    this.isAttachmentChange = !this.isAttachmentChange;
+    if (this.payInfo.id) {
+      this.bindAttachment(this.payInfo.id, true);
+    }
+  }
+
+  bindAttachment(pay_id: number, isRefer: boolean = false) {
+    let opt: any = null;
+    if(this.payType === 'treaty') {
+      opt = {
+        attachment_ids: this.attachment.map(v => v.id),
+        project_id: this.payInfo.project.id,
+        treaty_pay_id: pay_id,
+        is_basic: false
+      };
+    }
     
+    if(this.payType === 'contract') {
+      opt = {
+        attachment_ids: this.attachment.map(v => v.id),
+        project_id: this.payInfo.project.id,
+        contract_pay_id: pay_id,
+        is_basic: false
+      };
+    }
+
+    this.settingsConfigService.post('/api/attachment/bind', opt).subscribe((res: ApiData) => {
+      console.log(res);
+      if (res.code === 200) {
+        if (this.payInfo) {
+          if (isRefer) {
+            this.msg.success('附件绑定成功');
+          }
+          this.getAttachment();
+        }
+      } else {
+        this.msg.error(res.error || '附件绑定失败')
+      }
+    })
+  }
+  getAttachment() {
+    // `/api/attachment/treaty_pay/${this.payInfo.id}`
+    let attachmentUrl:string = '';
+    if(this.payType === 'treaty') {
+      attachmentUrl = '/api/attachment/treaty_pay/' + this.payInfo.id;
+    }
+    
+
+    this.settingsConfigService.get(attachmentUrl).subscribe((res: ApiData) => {
+      console.log(' 基础附件：', res, this.payType);
+      if (res.code === 200) {
+        this.attachment = res.data.attachment;
+      }
+    })
+  }
+
+
+  attachmentCategory: List[] = [];
+  getCategoryList() {
+    const opt: any = {
+      is_project: false,
+      is_contract: false,
+      is_pay: true,
+      is_bill: false
+    };
+    this.settingsConfigService.post('/api/attachment/category/list', opt).pipe(
+      filter(v => v.code === 200),
+      map(v => v.data)
+    ).subscribe(data => {
+      const cateArrData: any[] = data.attachment_category;
+      this.attachmentCategory = cateArrData.sort((a: any, b: any) => a.sequence - b.sequence).map(v => {
+        return { id: v.id, name: v.name }
+      });
+
+    });
   }
 
   
   ngOnInit(): void {
     this.validateForm = this.fb.group({
       treaty_payment_id: [null, [Validators.required]],
-      is_get_bill: [true, [Validators.required]],
+      is_get_bill: [null, [Validators.required]],
       bill_category_id: [null],
       exclude_tax_amount: [null, [Validators.pattern(/^(([1-9]\d*|0)(\.\d{1,})?)$|(0\.0?([1-9]\d?))$/)]],
       tax_amount: [null, [Validators.pattern(/^(([1-9]\d*|0)(\.\d{1,})?)$|(0\.0?([1-9]\d?))$/)]],
-      amount: [null, [ Validators.pattern(/^(([1-9]\d*|0)(\.\d{1,})?)$|(0\.0?([1-9]\d?))$/)]],
+      amount: [null, [Validators.pattern(/^(([1-9]\d*|0)(\.\d{1,})?)$|(0\.0?([1-9]\d?))$/)]],
       index: [null, [Validators.required, Validators.pattern(/^[1-9]\d*$/)]]
     });
 
-    if(this.treaty_pay_id) {
+    if(this.payInfo) {
       this.getDataList();
     }
   }
   
 
   getDataList() {
-    this.settingsConfigService.get(`/api/treaty/payment/tax/${this.treaty_pay_id}`).subscribe((res: ApiData) => {
+    this.settingsConfigService.get(`/api/treaty/payment/tax/${this.payInfo.id}`).subscribe((res: ApiData) => {
       console.log(res, '非合约 支付详情对应税 列表')
       if (res.code === 200) {
         const list:any[] = res.data.contract_payment_tax;
@@ -84,7 +171,6 @@ export class PaymentTaxManageComponent implements OnChanges, OnInit {
         }
       })
 
-      console.log(this.checkedOption, 'this.checkedOption o wa li');
     }
   }
 
@@ -119,7 +205,6 @@ export class PaymentTaxManageComponent implements OnChanges, OnInit {
   }
 
   resetForm(opt: any): void {
-    console.log(opt);
     this.editCostData = opt;
     [this.currentPayment] = this.paymentArray.filter(v => v.id === opt.contract_payment.id);
     const is_get_bill:boolean = opt.bill_category ? true : false;
@@ -132,6 +217,7 @@ export class PaymentTaxManageComponent implements OnChanges, OnInit {
       tax_amount: is_get_bill ? opt.tax_amount : null,
       index: opt.index
     });
+    this.isGetBillChange(is_get_bill);
   }
 
   submitCostLoading:boolean = false;
@@ -158,35 +244,35 @@ export class PaymentTaxManageComponent implements OnChanges, OnInit {
   }
 
   isGetBillChange(is_get_bill: boolean): void {
+    console.log(is_get_bill, 'is_get_bill change');
     if (!is_get_bill) { // 未开票
 
       this.validateForm.get('bill_category_id')!.clearValidators();
       this.validateForm.get('bill_category_id')!.markAsPristine();
       
-      this.validateForm.get('amount')!.clearValidators();
-      this.validateForm.get('amount')!.markAsPristine();
+      this.validateForm.get('exclude_tax_amount')!.clearValidators();
+      this.validateForm.get('exclude_tax_amount')!.markAsPristine();
       
       this.validateForm.get('tax_amount')!.clearValidators();
       this.validateForm.get('tax_amount')!.markAsPristine();
       
-      this.validateForm.get('exclude_tax_amount')!.setValidators(Validators.required);
-      this.validateForm.get('exclude_tax_amount')!.markAsDirty();
+      this.validateForm.get('amount').setValidators(Validators.required);
+      this.validateForm.get('amount').markAsDirty();
 
 
     } else { // 已开票
 
       this.validateForm.get('bill_category_id')!.setValidators(Validators.required);
       this.validateForm.get('bill_category_id')!.markAsDirty();
-      
-      this.validateForm.get('amount')!.setValidators(Validators.required);
-      this.validateForm.get('amount')!.markAsDirty();
+
+      this.validateForm.get('exclude_tax_amount')!.setValidators(Validators.required);
+      this.validateForm.get('exclude_tax_amount')!.markAsDirty();
       
       this.validateForm.get('tax_amount')!.setValidators(Validators.required);
       this.validateForm.get('tax_amount')!.markAsDirty();
 
-
-      this.validateForm.get('exclude_tax_amount')!.clearValidators();
-      this.validateForm.get('exclude_tax_amount')!.markAsPristine();
+      this.validateForm.get('amount')!.clearValidators();
+      this.validateForm.get('amount')!.markAsPristine();
 
     }
     this.validateForm.updateValueAndValidity();
@@ -207,7 +293,6 @@ export class PaymentTaxManageComponent implements OnChanges, OnInit {
       const _amount:number = +this.validateForm.get('amount').value;
       this.totalAmountError = _amount > this.currentPayment.amount;
     }
-    console.log(this.totalAmountError)
   }
 
   submitTaxForm(): void {

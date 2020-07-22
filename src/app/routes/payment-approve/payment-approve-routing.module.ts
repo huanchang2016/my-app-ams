@@ -54,6 +54,10 @@ import { ExcuteContractPayListComponent } from './contract-approve-manage/excute
 import { NoContractApplyForListComponent } from './no-contract-approve-manage/apply-for/no-contract-apply-for-list/no-contract-apply-for-list.component';
 import { ContractPayPendExecuteComponent } from './contract-approve-manage/apply-for/contract-pay-pend-execute/contract-pay-pend-execute.component';
 import { NoContractPayPendExecuteComponent } from './no-contract-approve-manage/apply-for/no-contract-pay-pend-execute/no-contract-pay-pend-execute.component';
+import { NoContractPayPayedComponent } from './no-contract-approve-manage/apply-for/no-contract-pay-payed/no-contract-pay-payed.component';
+import { NoContractExcutePayedListComponent } from './no-contract-approve-manage/excute-pay/no-contract-excute-payed-list/no-contract-excute-payed-list.component';
+import { ContractPayForPayedComponent } from './contract-approve-manage/apply-for/contract-pay-for-payed/contract-pay-for-payed.component';
+import { ContractExcuteForPayedComponent } from './contract-approve-manage/excute-pay/contract-excute-for-payed/contract-excute-for-payed.component';
 
 const routes: Routes = [
   // 合约支付列表（草稿、进行中、提交审批通过（未通过））
@@ -69,6 +73,7 @@ const routes: Routes = [
       { path: '', redirectTo: 'in_progress', pathMatch: 'full' },
       { path: 'in_progress', component: MyApplyForInprogressComponent, data: { title: '审批中' } },
       { path: 'excute', component: ContractPayPendExecuteComponent, data: { title: '待执行' } },
+      { path: 'payed', component: ContractPayForPayedComponent, data: { title: '已付款' } },
       { path: 'pass', component: MyApplyForPassComponent, data: { title: '已通过' } },
       { path: 'refuse', component: MyApplyForRefuseComponent, data: { title: '未通过' } }
     ],
@@ -135,6 +140,14 @@ const routes: Routes = [
         //   }
         // }
       },
+      { path: 'payed', component: ContractExcuteForPayedComponent,
+        // canActivate: [ACLGuard],
+        // data: {
+        //   guard: <ACLType>{
+        //     ability: ['contract_pay_approval']
+        //   }
+        // }
+      },
       { path: 'finished', component: ContractExcuteFinishedComponent,
         // canActivate: [ACLGuard],
         // data: {
@@ -161,6 +174,7 @@ const routes: Routes = [
       { path: '', redirectTo: 'in_progress', pathMatch: 'full' },
       { path: 'in_progress', component: NoContractProjectProgressComponent },
       { path: 'excute', component: NoContractPayPendExecuteComponent },
+      { path: 'payed', component: NoContractPayPayedComponent },
       { path: 'pass', component: NoContractApplyPassComponent },
       { path: 'refuse', component: NoContractApplyRefuseComponent },
     ]
@@ -214,21 +228,29 @@ const routes: Routes = [
     children: [
       { path: '', redirectTo: 'my', pathMatch: 'full' },
       { path: 'my', component: NoContractExcuteNotStartComponent,
-      // canActivate: [ACLGuard],
-      // data: {
-      //   guard: <ACLType>{
-      //     ability: ['contract_pay_approval']
-      //   }
-      // }
-    },
-    { path: 'finished', component: NoContractExcuteFinishedComponent,
-      // canActivate: [ACLGuard],
-      // data: {
-      //   guard: <ACLType>{
-      //     ability: ['contract_pay_approval']
-      //   }
-      // }
-    },
+        // canActivate: [ACLGuard],
+        // data: {
+        //   guard: <ACLType>{
+        //     ability: ['contract_pay_approval']
+        //   }
+        // }
+      },
+      { path: 'payed', component: NoContractExcutePayedListComponent,
+        // canActivate: [ACLGuard],
+        // data: {
+        //   guard: <ACLType>{
+        //     ability: ['contract_pay_approval']
+        //   }
+        // }
+      },
+      { path: 'finished', component: NoContractExcuteFinishedComponent,
+        // canActivate: [ACLGuard],
+        // data: {
+        //   guard: <ACLType>{
+        //     ability: ['contract_pay_approval']
+        //   }
+        // }
+      },
     ]
   },
   

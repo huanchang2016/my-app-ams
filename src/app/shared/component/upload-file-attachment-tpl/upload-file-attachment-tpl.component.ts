@@ -54,7 +54,7 @@ export class UploadFileAttachmentTplComponent implements OnChanges, OnInit, OnDe
   ) { }
 
   ngOnChanges(changes: SimpleChanges) {
-    // console.log(changes);
+    console.log(changes);
     const typeLength:number = this.AttachmentCategory.length;
     if (typeLength !== 0 && this.Attachment) {
       // 过滤处理 附件，将附件根据类型不同来分类展示

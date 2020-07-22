@@ -23,6 +23,10 @@ export class NoContractExcutePayListComponent implements OnInit, OnDestroy {
       tab: '待执行'
     },
     {
+      key: 'payed',
+      tab: '已付款'
+    },
+    {
       key: 'finished',
       tab: '已执行'
     }

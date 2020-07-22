@@ -93,7 +93,14 @@
       <div *ngIf="checkOption.status !== 'C'" style="margin-top: 4px;margin-bottom: 4px;">
         <!-- 选择付款后，需要补充填写资料信息 -->
         <div class="mt-md" *ngIf="paymentArr.length !== 0 && payInfo">
-          <app-payment-tax-manage [is_execute_user]="true" [payType]="payType" [payInfo]="payInfo" [paymentArray]="paymentArr" [billCategoryArray]="billCategoryArray"></app-payment-tax-manage>
+          <ng-container *ngIf="payType === 'treaty'">
+            <app-payment-tax-manage [is_execute_user]="true" [payType]="payType" [payInfo]="payInfo" [paymentArray]="paymentArr" [billCategoryArray]="billCategoryArray"></app-payment-tax-manage>
+          </ng-container>
+          <ng-container *ngIf="payType === 'contract'">
+            <!-- <app-payment-tax-manage [is_execute_user]="true" [payType]="payType" [payInfo]="payInfo" [paymentArray]="paymentArr" [billCategoryArray]="billCategoryArray"></app-payment-tax-manage> -->
+            <app-payment-contract-tax-mange></app-payment-contract-tax-mange>
+          </ng-container>
+          
         </div>
         <!-- 选择付款后，需要补充填写资料信息 -->
       </div>

@@ -51,8 +51,12 @@
         <td colspan="4">{{ treatypayInfo?.bank_account }}</td>
       </tr>
       <tr>
-        <td class="font-weight-bold">扣借款</td>
-        <td colspan="2"> 扣借款  ？  抵扣金额？ </td>
+        <td class="font-weight-bold">是否抵扣借款</td>
+        <td colspan="2">
+          <span *ngIf="treatypayInfo">
+            {{ treatypayInfo.if_write_off ? '是' : '否' }}
+          </span>
+        </td>
         <td class="font-weight-bold">抵扣金额</td>
         <td colspan="2">
           <span *ngIf="treatypayInfo?.if_write_off;else notWriteOff">{{ treatypayInfo?.write_off_amount | currency: 'CNY' }}</span>
@@ -96,17 +100,23 @@
         </tr>
       </ng-container>
       <tr>
-        <td colspan="3" class="font-weight-bold">合计</td>
-        <td colspan="3">
+        <td colspan="2" class="font-weight-bold text-center">合计</td>
+        <td>
           <ng-container *ngIf="treatypayInfo">
             <span>{{ treatypayInfo.before_deduct_amount | _currency }}</span>
             <span class="ml-sm">{{ treatypayInfo.before_deduct_amount | n2c }}</span>
           </ng-container>
         </td>
+        <td colspan="3"></td>
       </tr>
       <tr>
-        <td colspan="2" class="font-weight-bold">本期支付金额(大写)</td>
-        <td colspan="4"><ng-container *ngIf="treatypayInfo">{{ treatypayInfo.amount | n2c }}</ng-container></td>
+        <td colspan="2" class="font-weight-bold text-center">本期支付金额(大写)</td>
+        <td colspan="4">
+          <ng-container *ngIf="treatypayInfo">
+            <span>{{ treatypayInfo.amount | _currency }}</span>
+            <span class="ml-sm">{{ treatypayInfo.amount | n2c }}</span>
+          </ng-container>
+        </td>
       </tr>
       <tr>
         <td colspan="6">

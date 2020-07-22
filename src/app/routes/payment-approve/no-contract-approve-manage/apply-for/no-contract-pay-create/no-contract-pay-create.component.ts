@@ -544,7 +544,7 @@ export class NoContractPayCreateComponent implements OnInit {
             this.submit(res.data.id);
           }else {
             this.msg.success('保存成功');
-            this.router.navigateByUrl(`/approve/no-contract/list/apply/pay/${this.projectId}`);
+            // this.router.navigateByUrl(`/approve/no-contract/list/apply/pay/${this.projectId}`);
           }
         }
       } else {

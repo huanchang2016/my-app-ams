@@ -274,8 +274,8 @@
   </nz-card>
 
 </div>
-<!-- 流程进展 -->
-<ng-container *ngIf="contractInfo && !contractInfo.draft">
+<!-- 流程进展  新增或者编辑时，不显示流程情况 -->
+<!-- <ng-container *ngIf="contractInfo && !contractInfo.draft">
   <nz-card [nzBordered]="false" class="mt-md" [nzTitle]="workflowStatusTitle">
     <ng-template #workflowStatusTitle>
       <span>审批进展</span>
@@ -308,8 +308,6 @@
                 <span class="text-sm text-primary"
                   [class.text-error]="process.finished && !process.agree">{{ process.remark }}</span>
                 <ng-template #notFinished>
-                  <!-- TODO:暂不开发 -->
-                  <!-- <a *ngIf="process.current" (click)="msg.success('click')">催一下</a> -->
                 </ng-template>
               </div>
             </ng-template>
@@ -345,8 +343,6 @@
                 <span class="text-sm text-primary"
                   [class.text-error]="process.finished && !process.agree">{{ process.remark }}</span>
                 <ng-template #notFinished>
-                  <!-- TODO:暂不开发 -->
-                  <!-- <a *ngIf="process.current" (click)="msg.success('click')">催一下</a> -->
                 </ng-template>
               </div>
             </ng-template>
@@ -371,7 +367,7 @@
     <app-users-execute-flow [progressInfo]="progressInfo" (executeChange)="executeChange($event)">
     </app-users-execute-flow>
   </ng-container>
-</ng-container>
+</ng-container> -->
 
 
 <!-- 流程进展 -->

@@ -114,7 +114,7 @@
           <sv col="2" label="银行账号">{{ currentSelectedSubsidyCompany.bank_account }}</sv>
           <sv col="1" label="开票地址">{{ currentSelectedSubsidyCompany.address }}</sv>
         </sv-container>
-        <sv-container class="mb-md" title="开票税目或拨款税率" col="3" *ngIf="currentSelectedTaxAmount">
+        <sv-container class="mb-md" title="开票税目及税率" col="3" *ngIf="currentSelectedTaxAmount">
           <sv label="税目名称" *ngIf="income_type === 'project'">{{ currentSelectedTaxAmount.tax.name }}</sv>
           <sv label="{{ income_type === 'project' ? '收入' : '补贴' }}金额">{{ currentSelectedTaxAmount.income | _currency }}</sv>
           <sv label="开票税率">
@@ -151,7 +151,7 @@
 
       <div nz-col [nzSpan]="12">
         <nz-form-item class="form-item-box">
-          <nz-form-label nzFor="bill_period_time">所属日期</nz-form-label>
+          <nz-form-label nzFor="bill_period_time">经费所属期</nz-form-label>
           <nz-form-control>
             <app-range-datepicker id="bill_period_time" formControlName="bill_period_time"> </app-range-datepicker>
           </nz-form-control>

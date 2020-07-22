@@ -236,7 +236,7 @@
   
 </div>
 
-<!-- 流程进展 -->
+<!-- 流程进展  新增 或者编辑时  不需要显示流程信息 -->
 <nz-card [nzBordered]="false" class="mt-md" [nzTitle]="workflowStatusTitle"
   *ngIf="treatypayInfo && !treatypayInfo.draft">
   <ng-template #workflowStatusTitle>
@@ -270,8 +270,6 @@
               <span class="text-sm text-primary"
                 [class.text-error]="process.finished && !process.agree">{{ process.remark }}</span>
               <ng-template #notFinished>
-                <!-- TODO:暂不开发 -->
-                <!-- <a *ngIf="process.current" (click)="msg.success('click')">催一下</a> -->
               </ng-template>
             </div>
           </ng-template>
@@ -307,8 +305,6 @@
               <span class="text-sm text-primary"
                 [class.text-error]="process.finished && !process.agree">{{ process.remark }}</span>
               <ng-template #notFinished>
-                <!-- TODO:暂不开发 -->
-                <!-- <a *ngIf="process.current" (click)="msg.success('click')">催一下</a> -->
               </ng-template>
             </div>
           </ng-template>

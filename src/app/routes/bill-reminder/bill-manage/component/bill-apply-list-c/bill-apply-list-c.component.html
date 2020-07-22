@@ -50,7 +50,8 @@
                 <span [innerHTML]="data.remark | showTextareaContent"></span>
             </td>
             <td>
-                <a [routerLink]=" !isApprove ? ['/bill/project/invoices/view', data.id] : ['/bill/approve/view', data.id]" [queryParams]="{ project_id: data.project.id }"><i nz-icon nzType="eye" nzTheme="outline"></i></a>
+                <!-- approve/view/ -->
+                <a [routerLink]=" !isApprove ? ['/bill/project/invoices/edit', data.id] : ['/bill/approve/view', data.id]" [queryParams]="{ project_id: data.project.id }"><i nz-icon nzType="eye" nzTheme="outline"></i></a>
             </td>
         </tr>
     </tbody>

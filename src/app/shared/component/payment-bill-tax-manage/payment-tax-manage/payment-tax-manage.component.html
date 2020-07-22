@@ -71,19 +71,18 @@
 <!-- 成本支付新增 modal -->
 
 <ng-template #tplTitle>
-  <span>非合约支付台账</span>
+  <span>支付台账</span>
 </ng-template>
 <ng-template #tplContent>
   <div class="modal-form">
     <form nz-form [formGroup]="validateForm">
-
       <nz-form-item>
-        <nz-form-label nzFor="treaty_payment_id" nzRequired>协议支付</nz-form-label>
-        <nz-form-control nzErrorTip="请选择非合约支付详情">
-          <nz-select style="width: 100%;" id="treaty_payment_id" nzShowSearch nzPlaceHolder="请选择非合约支付详情"
+        <nz-form-label nzFor="treaty_payment_id" nzRequired>{{ payType === 'contract' ? '合约支付' : '协议支付'}}</nz-form-label>
+        <nz-form-control nzErrorTip="请选择{{ payType === 'contract' ? '合约支付' : '协议支付'}}详情">
+          <nz-select style="width: 100%;" id="treaty_payment_id" nzShowSearch nzPlaceHolder="请选择{{ payType === 'contract' ? '合约支付' : '协议支付'}}支付详情"
             formControlName="treaty_payment_id" (ngModelChange)="treatyPaymentChange($event)">
             <ng-container *ngFor="let item of paymentArray">
-              <nz-option [nzLabel]="item.abstract" [nzValue]="item.id"></nz-option>
+              <nz-option [nzLabel]="item.treaty.supplier.name" [nzValue]="item.id"></nz-option>
             </ng-container>
           </nz-select>
         </nz-form-control>

@@ -41,7 +41,7 @@ export class PaymentTaxManageComponent implements OnChanges, OnInit {
   currentPayment:any = null;
 
   ngOnChanges() {
-    console.log(this.is_execute_user, 'is_execute_user', this.paymentArray, 'paymentArray', 'billCategoryArray', this.billCategoryArray)
+    console.log(this.payInfo, 'payInfo', this.paymentArray, 'paymentArray', 'billCategoryArray', this.billCategoryArray)
     if(this.is_execute_user && this.payInfo) {
       // 是执行者访问， 需要展示  附件绑定
       this.getAttachment();
@@ -100,6 +100,9 @@ export class PaymentTaxManageComponent implements OnChanges, OnInit {
       attachmentUrl = '/api/attachment/treaty_pay/' + this.payInfo.id;
     }
     
+    if(this.payType === 'contract') {
+      attachmentUrl = '/api/attachment/contract_pay/' + this.payInfo.id;
+    }
 
     this.settingsConfigService.get(attachmentUrl).subscribe((res: ApiData) => {
       console.log(' 基础附件：', res, this.payType);
@@ -149,7 +152,16 @@ export class PaymentTaxManageComponent implements OnChanges, OnInit {
   
 
   getDataList() {
-    this.settingsConfigService.get(`/api/treaty/payment/tax/${this.payInfo.id}`).subscribe((res: ApiData) => {
+    let listUrl:string = '';
+    if(this.payType === 'treaty') {
+      listUrl = `/api/treaty/payment/tax/${this.payInfo.id}`;
+    }
+    
+    if(this.payType === 'contract') {
+      listUrl = '/api/contract/payment/tax/' + this.payInfo.id;
+    }
+
+    this.settingsConfigService.get(listUrl).subscribe((res: ApiData) => {
       console.log(res, '非合约 支付详情对应税 列表')
       if (res.code === 200) {
         const list:any[] = res.data.contract_payment_tax;
@@ -205,9 +217,11 @@ export class PaymentTaxManageComponent implements OnChanges, OnInit {
   }
 
   resetForm(opt: any): void {
+    console.log('edit data', opt);
     this.editCostData = opt;
     [this.currentPayment] = this.paymentArray.filter(v => v.id === opt.contract_payment.id);
     const is_get_bill:boolean = opt.bill_category ? true : false;
+    console.log('edit data', opt, 'currentPayment', this.currentPayment);
     this.validateForm.patchValue({
       treaty_payment_id: opt.contract_payment.id,
       is_get_bill: is_get_bill,

@@ -34,7 +34,7 @@
     <div class="text-center font-weight-bold">发票确认单</div>
   </ng-template>
   <div id="print-box" class="bill-info-box" *ngIf="projectDetailInfo && billInfo">
-    <nz-table #borderedTable nzData="[1]" nzBordered [nzFrontPagination]="false" [nzTitle]="tableTitle" [nzFooter]="tableFooter">
+    <nz-table #borderedTable nzData="[1]" nzBordered [nzFrontPagination]="false" [nzTitle]="tableTitle">
       <ng-template #tableTitle>
         <div class="text-center text-lg">{{ billInfo?.company.name }}</div>
       </ng-template>
@@ -89,14 +89,18 @@
           </td>
         </tr>
         <tr>
-          <td class="font-weight-bold">合计</td>
-          <td colspan="4" class="text-error font-weight-bold">{{ billInfo?.amount | currency: 'CNY' }}</td>
+          <td class="font-weight-bold">开票税目</td>
+          <td colspan="2" class="font-weight-bold">
+            {{ billInfo.tax.name }}
+          </td>
+          <td class="font-weight-bold">税率</td>
+          <td colspan="4" class="font-weight-bold">
+            {{ billInfo.tax.rate }}
+          </td>
         </tr>
         <tr>
-          <td class="font-weight-bold">大写</td>
-          <td colspan="4" class="font-weight-bold">
-            {{ billInfo.amount | n2c }}
-          </td>
+          <td class="font-weight-bold">开票金额</td>
+          <td colspan="4" class="text-error font-weight-bold">{{ billInfo?.amount | currency: 'CNY' }}</td>
         </tr>
         <tr>
           <td class="font-weight-bold">经费所属期</td>
@@ -104,8 +108,8 @@
         </tr>
         <tr>
           <td class="font-weight-bold">备注信息</td>
-          <td colspan="4" class="text-error font-weight-bold"><span
-              [innerHTML]="billInfo?.remark | showTextareaContent"></span></td>
+          <td colspan="4">
+            <span [innerHTML]="billInfo?.remark | showTextareaContent"></span></td>
         </tr>
         <tr *ngIf="billId">
           <td class="font-weight-bold">附件</td>
@@ -114,9 +118,9 @@
           </td>
         </tr>
       </tbody>
-      <ng-template #tableFooter>
+      <!-- <ng-template #tableFooter>
         <div class="text-right">开票日期： {{ billInfo?.submit_time }}</div>
-      </ng-template>
+      </ng-template> -->
     </nz-table>
   </div>
 </nz-card>

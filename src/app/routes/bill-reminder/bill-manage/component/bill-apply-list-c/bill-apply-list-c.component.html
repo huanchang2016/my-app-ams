@@ -51,7 +51,7 @@
             </td>
             <td>
                 <!-- approve/view/ -->
-                <a [routerLink]=" !isApprove ? ['/bill/project/invoices/edit', data.id] : ['/bill/approve/view', data.id]" [queryParams]="{ project_id: data.project.id }"><i nz-icon nzType="eye" nzTheme="outline"></i></a>
+                <a [routerLink]="['/bill/approve/view', data.id]" [queryParams]="{ project_id: data.project.id }"><i nz-icon nzType="eye" nzTheme="outline"></i></a>
             </td>
         </tr>
     </tbody>
@@ -81,7 +81,7 @@
                     </div>
                 </nz-skeleton>
                 <ng-template #actionEdit>
-                    <a [routerLink]=" !isApprove ? ['/bill/project/invoices/view', data.id] : ['/bill/approve/view', data.id]" [queryParams]="{ project_id: data.project.id }"><i nz-icon nzType="eye" nzTheme="outline"></i></a>
+                    <a [routerLink]="['/bill/approve/view', data.id]" [queryParams]="{ project_id: data.project.id }"><i nz-icon nzType="eye" nzTheme="outline"></i></a>
                 </ng-template>
             </nz-card>
         </ng-container>

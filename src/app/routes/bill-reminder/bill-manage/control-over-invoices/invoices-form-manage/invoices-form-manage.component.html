@@ -16,7 +16,7 @@
         保存
       </button>
 
-      <button nz-popconfirm nz-button [nzType]="'primary'" class="ml-xs" nzPopconfirmTitle="请确认发票开具信息填写完整，无误后继续提交！！！"
+      <button *ngIf="billId" nz-popconfirm nz-button [nzType]="'primary'" class="ml-xs" nzPopconfirmTitle="请确认发票开具信息填写完整，无误后继续提交！！！"
         (nzOnConfirm)="submitBillInfo()" (nzOnCancel)="cancel()">
         提交
       </button>
@@ -55,6 +55,24 @@
             </nz-form-control>
           </nz-form-item>
         </div>
+        <ng-container *ngIf="(currentSelectedProjectCompany && income_type === 'project') || (currentSelectedSubsidyCompany && income_type === 'subsidy')">
+          <div nz-col [nzSpan]="24" class="px-md" *ngIf="(currentSelectedProjectCompany && income_type === 'project') || (currentSelectedSubsidyCompany && income_type === 'subsidy')">
+            <sv-container class="mb-md" title="开票单位信息" *ngIf="income_type === 'project'">
+              <sv col="2" label="纳税人识别号">{{ currentSelectedProjectCompany.code }}</sv>
+              <sv col="2" label="联系电话">{{ currentSelectedProjectCompany.tel }}</sv>
+              <sv col="2" label="开户银行">{{ currentSelectedProjectCompany.bank_name }}</sv>
+              <sv col="2" label="银行账号">{{ currentSelectedProjectCompany.bank_account }}</sv>
+              <sv col="1" label="开票地址">{{ currentSelectedProjectCompany.address }}</sv>
+            </sv-container>
+            <sv-container class="mb-md" title="拨款单位信息" *ngIf="income_type === 'subsidy'">
+              <sv col="2" label="纳税人识别号">{{ currentSelectedSubsidyCompany.code }}</sv>
+              <sv col="2" label="联系电话">{{ currentSelectedSubsidyCompany.tel }}</sv>
+              <sv col="2" label="开户银行">{{ currentSelectedSubsidyCompany.bank_name }}</sv>
+              <sv col="2" label="银行账号">{{ currentSelectedSubsidyCompany.bank_account }}</sv>
+              <sv col="1" label="开票地址">{{ currentSelectedSubsidyCompany.address }}</sv>
+            </sv-container>
+          </div>
+        </ng-container>
         <div nz-col [nzSpan]="12">
           <nz-form-item class="form-item-box">
             <nz-form-label nzFor="project_tax_id" [nzRequired]="income_type === 'project'">开票税目</nz-form-label>
@@ -68,6 +86,17 @@
             </nz-form-control>
           </nz-form-item>
         </div>
+        <ng-container *ngIf="(currentSelectedProjectCompany && income_type === 'project') || (currentSelectedSubsidyCompany && income_type === 'subsidy')">
+          <div nz-col [nzSpan]="12" class="px-md" >
+            <sv-container class="mb-md" title="开票税目及税率" col="2" *ngIf="currentSelectedTaxAmount">
+              <sv label="{{ income_type === 'project' ? '收入' : '补贴' }}金额">{{ currentSelectedTaxAmount.income | _currency }}</sv>
+              <sv label="开票税率">
+                <span *ngIf="income_type === 'project'">{{ currentSelectedTaxAmount.tax.rate * 100 }} %</span>
+                <span *ngIf="income_type === 'subsidy'">{{ currentSelectedTaxAmount.tax_rate * 100 }} %</span>
+              </sv>
+            </sv-container>
+          </div>
+        </ng-container>
       </ng-container>
 
       <ng-container *ngIf="income_type === 'subsidy'">
@@ -99,7 +128,7 @@
           </nz-form-item>
         </div>
       </ng-container>
-      <div nz-col [nzSpan]="24" *ngIf="(currentSelectedProjectCompany && income_type === 'project') || (currentSelectedSubsidyCompany && income_type === 'subsidy')">
+      <!-- <div nz-col [nzSpan]="24" *ngIf="(currentSelectedProjectCompany && income_type === 'project') || (currentSelectedSubsidyCompany && income_type === 'subsidy')">
         <sv-container class="mb-md" title="开票单位信息" *ngIf="income_type === 'project'">
           <sv col="2" label="纳税人识别号">{{ currentSelectedProjectCompany.code }}</sv>
           <sv col="2" label="联系电话">{{ currentSelectedProjectCompany.tel }}</sv>
@@ -122,7 +151,7 @@
             <span *ngIf="income_type === 'subsidy'">{{ currentSelectedTaxAmount.tax_rate * 100 }} %</span>
           </sv>
         </sv-container>
-      </div>
+      </div> -->
       <div nz-col [nzSpan]="12">
         <nz-form-item class="form-item-box">
           <nz-form-label nzFor="bill_category_id" nzRequired>发票类型</nz-form-label>

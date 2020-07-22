@@ -189,6 +189,7 @@ export class InvoicesFormManageComponent implements OnInit {
 
   submitBillInfo(): void {
     console.log('提交发票 开具申请');
+    
     this.settingsConfigService.post('/api/bill/submit', { bill_id: this.billId }).subscribe((res: ApiData) => {
       if (res.code === 200) {
         this.msg.success('提交成功');
@@ -281,6 +282,16 @@ export class InvoicesFormManageComponent implements OnInit {
       customer_contract_code: data.customer_contract_code ? data.customer_contract_code : null,
     });
 
+    if(this.income_type === 'project' && this.projectTaxList.length !== 0) {
+      const tax = this.projectTaxList.filter( v => v.tax.id === data.tax.id)[0];
+      this.currentSelectedTaxAmount = tax;
+    }
+    if(this.income_type === 'subsidy' && this.subsidyTaxList.length !== 0) {
+      const tax = this.subsidyTaxList.filter( v => v.id === data.subsidy_income_detail.id)[0];
+      this.currentSelectedTaxAmount = tax;
+    }
+    
+    
 
   }
 
@@ -397,6 +408,7 @@ export class InvoicesFormManageComponent implements OnInit {
       console.log(res, '通过项目收入获取详情');
       if(res.code === 200) {
         this.projectTaxList = res.data.project_revenue_detail;
+
         // const project_tax_id = this.validateForm.get('project_tax_id').value;
         // if(project_tax_id && this.projectTaxList.length !== 0) {
         //   this.currentSelectedTaxAmount = this.projectTaxList.filter( v=> v.tax.id === project_tax_id)[0];

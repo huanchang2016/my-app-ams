@@ -105,7 +105,7 @@ export class ContractPayCreateComponent implements OnInit {
   // 新增 发票台账
   billModal: NzModalRef;
 
-  validateBillForm: FormGroup;
+  validateBillForm!: FormGroup;
 
   isEditCost = false;
 
@@ -138,6 +138,15 @@ export class ContractPayCreateComponent implements OnInit {
 
   pdfPosition = 0;
 
+  // 检测支付金额
+  currentPayment: any = null;
+
+  // 总金额错误提示
+  totalAmountError = false;
+
+  // 检验选项
+  checkedOption: any = {};
+
 
   ngOnInit() {
 
@@ -149,11 +158,11 @@ export class ContractPayCreateComponent implements OnInit {
     this.validateBillForm = this.fb.group({
       contract_payment_id: [null, [Validators.required]],
       bill_category_id: [null, [Validators.required]],
-      exclude_tax_amount: [null],
-      tax_amount: [null],
+      exclude_tax_amount: [null, [Validators.required]],
+      tax_amount: [null, [Validators.required]],
       amount: [null],
       index: [null, [Validators.required]],
-      radioValue: '1',
+      is_get_bill: [true, [Validators.required]],
     });
     this.getCategoryList();
     this.getTaxCategoryList();
@@ -165,18 +174,70 @@ export class ContractPayCreateComponent implements OnInit {
         console.log('currentSelectCost', this.currentSelectCost);
       }
     });
+    // this.requiredChange(true);
 
+    console.log('validateCostForm is_get_bill', this.validateBillForm.get('is_get_bill').value);
   }
+
+  contractPaymentChange(contract_payment_id: number): void {
+    [this.currentPayment] = this.listOfData.filter(v => v.id === contract_payment_id);
+    console.log('contract_payment_id', contract_payment_id)
+    console.log(this.currentPayment, 'contractPaymentChange this.currentPayment');
+    console.log('this.listOfData', this.listOfData);
+    this.amountChange();
+  }
+
   // 动态校验
-  requiredChange(radioValue: string): void {
-    if (radioValue === '1') {
-      this.validateBillForm.get('amount')!.clearValidators();
-      this.validateBillForm.get('amount')!.markAsPristine();
-    } else {
+  requiredChange(is_get_bill: boolean): void {
+    console.log('111');
+    if (!is_get_bill) { // 未开票
+      this.validateBillForm.get('bill_category_id')!.clearValidators();
+      this.validateBillForm.get('bill_category_id')!.markAsPristine();
+
+      this.validateBillForm.get('exclude_tax_amount')!.clearValidators();
+      this.validateBillForm.get('exclude_tax_amount')!.markAsPristine();
+
+      this.validateBillForm.get('tax_amount')!.clearValidators();
+      this.validateBillForm.get('tax_amount')!.markAsPristine();
+
       this.validateBillForm.get('amount')!.setValidators(Validators.required);
       this.validateBillForm.get('amount')!.markAsDirty();
+    } else { // 已开票
+      this.validateBillForm.get('bill_category_id')!.setValidators(Validators.required);
+      this.validateBillForm.get('bill_category_id')!.markAsDirty();
+
+      this.validateBillForm.get('exclude_tax_amount')!.setValidators(Validators.required);
+      this.validateBillForm.get('exclude_tax_amount')!.markAsDirty();
+
+      this.validateBillForm.get('tax_amount')!.setValidators(Validators.required);
+      this.validateBillForm.get('tax_amount')!.markAsDirty();
+
+      this.validateBillForm.get('amount')!.clearValidators();
+      this.validateBillForm.get('amount')!.markAsPristine();
     }
+    // this.validateBillForm.updateValueAndValidity();
     this.validateBillForm.get('amount')!.updateValueAndValidity();
+    this.validateBillForm.get('tax_amount')!.updateValueAndValidity();
+    this.validateBillForm.get('exclude_tax_amount')!.updateValueAndValidity();
+    console.log('动态校验', is_get_bill)
+  }
+
+  amountChange() {
+    // 监听除税金额和 税金的变化，判断是否大于 可支付的最大金额
+    if (!this.currentPayment) {
+      return;
+    }
+    if (this.validateBillForm.get('is_get_bill').value) {
+      const _exclude_tax_amount: number = +this.validateBillForm.get('exclude_tax_amount').value;
+      const _tax_amount: number = +this.validateBillForm.get('tax_amount').value;
+
+      this.totalAmountError = (_exclude_tax_amount + _tax_amount) > this.currentPayment.amount;
+
+    } else {
+      const _amount: number = +this.validateBillForm.get('amount').value;
+      this.totalAmountError = _amount > this.currentPayment.amount;
+    }
+    console.log(this.totalAmountError)
   }
 
   confirmationAmountValidator = (control: FormControl): { [s: string]: boolean } => {
@@ -292,6 +353,7 @@ export class ContractPayCreateComponent implements OnInit {
         const cost: any[] = res.data.cost;
         this.costlist = cost;
         this.dealCostSelectArr(cost);
+        console.log()
       }
     })
   }
@@ -300,6 +362,12 @@ export class ContractPayCreateComponent implements OnInit {
   addPaymentCost(tplTitle: TemplateRef<{}>, tplContent: TemplateRef<{}>, tplFooter: TemplateRef<{}>, e: MouseEvent): void {
     e.preventDefault();
     this.isEditCost = false;
+    this.costArr = this.costArr.map(v => {
+      if (v.id === this.listOfData[v.id - 1].cost.id) {
+        v.disabled = true;
+      }
+      return v;
+    })
     console.log('111this.costArr', this.costArr)
     console.log('this.listOfData', this.listOfData)
     this.tplModal = this.modalService.create({
@@ -348,7 +416,10 @@ export class ContractPayCreateComponent implements OnInit {
     });
     console.log('发票台账costArr', this.costArr)
     this.getContractPayment();
+    console.log('1this.contract_payment_id', this.contract_payment_id)
     this.listOfData.map(v => { this.contract_payment_id = v.id })
+    console.log('2this.contract_payment_id', this.contract_payment_id)
+
   }
   editBillTicket(billTitle: TemplateRef<{}>, billContent: TemplateRef<{}>, billFooter: TemplateRef<{}>, data: any, i): void {
     this.isEditCost = true;
@@ -380,9 +451,10 @@ export class ContractPayCreateComponent implements OnInit {
   closeTaxModal(): void {
     this.currentSelectCost = null;
     this.isEditCost = false;
+    this.currentPayment = null;
     this.billModal.destroy();
     this.validateBillForm.reset();
-    this.validateBillForm.patchValue({ radioValue: '1' });
+    this.validateBillForm.patchValue({ is_get_bill: true });
   }
 
   submitForm(): void {
@@ -567,9 +639,6 @@ export class ContractPayCreateComponent implements OnInit {
   }
 
   deleteTax(id: number): void {
-    // let paymentId = null;
-    // this.listOfTax.length !== 1 ? paymentId = this.listOfTax[id - 1].id : paymentId = this.listOfTax[0].id
-    // console.log('delete', paymentId)
     console.log('deleteid', id)
     console.log('listOfData', this.listOfTax)
     this.settingsConfigService.post('/api/contract/payment/tax/disable', { contract_payment_tax_id: id }).subscribe((res: ApiData) => {
@@ -593,14 +662,18 @@ export class ContractPayCreateComponent implements OnInit {
   }
 
   resetTaxForm(opt: any): void {
+    console.log('resetTaxForm opt.contract_payment.id', opt.contract_payment.id);
+    console.log('resetTaxForm listOfData', this.listOfData);
+    [this.currentPayment] = this.listOfData.filter(v => v.id === opt.contract_payment.id);
+    const is_get_bill: boolean = opt.bill_category ? true : false;
     this.validateBillForm.patchValue({
       contract_payment_id: opt.contract_payment.cost.cost_category.id,
       bill_category_id: opt.bill_category.id,
-      exclude_tax_amount: opt.exclude_tax_amount,
-      tax_amount: opt.tax_amount,
-      amount: opt.amount,
+      exclude_tax_amount: is_get_bill ? opt.exclude_tax_amount : null,
+      tax_amount: is_get_bill ? opt.tax_amount : null,
+      amount: is_get_bill ? null : opt.amount,
       index: opt.index,
-      radioValue: opt.radioValue
+      is_get_bill,
     });
   }
 
@@ -902,24 +975,24 @@ export class ContractPayCreateComponent implements OnInit {
       this.validateBillForm.controls[key].markAsDirty();
       this.validateBillForm.controls[key].updateValueAndValidity();
     }
-    if (this.validateBillForm.valid) {
+    if (this.validateBillForm.valid && !this.totalAmountError) {
       const value: any = this.validateBillForm.value;
       console.log('value', value);
-
+      const is_get_bill: boolean = this.validateBillForm.value.is_get_bill;
       const createArray = {
         contract_payment_id: this.contract_payment_id,
-        bill_category_id: value.bill_category_id,
-        exclude_tax_amount: Number(value.exclude_tax_amount),
-        tax_amount: Number(value.tax_amount),
-        amount: this.validateBillForm.get('radioValue').value === '1' ? Number(value.exclude_tax_amount) + Number(value.tax_amount) : Number(value.amount),
+        bill_category_id: is_get_bill ? value.bill_category_id : null,
+        exclude_tax_amount: is_get_bill ? Number(value.exclude_tax_amount) : 0,
+        tax_amount: is_get_bill ? Number(value.tax_amount) : 0,
+        amount: is_get_bill ? Number(value.exclude_tax_amount) + Number(value.tax_amount) : Number(value.amount),
         index: Number(value.index),
       }
       const editArray = {
         contract_payment_tax_id: this.contract_payment_tax_id,
         bill_category_id: value.bill_category_id,
-        exclude_tax_amount: Number(value.exclude_tax_amount),
-        tax_amount: Number(value.tax_amount),
-        amount: this.validateBillForm.get('radioValue').value === '1' ? Number(value.exclude_tax_amount) + Number(value.tax_amount) : Number(value.amount),
+        exclude_tax_amount: is_get_bill ? Number(value.exclude_tax_amount) : 0,
+        tax_amount: is_get_bill ? Number(value.tax_amount) : 0,
+        amount: is_get_bill ? Number(value.exclude_tax_amount) + Number(value.tax_amount) : Number(value.amount),
         index: Number(value.index),
       }
 

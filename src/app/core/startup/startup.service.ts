@@ -34,8 +34,8 @@ export class StartupService {
   }
 
 
-  menuData(permissions:any[]):Menu[] {
-    const permissionGroup:string[] = permissions.map( v => v.code );
+  menuData(permissions: any[]): Menu[] {
+    const permissionGroup: string[] = permissions.map(v => v.code);
     this.aclService.setAbility(permissionGroup);
     return [
       {
@@ -232,11 +232,11 @@ export class StartupService {
                 //   }
                 // ]
               }
-              
-              
+
+
             ]
           },
-  
+
           {
             text: '账务管理',
             link: '/bill',
@@ -447,25 +447,31 @@ export class StartupService {
                 hide: this.isHideRouter(['permission_list'], permissionGroup)
               }
             ]
+          },
+          {
+            text: '派遣流程',
+            link: '/dispatch',
+            icon: { type: 'icon', value: 'key' },
+            hide: this.isHideRouter(['permission_list'], permissionGroup)
           }
         ]
       }
     ];
   }
 
-  isHideRouter(abilities:string[], permissionGroup:string[]):boolean {
-    return abilities.filter( v => permissionGroup.includes(v)).length === 0;
+  isHideRouter(abilities: string[], permissionGroup: string[]): boolean {
+    return abilities.filter(v => permissionGroup.includes(v)).length === 0;
   }
 
-  
+
   private viaHttp(resolve: any, reject: any) {
     zip(
       this.httpClient.get('/api/user/info/my'),
       this.httpClient.get('/api/permission/my')
     ).pipe(
       catchError(([appData, permissionData]) => {
-          resolve(null);
-          return [appData, permissionData];
+        resolve(null);
+        return [appData, permissionData];
       })
     ).subscribe(([appData, permissionData]) => {
       // console.log(appData, permissionData);
@@ -473,7 +479,7 @@ export class StartupService {
         name: `财务共享服务中心`,
         description: `全力推进公司业务快速发展，优化流程管理，提高信息化应用效率，提升公司核心竞争力，加大财务管理软件建设与应用力度，天府人资公司菁英软件青年突击队积极对接研发需求，以推动公司信息化水平迈上新台阶，进一步实现办公高效化、规范化、标准化和科学化`
       };
-      const user:any = appData.data;
+      const user: any = appData.data;
       // Application information: including site name, description, year
       this.settingService.setApp(app);
       // User information: including name, avatar, email address
@@ -481,16 +487,16 @@ export class StartupService {
       // ACL: Set the permissions to full, https://ng-alain.com/acl/getting-started
       // this.aclService.setFull(true);
       // Menu data, https://ng-alain.com/theme/menu
-      if(permissionData.code === 200) {
+      if (permissionData.code === 200) {
         this.menuService.add(this.menuData(permissionData.data.normal_permission));
       }
       // Can be set page suffix title, https://ng-alain.com/theme/title
       this.titleService.suffix = app.name;
     },
-    () => { },
-    () => {
-      resolve(null);
-    });
+      () => { },
+      () => {
+        resolve(null);
+      });
   }
 
   load(): Promise<any> {
@@ -652,8 +658,8 @@ export class StartupService {
                 //   }
                 // ]
               }
-              
-              
+
+
             ]
           },
           {
@@ -721,7 +727,7 @@ export class StartupService {
               }
             ]
           },
-  
+
           {
             text: '账务管理',
             link: '/bill',
@@ -907,6 +913,12 @@ export class StartupService {
                 link: '/authority/roles',
               }
             ]
+          },
+          {
+            text: '派遣流程',
+            link: '/dispatch/dispatch-create',
+            icon: { type: 'icon', value: 'key' },
+            // hide: this.isHideRouter(['permission_list'], permissionGroup)
           }
         ]
       }

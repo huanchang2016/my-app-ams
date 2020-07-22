@@ -3,7 +3,7 @@ import { SharedModule } from '@shared';
 import { PaymentApproveRoutingModule } from './payment-approve-routing.module';
 import { ApproveSearchOptionComponent } from './component/approve-search-option/approve-search-option.component';
 
-  // 有合约  合约审批管理
+// 有合约  合约审批管理
 import { ApproveNotStartedComponent } from './contract-approve-manage/apply-for/approve-not-started/approve-not-started.component';
 import { PaymentContractFormComponent } from './component/payment-contract-form/payment-contract-form.component';
 import { ProjectContractListComponent } from './contract-approve-manage/apply-for/project-contract-list/project-contract-list.component';
@@ -66,7 +66,7 @@ const COMPONENTS = [
   MyApplyForInprogressComponent,
   MyApplyForPassComponent,
   MyApplyForRefuseComponent,
-  
+
   ForApprovalListComponent,
   ProjectContractListComponent,
   ContractPayCreateComponent,
@@ -102,7 +102,7 @@ const COMPONENTS = [
   NoContractExcuteNotStartComponent,
   NoContractExcuteFinishedComponent,
   NoContractPayPendExecuteComponent,
-  
+
   ContractApprovePayListComponent,
   NoContractApproveListComponent,
   ContractApplyForListComponent,
@@ -129,8 +129,8 @@ const COMPONENTS_NOROUNT = [
   ],
   declarations: [
     ...COMPONENTS,
-    ...COMPONENTS_NOROUNT,
-    
+    ...COMPONENTS_NOROUNT
+
   ],
   entryComponents: COMPONENTS_NOROUNT
 })

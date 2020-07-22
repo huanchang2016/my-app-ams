@@ -16,6 +16,7 @@ import { QrAuthComponent } from './passport/qr-auth/qr-auth.component';
 // single pages
 import { CallbackComponent } from './callback/callback.component';
 import { UserLockComponent } from './passport/lock/lock.component';
+// dispatch
 
 const routes: Routes = [
   {
@@ -30,16 +31,16 @@ const routes: Routes = [
       // { path: 'widgets', loadChildren: () => import('./widgets/widgets.module').then(m => m.WidgetsModule) },
       // 新增模块
       // 项目管理
-      { path: 'project', loadChildren: () => import('./project/project.module').then( m => m.ProjecttModule ) },
-      { path: 'pro-settings', loadChildren: () => import('./project-settings/project-settings.module').then( m => m.ProjectSettingsModule ) },
+      { path: 'project', loadChildren: () => import('./project/project.module').then(m => m.ProjecttModule) },
+      { path: 'pro-settings', loadChildren: () => import('./project-settings/project-settings.module').then(m => m.ProjectSettingsModule) },
       // 支付审批管理
-      { path: 'approve', loadChildren: () => import('./payment-approve/payment-approve.module').then( m => m.PaymentApproveModule ) },
+      { path: 'approve', loadChildren: () => import('./payment-approve/payment-approve.module').then(m => m.PaymentApproveModule) },
       // 账务管理 （发票、账务处理）
-      { path: 'bill', loadChildren: () => import('./bill-reminder/bill-reminder.module').then( m => m.BillReminderModule ) },
+      { path: 'bill', loadChildren: () => import('./bill-reminder/bill-reminder.module').then(m => m.BillReminderModule) },
       // 合同管理
-      { path: 'contract', loadChildren: () => import('./contract/contract.module').then( m => m.ContractModule ) },
+      { path: 'contract', loadChildren: () => import('./contract/contract.module').then(m => m.ContractModule) },
       // 项目流程管理
-      { path: 'workflow', loadChildren: () => import('./workflow/workflow.module').then( m => m.WorkflowModule ) },
+      { path: 'workflow', loadChildren: () => import('./workflow/workflow.module').then(m => m.WorkflowModule) },
       // 基础配置
       { path: 'company', loadChildren: () => import('./settings/company/company.module').then(m => m.CompanyModule) },
       { path: 'department', loadChildren: () => import('./settings/department/department.module').then(m => m.DepartmentModule) },
@@ -49,7 +50,9 @@ const routes: Routes = [
       // 用户管理
       { path: 'users', loadChildren: () => import('./users/users.module').then(m => m.UsersModule) },
       // 个人中心
-      { path: 'person-center', loadChildren: () => import('./person-center/person-center.module').then(m => m.PersonCenterModule) }
+      { path: 'person-center', loadChildren: () => import('./person-center/person-center.module').then(m => m.PersonCenterModule) },
+      // 派遣
+      { path: 'dispatch', loadChildren: () => import('./dispatch/dispatch.module').then(m => m.DispatchModule) }
     ]
   },
   // 全屏布局
@@ -81,11 +84,11 @@ const routes: Routes = [
   imports: [
     RouterModule.forRoot(
       routes, {
-        useHash: environment.useHash,
-        // NOTICE: If you use `reuse-tab` component and turn on keepingScroll you can set to `disabled`
-        // Pls refer to https://ng-alain.com/components/reuse-tab
-        scrollPositionRestoration: 'top',
-      }
+      useHash: environment.useHash,
+      // NOTICE: If you use `reuse-tab` component and turn on keepingScroll you can set to `disabled`
+      // Pls refer to https://ng-alain.com/components/reuse-tab
+      scrollPositionRestoration: 'top',
+    }
     )],
   exports: [RouterModule],
 })

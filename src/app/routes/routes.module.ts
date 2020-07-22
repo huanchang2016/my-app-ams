@@ -30,7 +30,7 @@ const COMPONENTS = [
 const COMPONENTS_NOROUNT = [];
 
 @NgModule({
-  imports: [ SharedModule, RouteRoutingModule ],
+  imports: [SharedModule, RouteRoutingModule],
   declarations: [
     ...COMPONENTS,
     ...COMPONENTS_NOROUNT,
@@ -40,4 +40,4 @@ const COMPONENTS_NOROUNT = [];
     CommonFunctionService
   ]
 })
-export class RoutesModule {}
+export class RoutesModule { }

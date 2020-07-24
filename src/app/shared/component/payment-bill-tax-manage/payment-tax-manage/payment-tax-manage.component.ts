@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, TemplateRef, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, TemplateRef, OnChanges, Output, EventEmitter } from '@angular/core';
 import { NzMessageService, NzModalService, NzModalRef } from 'ng-zorro-antd';
 import { SettingsConfigService } from 'src/app/routes/service/settings-config.service';
 import { ApiData, List } from 'src/app/data/interface.data';
@@ -19,16 +19,8 @@ import { filter, map } from 'rxjs/operators';
   `]
 })
 export class PaymentTaxManageComponent implements OnChanges, OnInit {
-  @Input() payInfo?:any;
-  @Input() paymentArray?:any[];
-  @Input() billCategoryArray:any[];
+  @Output() private outer = new EventEmitter();
 
-  @Input() is_execute_user:boolean = false;
-  @Input() payType?:string = 'treaty';
-
-  listOfData: any[] = [];
-  validateForm: FormGroup;
-  
   constructor(
     public msg: NzMessageService,
     private modalService: NzModalService,
@@ -37,20 +29,51 @@ export class PaymentTaxManageComponent implements OnChanges, OnInit {
   ) {
     this.getCategoryList();
   }
+  @Input() payInfo?: any;
+  @Input() paymentArray?: any[];
+  @Input() billCategoryArray: any[];
 
-  currentPayment:any = null;
+  @Input() is_execute_user = false;
+  @Input() payType = 'treaty';
+  @Input() getTreatyPayDetail: any;
+  @Input() treaty_pay_id: any;
+  @Input() setTreatyForm: any;
+  @Input() validateTreatyForm: any;
+  @Input() getTreatyPayment: any;
+
+  listOfData: any[] = [];
+  validateForm: FormGroup;
+
+  currentPayment: any = null;
+
+  // 附件上传
+  attachment: any[] = [];
+  isAttachmentChange = false;
+
+
+  attachmentCategory: List[] = [];
+
+  checkedOption: any = {};
+
+
+  // 新增 成本支付
+  tplModal: NzModalRef;
+
+  submitCostLoading = false;
+
+  isEditCost = false;
+  currentEditInfo: any = null;
+  editCostData: any = null;
+
+  totalAmountError = false;
 
   ngOnChanges() {
     console.log(this.payInfo, 'payInfo', this.paymentArray, 'paymentArray', 'billCategoryArray', this.billCategoryArray)
-    if(this.is_execute_user && this.payInfo) {
+    if (this.is_execute_user && this.payInfo) {
       // 是执行者访问， 需要展示  附件绑定
       this.getAttachment();
     }
   }
-
-  // 附件上传
-  attachment: any[] = [];
-  isAttachmentChange: boolean = false;
   attachmentChange(option: any) {
     this.attachment.push(option);
     this.isAttachmentChange = !this.isAttachmentChange;
@@ -61,7 +84,7 @@ export class PaymentTaxManageComponent implements OnChanges, OnInit {
 
   bindAttachment(pay_id: number, isRefer: boolean = false) {
     let opt: any = null;
-    if(this.payType === 'treaty') {
+    if (this.payType === 'treaty') {
       opt = {
         attachment_ids: this.attachment.map(v => v.id),
         project_id: this.payInfo.project.id,
@@ -69,8 +92,8 @@ export class PaymentTaxManageComponent implements OnChanges, OnInit {
         is_basic: false
       };
     }
-    
-    if(this.payType === 'contract') {
+
+    if (this.payType === 'contract') {
       opt = {
         attachment_ids: this.attachment.map(v => v.id),
         project_id: this.payInfo.project.id,
@@ -95,12 +118,12 @@ export class PaymentTaxManageComponent implements OnChanges, OnInit {
   }
   getAttachment() {
     // `/api/attachment/treaty_pay/${this.payInfo.id}`
-    let attachmentUrl:string = '';
-    if(this.payType === 'treaty') {
+    let attachmentUrl = '';
+    if (this.payType === 'treaty') {
       attachmentUrl = '/api/attachment/treaty_pay/' + this.payInfo.id;
     }
-    
-    if(this.payType === 'contract') {
+
+    if (this.payType === 'contract') {
       attachmentUrl = '/api/attachment/contract_pay/' + this.payInfo.id;
     }
 
@@ -111,9 +134,6 @@ export class PaymentTaxManageComponent implements OnChanges, OnInit {
       }
     })
   }
-
-
-  attachmentCategory: List[] = [];
   getCategoryList() {
     const opt: any = {
       is_project: false,
@@ -133,7 +153,7 @@ export class PaymentTaxManageComponent implements OnChanges, OnInit {
     });
   }
 
-  
+
   ngOnInit(): void {
     this.validateForm = this.fb.group({
       treaty_payment_id: [null, [Validators.required]],
@@ -142,53 +162,48 @@ export class PaymentTaxManageComponent implements OnChanges, OnInit {
       exclude_tax_amount: [null, [Validators.pattern(/^(([1-9]\d*|0)(\.\d{1,})?)$|(0\.0?([1-9]\d?))$/)]],
       tax_amount: [null, [Validators.pattern(/^(([1-9]\d*|0)(\.\d{1,})?)$|(0\.0?([1-9]\d?))$/)]],
       amount: [null, [Validators.pattern(/^(([1-9]\d*|0)(\.\d{1,})?)$|(0\.0?([1-9]\d?))$/)]],
-      index: [null, [Validators.required, Validators.pattern(/^[1-9]\d*$/)]]
+      invoice_number: [null, [Validators.required]]
     });
 
-    if(this.payInfo) {
+    if (this.payInfo) {
       this.getDataList();
     }
   }
-  
+
 
   getDataList() {
-    let listUrl:string = '';
-    if(this.payType === 'treaty') {
+    let listUrl = '';
+    if (this.payType === 'treaty') {
       listUrl = `/api/treaty/payment/tax/${this.payInfo.id}`;
     }
-    
-    if(this.payType === 'contract') {
+
+    if (this.payType === 'contract') {
       listUrl = '/api/contract/payment/tax/' + this.payInfo.id;
     }
 
     this.settingsConfigService.get(listUrl).subscribe((res: ApiData) => {
       console.log(res, '非合约 支付详情对应税 列表')
       if (res.code === 200) {
-        const list:any[] = res.data.contract_payment_tax;
-        this.listOfData = list.sort( (a:any, b:any) => a.index - b.index);
-        
-        
+        const list: any[] = res.data.contract_payment_tax;
+        console.log('list.............', list);
+        this.listOfData = list.sort((a: any, b: any) => a.id - b.id);
+
+
         this.dealBillCateArray();
       }
     })
   }
-
-  checkedOption:any = {};
   dealBillCateArray() {
-    if(this.listOfData.length !== 0) {
+    if (this.listOfData.length !== 0) {
       this.listOfData.forEach(el => {
-        if(el.bill_category) {
-          let key:string = el.contract_payment.cost.cost_category.id + '-' + el.company.id + '-' + el.bill_category.id;
+        if (el.bill_category) {
+          const key: string = el.contract_payment.cost.cost_category.id + '-' + el.company.id + '-' + el.bill_category.id;
           this.checkedOption[key] = true;
         }
       })
 
     }
   }
-
-  
-  // 新增 成本支付
-  tplModal: NzModalRef;
 
   addPaymentCost(tplTitle: TemplateRef<{}>, tplContent: TemplateRef<{}>, tplFooter: TemplateRef<{}>, e: MouseEvent): void {
     e.preventDefault();
@@ -220,21 +235,19 @@ export class PaymentTaxManageComponent implements OnChanges, OnInit {
     console.log('edit data', opt);
     this.editCostData = opt;
     [this.currentPayment] = this.paymentArray.filter(v => v.id === opt.contract_payment.id);
-    const is_get_bill:boolean = opt.bill_category ? true : false;
+    const is_get_bill: boolean = opt.bill_category ? true : false;
     console.log('edit data', opt, 'currentPayment', this.currentPayment);
     this.validateForm.patchValue({
       treaty_payment_id: opt.contract_payment.id,
-      is_get_bill: is_get_bill,
+      is_get_bill,
       bill_category_id: is_get_bill ? opt.bill_category.id : null,
       amount: is_get_bill ? null : opt.amount,
       exclude_tax_amount: is_get_bill ? opt.exclude_tax_amount : null,
       tax_amount: is_get_bill ? opt.tax_amount : null,
-      index: opt.index
+      invoice_number: is_get_bill ? opt.invoice_number : '暂无'
     });
     this.isGetBillChange(is_get_bill);
   }
-
-  submitCostLoading:boolean = false;
   closeModal(): void {
     this.isEditCost = false;
     this.currentEditInfo = null;
@@ -245,12 +258,6 @@ export class PaymentTaxManageComponent implements OnChanges, OnInit {
       is_get_bill: true
     })
   }
-
-  isEditCost: boolean = false;
-  currentEditInfo:any = null;
-  editCostData:any = null;
-
-  totalAmountError:boolean = false;
   treatyPaymentChange(treaty_payment_id: number): void {
     [this.currentPayment] = this.paymentArray.filter(v => v.id === treaty_payment_id);
     console.log(this.currentPayment, 'current selected payment');
@@ -263,13 +270,16 @@ export class PaymentTaxManageComponent implements OnChanges, OnInit {
 
       this.validateForm.get('bill_category_id')!.clearValidators();
       this.validateForm.get('bill_category_id')!.markAsPristine();
-      
+
       this.validateForm.get('exclude_tax_amount')!.clearValidators();
       this.validateForm.get('exclude_tax_amount')!.markAsPristine();
-      
+
       this.validateForm.get('tax_amount')!.clearValidators();
       this.validateForm.get('tax_amount')!.markAsPristine();
-      
+
+      this.validateForm.get('invoice_number')!.clearValidators();
+      this.validateForm.get('invoice_number')!.markAsPristine();
+
       this.validateForm.get('amount').setValidators(Validators.required);
       this.validateForm.get('amount').markAsDirty();
 
@@ -281,9 +291,12 @@ export class PaymentTaxManageComponent implements OnChanges, OnInit {
 
       this.validateForm.get('exclude_tax_amount')!.setValidators(Validators.required);
       this.validateForm.get('exclude_tax_amount')!.markAsDirty();
-      
+
       this.validateForm.get('tax_amount')!.setValidators(Validators.required);
       this.validateForm.get('tax_amount')!.markAsDirty();
+
+      this.validateForm.get('invoice_number')!.setValidators(Validators.required);
+      this.validateForm.get('invoice_number')!.markAsDirty();
 
       this.validateForm.get('amount')!.clearValidators();
       this.validateForm.get('amount')!.markAsPristine();
@@ -294,17 +307,17 @@ export class PaymentTaxManageComponent implements OnChanges, OnInit {
 
   amountChange() {
     // 监听除税金额和 税金的变化，判断是否大于 可支付的最大金额
-    if(!this.currentPayment) {
+    if (!this.currentPayment) {
       return;
     }
-    if(this.validateForm.get('is_get_bill').value) {
-      const _exclude_tax_amount:number = +this.validateForm.get('exclude_tax_amount').value;
-      const _tax_amount:number = +this.validateForm.get('tax_amount').value;
+    if (this.validateForm.get('is_get_bill').value) {
+      const _exclude_tax_amount: number = +this.validateForm.get('exclude_tax_amount').value;
+      const _tax_amount: number = +this.validateForm.get('tax_amount').value;
 
       this.totalAmountError = (_exclude_tax_amount + _tax_amount) > this.currentPayment.amount;
-      
-    }else {
-      const _amount:number = +this.validateForm.get('amount').value;
+
+    } else {
+      const _amount: number = +this.validateForm.get('amount').value;
       this.totalAmountError = _amount > this.currentPayment.amount;
     }
   }
@@ -319,6 +332,7 @@ export class PaymentTaxManageComponent implements OnChanges, OnInit {
       this.submitCostLoading = true;
 
       const value: any = this.validateForm.value;
+      console.log('value....................', value);
 
       // 添加台账后， 当前 发票类型不可选
       /****
@@ -332,68 +346,71 @@ export class PaymentTaxManageComponent implements OnChanges, OnInit {
        * }
        * 
        * 
-       * *****/ 
+       * *****/
       // let opt = null;
       // opt[value.bill_category_id] = true;
       // this.checkedOption[value.treaty_payment_id] = Object.assign(this.checkedOption[value.treaty_payment_id], opt)
 
-      if(this.isEditCost) {
+      if (this.isEditCost) {
         this.updatePayment(value);
-      }else {
+      } else {
         this.createPayment(value);
       }
-      
     }
   }
 
-  updatePayment(opt:any) {
-    const is_get_bill:boolean = opt.is_get_bill;
+  updatePayment(opt: any) {
+    const is_get_bill: boolean = opt.is_get_bill;
     const option = {
       treaty_payment_tax_id: this.currentEditInfo.id,
       bill_category_id: is_get_bill ? opt.bill_category_id : null,
       exclude_tax_amount: is_get_bill ? +opt.exclude_tax_amount : 0,
       tax_amount: is_get_bill ? +opt.tax_amount : 0,
       amount: is_get_bill ? 0 : +opt.amount,
-      index: +opt.index
+      invoice_number: is_get_bill ? String(opt.invoice_number) : '暂无'
+
     }
 
-    this.settingsConfigService.post('/api/treaty/payment/tax/update', option).subscribe((res:ApiData) => {
+    this.settingsConfigService.post('/api/treaty/payment/tax/update', option).subscribe((res: ApiData) => {
       this.submitCostLoading = false;
-      if(res.code === 200) {
+      if (res.code === 200) {
         this.msg.success('更新成功');
         this.getDataList(); // 获取详情支付列表
-        this.closeModal();
+        this.outer.emit();
       }
     })
   }
-  createPayment(opt:any) {
-    const is_get_bill:boolean = opt.is_get_bill;
+  createPayment(opt: any) {
+    const is_get_bill: boolean = opt.is_get_bill;
     const option = {
       treaty_payment_id: opt.treaty_payment_id,
       bill_category_id: is_get_bill ? opt.bill_category_id : null,
       exclude_tax_amount: is_get_bill ? +opt.exclude_tax_amount : 0,
       tax_amount: is_get_bill ? +opt.tax_amount : 0,
       amount: is_get_bill ? 0 : +opt.amount,
-      index: +opt.index
+      invoice_number: is_get_bill ? String(opt.invoice_number) : '暂无'
     }
-    this.settingsConfigService.post('/api/treaty/payment/tax/create', option).subscribe((res:ApiData) => {
+    this.settingsConfigService.post('/api/treaty/payment/tax/create', option).subscribe((res: ApiData) => {
       this.submitCostLoading = false;
-      if(res.code === 200) {
+      if (res.code === 200) {
         this.msg.success('创建成功');
         this.getDataList(); // 获取详情支付列表
+        this.outer.emit();
         this.closeModal();
       }
     })
   }
-  disabledPayment(id:number) {
-    this.settingsConfigService.post('/api/treaty/payment/tax/disable', { treaty_payment_tax_id: id }).subscribe((res:ApiData) => {
-      if(res.code === 200) {
+  disabledPayment(id: number) {
+    this.settingsConfigService.post('/api/treaty/payment/tax/disable', { treaty_payment_tax_id: id }).subscribe((res: ApiData) => {
+      if (res.code === 200) {
         this.msg.success('删除成功');
-        this.listOfData = this.listOfData.filter( v => v.id !== id);
+        this.listOfData = this.listOfData.filter(v => v.id !== id);
         this.dealBillCateArray();
+        this.getDataList();
+        this.outer.emit();
       }
     })
   }
-  
+
   cancel(): void { }
 }

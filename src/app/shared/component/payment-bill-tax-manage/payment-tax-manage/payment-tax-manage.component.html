@@ -11,6 +11,7 @@
     <thead>
       <tr>
         <th>支付单序号</th>
+        <th>票号</th>
         <th>费用类别</th>
         <th nzWidth="300px">出票单位</th>
         <th>发票类型</th>
@@ -21,8 +22,9 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let data of costSelectTable.data">
-        <td>{{ data.index }}</td>
+      <tr *ngFor="let data of costSelectTable.data; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ data.invoice_number }}</td>
         <td>{{ data.contract_payment.treaty.service_category.name }}</td>
         <td>{{ data.company.name }}</td>
         <td>
@@ -77,10 +79,12 @@
   <div class="modal-form">
     <form nz-form [formGroup]="validateForm">
       <nz-form-item>
-        <nz-form-label nzFor="treaty_payment_id" nzRequired>{{ payType === 'contract' ? '合约支付' : '协议支付'}}</nz-form-label>
+        <nz-form-label nzFor="treaty_payment_id" nzRequired>{{ payType === 'contract' ? '合约支付' : '协议支付'}}
+        </nz-form-label>
         <nz-form-control nzErrorTip="请选择{{ payType === 'contract' ? '合约支付' : '协议支付'}}详情">
-          <nz-select style="width: 100%;" id="treaty_payment_id" nzShowSearch nzPlaceHolder="请选择{{ payType === 'contract' ? '合约支付' : '协议支付'}}支付详情"
-            formControlName="treaty_payment_id" (ngModelChange)="treatyPaymentChange($event)">
+          <nz-select style="width: 100%;" id="treaty_payment_id" nzShowSearch
+            nzPlaceHolder="请选择{{ payType === 'contract' ? '合约支付' : '协议支付'}}支付详情" formControlName="treaty_payment_id"
+            (ngModelChange)="treatyPaymentChange($event)">
             <ng-container *ngFor="let item of paymentArray">
               <nz-option [nzLabel]="item.treaty.supplier.name" [nzValue]="item.id"></nz-option>
             </ng-container>
@@ -148,10 +152,10 @@
           </nz-form-item>
         </ng-container>
       </ng-container>
-      <nz-form-item>
-        <nz-form-label nzFor="index" nzRequired>序号</nz-form-label>
-        <nz-form-control nzErrorTip="请填写序号">
-          <input type="text" id="index" formControlName="index" placeHolder="填写序号" nz-input />
+      <nz-form-item *ngIf="validateForm.get('is_get_bill').value">
+        <nz-form-label nzFor="invoice_number" nzRequired>票号</nz-form-label>
+        <nz-form-control nzErrorTip="请填写票号">
+          <input type="text" id="invoice_number" formControlName="invoice_number" placeHolder="填写票号" nz-input />
         </nz-form-control>
       </nz-form-item>
       <ng-container *ngIf="validateForm.get('is_get_bill').value && totalAmountError && currentPayment">

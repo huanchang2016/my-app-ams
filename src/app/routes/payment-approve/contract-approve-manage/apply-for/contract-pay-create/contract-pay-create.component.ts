@@ -52,7 +52,10 @@ export class ContractPayCreateComponent implements OnInit {
   taxlist: any[] = []; // 所有税目数据
 
   projectInfo: any = null;
+
   projectId: number = null;
+
+  contractTaxTotal: number = null;
 
   contract_pay_id: number = null;
 
@@ -147,6 +150,11 @@ export class ContractPayCreateComponent implements OnInit {
   // 检验选项
   checkedOption: any = {};
 
+  currentPaymentTotal: any = null;
+
+  // 成本类型数组
+  currentTPaymentCost: any = null;
+
 
   ngOnInit() {
 
@@ -181,15 +189,14 @@ export class ContractPayCreateComponent implements OnInit {
 
   contractPaymentChange(contract_payment_id: number): void {
     [this.currentPayment] = this.listOfData.filter(v => v.id === contract_payment_id);
-    console.log('1contract_payment_id', contract_payment_id)
+    this.contract_payment_id = contract_payment_id;
+    this.currentPaymentTotal = this.currentPayment.amount - this.currentPayment.tax_use_amount
     console.log(this.currentPayment, '2contractPaymentChange this.currentPayment');
-    console.log('3this.listOfData', this.listOfData);
     this.amountChange();
   }
 
   // 动态校验
   requiredChange(is_get_bill: boolean): void {
-    console.log('111');
     if (!is_get_bill) { // 未开票
       this.validateBillForm.get('bill_category_id')!.clearValidators();
       this.validateBillForm.get('bill_category_id')!.markAsPristine();
@@ -225,7 +232,6 @@ export class ContractPayCreateComponent implements OnInit {
     this.validateBillForm.get('amount')!.updateValueAndValidity();
     this.validateBillForm.get('tax_amount')!.updateValueAndValidity();
     this.validateBillForm.get('exclude_tax_amount')!.updateValueAndValidity();
-    console.log('动态校验', is_get_bill)
   }
 
   amountChange() {
@@ -237,11 +243,11 @@ export class ContractPayCreateComponent implements OnInit {
       const _exclude_tax_amount: number = +this.validateBillForm.get('exclude_tax_amount').value;
       const _tax_amount: number = +this.validateBillForm.get('tax_amount').value;
 
-      this.totalAmountError = (_exclude_tax_amount + _tax_amount) > this.currentPayment.amount;
+      this.totalAmountError = (_exclude_tax_amount + _tax_amount) > this.currentPaymentTotal;
 
     } else {
       const _amount: number = +this.validateBillForm.get('amount').value;
-      this.totalAmountError = _amount > this.currentPayment.amount;
+      this.totalAmountError = _amount > this.currentPaymentTotal;
     }
     console.log(this.totalAmountError)
   }
@@ -304,6 +310,7 @@ export class ContractPayCreateComponent implements OnInit {
           console.log('this.contractInfo', this.contractInfo)
           this.summary = this.contractInfo.summary; // 合约支付摘要
           [this.selectedContract] = this.contractList.filter(v => v.contract.id === this.contract_id);
+          this.contractTaxTotal = res.data.tax_use_amount;
           if (!this.contractInfo.draft) {
             this.getWorkflow();
           }
@@ -367,15 +374,24 @@ export class ContractPayCreateComponent implements OnInit {
   // 成本支出
   addPaymentCost(tplTitle: TemplateRef<{}>, tplContent: TemplateRef<{}>, tplFooter: TemplateRef<{}>, e: MouseEvent): void {
     e.preventDefault();
-    // this.isEditCost = false;
-    // this.costArr = this.costArr.map(v => {
-    //   if (v.id === this.listOfData[v.id - 1].cost.id) {
-    //     v.disabled = true;
-    //   }
-    //   return v;
-    // })
     console.log('111this.costArr', this.costArr)
     console.log('this.listOfData', this.listOfData)
+    // this.currentTPaymentCost = this.costArr.filter(checkAdult);
+    // function checkAdult(age) {
+    //   for (let i = 0; i < this.listOfData.length; i++) {
+    //     if (age === this.listOfData[i])
+    //       return true
+    //   }
+    // };
+    // for (let i = 0; i < this.costArr.length; i++) {
+    //   for (let j = 0; j < this.listOfData.length; j++) {
+    //     if (this.costArr[i].id === this.listOfData[j].cost.id) {
+    //       this.currentTPaymentCost.push(this.listOfData[j]);
+    //     }
+    //   }
+    // }
+    // console.log('currentTPaymentCost', this.currentTPaymentCost);
+
     this.tplModal = this.modalService.create({
       nzTitle: tplTitle,
       nzContent: tplContent,
@@ -652,6 +668,7 @@ export class ContractPayCreateComponent implements OnInit {
       if (res.code === 200) {
         console.log('禁用合同支付税目  成功');
         this.listOfTax = this.listOfTax.filter(v => v.id !== id);
+        this.getContractList();
       } else {
         this.submitLoading = false;
       }
@@ -1020,6 +1037,8 @@ export class ContractPayCreateComponent implements OnInit {
         console.log('createContractTax res', res.data);
         console.log('创建合同支付税目  成功');
         this.getContractTax();
+        this.getContractList();
+        this.getContractPayDetail();
         console.log('currentSelectTax', this.currentSelectTax);
       }
     });
@@ -1031,6 +1050,8 @@ export class ContractPayCreateComponent implements OnInit {
         console.log('editContractTax res', res.data);
         console.log('修改合同支付税目  成功');
         this.getContractTax();
+        this.getContractList();
+        this.getContractPayDetail();
       }
     });
   }

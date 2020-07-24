@@ -1,1 +1,81 @@
-<p>payment-contract-tax-mange works!</p>
+<!-- 发票台账 -->
+<nz-card nzTitle="发票台账" [nzBordered]="false" [nzExtra]="costTpl" class="mt-md">
+    <ng-template #costTpl>
+        <button *ngIf="!contractInfo || contractInfo.draft" nz-button [nzType]="'primary'"
+            (click)="addBillTicket($event)">新增发票台账</button>
+    </ng-template>
+
+    <div class="hidden-mobile">
+        <nz-table #taxSelectTable [nzData]="listOfTax" [nzFrontPagination]="false">
+            <thead>
+                <tr>
+                    <th nzWidth="80px">序号</th>
+                    <th>成本类型</th>
+                    <th>发票类型</th>
+                    <th nzWidth="250px">金额</th>
+                    <th *ngIf="!contractInfo || contractInfo.draft">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let data of taxSelectTable.data; let i = index">
+                    <td>{{ i + 1}}</td>
+                    <td>{{ data.contract_payment.cost.cost_category.name }}</td>
+                    <td>{{ data.bill_category===null?'未开发票':data.bill_category.name }}</td>
+                    <td>
+                        <sv-container size="small" col="1">
+                            <sv label="除税金额"><span>{{ data.exclude_tax_amount | currency: 'CNY' }}</span></sv>
+                            <sv label="税金"><span>{{ data.tax_amount | currency: 'CNY' }}</span></sv>
+                            <sv label="总金额"><span>{{ data.amount | currency: 'CNY' }}</span></sv>
+                        </sv-container>
+                    </td>
+                    <td *ngIf="!contractInfo || contractInfo.draft">
+                        <a (click)="editBillTicket(data, i)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
+                        <nz-divider nzType="vertical"></nz-divider>
+                        <a nz-popconfirm nzPopconfirmTitle="确认删除当前发票台账?" (nzOnConfirm)="deleteTax(data.id)"
+                            (nzOnCancel)="cancel()">删除</a>
+                    </td>
+                </tr>
+            </tbody>
+        </nz-table>
+    </div>
+
+    <div class="hidden-pc">
+        <ng-container *ngFor="let data of listOfTax; let i = index">
+            <nz-card [nzActions]=" (!contractInfo || contractInfo.draft) ? [actionEdit, actionDelete] : [] "
+                class="mt-md">
+                <nz-skeleton [nzActive]="true" [nzLoading]="false">
+                    <nz-card-meta [nzTitle]="treatyTitltTpl"></nz-card-meta>
+                    <ng-template #treatyTitltTpl>
+                        <span>{{ data.contract_payment.cost.cost_category.name }}</span>
+                    </ng-template>
+                    <div class="pt-md">
+                        <sv-container size="small">
+                            <sv label="序号"><span>{{ data.index | currency: 'CNY' }}</span></sv>
+                            <sv label="成本类型"><span>{{ data.contract_payment.cost.cost_category.name }}</span></sv>
+                            <sv label="发票类型"><span
+                                    class="font-weight-bold">{{ data.bill_category===null?'未开发票':data.bill_category.name  }}</span>
+                            </sv>
+                            <sv label="除税金额"><span
+                                    class="font-weight-bold">{{ data.exclude_tax_amount | currency: 'CNY' }}</span>
+                            </sv>
+                            <sv label="税金"><span class="font-weight-bold">{{ data.tax_amount | currency: 'CNY' }}</span>
+                            </sv>
+                            <sv label="总金额"><span class="font-weight-bold">{{ data.amount | currency: 'CNY' }}</span>
+                            </sv>
+                        </sv-container>
+                    </div>
+                </nz-skeleton>
+
+                <ng-template #actionEdit>
+                    <a (click)="editBillTicket(data, i)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
+                </ng-template>
+                <ng-template #actionDelete>
+                    <a nz-popconfirm nzPopconfirmTitle="确认删除当前成本支付?" (nzOnConfirm)="deleteTax(data.id)"
+                        (nzOnCancel)="cancel()">删除</a>
+                </ng-template>
+            </nz-card>
+        </ng-container>
+    </div>
+    <!-- edit -->
+
+</nz-card>

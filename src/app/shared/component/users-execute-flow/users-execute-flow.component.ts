@@ -17,6 +17,8 @@ export class UsersExecuteFlowComponent implements OnChanges {
   @Input() payType?: string;
   @Input() payInfo?: any;
   @Input() paymentArr?: any[];
+  @Input() listOfData?: any[];
+  @Input() contract_pay_id?: number;
 
   @Output() executeChange: EventEmitter<any> = new EventEmitter();
 
@@ -32,39 +34,40 @@ export class UsersExecuteFlowComponent implements OnChanges {
     remark: '' // 备注原因
   }
 
-  billCategoryArray:any[] = []; // 发票类型
+  billCategoryArray: any[] = []; // 发票类型
 
   constructor(
     private settings: SettingsService,
     private notice: NzNotificationService,
     private settingsConfigService: SettingsConfigService
   ) {
-    this.settingsConfigService.get('/api/bill/category/all').subscribe((res:ApiData) => {
-      if(res.code === 200) {
-        const list:any = res.data.bill_category;
-        if(list.length !== 0) {
-          this.billCategoryArray = list.sort((a:any, b:any) => a.sequence - b.sequence);
+    this.settingsConfigService.get('/api/bill/category/all').subscribe((res: ApiData) => {
+      if (res.code === 200) {
+        const list: any = res.data.bill_category;
+        if (list.length !== 0) {
+          this.billCategoryArray = list.sort((a: any, b: any) => a.sequence - b.sequence);
         }
       }
     })
   }
 
   ngOnChanges() {
+    console.log('中间组件 listOfData', this.listOfData);
     if (this.progressInfo) {
       this.nodeProcess = [this.progressInfo];
       this.isExecuteUser = this.progressInfo.execute_user.id === this.settings.user.id;
 
-      let status:string = '';
-      if(this.progressInfo.workflow_status.name === '待执行') {
+      let status = '';
+      if (this.progressInfo.workflow_status.name === '待执行') {
         status = 'A';
-      }else if(this.progressInfo.workflow_status.name === '已付款') {
+      } else if (this.progressInfo.workflow_status.name === '已付款') {
         status = 'A';
-      }else if(this.progressInfo.workflow_status.name === '无法执行') {
+      } else if (this.progressInfo.workflow_status.name === '无法执行') {
         status = 'C';
-      }else if(this.progressInfo.workflow_status.name === '已完成') {
+      } else if (this.progressInfo.workflow_status.name === '已完成') {
         status = 'B';
       }
-      
+
       this.checkOption.status = status;
     }
   }
@@ -78,8 +81,8 @@ export class UsersExecuteFlowComponent implements OnChanges {
     const is_execute = this.checkOption.status === 'B';
 
     const option = {
-      is_pay: is_pay,
-      is_execute: is_execute,
+      is_pay,
+      is_execute,
       remark: this.checkOption.remark
     }
     this.executeChange.emit(option);

@@ -161,7 +161,7 @@ export class ContractPayCreateComponent implements OnInit {
       exclude_tax_amount: [null, [Validators.required]],
       tax_amount: [null, [Validators.required]],
       amount: [null],
-      index: [null, [Validators.required]],
+      invoice_number: [null, [Validators.required]],
       is_get_bill: [true, [Validators.required]],
     });
     this.getCategoryList();
@@ -181,9 +181,9 @@ export class ContractPayCreateComponent implements OnInit {
 
   contractPaymentChange(contract_payment_id: number): void {
     [this.currentPayment] = this.listOfData.filter(v => v.id === contract_payment_id);
-    console.log('contract_payment_id', contract_payment_id)
-    console.log(this.currentPayment, 'contractPaymentChange this.currentPayment');
-    console.log('this.listOfData', this.listOfData);
+    console.log('1contract_payment_id', contract_payment_id)
+    console.log(this.currentPayment, '2contractPaymentChange this.currentPayment');
+    console.log('3this.listOfData', this.listOfData);
     this.amountChange();
   }
 
@@ -200,6 +200,9 @@ export class ContractPayCreateComponent implements OnInit {
       this.validateBillForm.get('tax_amount')!.clearValidators();
       this.validateBillForm.get('tax_amount')!.markAsPristine();
 
+      this.validateBillForm.get('invoice_number')!.clearValidators();
+      this.validateBillForm.get('invoice_number')!.markAsPristine();
+
       this.validateBillForm.get('amount')!.setValidators(Validators.required);
       this.validateBillForm.get('amount')!.markAsDirty();
     } else { // 已开票
@@ -211,6 +214,9 @@ export class ContractPayCreateComponent implements OnInit {
 
       this.validateBillForm.get('tax_amount')!.setValidators(Validators.required);
       this.validateBillForm.get('tax_amount')!.markAsDirty();
+
+      this.validateBillForm.get('invoice_number')!.setValidators(Validators.required);
+      this.validateBillForm.get('invoice_number')!.markAsDirty();
 
       this.validateBillForm.get('amount')!.clearValidators();
       this.validateBillForm.get('amount')!.markAsPristine();
@@ -361,13 +367,13 @@ export class ContractPayCreateComponent implements OnInit {
   // 成本支出
   addPaymentCost(tplTitle: TemplateRef<{}>, tplContent: TemplateRef<{}>, tplFooter: TemplateRef<{}>, e: MouseEvent): void {
     e.preventDefault();
-    this.isEditCost = false;
-    this.costArr = this.costArr.map(v => {
-      if (v.id === this.listOfData[v.id - 1].cost.id) {
-        v.disabled = true;
-      }
-      return v;
-    })
+    // this.isEditCost = false;
+    // this.costArr = this.costArr.map(v => {
+    //   if (v.id === this.listOfData[v.id - 1].cost.id) {
+    //     v.disabled = true;
+    //   }
+    //   return v;
+    // })
     console.log('111this.costArr', this.costArr)
     console.log('this.listOfData', this.listOfData)
     this.tplModal = this.modalService.create({
@@ -500,7 +506,7 @@ export class ContractPayCreateComponent implements OnInit {
   createContractPaymentDetail(option) {
     console.log('createOption', option);
     this.settingsConfigService.post('/api/contract/payment/create', option).subscribe((res: ApiData) => {
-      console.log('create res', res.data);
+      console.log('payment create res', res.data);
       if (res.code === 200) {
         console.log('新建合同支付详情  成功');
         this.saveDisable = true;
@@ -621,7 +627,7 @@ export class ContractPayCreateComponent implements OnInit {
     console.log('deleteid', id)
     console.log('listOfData', this.listOfData)
     this.settingsConfigService.post('/api/contract/payment/disable', { contract_payment_id: paymentId }).subscribe((res: ApiData) => {
-      console.log('create res', res.data);
+      console.log('delete res', res.data);
       if (res.code === 200) {
         console.log('删除合同支付详情  成功');
         this.listOfData = this.listOfData.filter(v => v.cost.id !== id);
@@ -642,7 +648,7 @@ export class ContractPayCreateComponent implements OnInit {
     console.log('deleteid', id)
     console.log('listOfData', this.listOfTax)
     this.settingsConfigService.post('/api/contract/payment/tax/disable', { contract_payment_tax_id: id }).subscribe((res: ApiData) => {
-      console.log('create res', res.data);
+      console.log('deleteTax res', res.data);
       if (res.code === 200) {
         console.log('禁用合同支付税目  成功');
         this.listOfTax = this.listOfTax.filter(v => v.id !== id);
@@ -672,7 +678,7 @@ export class ContractPayCreateComponent implements OnInit {
       exclude_tax_amount: is_get_bill ? opt.exclude_tax_amount : null,
       tax_amount: is_get_bill ? opt.tax_amount : null,
       amount: is_get_bill ? null : opt.amount,
-      index: opt.index,
+      invoice_number: opt.invoice_number,
       is_get_bill,
     });
   }
@@ -938,7 +944,7 @@ export class ContractPayCreateComponent implements OnInit {
       summary: this.summary,
     };
     this.settingsConfigService.post('/api/contract/pay/create', option).subscribe((res: ApiData) => {
-      console.log('create res', res.data);
+      console.log('pay create res', res.data);
       if (res.code === 200) {
         console.log('创建合同支付  成功');
         this.contract_pay_id = res.data.id;
@@ -955,7 +961,7 @@ export class ContractPayCreateComponent implements OnInit {
       summary: this.summary,
     };
     this.settingsConfigService.post('/api/contract/pay/update', option).subscribe((res: ApiData) => {
-      console.log('create res', res.data);
+      console.log('edit res', res.data);
       if (res.code === 200) {
         console.log('编辑合同支付  成功');
         this.saveDisable = true;
@@ -985,7 +991,7 @@ export class ContractPayCreateComponent implements OnInit {
         exclude_tax_amount: is_get_bill ? Number(value.exclude_tax_amount) : 0,
         tax_amount: is_get_bill ? Number(value.tax_amount) : 0,
         amount: is_get_bill ? Number(value.exclude_tax_amount) + Number(value.tax_amount) : Number(value.amount),
-        index: Number(value.index),
+        invoice_number: is_get_bill ? String(value.invoice_number) : 0,
       }
       const editArray = {
         contract_payment_tax_id: this.contract_payment_tax_id,
@@ -993,7 +999,7 @@ export class ContractPayCreateComponent implements OnInit {
         exclude_tax_amount: is_get_bill ? Number(value.exclude_tax_amount) : 0,
         tax_amount: is_get_bill ? Number(value.tax_amount) : 0,
         amount: is_get_bill ? Number(value.exclude_tax_amount) + Number(value.tax_amount) : Number(value.amount),
-        index: Number(value.index),
+        invoice_number: is_get_bill ? String(value.invoice_number) : 0,
       }
 
       console.log('createArray', createArray);

@@ -74,7 +74,7 @@
         </div>
       </sv>
       <ng-container *ngIf="selectedContract.contract.is_split">
-        <sv-title>分割合同</sv-title>
+        <sv-title style="font-weight:700;">分割合同</sv-title>
         <!-- <sv col="3" label="分割合同"><span class="text-primary">是</span></sv> -->
         <sv col="3" label="分割总金额"><span class="mr-md">{{ selectedContract.split_contract.amount | _currency }}</span>
         </sv>
@@ -85,10 +85,10 @@
     <ng-template #notSelectedContract>
       <div class="text-center my-lg text-grey text-lg">暂未选择合同</div>
     </ng-template>
-    <div *ngIf="selectedContract" class="py-sm">
+    <!-- <div *ngIf="selectedContract" class="py-sm">
       <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/contract/' + selectedContract.id">
       </app-upload-file-attachment-show-c>
-    </div>
+    </div> -->
     <div style="display: flex;justify-content: flex-end;">
       <button *ngIf="!contractInfo || contractInfo.draft" nz-button [disabled]="saveDisable" [nzType]="'primary'"
         (click)="submitSum()">保存</button>
@@ -108,7 +108,7 @@
       <nz-table #costSelectTable [nzData]="listOfData" [nzFrontPagination]="false">
         <thead>
           <tr>
-            <th nzWidth="80px">序号</th>
+            <th nzWidth="80px">票号</th>
             <th>成本类型</th>
             <th>本期支付（元）</th>
             <th nzWidth="250px">支付统计</th>
@@ -191,6 +191,7 @@
         <thead>
           <tr>
             <th nzWidth="80px">序号</th>
+            <th nzWidth="80px">票号</th>
             <th>成本类型</th>
             <th>发票类型</th>
             <th nzWidth="250px">金额</th>
@@ -199,7 +200,8 @@
         </thead>
         <tbody>
           <tr *ngFor="let data of taxSelectTable.data; let i = index">
-            <td>{{ i + 1}}</td>
+            <td>{{ i + 1 }}</td>
+            <td>{{ data.invoice_number }}</td>
             <td>{{ data.contract_payment.cost.cost_category.name }}</td>
             <td>{{ data.bill_category===null?'未开发票':data.bill_category.name }}</td>
             <td>
@@ -231,7 +233,7 @@
             </ng-template>
             <div class="pt-md">
               <sv-container size="small">
-                <sv label="序号"><span>{{ data.index | currency: 'CNY' }}</span></sv>
+                <sv label="票号"><span>{{ data.invoice_number }}</span></sv>
                 <sv label="成本类型"><span>{{ data.contract_payment.cost.cost_category.name }}</span></sv>
                 <sv label="发票类型"><span
                     class="font-weight-bold">{{ data.bill_category===null?'未开发票':data.bill_category.name  }}</span>
@@ -517,15 +519,15 @@
         </nz-form-control>
       </nz-form-item>
 
-      <nz-form-item>
-        <nz-form-label nzFor="index" nzRequired>序号</nz-form-label>
-        <nz-form-control [nzErrorTip]="errorIndex">
+      <nz-form-item *ngIf="validateBillForm.get('is_get_bill')?.value">
+        <nz-form-label nzFor="invoice_number" nzRequired>票号</nz-form-label>
+        <nz-form-control [nzErrorTip]="errorInvoiceNumber">
           <nz-input-group style="width: 100%">
-            <input type="text" id="index" placeholder="填写序号" formControlName="index" nz-input />
+            <input type="text" id="invoice_number" placeholder="填写票号" formControlName="invoice_number" nz-input />
           </nz-input-group>
-          <ng-template #errorIndex let-control>
+          <ng-template #errorInvoiceNumber let-control>
             <ng-container *ngIf="control.hasError('required')">
-              请填序号，只需填写数字
+              请填票号，只需填写数字
             </ng-container>
           </ng-template>
         </nz-form-control>

@@ -19,6 +19,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
         flex-grow: 1;
         line-height: 40px;
       }
+      :host ::ng-deep .show_info_box .sv__label,
+      :host ::ng-deep .show_info_box .sv__detail {
+        line-height: 36px;
+        padding-bottom: 0;
+      }
     `,
   ],
 })
@@ -91,21 +96,6 @@ export class InvoicesFormManageComponent implements OnInit {
     this.income_type = type;
     this.currentSelectedTaxAmount = null;
     if(type === 'project') {
-      // this.validateForm.patchValue({
-      //   subsidy_group_id: null,
-      //   subsidy_tax_id: null
-      // });
-      // if(this.projectGroup.length === 0) {
-      //   this.getProjectIncomeConfig(this.projectId);
-      // }else {
-      //   if(this.projectGroup.length === 1) {
-      //     this.validateForm.patchValue({
-      //       project_group_id: this.projectGroup[0].id
-      //     });
-      //     this.currentSelectedProjectCompany = this.projectGroup[0];
-      //     this.projectGroupChange(this.currentSelectedProjectCompany.id);
-      //   }
-      // }
 
       this.validateForm.get('subsidy_group_id')!.clearValidators();
       this.validateForm.get('subsidy_group_id')!.markAsPristine();
@@ -118,21 +108,6 @@ export class InvoicesFormManageComponent implements OnInit {
       this.validateForm.get('project_tax_id')!.markAsDirty();
 
     }else {
-      // this.validateForm.patchValue({
-      //   project_group_id: null,
-      //   project_tax_id: null
-      // });
-      // if(this.subsidyGroup.length === 0) {
-      //   this.getSubsidyIncomeConfig(this.projectId);
-      // }else {
-      //   if(this.subsidyGroup.length === 1) {
-      //     this.validateForm.patchValue({
-      //       subsidy_group_id: this.subsidyGroup[0].id
-      //     });
-      //     this.currentSelectedSubsidyCompany = this.subsidyGroup[0];
-      //     this.subsidyGroupChange(this.currentSelectedSubsidyCompany.id);
-      //   }
-      // }
 
       this.validateForm.get('subsidy_group_id')!.setValidators(Validators.required);
       this.validateForm.get('subsidy_group_id')!.markAsDirty();
@@ -282,6 +257,8 @@ export class InvoicesFormManageComponent implements OnInit {
       customer_contract_code: data.customer_contract_code ? data.customer_contract_code : null,
     });
 
+    console.log(this.income_type, this.projectTaxList, this.subsidyTaxList, '...............');
+    
     if(this.income_type === 'project' && this.projectTaxList.length !== 0) {
       const tax = this.projectTaxList.filter( v => v.tax.id === data.tax.id)[0];
       this.currentSelectedTaxAmount = tax;
@@ -409,21 +386,6 @@ export class InvoicesFormManageComponent implements OnInit {
       if(res.code === 200) {
         this.projectTaxList = res.data.project_revenue_detail;
 
-        // const project_tax_id = this.validateForm.get('project_tax_id').value;
-        // if(project_tax_id && this.projectTaxList.length !== 0) {
-        //   this.currentSelectedTaxAmount = this.projectTaxList.filter( v=> v.tax.id === project_tax_id)[0];
-        // }
-        // if(this.projectTaxList.length === 1) {
-        //   this.validateForm.patchValue({
-        //     project_tax_id: this.projectTaxList[0].tax.id
-        //   });
-        //   this.currentSelectedTaxAmount = this.projectTaxList[0];
-        // }else {
-        //   const project_tax_id = this.validateForm.get('project_tax_id').value;
-        //   if(project_tax_id && this.projectTaxList.length !== 0) {
-        //     this.currentSelectedTaxAmount = this.projectTaxList.filter( v=> v.tax.id === project_tax_id)[0];
-        //   }
-        // }
       }
     });
   }
@@ -445,21 +407,6 @@ export class InvoicesFormManageComponent implements OnInit {
       if(res.code === 200) {
         const subsidy_income_detail:any[] = res.data.subsidy_income_detail;
         this.subsidyTaxList = subsidy_income_detail.filter( v => v.is_bill );
-        // const subsidy_tax_id = this.validateForm.get('subsidy_tax_id').value;
-        // if(subsidy_tax_id && this.subsidyTaxList.length !== 0) {
-        //   this.currentSelectedTaxAmount = this.subsidyTaxList.filter( v=> v.id === subsidy_tax_id)[0];
-        // }
-        // if(this.subsidyTaxList.length === 1) {
-        //   this.validateForm.patchValue({
-        //     subsidy_tax_id: this.subsidyTaxList[0].id
-        //   });
-        //   this.currentSelectedTaxAmount = this.subsidyTaxList[0];
-        // }else {
-        //   const subsidy_tax_id = this.validateForm.get('subsidy_tax_id').value;
-        //   if(subsidy_tax_id && this.subsidyTaxList.length !== 0) {
-        //     this.currentSelectedTaxAmount = this.subsidyTaxList.filter( v=> v.id === subsidy_tax_id)[0];
-        //   }
-        // }
       }
     });
   }

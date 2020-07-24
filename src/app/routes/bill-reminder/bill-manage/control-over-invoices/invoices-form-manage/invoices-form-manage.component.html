@@ -16,8 +16,8 @@
         保存
       </button>
 
-      <button *ngIf="billId" nz-popconfirm nz-button [nzType]="'primary'" class="ml-xs" nzPopconfirmTitle="请确认发票开具信息填写完整，无误后继续提交！！！"
-        (nzOnConfirm)="submitBillInfo()" (nzOnCancel)="cancel()">
+      <button *ngIf="billId" nz-popconfirm nz-button [nzType]="'primary'" class="ml-xs"
+        nzPopconfirmTitle="请确认发票开具信息填写完整，无误后继续提交！！！" (nzOnConfirm)="submitBillInfo()" (nzOnCancel)="cancel()">
         提交
       </button>
     </ng-container>
@@ -41,117 +41,107 @@
           </nz-form-control>
         </nz-form-item>
       </div>
-      <ng-container *ngIf="income_type === 'project'">
-        <div nz-col [nzSpan]="12">
-          <nz-form-item class="form-item-box">
-            <nz-form-label nzFor="project_group_id" [nzRequired]="income_type === 'project'">客户单位</nz-form-label>
-            <nz-form-control nzErrorTip="请选择客户单位">
-              <nz-select style="width: 100%;" id="project_group_id" nzShowSearch nzPlaceHolder="请选择客户单位"
-                formControlName="project_group_id" (ngModelChange)="projectGroupChange($event)">
-                <ng-container *ngFor="let item of projectGroup">
-                  <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
-                </ng-container>
-              </nz-select>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <ng-container *ngIf="(currentSelectedProjectCompany && income_type === 'project') || (currentSelectedSubsidyCompany && income_type === 'subsidy')">
-          <div nz-col [nzSpan]="24" class="px-md" *ngIf="(currentSelectedProjectCompany && income_type === 'project') || (currentSelectedSubsidyCompany && income_type === 'subsidy')">
-            <sv-container class="mb-md" title="开票单位信息" *ngIf="income_type === 'project'">
-              <sv col="2" label="纳税人识别号">{{ currentSelectedProjectCompany.code }}</sv>
-              <sv col="2" label="联系电话">{{ currentSelectedProjectCompany.tel }}</sv>
-              <sv col="2" label="开户银行">{{ currentSelectedProjectCompany.bank_name }}</sv>
-              <sv col="2" label="银行账号">{{ currentSelectedProjectCompany.bank_account }}</sv>
-              <sv col="1" label="开票地址">{{ currentSelectedProjectCompany.address }}</sv>
-            </sv-container>
-            <sv-container class="mb-md" title="拨款单位信息" *ngIf="income_type === 'subsidy'">
-              <sv col="2" label="纳税人识别号">{{ currentSelectedSubsidyCompany.code }}</sv>
-              <sv col="2" label="联系电话">{{ currentSelectedSubsidyCompany.tel }}</sv>
-              <sv col="2" label="开户银行">{{ currentSelectedSubsidyCompany.bank_name }}</sv>
-              <sv col="2" label="银行账号">{{ currentSelectedSubsidyCompany.bank_account }}</sv>
-              <sv col="1" label="开票地址">{{ currentSelectedSubsidyCompany.address }}</sv>
-            </sv-container>
-          </div>
-        </ng-container>
-        <div nz-col [nzSpan]="12">
-          <nz-form-item class="form-item-box">
-            <nz-form-label nzFor="project_tax_id" [nzRequired]="income_type === 'project'">开票税目</nz-form-label>
-            <nz-form-control nzErrorTip="请选择开票税目">
-              <nz-select style="width: 100%;" id="project_tax_id" nzShowSearch nzPlaceHolder="请选择开票税目"
-                formControlName="project_tax_id" (ngModelChange)="projectTaxChange($event)">
-                <ng-container *ngFor="let item of projectTaxList">
-                  <nz-option [nzLabel]="item.tax.name" [nzValue]="item.tax.id"></nz-option>
-                </ng-container>
-              </nz-select>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <ng-container *ngIf="(currentSelectedProjectCompany && income_type === 'project') || (currentSelectedSubsidyCompany && income_type === 'subsidy')">
-          <div nz-col [nzSpan]="12" class="px-md" >
-            <sv-container class="mb-md" title="开票税目及税率" col="2" *ngIf="currentSelectedTaxAmount">
-              <sv label="{{ income_type === 'project' ? '收入' : '补贴' }}金额">{{ currentSelectedTaxAmount.income | _currency }}</sv>
-              <sv label="开票税率">
-                <span *ngIf="income_type === 'project'">{{ currentSelectedTaxAmount.tax.rate * 100 }} %</span>
-                <span *ngIf="income_type === 'subsidy'">{{ currentSelectedTaxAmount.tax_rate * 100 }} %</span>
-              </sv>
-            </sv-container>
-          </div>
-        </ng-container>
-      </ng-container>
+      <div nz-col [nzSpan]="12" *ngIf="income_type === 'project'">
+        <nz-form-item class="form-item-box">
+          <nz-form-label nzFor="project_group_id" [nzRequired]="income_type === 'project'">客户单位</nz-form-label>
+          <nz-form-control nzErrorTip="请选择客户单位">
+            <nz-select style="width: 100%;" id="project_group_id" nzShowSearch nzPlaceHolder="请选择客户单位"
+              formControlName="project_group_id" (ngModelChange)="projectGroupChange($event)">
+              <ng-container *ngFor="let item of projectGroup">
+                <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
+              </ng-container>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="12" *ngIf="income_type === 'subsidy'">
+        <nz-form-item class="form-item-box">
+          <nz-form-label nzFor="subsidy_group_id" [nzRequired]="income_type === 'subsidy'">拨款单位</nz-form-label>
+          <nz-form-control nzErrorTip="请选择拨款单位">
+            <nz-select style="width: 100%;" id="subsidy_group_id" nzShowSearch nzPlaceHolder="请选择拨款单位"
+              formControlName="subsidy_group_id" (ngModelChange)="subsidyGroupChange($event)">
+              <ng-container *ngFor="let item of subsidyGroup">
+                <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
+              </ng-container>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
 
-      <ng-container *ngIf="income_type === 'subsidy'">
-        <div nz-col [nzSpan]="12">
-          <nz-form-item class="form-item-box">
-            <nz-form-label nzFor="subsidy_group_id" [nzRequired]="income_type === 'subsidy'">拨款单位</nz-form-label>
-            <nz-form-control nzErrorTip="请选择拨款单位">
-              <nz-select style="width: 100%;" id="subsidy_group_id" nzShowSearch nzPlaceHolder="请选择拨款单位"
-                formControlName="subsidy_group_id" (ngModelChange)="subsidyGroupChange($event)">
-                <ng-container *ngFor="let item of subsidyGroup">
-                  <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
-                </ng-container>
-              </nz-select>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col [nzSpan]="12">
-          <nz-form-item class="form-item-box">
-            <nz-form-label nzFor="subsidy_tax_id" [nzRequired]="income_type === 'subsidy'">拨款金额及税率</nz-form-label>
-            <nz-form-control nzErrorTip="请选择拨款金额及税率">
-              <nz-select style="width: 100%;" id="subsidy_tax_id" nzShowSearch nzPlaceHolder="请选择拨款金额及税率"
-                formControlName="subsidy_tax_id" (ngModelChange)="subsidyTaxChange($event)">
-                <ng-container *ngFor="let item of subsidyTaxList">
-                  <nz-option [nzLabel]="'补贴金额(' + item.income + '); 开票税率(' + item.tax_rate + ')'" [nzValue]="item.id">
-                  </nz-option>
-                </ng-container>
-              </nz-select>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-      </ng-container>
-      <!-- <div nz-col [nzSpan]="24" *ngIf="(currentSelectedProjectCompany && income_type === 'project') || (currentSelectedSubsidyCompany && income_type === 'subsidy')">
-        <sv-container class="mb-md" title="开票单位信息" *ngIf="income_type === 'project'">
+      <div nz-col [nzSpan]="23" [nzOffset]="1" *ngIf="currentSelectedProjectCompany && income_type === 'project'">
+        <sv-container title="开票单位信息">
           <sv col="2" label="纳税人识别号">{{ currentSelectedProjectCompany.code }}</sv>
           <sv col="2" label="联系电话">{{ currentSelectedProjectCompany.tel }}</sv>
           <sv col="2" label="开户银行">{{ currentSelectedProjectCompany.bank_name }}</sv>
           <sv col="2" label="银行账号">{{ currentSelectedProjectCompany.bank_account }}</sv>
           <sv col="1" label="开票地址">{{ currentSelectedProjectCompany.address }}</sv>
         </sv-container>
-        <sv-container class="mb-md" title="拨款单位信息" *ngIf="income_type === 'subsidy'">
+      </div>
+      <div nz-col [nzSpan]="23" [nzOffset]="1" *ngIf="currentSelectedSubsidyCompany && income_type === 'subsidy'">
+        <sv-container title="拨款单位信息">
           <sv col="2" label="纳税人识别号">{{ currentSelectedSubsidyCompany.code }}</sv>
           <sv col="2" label="联系电话">{{ currentSelectedSubsidyCompany.tel }}</sv>
           <sv col="2" label="开户银行">{{ currentSelectedSubsidyCompany.bank_name }}</sv>
           <sv col="2" label="银行账号">{{ currentSelectedSubsidyCompany.bank_account }}</sv>
           <sv col="1" label="开票地址">{{ currentSelectedSubsidyCompany.address }}</sv>
         </sv-container>
-        <sv-container class="mb-md" title="开票税目及税率" col="3" *ngIf="currentSelectedTaxAmount">
-          <sv label="税目名称" *ngIf="income_type === 'project'">{{ currentSelectedTaxAmount.tax.name }}</sv>
-          <sv label="{{ income_type === 'project' ? '收入' : '补贴' }}金额">{{ currentSelectedTaxAmount.income | _currency }}</sv>
-          <sv label="开票税率">
-            <span *ngIf="income_type === 'project'">{{ currentSelectedTaxAmount.tax.rate * 100 }} %</span>
-            <span *ngIf="income_type === 'subsidy'">{{ currentSelectedTaxAmount.tax_rate * 100 }} %</span>
-          </sv>
-        </sv-container>
-      </div> -->
+      </div>
+
+      <div nz-col [nzSpan]="24">
+        <div nz-row>
+          <div nz-col [nzSpan]="12" *ngIf="income_type === 'project'">
+            <nz-form-item class="form-item-box">
+              <nz-form-label nzFor="project_tax_id" [nzRequired]="income_type === 'project'">开票税目</nz-form-label>
+              <nz-form-control nzErrorTip="请选择开票税目">
+                <nz-select style="width: 100%;" id="project_tax_id" nzShowSearch nzPlaceHolder="请选择开票税目"
+                  formControlName="project_tax_id" (ngModelChange)="projectTaxChange($event)">
+                  <ng-container *ngFor="let item of projectTaxList">
+                    <nz-option [nzLabel]="item.tax.name" [nzValue]="item.tax.id"></nz-option>
+                  </ng-container>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <div nz-col [nzSpan]="12" *ngIf="income_type === 'subsidy'">
+            <nz-form-item class="form-item-box">
+              <nz-form-label nzFor="subsidy_tax_id" [nzRequired]="income_type === 'subsidy'">拨款金额及税率</nz-form-label>
+              <nz-form-control nzErrorTip="请选择拨款金额及税率">
+                <nz-select style="width: 100%;" id="subsidy_tax_id" nzShowSearch nzPlaceHolder="请选择拨款金额及税率"
+                  formControlName="subsidy_tax_id" (ngModelChange)="subsidyTaxChange($event)">
+                  <ng-container *ngFor="let item of subsidyTaxList">
+                    <nz-option [nzLabel]="'补贴金额(' + item.income + '); 开票税率(' + item.tax_rate + ')'" [nzValue]="item.id">
+                    </nz-option>
+                  </ng-container>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <ng-container *ngIf="income_type === 'project' && currentSelectedTaxAmount">
+            <div nz-col [nzSpan]="12">
+              <sv-container col="2" class="show_info_box ml-lg">
+                <sv label="收入金额" style="padding: 0; line-height:32px;">{{ currentSelectedTaxAmount.income | _currency }}</sv>
+                <sv label="开票税率" style="padding: 0; line-height:32px;">
+                  <span>{{ currentSelectedTaxAmount.tax.rate * 100 }} %</span>
+                </sv>
+              </sv-container>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="income_type === 'subsidy' && currentSelectedTaxAmount">
+            <div nz-col [nzSpan]="12">
+              <sv-container col="2" class="show_info_box ml-lg">
+                <sv label="补贴金额">{{ currentSelectedTaxAmount.income | _currency }}</sv>
+                <sv label="开票税率">
+                  <span>{{ currentSelectedTaxAmount.tax_rate * 100 }} %</span>
+                </sv>
+              </sv-container>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+
+
       <div nz-col [nzSpan]="12">
         <nz-form-item class="form-item-box">
           <nz-form-label nzFor="bill_category_id" nzRequired>发票类型</nz-form-label>
@@ -165,19 +155,6 @@
           </nz-form-control>
         </nz-form-item>
       </div>
-      <!-- <div nz-col [nzSpan]="12">
-        <nz-form-item class="form-item-box">
-          <nz-form-label nzFor="apply_amount" nzRequired>结算金额</nz-form-label>
-          <nz-form-control nzErrorTip="请填写结算金额">
-            <nz-input-group nzSuffix="元" nzPrefix="￥" style="width: 100%;">
-              <input type="text" id="apply_amount"
-                placeholder="填写结算金额{{ maxIncome > 0 ? '，金额不得超过' + maxIncome + '元' : '' }}"
-                formControlName="apply_amount" nz-input />
-            </nz-input-group>
-          </nz-form-control>
-        </nz-form-item>
-      </div> -->
-
       <div nz-col [nzSpan]="12">
         <nz-form-item class="form-item-box">
           <nz-form-label nzFor="bill_period_time">经费所属期</nz-form-label>

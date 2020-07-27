@@ -39,6 +39,7 @@
         <th>合同名称</th>
         <th>合同编号</th>
         <th>支付金额（元）</th>
+        <th>开票金额（元）</th>
         <th>操作</th>
       </tr>
     </thead>
@@ -48,6 +49,7 @@
         <td>{{ data.deal.contract.name }}</td>
         <td>{{ data.deal.contract.number }}</td>
         <td>{{ data.amount | currency: "CNY" }}</td>
+        <td>{{ data.tax_use_amount | currency: "CNY" }}</td>
         <td>
           <a [routerLink]="['/approve/list/apply/pay/edit', projectId]" [queryParams]="{contract_pay_id: data.id }"><i
               nz-icon nzType="edit" nzTheme="outline"></i></a>
@@ -57,9 +59,10 @@
             (nzOnCancel)="cancel()">禁用</a>
           <nz-divider nzType="vertical"></nz-divider>
 
-          <a nz-popconfirm nzPopconfirmTitle="请确认合约支付信息填写完整，无误后继续提交！！！" (nzOnConfirm)="submitContractPay(data.id)"
+          <a *ngIf=" data.amount===data.tax_use_amount && data.amount!==0 " nz-popconfirm
+            nzPopconfirmTitle="请确认合约支付信息填写完整，无误后继续提交！！！" (nzOnConfirm)="submitContractPay(data.id)"
             (nzOnCancel)="cancel()">
-            提交支付申请
+            提交
           </a>
         </td>
       </tr>

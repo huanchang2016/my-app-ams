@@ -17,8 +17,8 @@ export class ProjectContractListComponent implements OnInit {
     private activatedRoute: ActivatedRoute
   ) {
     this.activatedRoute.params.subscribe((params: Params) => {
-      if (params && params['id']) {
-        this.projectId = +params['id'];
+      if (params && params.id) {
+        this.projectId = +params.id;
         this.getProjectInfo()
         this.getDataList();
         this.getContractList();
@@ -27,14 +27,13 @@ export class ProjectContractListComponent implements OnInit {
   }
   listOfData: any[] = [];
 
-
   projectInfo: any = null;
+
   projectId: number = null;
 
   contractList: any[] = [];
 
-  pageTitle: string = '';
-  s
+  pageTitle = '';
 
   ngOnInit() {
   }

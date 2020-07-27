@@ -153,7 +153,7 @@ export class ContractPayCreateComponent implements OnInit {
   currentPaymentTotal: any = null;
 
   // 成本类型数组
-  currentTPaymentCost: any = null;
+  currentTPaymentCost: any[] = [];
 
 
   ngOnInit() {
@@ -190,7 +190,7 @@ export class ContractPayCreateComponent implements OnInit {
   contractPaymentChange(contract_payment_id: number): void {
     [this.currentPayment] = this.listOfData.filter(v => v.id === contract_payment_id);
     this.contract_payment_id = contract_payment_id;
-    this.currentPaymentTotal = this.currentPayment.amount - this.currentPayment.tax_use_amount
+    this.currentPaymentTotal = this.currentPayment?.amount - this.currentPayment?.tax_use_amount
     console.log(this.currentPayment, '2contractPaymentChange this.currentPayment');
     this.amountChange();
   }
@@ -281,6 +281,7 @@ export class ContractPayCreateComponent implements OnInit {
       console.log('contract list deal: ', res);
       if (res.code === 200) {
         this.contractList = res.data.deal;
+        console.log('.............',this.contractList);
         // 如果有 contract_pay_id 参数， 则表示为编辑 合约支付
         this.activatedRoute.queryParams.subscribe(params => {
           if (params && params.contract_pay_id) {
@@ -383,14 +384,26 @@ export class ContractPayCreateComponent implements OnInit {
     //       return true
     //   }
     // };
-    // for (let i = 0; i < this.costArr.length; i++) {
-    //   for (let j = 0; j < this.listOfData.length; j++) {
-    //     if (this.costArr[i].id === this.listOfData[j].cost.id) {
-    //       this.currentTPaymentCost.push(this.listOfData[j]);
+    // for (const item of this.costArr) {
+    //   for (const i of this.listOfData) {
+    //     if(item.id===i.cost.id){
+    //       this.currentTPaymentCost.push(i);
     //     }
     //   }
     // }
-    // console.log('currentTPaymentCost', this.currentTPaymentCost);
+    this.currentTPaymentCost = [];
+    for (let i = 0; i < this.costArr.length; i++) {
+      for (let j = 0; j < this.listOfData.length; j++) {
+        if (this.costArr[i].id === this.listOfData[j].cost.id) {
+          this.currentTPaymentCost.push(this.costArr[i]);
+        }
+      }
+    }
+    this.currentTPaymentCost = this.currentTPaymentCost.map((v) => {
+      v.disabled = true;
+      return v;
+    });
+    console.log('currentTPaymentCost', this.currentTPaymentCost);
 
     this.tplModal = this.modalService.create({
       nzTitle: tplTitle,
@@ -965,7 +978,7 @@ export class ContractPayCreateComponent implements OnInit {
       if (res.code === 200) {
         console.log('创建合同支付  成功');
         this.contract_pay_id = res.data.id;
-        this.saveDisable = true;
+        // this.saveDisable = true;
         this.selectedFlag = true;
       } else {
         this.submitLoading = false;
@@ -981,7 +994,7 @@ export class ContractPayCreateComponent implements OnInit {
       console.log('edit res', res.data);
       if (res.code === 200) {
         console.log('编辑合同支付  成功');
-        this.saveDisable = true;
+        // this.saveDisable = true;
         this.selectedFlag = true;
       } else {
         this.submitLoading = false;

@@ -273,7 +273,9 @@ export class NoContractPayCreateComponent implements OnInit {
         console.log(res, '非合约支付详情列表2222');
         if (res.code === 200) {
           const treatyPayment: any[] = res.data.treaty_payment;
+          console.log('treatyPayment.....', treatyPayment);
           this.listOfData = treatyPayment;
+          console.log('listOfData......', this.listOfData);
         }
       })
   }
@@ -375,6 +377,7 @@ export class NoContractPayCreateComponent implements OnInit {
       } else {
         this.createPayment(value);
       }
+      console.log('2.listOfData......', this.listOfData);
 
     }
   }
@@ -388,6 +391,8 @@ export class NoContractPayCreateComponent implements OnInit {
       if (res.code === 200) {
         this.msg.success('更新成功');
         this.getTreatyPayment(); // 获取详情支付列表
+        this.getProjectInfo(); // 项目信息
+        this.getTreatyList(); // 项目下的协议信息
         this.closeModal();
       }
     })
@@ -400,6 +405,9 @@ export class NoContractPayCreateComponent implements OnInit {
       if (res.code === 200) {
         this.msg.success('创建成功');
         this.getTreatyPayment(); // 获取详情支付列表
+        this.getProjectInfo(); // 项目信息
+        this.getTreatyList(); // 项目下的协议信息
+        console.log('1.listOfData......', this.listOfData);
         this.closeModal();
       }
     })

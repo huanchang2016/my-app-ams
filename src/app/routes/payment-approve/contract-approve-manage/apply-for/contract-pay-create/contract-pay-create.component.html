@@ -24,12 +24,13 @@
     </nz-dropdown-menu>
     <ng-container *ngIf="selectedFlag && summary && listOfData.length !== 0 ">
       <button *ngIf="!contractInfo || contractInfo.draft" nz-button [nzType]="'dashed'" (click)="submitPayAmount()"
-        [nzLoading]="submitLoading" class="ml-xs">保存合约支付</button>
+        [nzLoading]="submitLoading" class="ml-xs">保存</button>
 
       <ng-container *ngIf="!contractInfo || contractInfo.draft">
-        <button *ngIf="contract_pay_id" nz-popconfirm nz-button [nzType]="'primary'" class="ml-xs"
-          nzPopconfirmTitle="请确认合约支付信息填写完整，无误后继续提交！！！" (nzOnConfirm)="submitContractPay()" (nzOnCancel)="cancel()">
-          提交支付申请
+        <button *ngIf="contract_pay_id && contractInfo.amount===contractInfo.tax_use_amount" nz-popconfirm nz-button
+          [nzType]="'primary'" class="ml-xs" nzPopconfirmTitle="请确认合约支付信息填写完整，无误后继续提交！！！"
+          (nzOnConfirm)="submitContractPay()" (nzOnCancel)="cancel()">
+          提交
         </button>
       </ng-container>
     </ng-container>
@@ -83,7 +84,7 @@
       </ng-container>
       <ng-container>
         <sv-title>开票金额</sv-title>
-        <sv col="3" label="开票总金额"><span class="mr-md">{{ contractTaxTotal | _currency }}</span>
+        <sv col="3" label="开票总金额"><span class="mr-md">{{ contractTaxTotal || 0 | _currency }}</span>
         </sv>
       </ng-container>
     </sv-container>

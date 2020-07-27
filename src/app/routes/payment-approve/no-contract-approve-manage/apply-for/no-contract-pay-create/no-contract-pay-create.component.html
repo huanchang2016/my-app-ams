@@ -26,12 +26,13 @@
     </nz-dropdown-menu>
     <!-- <ng-container *ngIf="listOfData.length !== 0 "> -->
     <!-- <button *ngIf="!treatypayInfo || treatypayInfo.draft" nz-button [nzType]="'dashed'" (click)="submitTreatyForm()"
-        [nzLoading]="saveLoading">保存非合约支付</button> -->
+      [nzLoading]="saveLoading">保存</button> -->
 
-    <ng-container *ngIf="treaty_pay_id">
+    <ng-container
+      *ngIf="treaty_pay_id  &&  treatypayInfo?.amount===treatypayInfo?.tax_use_amount && treatypayInfo?.amount!==0">
       <a *ngIf="!treatypayInfo || treatypayInfo.draft" nz-popconfirm nz-button [nzType]="'primary'" class="mx-sm"
         nzPopconfirmTitle="请确认非合约支付信息填写完整，无误后继续提交！！！" (nzOnConfirm)="submitContractPay()" (nzOnCancel)="cancel()">
-        提交支付申请
+        提交
       </a>
     </ng-container>
 
@@ -120,7 +121,7 @@
           <nz-form-item>
             <nz-form-label style="line-height: 40px;">开票总金额</nz-form-label>
             <ng-container>
-              <span class="mr-md">{{ contractTaxTotal | _currency }}</span>
+              <span class="mr-md">{{ contractTaxTotal || 0 | _currency }}</span>
             </ng-container>
           </nz-form-item>
         </div>
@@ -241,7 +242,8 @@
     </div>
   </nz-card>
 
-  <div class="mt-md" *ngIf="listOfData.length !== 0 && treatypayInfo">
+  <!-- <div class="mt-md" *ngIf="listOfData.length !== 0 && treatypayInfo"> -->
+  <div class="mt-md" *ngIf="listOfData.length !== 0">
     <app-payment-tax-manage [is_execute_user]="false" [payType]="'treaty'" [payInfo]="treatypayInfo"
       [paymentArray]="listOfData" [billCategoryArray]="billCategoryArray" (outer)="readOuter()">
     </app-payment-tax-manage>

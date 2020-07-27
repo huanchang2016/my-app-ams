@@ -39,6 +39,7 @@
         <th>编号</th>
         <th nzWidth="300px">收款信息</th>
         <th nzWidth="160px">支付金额（元）</th>
+        <th nzWidth="160px">开票金额（元）</th>
         <th nzWidth="200px">冲抵情况</th>
         <th nzWidth="250px">操作</th>
       </tr>
@@ -49,7 +50,7 @@
         <td>
           {{ data.pay_company }}
         </td>
-        <td>{{ data.number }}</td>
+        <td>{{ data.number || '暂无' }}</td>
         <td>
           <sv-container size="small" col="1">
             <!-- <sv label="用户">{{ data.pay_company }}</sv> -->
@@ -58,6 +59,7 @@
           </sv-container>
         </td>
         <td>{{ data.amount | currency: 'CNY' }}</td>
+        <td>{{ data.tax_use_amount | currency: 'CNY' }}</td>
         <td>
           <sv-container size="small" col="1">
             <sv label="冲销借款"><span>{{ data.if_write_off ? '有' : '无' }}</span></sv>
@@ -69,15 +71,16 @@
           <a [routerLink]="['/approve/no-contract/list/apply/pay/edit', projectId]"
             [queryParams]="{treaty_pay_id: data.id }"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
           <nz-divider nzType="vertical"></nz-divider>
-          <a nz-popconfirm nzPopconfirmTitle="确认禁用当前合约支付?" (nzOnConfirm)="disabled(data.id)"
-            (nzOnCancel)="cancel()" class="text-error">禁用</a>
-          <!-- <ng-container *ngIf="data.draft">
+          <a nz-popconfirm nzPopconfirmTitle="确认禁用当前合约支付?" (nzOnConfirm)="disabled(data.id)" (nzOnCancel)="cancel()"
+            class="text-error">禁用</a>
+          <ng-container *ngIf="data.draft">
             <nz-divider nzType="vertical"></nz-divider>
-            <a nz-popconfirm nz-button [nzType]="'primary'" nzPopconfirmTitle="请确认非合约支付信息填写完整，无误后继续提交！！！"
-              (nzOnConfirm)="submitContractPay(data.id)" (nzOnCancel)="cancel()">
-              提交申请
+            <a *ngIf="data.amount===data.tax_use_amount && data.amount!==0" nz-popconfirm nz-button [nzType]="'primary'"
+              nzPopconfirmTitle="请确认非合约支付信息填写完整，无误后继续提交！！！" (nzOnConfirm)="submitContractPay(data.id)"
+              (nzOnCancel)="cancel()">
+              提交
             </a>
-          </ng-container> -->
+          </ng-container>
         </td>
       </tr>
     </tbody>

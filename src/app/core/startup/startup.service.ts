@@ -238,7 +238,7 @@ export class StartupService {
           },
 
           {
-            text: '账务管理',
+            text: '发票管理',
             link: '/bill',
             icon: { type: 'icon', value: 'transaction' },
             children: [
@@ -729,7 +729,7 @@ export class StartupService {
           },
 
           {
-            text: '账务管理',
+            text: '发票管理',
             link: '/bill',
             icon: { type: 'icon', value: 'transaction' },
             children: [

@@ -11,7 +11,7 @@
   </ng-template>
 
   <app-project-info-show-tpl [projectInfo]="projectDetailInfo"></app-project-info-show-tpl>
-  
+
   <ng-template #action>
     <button nz-button (click)="printCurrentModal('print-box',  projectDetailInfo?.name)">打印</button>
     <button nz-button nz-dropdown [nzDropdownMenu]="opMenu" class="mx-sm">
@@ -62,7 +62,8 @@
           <td class="font-weight-bold">发票类型</td>
           <td colspan="4">
             <ng-container *ngFor="let billCate of billCategoryArray">
-              <label class="mr-lg bill-category-box" nzDisabled nz-checkbox [ngModel]="billCate.id === billInfo?.bill_category.id">{{ billCate.name }}</label>
+              <label class="mr-lg bill-category-box" nzDisabled nz-checkbox
+                [ngModel]="billCate.id === billInfo?.bill_category.id">{{ billCate.name }}</label>
             </ng-container>
 
           </td>
@@ -114,7 +115,8 @@
         <tr *ngIf="billId">
           <td class="font-weight-bold">附件</td>
           <td colspan="4">
-            <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/bill/' + billId"></app-upload-file-attachment-show-c>
+            <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/bill/' + billId">
+            </app-upload-file-attachment-show-c>
           </td>
         </tr>
       </tbody>
@@ -238,5 +240,6 @@
 </nz-card>
 
 <ng-container *ngIf="progressInfo && progressInfo.execute_user">
-  <app-users-bill-execute-flow [progressInfo]="progressInfo" [billInfo]="billInfo" (executeChange)="executeChange($event)"></app-users-bill-execute-flow>
+  <app-users-bill-execute-flow [progressInfo]="progressInfo" [billInfo]="billInfo"
+    (executeChange)="executeChange($event)"></app-users-bill-execute-flow>
 </ng-container>

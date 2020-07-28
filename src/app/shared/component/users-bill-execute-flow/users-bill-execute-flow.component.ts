@@ -17,6 +17,7 @@ import { ApiData, List } from 'src/app/data/interface.data';
   ]
 })
 export class UsersBillExecuteFlowComponent implements OnChanges {
+  @Output() private outer = new EventEmitter();
 
   // 执行情况：
   //    如果执行成功，需要填写  发票号码 发票金额(不含税)  税额 
@@ -30,6 +31,7 @@ export class UsersBillExecuteFlowComponent implements OnChanges {
   // }
 
   constructor(
+    public msg: NzMessageService,
     private settings: SettingsService,
     private modalService: NzModalService,
     private fb: FormBuilder,
@@ -53,6 +55,14 @@ export class UsersBillExecuteFlowComponent implements OnChanges {
 
   validateForm!: FormGroup;
 
+  bill_invoice_id: null;
+
+  isCreate = true;
+
+  totalAmountError: boolean;
+
+  billAmount: any;
+
   ngOnChanges() {
     if (this.progressInfo) {
       console.log(this.progressInfo, 'app-users-execute-flow');
@@ -69,9 +79,9 @@ export class UsersBillExecuteFlowComponent implements OnChanges {
     this.validateForm = this.fb.group({
       is_execute: ['A', [Validators.required]],
       remark: [null],
-      invoice_number: [null, [Validators.required, Validators.pattern(/^[0-9]*$/)]],
-      invoice_amount: [null, [Validators.required, Validators.pattern(/^[0-9]*$/)]],
-      tax_amount: [null, [Validators.required]]
+      invoice_number: [null, [Validators.required]],
+      invoice_amount: [null, [Validators.required, Validators.pattern(/^(([1-9]\d*|0)(\.\d{1,})?)$|(0\.0?([1-9]\d?))$/)]],
+      tax_amount: [null, [Validators.required, Validators.pattern(/^(([1-9]\d*|0)(\.\d{1,})?)$|(0\.0?([1-9]\d?))$/)]]
     });
 
     this.validateForm.get('is_execute').valueChanges.subscribe(val => {
@@ -105,28 +115,41 @@ export class UsersBillExecuteFlowComponent implements OnChanges {
       this.validateForm!.updateValueAndValidity();
     });
 
-    // this.validateForm.get('invoice_amount').valueChanges.subscribe(v => {
-    //   const _amount = Number(v) || 0;
-    //   const _tax_amount = (_amount * this.billInfo.tax_rate).toFixed(2);
-    //   this.validateForm.patchValue({
-    //     tax_amount: _tax_amount
-    //   })
-    // })
+    this.validateForm.get('invoice_amount').valueChanges.subscribe(v => {
+      // const _amount = Number(v) || 0;
+      // const _tax_amount = (_amount * this.billInfo.tax.rate).toFixed(2);
+      // this.validateForm.patchValue({
+      //   tax_amount: _tax_amount
+      // })
+      console.log('tax_amount value', this.validateForm.get('tax_amount').value);
+    })
+
+    this.validateForm.get('invoice_amount').valueChanges.subscribe(v => {
+      const _amount = Number(v) || 0;
+      const _tax_amount = (_amount * (this.billInfo.tax ? this.billInfo.tax.rate : this.billInfo.subsidy_income_detail.tax_rate)).toFixed(2);
+      this.validateForm.patchValue({
+        tax_amount: _tax_amount
+      })
+      console.log('正在监听税额', this.validateForm.get('invoice_amount').value);
+    })
   }
 
   getBillInvoice() {
     console.log('getBillInvoice billInfo.....', this.billInfo);
+    this.billAmount = this.billInfo.amount - this.billInfo.invoice_amount;
     this.settingsConfigService.get(`/api/bill_invoice/${this.billInfo.id}`).subscribe((res: ApiData) => {
       console.log('getBillInvoice', res.data);
       if (res.code === 200) {
         console.log('获取发票列表  成功');
-        this.invoiceOfData = res.data.bill_invoice
+        this.invoiceOfData = res.data.bill_invoice;
+        console.log('this.invoiceOfData', this.invoiceOfData);
       }
     });
   }
 
   createBillTicket(billTitle: TemplateRef<{}>, billContent: TemplateRef<{}>, billFooter: TemplateRef<{}>, e: MouseEvent): void {
     e.preventDefault();
+    this.isCreate = true;
     this.billModal = this.modalService.create({
       nzTitle: billTitle,
       nzContent: billContent,
@@ -137,8 +160,16 @@ export class UsersBillExecuteFlowComponent implements OnChanges {
     });
   }
 
-  deleteBill(id: number) {
-    console.log(id)
+  deleteInvoice(id: number) {
+    this.settingsConfigService.post('/api/bill_invoice/disable', { bill_invoice_id: id }).subscribe((res: ApiData) => {
+      console.log('deleteInvoice', res.data);
+      if (res.code === 200) {
+        console.log('删除发票  成功');
+        this.getBillInvoice();
+        this.outer.emit();
+        this.msg.success('删除成功!');
+      }
+    });
   }
 
   edit(billTitle: TemplateRef<{}>, billContent: TemplateRef<{}>, billFooter: TemplateRef<{}>, data: any, i: any): void {
@@ -154,7 +185,10 @@ export class UsersBillExecuteFlowComponent implements OnChanges {
     // console.log('111data', data)
     // this.contract_payment_id = this.listOfData[i].id;
     // console.log('this.contract_payment_id by listOfData', this.contract_payment_id)
-    // this.resetForm(data);
+    this.isCreate = false;
+    console.log('edit data', data);
+    this.bill_invoice_id = data.id;
+    this.resetForm(data);
     this.billModal = this.modalService.create({
       nzTitle: billTitle,
       nzContent: billContent,
@@ -165,11 +199,19 @@ export class UsersBillExecuteFlowComponent implements OnChanges {
     });
   }
 
+  resetForm(opt: any): void {
+    this.validateForm.patchValue({
+      bill_invoice_id: opt.id,
+      invoice_number: opt.invoice_number,
+      invoice_amount: opt.invoice_amount,
+      tax_amount: opt.tax_amount,
+    })
+  }
+
   closeModal(): void {
     this.billModal.destroy();
     this.validateForm.reset();
     this.validateForm.patchValue({ is_execute: 'A' });
-    console.log('closeModal', this.validateForm.get('is_execute').value)
   }
 
   handleOk(): void {
@@ -186,7 +228,7 @@ export class UsersBillExecuteFlowComponent implements OnChanges {
 
     console.log('submit', this.validateForm);
 
-    if (this.validateForm.valid) {
+    if (this.validateForm.valid && !this.totalAmountError) {
       const value: any = this.validateForm.value;
       console.log('value', value);
 
@@ -204,12 +246,19 @@ export class UsersBillExecuteFlowComponent implements OnChanges {
         tax_amount: this.toFixed(value.tax_amount, 2),
       }
 
+      const editArray = {
+        bill_invoice_id: this.bill_invoice_id,
+        invoice_number: String(value.invoice_number),
+        invoice_amount: this.toFixed(value.invoice_amount, 2),
+        tax_amount: this.toFixed(value.tax_amount, 2),
+      }
+
       console.log('createArray', createArray);
-      // if (!this.isEditCost) {
-      this.createInvoice(createArray);
-      // } else {
-      // this.editInvoice(editArray);
-      // }
+      if (this.isCreate) {
+        this.createInvoice(createArray);
+      } else {
+        this.editInvoice(editArray);
+      }
       this.closeModal();
     }
   }
@@ -225,14 +274,44 @@ export class UsersBillExecuteFlowComponent implements OnChanges {
       if (res.code === 200) {
         console.log('新建发票  成功');
         this.getBillInvoice();
+        this.outer.emit();
+        this.msg.success('创建成功!');
       }
     });
   }
 
   editInvoice(option) {
-
+    this.settingsConfigService.post('/api/bill_invoice/update', option).subscribe((res: ApiData) => {
+      console.log('editInvoice', res.data);
+      if (res.code === 200) {
+        console.log('编辑发票  成功');
+        this.getBillInvoice();
+        this.outer.emit();
+        this.msg.success('编辑成功!');
+      }
+    });
   }
 
   cancel() { }
+
+  numChange() {
+    const _invoice_amount: number = +this.validateForm.get('invoice_amount').value;
+    const _tax_amount: number = +this.validateForm.get('tax_amount').value;
+    if (_invoice_amount > this.billInfo.amount || _tax_amount > this.billInfo.amount || _invoice_amount < _tax_amount || _invoice_amount > this.billAmount) {
+      this.totalAmountError = true;
+    } else {
+      this.totalAmountError = false;
+    }
+    // this.totalAmountError = (_invoice_amount + _tax_amount) > this.billInfo.amount;
+    console.log('totalAmountError', this.totalAmountError)
+  }
+
+  submit() {
+    const is_execute = {
+      is_execute: this.validateForm.get('is_execute').value === 'A' ? true : false
+    }
+    const option = { ...this.validateForm.value, ...is_execute };
+    this.executeChange.emit(option);
+  }
 
 }

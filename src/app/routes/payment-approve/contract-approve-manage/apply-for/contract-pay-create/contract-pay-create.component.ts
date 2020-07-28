@@ -281,7 +281,7 @@ export class ContractPayCreateComponent implements OnInit {
       console.log('contract list deal: ', res);
       if (res.code === 200) {
         this.contractList = res.data.deal;
-        console.log('.............',this.contractList);
+        console.log('.............', this.contractList);
         // 如果有 contract_pay_id 参数， 则表示为编辑 合约支付
         this.activatedRoute.queryParams.subscribe(params => {
           if (params && params.contract_pay_id) {
@@ -542,6 +542,7 @@ export class ContractPayCreateComponent implements OnInit {
         this.getContractPayment();
         this.contract_payment_id = res.data.id;
         console.log('创建合约支付详情后生成payment_id', this.contract_payment_id)
+        this.msg.success('新建成功');
       } else {
         this.submitLoading = false;
       }
@@ -557,6 +558,7 @@ export class ContractPayCreateComponent implements OnInit {
         console.log('编辑合同支付详情  成功');
         this.saveDisable = true;
         this.getContractPayment();
+        this.msg.success('创建成功');
       } else {
         this.submitLoading = false;
       }
@@ -592,7 +594,7 @@ export class ContractPayCreateComponent implements OnInit {
     this.settingsConfigService.post('/api/contract/pay/create', option).subscribe((res: ApiData) => {
       console.log(res);
       if (res.code === 200) {
-        // this.msg.success('提交成功');
+        this.msg.success('提交成功');
         // this.router.navigateByUrl(`/approve/contract/apply/pay/${this.projectId}`);
 
         this.bindAttachment(res.data.id);
@@ -670,7 +672,7 @@ export class ContractPayCreateComponent implements OnInit {
         this.submitLoading = false;
       }
     });
-    this.msg.success('支付成本删除成功!');
+    this.msg.success('删除成功!');
   }
 
   deleteTax(id: number): void {
@@ -682,11 +684,11 @@ export class ContractPayCreateComponent implements OnInit {
         console.log('禁用合同支付税目  成功');
         this.listOfTax = this.listOfTax.filter(v => v.id !== id);
         this.getContractList();
+        this.msg.success('删除成功');
       } else {
         this.submitLoading = false;
       }
     });
-    this.msg.success('合同支付税目删除成功!');
   }
 
   resetForm(opt: any): void {
@@ -725,7 +727,7 @@ export class ContractPayCreateComponent implements OnInit {
       console.log(res);
       this.submitLoading = false;
       if (res.code === 200) {
-        this.msg.success('支付信息提交成功');
+        this.msg.success('提交成功');
         this.router.navigateByUrl(`/approve/list/apply/pay/${this.projectId}`);
       }
     });
@@ -980,6 +982,7 @@ export class ContractPayCreateComponent implements OnInit {
         this.contract_pay_id = res.data.id;
         // this.saveDisable = true;
         this.selectedFlag = true;
+        this.msg.success('创建成功');
       } else {
         this.submitLoading = false;
       }
@@ -996,6 +999,7 @@ export class ContractPayCreateComponent implements OnInit {
         console.log('编辑合同支付  成功');
         // this.saveDisable = true;
         this.selectedFlag = true;
+        this.msg.success('编辑成功');
       } else {
         this.submitLoading = false;
       }
@@ -1053,6 +1057,7 @@ export class ContractPayCreateComponent implements OnInit {
         this.getContractList();
         this.getContractPayDetail();
         console.log('currentSelectTax', this.currentSelectTax);
+        this.msg.success('创建成功');
       }
     });
   }
@@ -1065,6 +1070,7 @@ export class ContractPayCreateComponent implements OnInit {
         this.getContractTax();
         this.getContractList();
         this.getContractPayDetail();
+        this.msg.success('修改成功');
       }
     });
   }

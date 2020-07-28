@@ -36,6 +36,8 @@ export class UsersExecuteFlowComponent implements OnChanges {
 
   billCategoryArray: any[] = []; // 发票类型
 
+  flag: boolean;
+
   constructor(
     private settings: SettingsService,
     private notice: NzNotificationService,
@@ -85,9 +87,15 @@ export class UsersExecuteFlowComponent implements OnChanges {
       is_execute,
       remark: this.checkOption.remark
     }
-    this.executeChange.emit(option);
+
+    // 提交
+    // this.executeChange.emit(option);
   }
 
   cancel() { }
 
+  readOuter(isSubmit) {
+    this.flag = isSubmit;
+    console.log('isSubmit', isSubmit);
+  }
 }

@@ -54,13 +54,6 @@ import html2canvas from 'html2canvas';
 })
 export class BillReminderInvoicesInfoViewComponent implements OnInit {
 
-  projectId:number = null;
-  projectDetailInfo:any = null;
-  billId:number = null;
-  billInfo:any = null;
-
-  billCategoryArray:any[] = [];
-
   constructor(
     private settingsConfigService: SettingsConfigService,
     private activatedRoute: ActivatedRoute,
@@ -70,7 +63,7 @@ export class BillReminderInvoicesInfoViewComponent implements OnInit {
   ) {
     // console.log('发票开具   详情查看')
     this.projectId = +this.activatedRoute.snapshot.queryParams.project_id;
-    if(this.projectId) {
+    if (this.projectId) {
       this.getConfig();
     }
     this.activatedRoute.params.subscribe((params: Params) => {
@@ -83,9 +76,34 @@ export class BillReminderInvoicesInfoViewComponent implements OnInit {
     })
   }
 
-  ngOnInit(): void {
-    
+  projectId: number = null;
+  projectDetailInfo: any = null;
+  billId: number = null;
+  billInfo: any = null;
+
+  billCategoryArray: any[] = [];
+
+  // 流程进程信息
+  progressInfo: any = null;
+  nodeProcess: any[] = [];
+  currentNodeProcess: any = null;
+  isCurrentCheck: boolean = false;
+
+  checkOption: any = {
+    agree: null,
+    remark: ''
   }
+
+  isPrinter: boolean = false;
+  pdfPosition: number = 0;
+
+  ngOnInit(): void {
+
+  }
+  readOuter() {
+    this.getBillInfo();
+  }
+
   getBillInfo(): void {
     this.settingsConfigService.get(`/api/bill/${this.billId}`).subscribe((res: ApiData) => {
       console.log('billInfo, ', res.data);
@@ -95,12 +113,12 @@ export class BillReminderInvoicesInfoViewComponent implements OnInit {
     });
 
   }
-  
+
   getConfig() {
     // 获取客户单位 信息详情
-    this.settingsConfigService.get(`/api/project/detail/${this.projectId}`).subscribe((res:ApiData) => {
+    this.settingsConfigService.get(`/api/project/detail/${this.projectId}`).subscribe((res: ApiData) => {
       console.log('projectDetailInfo, ', res.data);
-      if(res.code === 200) {
+      if (res.code === 200) {
         this.projectDetailInfo = res.data;
         // 发票的服务名称和项目是创建时已经绑定好了的，所以同一项目下的发票 服务名称不可改变
         // this.getSubTaxFees(this.projectDetailInfo.budget.tax.id); // TODO: 
@@ -114,94 +132,83 @@ export class BillReminderInvoicesInfoViewComponent implements OnInit {
       }
     })
   }
-  
-  // 流程进程信息
-  progressInfo:any = null;
-  nodeProcess:any[] = [];
-  currentNodeProcess:any = null;
-  isCurrentCheck:boolean = false;
-
-  checkOption: any = {
-    agree: null,
-    remark: ''
-  }
 
   getWorkflow() {
     this.settingsConfigService
-        .get(`/api/bill/process/${this.billId}`)
-        .subscribe((res:ApiData) => {
-          console.log(res, 'workflow bill info');
-          if(res.code === 200) {
-            this.progressInfo = res.data;
-            if(this.progressInfo) {
-              this.getNodeProcess();
-            }
+      .get(`/api/bill/process/${this.billId}`)
+      .subscribe((res: ApiData) => {
+        console.log(res, 'workflow bill info');
+        if (res.code === 200) {
+          this.progressInfo = res.data;
+          if (this.progressInfo) {
+            this.getNodeProcess();
           }
-    })
+        }
+      })
   }
 
-  getNodeProcess():void {
+  getNodeProcess(): void {
     this.isCurrentCheck = false;
     this.settingsConfigService
-        .get(`/api/node/process/${this.progressInfo.id}`)
-        .subscribe((res:ApiData) => {
-          // console.log(res, 'node_process');
-          if(res.code === 200) {
-            this.nodeProcess = res.data.node_process;
-            this.currentNodeProcess = this.nodeProcess.filter( v => v.current)[0];
-            // console.log(this.currentNodeProcess, this.isCurrentCheck, this.settings.user);
-            if(this.currentNodeProcess) {
-              this.isCurrentCheck = this.currentNodeProcess.user.id === this.settings.user.id;
-            }
+      .get(`/api/node/process/${this.progressInfo.id}`)
+      .subscribe((res: ApiData) => {
+        // console.log(res, 'node_process');
+        if (res.code === 200) {
+          this.nodeProcess = res.data.node_process;
+          this.currentNodeProcess = this.nodeProcess.filter(v => v.current)[0];
+          // console.log(this.currentNodeProcess, this.isCurrentCheck, this.settings.user);
+          if (this.currentNodeProcess) {
+            this.isCurrentCheck = this.currentNodeProcess.user.id === this.settings.user.id;
           }
-    })
+        }
+      })
   }
 
 
-  
+
   submitCheckCurrentProcess() {
-    if(this.checkOption.agree === null) {
+    if (this.checkOption.agree === null) {
       this.notice.error('错误', '是否通过未选择');
       return;
     }
     // console.log(this.checkOption, 'agree info submit!');
-    const obj:any = {
+    const obj: any = {
       ...this.checkOption,
       node_process_id: this.currentNodeProcess.id
     }
     this.settingsConfigService
-        .post(`/api/bill/approval`, obj)
-        .subscribe((res:ApiData) => {
-          // console.log(res, 'approval');
-          if(res.code === 200) {
-           this.msg.success('审核提交成功');
-           this.settingsConfigService.resetGlobalTasks();
-           this.getWorkflow();
-          }
-    })
+      .post(`/api/bill/approval`, obj)
+      .subscribe((res: ApiData) => {
+        // console.log(res, 'approval');
+        if (res.code === 200) {
+          this.msg.success('审核提交成功');
+          this.settingsConfigService.resetGlobalTasks();
+          this.getWorkflow();
+        }
+      })
   }
   cancel() { }
 
-  executeChange(data:any) {
+  executeChange(data: any) {
     console.log('执行情况信息 提交: ', data);
 
-    const option:any = Object.assign(data, { process_id: this.progressInfo.id });
-    this.settingsConfigService.post('/api/bill/execute', option).subscribe((res:ApiData) => {
+    const option: any = Object.assign(data, { process_id: this.progressInfo.id });
+    this.settingsConfigService.post('/api/bill/execute', option).subscribe((res: ApiData) => {
       console.log(res, '执行情况确认');
-      if(res.code === 200) {
+      if (res.code === 200) {
         this.msg.success('执行情况更新成功');
         this.settingsConfigService
-        .get(`/api/bill/process/${this.billId}`)
-        .subscribe((res:ApiData) => {
-          if(res.code === 200) {
-            this.progressInfo = res.data;
-          }
-        })
+          .get(`/api/bill/process/${this.billId}`)
+          .subscribe((res: ApiData) => {
+            if (res.code === 200) {
+              this.progressInfo = res.data;
+            }
+          })
       }
     })
   }
 
-  
+
   // 打印
   printCurrentModal(idname: string, title: string) {
     let printWindow = window.open();
@@ -249,8 +256,6 @@ export class BillReminderInvoicesInfoViewComponent implements OnInit {
 
     });
   }
-
-  isPrinter: boolean = false;
   // pdf
   downloadFile(type: string) {
     this.isPrinter = true;
@@ -277,7 +282,6 @@ export class BillReminderInvoicesInfoViewComponent implements OnInit {
     }, 500);
 
   }
-  pdfPosition: number = 0;
   exportPdf(contentDataURL: any, imgWidth: number, imgHeight: number, pageHeight: number, leftHeight: number) {
     let pdf = new jspdf('p', 'mm', 'a4'); // A4 size page of PDF  
     if (leftHeight + 10 < pageHeight) {

@@ -80,18 +80,18 @@
   <div class="steps-content" *ngIf="isExecuteUser && !progressInfo.complete">
 
     <form nz-form [formGroup]="validateForm">
-      <nz-form-item>
+      <!-- <nz-form-item>
         <nz-form-control nzErrorTip="请确认是否已经执行">
           <nz-radio-group formControlName="is_execute" [nzButtonStyle]="'solid'">
             <label nz-radio-button [nzValue]="'A'">已执行</label>
             <label nz-radio-button [nzValue]="'B'">无法执行</label>
           </nz-radio-group>
         </nz-form-control>
-      </nz-form-item>
+      </nz-form-item> -->
       <ng-container *ngIf="validateForm.get('is_execute').value === 'B'">
         <div class="check-box mt-md">
 
-          <nz-form-item>
+          <nz-form-item class="text-right">
             <nz-form-control nzErrorTip="请填写无法执行的原因">
               <textarea nz-input placeholder="请填写无法执行的原因" formControlName="remark"
                 [nzAutosize]="{ minRows: 3, maxRows: 6 }" class="my-sm"></textarea>
@@ -121,7 +121,7 @@
               </nz-form-control>
             </nz-form-item> -->
 
-        <nz-card nzTitle="发票台账" [nzBordered]="false" [nzExtra]="billTpl" class="mt-md">
+        <nz-card nzTitle="发票管理" [nzBordered]="false" [nzExtra]="billTpl" class="mt-md">
           <ng-template #billTpl>
             <button nz-button [nzType]="'primary'"
               (click)="createBillTicket(billTitle, billContent, billFooter, $event)">新增发票</button>
@@ -129,47 +129,61 @@
           <nz-table #costSelectTable [nzData]="invoiceOfData" [nzFrontPagination]="false">
             <thead>
               <tr>
+                <th nzWidth="80px">序号</th>
                 <th>发票号码</th>
                 <th>发票金额</th>
-                <th>本期支付（元）</th>
                 <th>发票税额</th>
-                <!-- <th *ngIf="!contractInfo || contractInfo.draft">操作</th> -->
+                <th>操作</th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let data of costSelectTable.data; let i = index">
                 <td>{{ i + 1}}</td>
-                <td>{{ data.cost.cost_category.name }}</td>
-                <td>{{ data.amount | _currency}}</td>
-                <td>{{ data.tax_use_amount | _currency}}</td>
-                <td>
+                <td>{{ data.invoice_number }}</td>
+                <td>{{ data.invoice_amount | _currency}}</td>
+                <td>{{ data.tax_amount | _currency}}</td>
+                <!-- <td>
                   <sv-container size="small" col="1">
                     <sv label="预算金额"><span>{{ data.cost.amount | currency: 'CNY' }}</span></sv>
                     <sv label="累计支付"><span>{{ data.cost.pay_amount | currency: 'CNY' }}</span></sv>
                     <sv label="剩余支付"><span>{{ (data.cost.amount - data.cost.pay_amount) | currency: 'CNY' }}</span>
                     </sv>
                   </sv-container>
-                </td>
-                <td>
-                  <span [innerHTML]="data.remark | showTextareaContent"></span>
-                </td>
+                </td> -->
                 <td>
                   <a (click)="edit(billTitle, billContent, billFooter, data, i)"><i nz-icon nzType="edit"
                       nzTheme="outline"></i></a>
                   <nz-divider nzType="vertical"></nz-divider>
-                  <a nz-popconfirm nzPopconfirmTitle="确认删除当前成本支付?" (nzOnConfirm)="deleteBill(data.cost.id)"
+                  <a nz-popconfirm nzPopconfirmTitle="确认删除当前发票?" (nzOnConfirm)="deleteInvoice(data.id)"
                     (nzOnCancel)="cancel()">删除</a>
                 </td>
               </tr>
             </tbody>
           </nz-table>
+          <!-- <sv-container style="font-weight: 700;margin-top: 10px;">
+            <ng-container>
+              <sv col="3" label="总金额："><span class="mr-md">{{ billInfo?.amount || 0 | _currency }}</span>
+              </sv>
+              <sv col="3" label="开票总金额："><span class="mr-md">{{ billInfo?.invoice_amount || 0 | _currency }}</span>
+              </sv>
+              <sv col="3" label="总税额："><span class="mr-md">{{ billInfo?.tax_amount || 0 | _currency }}</span>
+              </sv>
+            </ng-container>
+          </sv-container> -->
+          <!-- <ng-template> -->
+          <div class="text-right" *ngIf="billInfo">
+            <span class="font-weight-bold">总金额： {{ billInfo.amount | _currency }}</span>
+            <span class="font-weight-bold mx-md">开票总金额： {{ billInfo.invoice_amount | _currency }}</span>
+            <span class="font-weight-bold">总税额： {{ billInfo.tax_amount | _currency }}</span>
+          </div>
+          <!-- </ng-template> -->
         </nz-card>
       </ng-container>
 
       <!-- model -->
       <ng-template #billTitle>
-        <span *ngIf="!isEditCost">添加发票</span>
-        <span *ngIf="isEditCost">修改发票</span>
+        <span *ngIf="isCreate">添加发票</span>
+        <span *ngIf="!isCreate">修改发票</span>
       </ng-template>
       <ng-template #billContent>
         <div class="modal-form">
@@ -180,19 +194,25 @@
               </nz-form-control>
             </nz-form-item>
             <nz-form-item>
-              <nz-form-control nzErrorTip="请填写开具的发票金额，只能填写数字">
+              <nz-form-control nzErrorTip="发票金额{{ billInfo ? '，不得超过' + billAmount + '元' : '' }}">
                 <nz-input-group nzSuffix="RMB" nzPrefix="￥" style="width: 100%;">
-                  <input type="text" nz-input placeholder="发票金额" formControlName="invoice_amount" />
+                  <input type="text" nz-input placeholder="发票金额{{ billInfo ? '，不得超过' + billAmount + '元' : '' }}"
+                    formControlName="invoice_amount" (ngModelChange)="numChange()" />
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
             <nz-form-item>
               <nz-form-control nzErrorTip="请填写开具的发票税额，只能填写数字">
                 <nz-input-group nzSuffix="RMB" nzPrefix="￥" style="width: 100%;">
-                  <input type="text" nz-input placeholder="发票税额" formControlName="tax_amount" />
+                  <input type="text" nz-input placeholder="发票税额" formControlName="tax_amount"
+                    (ngModelChange)="numChange()" />
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
+            <ng-container *ngIf="totalAmountError">
+              <div class="text-center text-error">发票金额和发票税额不得超过 {{ billInfo.amount }} 元
+              </div>
+            </ng-container>
           </form>
         </div>
       </ng-template>
@@ -201,9 +221,17 @@
         <button nz-button nzType="primary" (click)="handleOk()">确定</button>
       </ng-template>
 
+      <nz-form-item class="text-right mt-md">
+        <nz-form-control nzErrorTip="请确认是否已经执行">
+          <nz-radio-group formControlName="is_execute" [nzButtonStyle]="'solid'">
+            <label nz-radio-button [nzValue]="'A'">已执行</label>
+            <label nz-radio-button [nzValue]="'B'">无法执行</label>
+          </nz-radio-group>
+        </nz-form-control>
+      </nz-form-item>
       <div class="text-right mt-md">
-        <a nz-popconfirm nz-button [nzType]="'primary'" nzPopconfirmTitle="请仔细核对执行情况" (nzOnConfirm)="submitForm()"
-          (nzOnCancel)="cancel()">
+        <a nz-popconfirm nz-button [nzType]="'primary'" nzPopconfirmTitle="请仔细核对执行情况" (nzOnConfirm)="submit()"
+          (nzOnCancel)="cancel()" [disabled]="billInfo?.amount !== billInfo?.invoice_amount">
           提交
         </a>
       </div>

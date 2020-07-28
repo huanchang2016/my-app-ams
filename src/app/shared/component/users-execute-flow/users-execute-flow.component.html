@@ -100,7 +100,8 @@
           </ng-container>
           <ng-container *ngIf="payType === 'contract'">
             <!-- <app-payment-tax-manage [is_execute_user]="true" [payType]="payType" [payInfo]="payInfo" [paymentArray]="paymentArr" [billCategoryArray]="billCategoryArray"></app-payment-tax-manage> -->
-            <app-payment-contract-tax-mange [listOfData]="listOfData" [contract_pay_id]="contract_pay_id">
+            <app-payment-contract-tax-mange [listOfData]="listOfData" [contract_pay_id]="contract_pay_id"
+              (outer)="readOuter($event)">
             </app-payment-contract-tax-mange>
           </ng-container>
 
@@ -118,7 +119,7 @@
         </ng-container>
         <ng-container *ngIf="checkOption.status !== 'C'">
           <a nz-popconfirm nz-button [nzType]="'primary'" nzPopconfirmTitle="请确认当前付款或者执行情况是否填写完整，确认请继续。"
-            (nzOnConfirm)="submitCheckCurrentProcess()" (nzOnCancel)="cancel()">
+            (nzOnConfirm)="submitCheckCurrentProcess()" (nzOnCancel)="cancel()" [disabled]="flag">
             提交
           </a>
         </ng-container>

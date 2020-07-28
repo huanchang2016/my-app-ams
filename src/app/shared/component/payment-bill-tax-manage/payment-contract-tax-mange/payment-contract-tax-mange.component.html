@@ -1,8 +1,8 @@
 <!-- 发票台账 -->
-<nz-card nzTitle="发票台账" [nzBordered]="false" [nzExtra]="costTpl" class="mt-md">
+<nz-card nzTitle="发票台账" [nzBordered]="false" [nzExtra]="costTpl" class="mt-md" *ngIf="listOfData.length>0">
     <ng-template #costTpl>
-        <button *ngIf="!contractInfo || contractInfo.draft" nz-button [nzType]="'primary'"
-            (click)="addBillTicket($event)">新增发票台账</button>
+        <button nz-button [nzType]="'primary'"
+            (click)="addBillTicket(billTitle, billContent, billFooter, $event)">新增发票台账</button>
     </ng-template>
 
     <div class="hidden-mobile">
@@ -10,15 +10,17 @@
             <thead>
                 <tr>
                     <th nzWidth="80px">序号</th>
+                    <th nzWidth="80px">票号</th>
                     <th>成本类型</th>
                     <th>发票类型</th>
                     <th nzWidth="250px">金额</th>
-                    <th *ngIf="!contractInfo || contractInfo.draft">操作</th>
+                    <th>操作</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let data of taxSelectTable.data; let i = index">
-                    <td>{{ i + 1}}</td>
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ data.invoice_number }}</td>
                     <td>{{ data.contract_payment.cost.cost_category.name }}</td>
                     <td>{{ data.bill_category===null?'未开发票':data.bill_category.name }}</td>
                     <td>
@@ -28,8 +30,9 @@
                             <sv label="总金额"><span>{{ data.amount | currency: 'CNY' }}</span></sv>
                         </sv-container>
                     </td>
-                    <td *ngIf="!contractInfo || contractInfo.draft">
-                        <a (click)="editBillTicket(data, i)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
+                    <td>
+                        <a (click)="editBillTicket(billTitle, billContent, billFooter, data, i)"><i nz-icon
+                                nzType="edit" nzTheme="outline"></i></a>
                         <nz-divider nzType="vertical"></nz-divider>
                         <a nz-popconfirm nzPopconfirmTitle="确认删除当前发票台账?" (nzOnConfirm)="deleteTax(data.id)"
                             (nzOnCancel)="cancel()">删除</a>
@@ -50,7 +53,7 @@
                     </ng-template>
                     <div class="pt-md">
                         <sv-container size="small">
-                            <sv label="序号"><span>{{ data.index | currency: 'CNY' }}</span></sv>
+                            <sv label="票号"><span>{{ data.invoice_number }}</span></sv>
                             <sv label="成本类型"><span>{{ data.contract_payment.cost.cost_category.name }}</span></sv>
                             <sv label="发票类型"><span
                                     class="font-weight-bold">{{ data.bill_category===null?'未开发票':data.bill_category.name  }}</span>
@@ -67,7 +70,8 @@
                 </nz-skeleton>
 
                 <ng-template #actionEdit>
-                    <a (click)="editBillTicket(data, i)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
+                    <a (click)="editBillTicket(billTitle, billContent, billFooter, data, i)"><i nz-icon nzType="edit"
+                            nzTheme="outline"></i></a>
                 </ng-template>
                 <ng-template #actionDelete>
                     <a nz-popconfirm nzPopconfirmTitle="确认删除当前成本支付?" (nzOnConfirm)="deleteTax(data.id)"
@@ -78,4 +82,149 @@
     </div>
     <!-- edit -->
 
+</nz-card>
+<!-- 发票台账新增 modal -->
+
+<ng-template #billTitle>
+    <span *ngIf="!isEditCost">添加发票台账</span>
+    <span *ngIf="isEditCost">修改发票台账</span>
+</ng-template>
+<ng-template #billContent>
+    <div class="modal-form">
+        <form nz-form [formGroup]="validateBillForm">
+            <nz-form-item>
+                <nz-form-label nzFor="contract_payment_id" nzRequired>成本类型</nz-form-label>
+                <nz-form-control nzErrorTip="请选择成本类型">
+                    <nz-select style="width: 100%;" id="contract_payment_id" nzShowSearch nzPlaceHolder="请选择成本类型"
+                        formControlName="contract_payment_id" (ngModelChange)="contractPaymentChange($event)">
+                        <ng-container *ngFor="let item of listOfData">
+                            <nz-option [nzLabel]="item.cost.cost_category.name" [nzValue]="item.id" [nzDisabled]="">
+                            </nz-option>
+                        </ng-container>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label nzFor="is_get_bill" nzRequired>是否开票</nz-form-label>
+                <nz-form-control nzErrorTip="请选择发票类型">
+                    <nz-radio-group id="is_get_bill" formControlName="is_get_bill"
+                        (ngModelChange)="requiredChange($event)">
+                        <label nz-radio [nzValue]="true">已开票</label>
+                        <label nz-radio [nzValue]="false">未开票</label>
+                        <!-- <label nz-checkbox formControlName="is_get_bill" (ngModelChange)="requiredChange($event)">是否开票</label> -->
+                    </nz-radio-group>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item *ngIf="validateBillForm.get('is_get_bill')?.value">
+                <nz-form-label nzFor="bill_category_id" nzRequired>发票类型</nz-form-label>
+                <nz-form-control nzErrorTip="请选择发票类型">
+                    <nz-select style="width: 100%;" id="bill_category_id" nzShowSearch nzPlaceHolder="请选择发票类型"
+                        formControlName="bill_category_id">
+                        <ng-container *ngFor="let item of taxArr">
+                            <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
+                        </ng-container>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item *ngIf="validateBillForm.get('is_get_bill')?.value">
+                <nz-form-label nzFor="exclude_tax_amount" nzRequired>除税金额</nz-form-label>
+                <nz-form-control
+                    nzErrorTip="请填写支付金额中除税金额{{ currentPayment ? '，不得超过' + currentPaymentTotal + '元' : '' }}">
+                    <nz-input-group nzSuffix="元" nzPrefix="￥" style="width: 100%">
+                        <input type="text" id="exclude_tax_amount" [disabled]=""
+                            placeholder="合约支付除税金额{{ currentPayment ? '，不得超过' + currentPaymentTotal + '元' : '' }}"
+                            formControlName="exclude_tax_amount" nz-input (ngModelChange)="amountChange()" />
+                    </nz-input-group>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item *ngIf="validateBillForm.get('is_get_bill')?.value">
+                <nz-form-label nzFor="tax_amount" nzRequired>税金</nz-form-label>
+                <nz-form-control
+                    nzErrorTip="请填写支付金额中除税金额{{ currentPayment ? '，不得超过' + currentPaymentTotal + '元' : '' }}">
+                    <nz-input-group nzSuffix="元" nzPrefix="￥" style="width: 100%">
+                        <input type="text" id="tax_amount"
+                            placeholder="合约支付税金{{ currentPayment ? '，不得超过' + currentPaymentTotal + '元' : '' }}"
+                            formControlName="tax_amount" nz-input (ngModelChange)="amountChange()" />
+                    </nz-input-group>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item *ngIf="!validateBillForm.get('is_get_bill')?.value">
+                <nz-form-label nzFor="amount" nzRequired>总金额</nz-form-label>
+                <nz-form-control
+                    nzErrorTip="请填写非合约支付总金额{{ currentPayment ? '，不得超过' + currentPaymentTotal + '元' : '' }}">
+                    <nz-input-group nzSuffix="元" nzPrefix="￥" style="width: 100%">
+                        <input type="text" id="amount"
+                            placeholder="合约支付总金额{{ currentPayment ? '，不得超过' + currentPaymentTotal + '元' : '' }}"
+                            formControlName="amount" nz-input (ngModelChange)="amountChange()" />
+                    </nz-input-group>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item *ngIf="validateBillForm.get('is_get_bill')?.value">
+                <nz-form-label nzFor="invoice_number" nzRequired>票号</nz-form-label>
+                <nz-form-control [nzErrorTip]="errorInvoiceNumber">
+                    <nz-input-group style="width: 100%">
+                        <input type="text" id="invoice_number" placeholder="填写票号" formControlName="invoice_number"
+                            nz-input />
+                    </nz-input-group>
+                    <ng-template #errorInvoiceNumber let-control>
+                        <ng-container *ngIf="control.hasError('required')">
+                            请填票号
+                        </ng-container>
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
+
+            <ng-container *ngIf="validateBillForm.get('is_get_bill').value && totalAmountError && currentPayment">
+                <div class="text-center text-error">除税金额和税金总和不得超过
+                    {{ currentPayment.amount-currentPayment.tax_use_amount }} 元
+                </div>
+            </ng-container>
+            <ng-container *ngIf="!validateBillForm.get('is_get_bill').value && totalAmountError && currentPayment">
+                <div class="text-center text-error">支付总金额不得超过 {{ currentPayment.amount-currentPayment.tax_use_amount }}
+                    元</div>
+            </ng-container>
+
+
+        </form>
+    </div>
+</ng-template>
+<ng-template #billFooter>
+    <button nz-button nzType="default" (click)="closeTaxModal()">取消</button>
+    <button nz-button nzType="primary" (click)="sureOk()">确定</button>
+</ng-template>
+
+<!-- 合约支付详情列表 -->
+<nz-card nzTitle="合约支付详情列表" [nzBordered]="false" [nzExtra]="" class="mt-md">
+    <nz-table #detailTable [nzData]="listOfData" [nzFrontPagination]="false">
+        <thead>
+            <tr>
+                <th nzWidth="80px">序号</th>
+                <th>总金额</th>
+                <th>开票总金额</th>
+                <th>状态</th>
+                <!-- <th>操作</th> -->
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let data of detailTable.data; let i = index">
+                <td>{{ i + 1 }}</td>
+                <td>{{ data.amount | currency: 'CNY' }}</td>
+                <td>{{ data.tax_use_amount | currency: 'CNY' }}</td>
+                <td>{{ data.contract_pay.pay_status.name }}</td>
+                <!-- <td>
+                    <a (click)="editBillTicket(billTitle, billContent, billFooter, data, i)"><i nz-icon nzType="edit"
+                            nzTheme="outline"></i></a>
+                    <nz-divider nzType="vertical"></nz-divider>
+                    <a nz-popconfirm nzPopconfirmTitle="确认删除当前发票台账?" (nzOnConfirm)="deleteTax(data.id)"
+                        (nzOnCancel)="cancel()">删除</a>
+                </td> -->
+            </tr>
+        </tbody>
+    </nz-table>
 </nz-card>

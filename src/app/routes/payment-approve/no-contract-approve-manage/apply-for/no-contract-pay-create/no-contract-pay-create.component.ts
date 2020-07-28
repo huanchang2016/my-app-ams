@@ -211,6 +211,11 @@ export class NoContractPayCreateComponent implements OnInit {
     }
 
   }
+  disableInput() {
+    if (!this.ifWriteOff) {
+      return false;
+    }
+  }
 
   supplierCostFind(cost_id: number): boolean {
     const supplier: any[] = this.listOfData.filter(v => v.treaty.id === this.currentTreaty.id);

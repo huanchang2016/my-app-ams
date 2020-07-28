@@ -83,8 +83,8 @@
             <nz-form-label nzFor="write_off_amount" [nzRequired]="ifWriteOff">冲抵金额</nz-form-label>
             <nz-form-control nzErrorTip="请填写冲销个人借款金额">
               <nz-input-group nzSuffix="元" nzPrefix="￥" style="width: 100%">
-                <input type="text" id="write_off_amount" nzPlaceHolder="请填写冲销个人借款金额" formControlName="write_off_amount"
-                  nz-input />
+                <input type="text" id="write_off_amount" nzPlaceHolder="请填写冲销个人借款金额" (keydown)="disableInput()"
+                  formControlName="write_off_amount" nz-input />
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>

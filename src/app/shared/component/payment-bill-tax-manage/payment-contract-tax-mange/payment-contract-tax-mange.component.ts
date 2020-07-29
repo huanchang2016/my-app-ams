@@ -9,8 +9,14 @@ import { filter, map } from 'rxjs/operators';
 @Component({
   selector: 'app-payment-contract-tax-mange',
   templateUrl: './payment-contract-tax-mange.component.html',
-  styles: [
-  ]
+  styles: [`
+    nz-form-label {
+      min-width: 120px;
+    }
+    nz-form-control {
+        flex-grow: 1;
+    }
+  `]
 })
 export class PaymentContractTaxMangeComponent implements OnInit {
   @Input() listOfData?: any[];
@@ -18,6 +24,8 @@ export class PaymentContractTaxMangeComponent implements OnInit {
   @Input() contract_pay_id?: number;
 
   @Output() private outer = new EventEmitter();
+
+  @Output() private contractInformation = new EventEmitter();
 
   billModal: NzModalRef;
 
@@ -48,6 +56,8 @@ export class PaymentContractTaxMangeComponent implements OnInit {
   projectId: number = null;
 
   contractList: any[] = [];
+
+  contractListData: any = [];
 
   selectedContract: any = null;
 
@@ -134,12 +144,14 @@ export class PaymentContractTaxMangeComponent implements OnInit {
 
   }
 
-  contractPaymentChange(contract_payment_id: number): void {
-    [this.currentPayment] = this.listOfData.filter(v => v.id === contract_payment_id);
-    this.contract_payment_id = contract_payment_id;
-    this.currentPaymentTotal = this.currentPayment?.amount - this.currentPayment?.tax_use_amount
-    console.log(this.currentPayment, '2contractPaymentChange this.currentPayment');
-    this.amountChange();
+  contractPaymentChange(cost_category_id: number): void {
+    [this.currentPayment] = this.listOfData.filter(v => v.cost.cost_category.id === cost_category_id);
+    if (this.currentPayment) {
+      this.contract_payment_id = this.currentPayment.id;
+      this.currentPaymentTotal = this.currentPayment.amount - this.currentPayment.tax_use_amount
+      console.log(this.currentPayment, '2contractPaymentChange this.currentPayment');
+      this.amountChange();
+    }
   }
 
   amountChange() {
@@ -203,19 +215,24 @@ export class PaymentContractTaxMangeComponent implements OnInit {
     console.log('this.contract_pay_id', this.contract_pay_id);
     this.settingsConfigService.get(`/api/contract/payment/tax/${this.contract_pay_id}`)
       .subscribe((res: ApiData) => {
-        console.log(res, '合约支付税目列表');
+        console.log(res, '合约支付税目列表......');
         if (res.code === 200) {
           const contractTax: any[] = res.data.contract_payment_tax;
           this.listOfTax = contractTax;
           console.log('getContractTax listOfTax', this.listOfTax);
-          for (const item of this.listOfTax) {
-            if (!item.bill_category) {
-              this.isSubmit = true;
-              this.outer.emit(this.isSubmit);
-            } else {
-              this.isSubmit = false;
+          if (this.contractInfo) {
+            console.log('kkk', this.contractInfo.amount === this.contractInfo.tax_use_amount)
+            for (const item of this.listOfTax) {
+              if ((this.contractInfo.amount === this.contractInfo.tax_use_amount) && item.bill_category) {
+                this.isSubmit = false;
+                this.outer.emit(this.isSubmit);
+              } else {
+                this.isSubmit = true;
+                this.outer.emit(this.isSubmit);
+              }
             }
           }
+          console.log('getContractTax isSubmit', this.isSubmit);
         }
       })
   }
@@ -225,7 +242,8 @@ export class PaymentContractTaxMangeComponent implements OnInit {
       console.log('contract list deal: ', res);
       if (res.code === 200) {
         this.contractList = res.data.deal;
-        console.log('.............', this.contractList);
+        this.contractListData = res.data;
+        console.log('1.............', this.contractList);
         // 如果有 contract_pay_id 参数， 则表示为编辑 合约支付
         this.activatedRoute.queryParams.subscribe(params => {
           if (params && params.contract_pay_id) {
@@ -259,6 +277,7 @@ export class PaymentContractTaxMangeComponent implements OnInit {
         console.log(res, '合约支付信息');
         if (res.code === 200) {
           this.contractInfo = res.data;
+          this.contractInformation.emit(this.contractInfo);
           this.contract_id = res.data.deal.contract.id;
           console.log('this.contract_id', this.contract_id)
           console.log('this.contractInfo', this.contractInfo)
@@ -367,7 +386,7 @@ export class PaymentContractTaxMangeComponent implements OnInit {
         exclude_tax_amount: is_get_bill ? Number(value.exclude_tax_amount) : 0,
         tax_amount: is_get_bill ? Number(value.tax_amount) : 0,
         amount: is_get_bill ? Number(value.exclude_tax_amount) + Number(value.tax_amount) : Number(value.amount),
-        invoice_number: is_get_bill ? String(value.invoice_number) : 0,
+        invoice_number: is_get_bill ? String(value.invoice_number) : '暂无',
       }
       const editArray = {
         contract_payment_tax_id: this.contract_payment_tax_id,
@@ -375,7 +394,7 @@ export class PaymentContractTaxMangeComponent implements OnInit {
         exclude_tax_amount: is_get_bill ? Number(value.exclude_tax_amount) : 0,
         tax_amount: is_get_bill ? Number(value.tax_amount) : 0,
         amount: is_get_bill ? Number(value.exclude_tax_amount) + Number(value.tax_amount) : Number(value.amount),
-        invoice_number: is_get_bill ? String(value.invoice_number) : 0,
+        invoice_number: is_get_bill ? String(value.invoice_number) : '暂无',
       }
 
       console.log('createArray', createArray);
@@ -419,7 +438,8 @@ export class PaymentContractTaxMangeComponent implements OnInit {
   resetTaxForm(opt: any): void {
     console.log('resetTaxForm opt.contract_payment.id', opt.contract_payment.id);
     console.log('resetTaxForm listOfData', this.listOfData);
-    [this.currentPayment] = this.listOfData.filter(v => v.id === opt.contract_payment.id);
+    console.log('opt...', opt)
+    this.currentPayment = this.listOfData.filter(v => v.id === opt.contract_payment.id);
     const is_get_bill: boolean = opt.bill_category ? true : false;
     this.validateBillForm.patchValue({
       contract_payment_id: opt.contract_payment.cost.cost_category.id,
@@ -441,7 +461,9 @@ export class PaymentContractTaxMangeComponent implements OnInit {
       console.log('create res', res.data);
       if (res.code === 200) {
         console.log('禁用合同支付税目  成功');
+        this.getContractPayDetail();
         this.getContractTax();
+        this.getContractPayment();
         this.listOfTax = this.listOfTax.filter(v => v.id !== id);
       } else {
         this.submitLoading = false;

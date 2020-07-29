@@ -19,8 +19,11 @@ export class UsersExecuteFlowComponent implements OnChanges {
   @Input() paymentArr?: any[];
   @Input() listOfData?: any[];
   @Input() contract_pay_id?: number;
+  @Input() treatypayInfo?: any;
 
   @Output() executeChange: EventEmitter<any> = new EventEmitter();
+
+  @Output() refresh: EventEmitter<any> = new EventEmitter();
 
 
 
@@ -37,6 +40,8 @@ export class UsersExecuteFlowComponent implements OnChanges {
   billCategoryArray: any[] = []; // 发票类型
 
   flag: boolean;
+
+  contractInfo: any = [];
 
   constructor(
     private settings: SettingsService,
@@ -97,5 +102,16 @@ export class UsersExecuteFlowComponent implements OnChanges {
   readOuter(isSubmit) {
     this.flag = isSubmit;
     console.log('isSubmit', isSubmit);
+  }
+  readContractInfo(infoData) {
+    this.contractInfo = infoData;
+    console.log('this.contractInfo', this.contractInfo);
+  }
+  readSubmitFlag(submitFlag) {
+    this.flag = submitFlag
+    console.log('submitFlag', submitFlag);
+  }
+  refreshPage() {
+    console.log('111');
   }
 }

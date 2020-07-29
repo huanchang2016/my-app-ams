@@ -40,7 +40,7 @@
             {{ data.exclude_tax_amount | _currency }}
           </ng-container>
           <ng-container *ngIf="!data.exclude_tax_amount">
-            无
+            0
           </ng-container>
         </td>
         <td>
@@ -48,7 +48,7 @@
             {{ data.tax_amount | _currency }}
           </ng-container>
           <ng-container *ngIf="!data.tax_amount">
-            无
+            0
           </ng-container>
         </td>
         <td>
@@ -177,3 +177,28 @@
   <button nz-button nzType="default" (click)="closeModal()">取消</button>
   <button nz-button nzType="primary" (click)="submitTaxForm()" [nzLoading]="submitCostLoading">确定</button>
 </ng-template>
+
+<!-- 非合约支付详情列表 -->
+<nz-card nzTitle="非合约支付详情列表" [nzBordered]="false" [nzExtra]="" class="mt-md">
+  <nz-table #detailTable [nzData]="paymentArray" [nzFrontPagination]="false">
+    <thead>
+      <tr>
+        <th nzWidth="80px">序号</th>
+        <th>成本类型</th>
+        <th>总金额</th>
+        <th>开票总金额</th>
+        <th>状态</th>
+        <!-- <th>操作</th> -->
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of detailTable.data; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ data.cost.cost_category.name }}</td>
+        <td>{{ data.amount | currency: 'CNY' }}</td>
+        <td>{{ data.tax_use_amount | currency: 'CNY' }}</td>
+        <td>{{ data.treaty_pay.pay_status.name }}</td>
+      </tr>
+    </tbody>
+  </nz-table>
+</nz-card>

@@ -187,12 +187,14 @@ export class ContractPayCreateComponent implements OnInit {
     console.log('validateCostForm is_get_bill', this.validateBillForm.get('is_get_bill').value);
   }
 
-  contractPaymentChange(contract_payment_id: number): void {
-    [this.currentPayment] = this.listOfData.filter(v => v.id === contract_payment_id);
-    this.contract_payment_id = contract_payment_id;
-    this.currentPaymentTotal = this.currentPayment?.amount - this.currentPayment?.tax_use_amount
-    console.log(this.currentPayment, '2contractPaymentChange this.currentPayment');
-    this.amountChange();
+  contractPaymentChange(cost_category_id: number): void {
+    [this.currentPayment] = this.listOfData.filter(v => v.cost.cost_category.id === cost_category_id);
+    if (this.currentPayment) {
+      this.contract_payment_id = this.currentPayment.id;
+      this.currentPaymentTotal = this.currentPayment?.amount - this.currentPayment?.tax_use_amount
+      console.log(this.currentPayment, '2contractPaymentChange this.currentPayment');
+      this.amountChange();
+    }
   }
 
   // 动态校验
@@ -706,7 +708,7 @@ export class ContractPayCreateComponent implements OnInit {
     const is_get_bill: boolean = opt.bill_category ? true : false;
     this.validateBillForm.patchValue({
       contract_payment_id: opt.contract_payment.cost.cost_category.id,
-      bill_category_id: opt.bill_category.id,
+      bill_category_id: opt.bill_category?.id,
       exclude_tax_amount: is_get_bill ? opt.exclude_tax_amount : null,
       tax_amount: is_get_bill ? opt.tax_amount : null,
       amount: is_get_bill ? null : opt.amount,
@@ -1025,7 +1027,7 @@ export class ContractPayCreateComponent implements OnInit {
         exclude_tax_amount: is_get_bill ? Number(value.exclude_tax_amount) : 0,
         tax_amount: is_get_bill ? Number(value.tax_amount) : 0,
         amount: is_get_bill ? Number(value.exclude_tax_amount) + Number(value.tax_amount) : Number(value.amount),
-        invoice_number: is_get_bill ? String(value.invoice_number) : 0,
+        invoice_number: is_get_bill ? String(value.invoice_number) : '暂无',
       }
       const editArray = {
         contract_payment_tax_id: this.contract_payment_tax_id,
@@ -1033,7 +1035,7 @@ export class ContractPayCreateComponent implements OnInit {
         exclude_tax_amount: is_get_bill ? Number(value.exclude_tax_amount) : 0,
         tax_amount: is_get_bill ? Number(value.tax_amount) : 0,
         amount: is_get_bill ? Number(value.exclude_tax_amount) + Number(value.tax_amount) : Number(value.amount),
-        invoice_number: is_get_bill ? String(value.invoice_number) : 0,
+        invoice_number: is_get_bill ? String(value.invoice_number) : '暂无',
       }
 
       console.log('createArray', createArray);

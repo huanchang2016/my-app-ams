@@ -21,6 +21,10 @@ import { filter, map } from 'rxjs/operators';
 export class PaymentTaxManageComponent implements OnChanges, OnInit {
   @Output() private outer = new EventEmitter();
 
+  @Output() private submitFlag = new EventEmitter();
+
+  @Output() private refresh = new EventEmitter();
+
   constructor(
     public msg: NzMessageService,
     private modalService: NzModalService,
@@ -55,6 +59,8 @@ export class PaymentTaxManageComponent implements OnChanges, OnInit {
 
   checkedOption: any = {};
 
+  no_contract_info: any = [];
+
 
   // 新增 成本支付
   tplModal: NzModalRef;
@@ -67,8 +73,13 @@ export class PaymentTaxManageComponent implements OnChanges, OnInit {
 
   totalAmountError = false;
 
+  isSubmit: boolean;
+
   ngOnChanges() {
-    console.log(this.payInfo, 'payInfo', this.paymentArray, 'paymentArray', 'billCategoryArray', this.billCategoryArray)
+    console.log('payInfo', this.payInfo);
+    console.log('paymentArray', this.paymentArray);
+    console.log('billCategoryArray', this.billCategoryArray);
+
     if (this.is_execute_user && this.payInfo) {
       // 是执行者访问， 需要展示  附件绑定
       this.getAttachment();
@@ -184,9 +195,24 @@ export class PaymentTaxManageComponent implements OnChanges, OnInit {
     this.settingsConfigService.get(listUrl).subscribe((res: ApiData) => {
       console.log(res, '非合约 支付详情对应税 列表')
       if (res.code === 200) {
+        this.no_contract_info = res.data.contract_payment_tax;
+        console.log('this.no_contract_info', this.no_contract_info);
         const list: any[] = res.data.contract_payment_tax;
         console.log('list.............', list);
         this.listOfData = list.sort((a: any, b: any) => a.id - b.id);
+
+        if (this.payInfo) {
+          console.log('nnn', this.payInfo.amount === this.payInfo.tax_use_amount)
+          for (const item of this.listOfData) {
+            if ((this.payInfo.amount === this.payInfo.tax_use_amount) && item.bill_category) {
+              this.isSubmit = false;
+              this.submitFlag.emit(this.isSubmit);
+            } else {
+              this.isSubmit = true;
+              this.submitFlag.emit(this.isSubmit);
+            }
+          }
+        }
 
 
         this.dealBillCateArray();
@@ -366,7 +392,7 @@ export class PaymentTaxManageComponent implements OnChanges, OnInit {
       bill_category_id: is_get_bill ? opt.bill_category_id : null,
       exclude_tax_amount: is_get_bill ? +opt.exclude_tax_amount : 0,
       tax_amount: is_get_bill ? +opt.tax_amount : 0,
-      amount: is_get_bill ? 0 : +opt.amount,
+      amount: is_get_bill ? opt.exclude_tax_amount + opt.tax_amount : +opt.amount,
       invoice_number: is_get_bill ? String(opt.invoice_number) : '暂无'
 
     }
@@ -377,6 +403,7 @@ export class PaymentTaxManageComponent implements OnChanges, OnInit {
         this.msg.success('更新成功');
         this.getDataList(); // 获取详情支付列表
         this.outer.emit();
+        this.closeModal();
       }
     })
   }
@@ -394,6 +421,7 @@ export class PaymentTaxManageComponent implements OnChanges, OnInit {
       this.submitCostLoading = false;
       if (res.code === 200) {
         this.msg.success('创建成功');
+        this.refresh.emit();
         this.getDataList(); // 获取详情支付列表
         this.outer.emit();
         this.closeModal();
@@ -404,6 +432,7 @@ export class PaymentTaxManageComponent implements OnChanges, OnInit {
     this.settingsConfigService.post('/api/treaty/payment/tax/disable', { treaty_payment_tax_id: id }).subscribe((res: ApiData) => {
       if (res.code === 200) {
         this.msg.success('删除成功');
+        this.refresh.emit();
         this.listOfData = this.listOfData.filter(v => v.id !== id);
         this.dealBillCateArray();
         this.getDataList();

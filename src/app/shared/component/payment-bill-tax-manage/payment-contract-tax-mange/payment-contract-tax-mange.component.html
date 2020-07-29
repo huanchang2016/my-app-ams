@@ -20,7 +20,7 @@
             <tbody>
                 <tr *ngFor="let data of taxSelectTable.data; let i = index">
                     <td>{{ i + 1 }}</td>
-                    <td>{{ data.invoice_number }}</td>
+                    <td>{{ data.invoice_number?data.invoice_number:'暂无' }}</td>
                     <td>{{ data.contract_payment.cost.cost_category.name }}</td>
                     <td>{{ data.bill_category===null?'未开发票':data.bill_category.name }}</td>
                     <td>
@@ -98,7 +98,7 @@
                     <nz-select style="width: 100%;" id="contract_payment_id" nzShowSearch nzPlaceHolder="请选择成本类型"
                         formControlName="contract_payment_id" (ngModelChange)="contractPaymentChange($event)">
                         <ng-container *ngFor="let item of listOfData">
-                            <nz-option [nzLabel]="item.cost.cost_category.name" [nzValue]="item.id" [nzDisabled]="">
+                            <nz-option [nzLabel]="item.cost.cost_category.name" [nzValue]="item.cost.cost_category.id">
                             </nz-option>
                         </ng-container>
                     </nz-select>
@@ -205,6 +205,7 @@
         <thead>
             <tr>
                 <th nzWidth="80px">序号</th>
+                <th>成本类型</th>
                 <th>总金额</th>
                 <th>开票总金额</th>
                 <th>状态</th>
@@ -214,6 +215,7 @@
         <tbody>
             <tr *ngFor="let data of detailTable.data; let i = index">
                 <td>{{ i + 1 }}</td>
+                <td>{{ data.cost.cost_category.name }}</td>
                 <td>{{ data.amount | currency: 'CNY' }}</td>
                 <td>{{ data.tax_use_amount | currency: 'CNY' }}</td>
                 <td>{{ data.contract_pay.pay_status.name }}</td>

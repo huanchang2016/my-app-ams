@@ -59,9 +59,10 @@
         </td>
         <td class="font-weight-bold">抵扣金额</td>
         <td colspan="2">
-          <span *ngIf="treatypayInfo?.if_write_off;else notWriteOff">{{ treatypayInfo?.write_off_amount | currency: 'CNY' }}</span>
+          <span
+            *ngIf="treatypayInfo?.if_write_off;else notWriteOff">{{ treatypayInfo?.write_off_amount | currency: 'CNY' }}</span>
           <ng-template #notWriteOff>
-              <span class="font-weight-bold">无冲抵</span>
+            <span class="font-weight-bold">无冲抵</span>
           </ng-template>
         </td>
       </tr>
@@ -86,7 +87,7 @@
         <td>费用预算累计金额</td>
         <td>成本类型预算总金额</td>
       </tr>
-      
+
       <ng-container *ngFor="let data of listOfData;let i = index">
         <tr>
           <td>{{ i + 1 }}</td>
@@ -120,7 +121,8 @@
       </tr>
       <tr>
         <td colspan="6">
-          <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/treaty_pay/' + treaty_pay_id"></app-upload-file-attachment-show-c>
+          <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/treaty_pay/' + treaty_pay_id">
+          </app-upload-file-attachment-show-c>
         </td>
       </tr>
 
@@ -241,5 +243,7 @@
 <!-- 支付流程进展： 草稿 不显示 -->
 
 <ng-container *ngIf="progressInfo && progressInfo.execute_user">
-  <app-users-execute-flow [payType]="'treaty'" [payInfo]="treatypayInfo" [paymentArr]="listOfData" [progressInfo]="progressInfo" (executeChange)="executeChange($event)"></app-users-execute-flow>
+  <app-users-execute-flow [payType]="'treaty'" (refresh)="refreshPage()" [payInfo]="treatypayInfo"
+    [paymentArr]="listOfData" [progressInfo]="progressInfo" (executeChange)="executeChange($event)">
+  </app-users-execute-flow>
 </ng-container>

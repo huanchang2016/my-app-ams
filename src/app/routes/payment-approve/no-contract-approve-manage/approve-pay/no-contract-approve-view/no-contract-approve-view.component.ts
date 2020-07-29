@@ -19,14 +19,6 @@ import html2canvas from 'html2canvas';
   `]
 })
 export class NoContractApproveViewComponent implements OnInit {
-  listOfData: any[] = [];
-
-  projectInfo: any = null;
-  projectId: number = null;
-
-  treaty_pay_id: number = null;
-  treatypayInfo: any = null;
-  treaty_id: number = null;
 
   constructor(
     public msg: NzMessageService,
@@ -51,6 +43,28 @@ export class NoContractApproveViewComponent implements OnInit {
     })
 
   }
+  listOfData: any[] = [];
+
+  projectInfo: any = null;
+  projectId: number = null;
+
+  treaty_pay_id: number = null;
+  treatypayInfo: any = null;
+  treaty_id: number = null;
+
+  // 流程进程信息
+  progressInfo: any = null;
+  nodeProcess: any[] = [];
+  currentNodeProcess: any = null;
+  isCurrentCheck: boolean = false;
+
+  checkOption: any = {
+    agree: null,
+    remark: ''
+  }
+
+  isPrinter: boolean = false;
+  pdfPosition: number = 0;
 
   ngOnInit() { }
 
@@ -86,17 +100,6 @@ export class NoContractApproveViewComponent implements OnInit {
   }
 
   cancel(): void { }
-
-  // 流程进程信息
-  progressInfo: any = null;
-  nodeProcess: any[] = [];
-  currentNodeProcess: any = null;
-  isCurrentCheck: boolean = false;
-
-  checkOption: any = {
-    agree: null,
-    remark: ''
-  }
 
   getWorkflow() {
     this.settingsConfigService
@@ -214,8 +217,6 @@ export class NoContractApproveViewComponent implements OnInit {
 
     });
   }
-
-  isPrinter: boolean = false;
   // pdf
   downloadFile(type: string) {
     this.isPrinter = true;
@@ -242,7 +243,6 @@ export class NoContractApproveViewComponent implements OnInit {
     }, 500);
 
   }
-  pdfPosition: number = 0;
   exportPdf(contentDataURL: any, imgWidth: number, imgHeight: number, pageHeight: number, leftHeight: number) {
     let pdf = new jspdf('p', 'mm', 'a4'); // A4 size page of PDF  
     if (leftHeight + 10 < pageHeight) {
@@ -271,5 +271,9 @@ export class NoContractApproveViewComponent implements OnInit {
     var event = document.createEvent('MouseEvents');
     event.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
     oA.dispatchEvent(event);
+  }
+
+  refreshPage() {
+    this.getTreatyPayDetail();
   }
 }

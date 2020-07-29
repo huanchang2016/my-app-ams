@@ -452,7 +452,8 @@
           <nz-select style="width: 100%;" id="contract_payment_id" nzShowSearch nzPlaceHolder="请选择成本类型"
             formControlName="contract_payment_id" (ngModelChange)="contractPaymentChange($event)">
             <ng-container *ngFor="let item of listOfData">
-              <nz-option [nzLabel]="item.cost.cost_category.name" [nzValue]="item.id" [nzDisabled]=""></nz-option>
+              <nz-option [nzLabel]="item.cost.cost_category.name" [nzValue]="item.cost.cost_category.id"
+                [nzDisabled]=""></nz-option>
             </ng-container>
           </nz-select>
         </nz-form-control>

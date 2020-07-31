@@ -47,6 +47,7 @@ export class FinancialProcessingVoucherBillVoucherDetailsComponent implements On
       if(params && params['id']) {
         this.bill_id = +params['id'];
         this.getDataInfo();
+        this.getBillInvoice(); // 获取发票清单
       }
     });
 
@@ -121,6 +122,15 @@ export class FinancialProcessingVoucherBillVoucherDetailsComponent implements On
         if(this.billInfo.certificate && this.billInfo.certificate.is_deal) {
           this.getCertificateInfo();
         }
+      }
+    });
+
+  }
+  invoiceOfData:any[] = []; // 发票清单列表信息（执行人填写）
+  getBillInvoice() {
+    this.settingsConfigService.get(`/api/bill_invoice/${this.bill_id}`).subscribe((res: ApiData) => {
+      if (res.code === 200) {
+        this.invoiceOfData = res.data.bill_invoice;
       }
     });
   }

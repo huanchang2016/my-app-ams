@@ -25,8 +25,17 @@
 </nz-card>
 
 <div class="info_box mt-md" *ngIf="info">
-    <nz-table #borderedTable nzBordered nzData="[1]" [nzFrontPagination]="false">
+    <nz-table #borderedTable nzBordered nzData="[1]" [nzFrontPagination]="false" [nzTitle]="tableTitle">
+        <ng-template #tableTitle>
+            <div class="text-center text-lg" style="color: #333;">{{ info.user.company.name }}</div>
+        </ng-template>
         <tbody>
+            <tr>
+                <td colspan="6" class="text-md text-center" style="color: #333;">项 目 费 用 付 款 书</td>
+            </tr>
+            <tr>
+                <td colspan="6" class="text-md text-center">（合同款项支付用）</td>
+            </tr>
             <tr>
                 <td class="font-weight-bold">合同编号</td>
                 <td colspan="2">{{ info.deal.contract.number }}</td>
@@ -108,4 +117,37 @@
             </tr>
         </tbody>
     </nz-table>
+</div>
+
+<div class="mt-md bg-white">
+    <nz-table #taxSelectTable [nzData]="paymentTaxList" [nzShowPagination]="false">
+        <thead>
+            <tr>
+                <th nzWidth="80px">序号</th>
+                <th nzWidth="80px">票号</th>
+                <th>成本类型</th>
+                <th>发票类型</th>
+                <th nzWidth="250px">金额</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let data of taxSelectTable.data; let i = index">
+                <td>{{ i + 1 }}</td>
+                <td>{{ data.invoice_number?data.invoice_number:'暂无' }}</td>
+                <td>{{ data.contract_payment.cost.cost_category.name }}</td>
+                <td>{{ data.bill_category===null?'未开发票':data.bill_category.name }}</td>
+                <td>
+                    <sv-container size="small" col="1">
+                        <sv label="除税金额"><span>{{ data.exclude_tax_amount | currency: 'CNY' }}</span></sv>
+                        <sv label="税金"><span>{{ data.tax_amount | currency: 'CNY' }}</span></sv>
+                        <sv label="总金额"><span>{{ data.amount | currency: 'CNY' }}</span></sv>
+                    </sv-container>
+                </td>
+            </tr>
+        </tbody>
+    </nz-table>
+    <div class="mt-sm pl-sm">
+        <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/contract_pay/' + this.id">
+        </app-upload-file-attachment-show-c>
+    </div>
 </div>

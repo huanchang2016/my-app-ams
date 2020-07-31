@@ -26,24 +26,24 @@
 <div class="info_box mt-md" *ngIf="billInfo">
     <nz-table #borderedTable nzData="[1]" nzBordered [nzFrontPagination]="false" [nzTitle]="tableTitle">
         <ng-template #tableTitle>
-            <div class="text-center text-lg">{{ billInfo.company.name }}</div>
+            <div class="text-center text-lg" style="color: #333;">{{ billInfo.company.name }}</div>
         </ng-template>
         <tbody>
             <tr>
-                <td colspan="5" class="text-md text-center">发票确认单</td>
-            </tr>
-            <tr>
-                <td class="font-weight-bold td-left">项目名称</td>
-                <td colspan="4">{{ billInfo.project.name }}</td>
-            </tr>
-            <tr>
-                <td class="font-weight-bold td-left">项目编号</td>
-                <td colspan="4">{{ billInfo.project.number }}</td>
+                <td colspan="5" class="text-md text-center" style="color: #333;">发票确认单</td>
             </tr>
             <tr>
                 <td class="font-weight-bold td-left">项目类型</td>
                 <td colspan="4">{{ billInfo.project.category?.name }}</td>
             </tr>
+            <tr>
+                <td class="font-weight-bold td-left">项目名称</td>
+                <td colspan="4">{{ billInfo.project.name }}</td>
+            </tr>
+            <!-- <tr>
+                <td class="font-weight-bold td-left">项目编号</td>
+                <td colspan="4">{{ billInfo.project.number }}</td>
+            </tr> -->
             <tr>
                 <td class="font-weight-bold">协议号</td>
                 <td colspan="4">{{ billInfo.customer_contract_code }}</td>
@@ -59,11 +59,11 @@
                 </td>
             </tr>
             <tr>
-                <td class="font-weight-bold">开票单位</td>
+                <td class="font-weight-bold">开票单位名称</td>
                 <td colspan="4">{{ billInfo.customer.name }}</td>
             </tr>
             <tr>
-                <td class="font-weight-bold">统一社会信用代码</td>
+                <td class="font-weight-bold">纳税人识别号</td>
                 <td colspan="4">{{ billInfo.customer.code }}</td>
             </tr>
             <tr>
@@ -118,4 +118,33 @@
             </tr>
         </tbody>
     </nz-table>
+</div>
+<div class="info_box bg-white border-radius-xs my-md">
+    <nz-table #invoiceTable [nzData]="invoiceOfData" [nzShowPagination]="false" [nzFooter]="invoiceTotalTpl">
+        <thead>
+          <tr>
+            <th nzWidth="80px">序号</th>
+            <th>发票号码</th>
+            <th>发票金额</th>
+            <th>发票税额</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of invoiceTable.data; let i = index">
+            <td>{{ i + 1}}</td>
+            <td>{{ data.invoice_number }}</td>
+            <td>{{ data.invoice_amount | _currency}}</td>
+            <td>{{ data.tax_amount | _currency}}</td>
+          </tr>
+        </tbody>
+      </nz-table>
+      <ng-template #invoiceTotalTpl>
+        <div class="text-right" *ngIf="billInfo">
+            <span><span class="font-weight-bold">总金额： </span>{{ billInfo.amount | _currency }}</span>
+            <span class="mx-md"><span class="font-weight-bold">开票总金额： </span>{{ billInfo.invoice_amount | _currency }}</span>
+            <span><span class="font-weight-bold">总税额： </span>{{ billInfo.tax_amount | _currency }}</span>
+        </div>
+      </ng-template>
+
+      
 </div>

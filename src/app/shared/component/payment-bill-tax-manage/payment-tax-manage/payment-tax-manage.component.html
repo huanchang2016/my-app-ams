@@ -88,7 +88,7 @@
         <nz-form-label nzFor="treaty_payment_id" nzRequired>{{ payType === 'contract' ? '合约支付' : '协议支付'}}
         </nz-form-label>
         <nz-form-control nzErrorTip="请选择{{ payType === 'contract' ? '合约支付' : '协议支付'}}详情">
-          <nz-select style="width: 100%;" id="treaty_payment_id" nzShowSearch
+          <nz-select style="width: 100%;" id="treaty_payment_id" nzShowSearch [nzDisabled]="isEditCost"
             nzPlaceHolder="请选择{{ payType === 'contract' ? '合约支付' : '协议支付'}}支付详情" formControlName="treaty_payment_id"
             (ngModelChange)="treatyPaymentChange($event)">
             <ng-container *ngFor="let item of paymentArray">

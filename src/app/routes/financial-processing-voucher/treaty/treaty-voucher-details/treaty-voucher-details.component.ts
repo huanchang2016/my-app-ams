@@ -48,6 +48,7 @@ export class FinancialProcessingVoucherTreatyVoucherDetailsComponent implements 
       if (params && params['id']) {
         this.id = +params['id'];
         this.getDataInfo();
+        this.getPaymentBillTaxList();
       }
     });
 
@@ -158,5 +159,17 @@ export class FinancialProcessingVoucherTreatyVoucherDetailsComponent implements 
           this.treatyPayment = treatyPayment;
         }
       })
+  }
+
+  paymentTaxList:any[] = []; // 支付 发票台账（执行人填写）
+  getPaymentBillTaxList():void {
+    const listUrl = `/api/treaty/payment/tax/${this.id}`;
+    this.settingsConfigService.get(listUrl).subscribe((res: ApiData) => {
+      console.log(res, '非合约 支付详情对应税 列表')
+      if (res.code === 200) {
+        const list: any[] = res.data.contract_payment_tax;
+        this.paymentTaxList = list.sort((a: any, b: any) => a.id - b.id);
+      }
+    });
   }
 }

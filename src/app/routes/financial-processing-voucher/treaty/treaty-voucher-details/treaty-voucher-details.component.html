@@ -25,8 +25,17 @@
 </nz-card>
 
 <div class="info_box mt-md" *ngIf="info && projectInfo">
-    <nz-table #borderedTable nzBordered nzData="[1]" [nzFrontPagination]="false">
+    <nz-table #borderedTable nzBordered nzData="[1]" [nzFrontPagination]="false" [nzTitle]="tableTitle">
+        <ng-template #tableTitle>
+            <div class="text-center text-lg" style="color: #333;">{{ info.user.company.name }}</div>
+        </ng-template>
         <tbody>
+            <tr>
+                <td colspan="6" class="text-md text-center" style="color: #333;">项 目 费 用 付 款 书</td>
+            </tr>
+            <tr>
+                <td colspan="6" class="text-md text-center">（非合同款项支付用）</td>
+            </tr>
             <tr>
                 <td colspan="2" class="text-md text-center font-weight-bold">项目名称</td>
                 <td colspan="4" class="text-md text-center">{{ projectInfo.name }}</td>
@@ -117,4 +126,52 @@
 
         </tbody>
     </nz-table>
+</div>
+
+<div class="mt-md bg-white">
+    <nz-table #costSelectTable [nzData]="paymentTaxList" [nzShowPagination]="false">
+        <thead>
+          <tr>
+            <th>支付单序号</th>
+            <th>票号</th>
+            <th>费用类别</th>
+            <th nzWidth="300px">出票单位</th>
+            <th>发票类型</th>
+            <th>发票金额（不含税）</th>
+            <th>税额</th>
+            <th>价税合计</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of costSelectTable.data; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ data.invoice_number }}</td>
+            <td>{{ data.contract_payment.treaty.service_category.name }}</td>
+            <td>{{ data.company.name }}</td>
+            <td>
+              <ng-container *ngIf="data.bill_category">
+                {{ data.bill_category.name }}
+              </ng-container>
+              <ng-container *ngIf="!data.bill_category">
+                暂未取得发票
+              </ng-container>
+            </td>
+            <td>{{ data.exclude_tax_amount | _currency }}</td>
+            <td>{{ data.tax_amount | _currency }}</td>
+            <td>
+              <ng-container *ngIf="data.bill_category">
+                {{ data.exclude_tax_amount + data.tax_amount | _currency }}
+              </ng-container>
+              <ng-container *ngIf="!data.bill_category">
+                {{ data.amount | _currency }}
+              </ng-container>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+    
+      <div class="mt-sm pl-sm">
+        <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/treaty_pay/' + this.id">
+        </app-upload-file-attachment-show-c>
+      </div>
 </div>

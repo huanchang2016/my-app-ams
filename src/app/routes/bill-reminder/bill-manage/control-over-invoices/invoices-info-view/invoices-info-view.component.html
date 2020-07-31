@@ -43,17 +43,17 @@
           <td colspan="5" class="text-md text-center">发票确认单</td>
         </tr>
         <tr>
-          <td class="font-weight-bold td-left">项目名称</td>
-          <td colspan="4">{{ billInfo?.project.name }}</td>
-        </tr>
-        <tr>
-          <td class="font-weight-bold td-left">项目编号</td>
-          <td colspan="4">{{ billInfo?.project.number }}</td>
-        </tr>
-        <tr>
           <td class="font-weight-bold td-left">项目类型</td>
           <td colspan="4">{{ billInfo?.project.category?.name }}</td>
         </tr>
+        <tr>
+          <td class="font-weight-bold td-left">项目名称</td>
+          <td colspan="4">{{ billInfo?.project.name }}</td>
+        </tr>
+        <!-- <tr> // 2020 年7月31日 上午 10：07 修改发票详情预览 显示
+          <td class="font-weight-bold td-left">项目编号</td>
+          <td colspan="4">{{ billInfo?.project.number }}</td>
+        </tr> -->
         <tr>
           <td class="font-weight-bold">协议号</td>
           <td colspan="4">{{ billInfo?.customer_contract_code }}</td>
@@ -69,11 +69,11 @@
           </td>
         </tr>
         <tr>
-          <td class="font-weight-bold">开票单位</td>
+          <td class="font-weight-bold">开票单位名称</td>
           <td colspan="4">{{ billInfo?.customer.name }}</td>
         </tr>
         <tr>
-          <td class="font-weight-bold">统一社会信用代码</td>
+          <td class="font-weight-bold">纳税人识别号</td>
           <td colspan="4">{{ billInfo?.customer.code }}</td>
         </tr>
         <tr>

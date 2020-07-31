@@ -1,13 +1,22 @@
 import { NgModule } from '@angular/core';
+import { SharedModule } from '@shared';
 import { CommonModule } from '@angular/common';
 
 import { DispatchRoutingModule } from './dispatch-routing.module';
 import { DispatchCreateComponent } from './dispatch-create/dispatch-create.component';
+import { DispathIndexComponent } from './dispath-index/dispath-index.component';
+import { DraftListComponent } from './my-dispatch/draft-list/draft-list.component';
+import { DispatchSearchComponent } from './component/dispatch-search/dispatch-search.component';
+import { DispatchInfoComponent } from './component/dispatch-info/dispatch-info.component';
+// import { ProductSearchOptionComponent } from './component/search-option/search-option.component';
+// import { ProductSearchOptionComponent } from '../project/component/search-option/search-option.component';
 
 
 @NgModule({
-  declarations: [DispatchCreateComponent],
+  declarations: [DispatchCreateComponent, DispathIndexComponent, DraftListComponent, DispatchSearchComponent, DispatchInfoComponent],
   imports: [
+    // ProductSearchOptionComponent,
+    SharedModule,
     CommonModule,
     DispatchRoutingModule
   ]

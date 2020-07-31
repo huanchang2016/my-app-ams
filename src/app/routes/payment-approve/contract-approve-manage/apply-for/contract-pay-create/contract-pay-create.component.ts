@@ -185,6 +185,15 @@ export class ContractPayCreateComponent implements OnInit {
     // this.requiredChange(true);
 
     console.log('validateCostForm is_get_bill', this.validateBillForm.get('is_get_bill').value);
+    console.log('1', this.selectedFlag);
+    console.log('2', this.summary);
+    console.log('3', this.listOfData.length !== 0);
+  }
+
+  ngOnChanges(): void {
+    console.log('1', this.selectedFlag);
+    console.log('2', this.summary);
+    console.log('3', this.listOfData.length !== 0);
   }
 
   contractPaymentChange(cost_category_id: number): void {
@@ -199,6 +208,8 @@ export class ContractPayCreateComponent implements OnInit {
 
   // 动态校验
   requiredChange(is_get_bill: boolean): void {
+    console.log('requiredChange currentPayment', this.currentPayment);
+    this.amountChange();
     if (!is_get_bill) { // 未开票
       this.validateBillForm.get('bill_category_id')!.clearValidators();
       this.validateBillForm.get('bill_category_id')!.markAsPristine();
@@ -460,11 +471,16 @@ export class ContractPayCreateComponent implements OnInit {
   }
   editBillTicket(billTitle: TemplateRef<{}>, billContent: TemplateRef<{}>, billFooter: TemplateRef<{}>, data: any, i): void {
     this.isEditCost = true;
+    // console.log('invoice_number', data.invoice_number);
+    // data.invoice_number ? this.validateBillForm.patchValue({ is_get_bill: true }) : this.validateBillForm.patchValue({ is_get_bill: false });
+    console.log('is_get_bill.value', this.validateBillForm.get('is_get_bill').value);
+    // this.requiredChange(this.validateBillForm.get('is_get_bill').value);
     this.contract_payment_id = this.listOfTax[i].id;
     this.contract_payment_tax_id = data.id;
     console.log('contract_payment_tax_id', this.contract_payment_tax_id);
     console.log('editBillTicket data', data);
     this.resetTaxForm(data);
+    this.contractPaymentChange(data.contract_payment.id);
     this.billModal = this.modalService.create({
       nzTitle: billTitle,
       nzContent: billContent,
@@ -686,6 +702,7 @@ export class ContractPayCreateComponent implements OnInit {
         console.log('禁用合同支付税目  成功');
         this.listOfTax = this.listOfTax.filter(v => v.id !== id);
         this.getContractList();
+        this.getContractPayDetail();
         this.msg.success('删除成功');
       } else {
         this.submitLoading = false;
@@ -1027,15 +1044,15 @@ export class ContractPayCreateComponent implements OnInit {
         exclude_tax_amount: is_get_bill ? Number(value.exclude_tax_amount) : 0,
         tax_amount: is_get_bill ? Number(value.tax_amount) : 0,
         amount: is_get_bill ? Number(value.exclude_tax_amount) + Number(value.tax_amount) : Number(value.amount),
-        invoice_number: is_get_bill ? String(value.invoice_number) : '暂无',
+        invoice_number: is_get_bill ? String(value.invoice_number) : null,
       }
       const editArray = {
         contract_payment_tax_id: this.contract_payment_tax_id,
-        bill_category_id: value.bill_category_id,
+        bill_category_id: is_get_bill ? value.bill_category_id : null,
         exclude_tax_amount: is_get_bill ? Number(value.exclude_tax_amount) : 0,
         tax_amount: is_get_bill ? Number(value.tax_amount) : 0,
         amount: is_get_bill ? Number(value.exclude_tax_amount) + Number(value.tax_amount) : Number(value.amount),
-        invoice_number: is_get_bill ? String(value.invoice_number) : '暂无',
+        invoice_number: is_get_bill ? String(value.invoice_number) : null,
       }
 
       console.log('createArray', createArray);

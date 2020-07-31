@@ -20,7 +20,7 @@
             <tbody>
                 <tr *ngFor="let data of taxSelectTable.data; let i = index">
                     <td>{{ i + 1 }}</td>
-                    <td>{{ data.invoice_number?data.invoice_number:'暂无' }}</td>
+                    <td>{{ data.invoice_number?data.invoice_number:'无' }}</td>
                     <td>{{ data.contract_payment.cost.cost_category.name }}</td>
                     <td>{{ data.bill_category===null?'未开发票':data.bill_category.name }}</td>
                     <td>
@@ -40,6 +40,10 @@
                 </tr>
             </tbody>
         </nz-table>
+        <div class="text-right" *ngIf="contractInfo">
+            <span class="font-weight-bold">总金额： {{ contractInfo.amount | _currency }}</span>
+            <span class="font-weight-bold mx-md">开票总金额： {{ contractInfo.tax_use_amount | _currency }}</span>
+        </div>
     </div>
 
     <div class="hidden-pc">

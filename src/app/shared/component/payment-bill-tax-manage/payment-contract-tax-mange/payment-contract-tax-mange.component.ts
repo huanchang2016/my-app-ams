@@ -357,6 +357,7 @@ export class PaymentContractTaxMangeComponent implements OnInit {
     console.log('contract_payment_tax_id', this.contract_payment_tax_id);
     console.log('editBillTicket data', data);
     this.resetTaxForm(data);
+    this.contractPaymentChange(data.contract_payment.id);
     this.billModal = this.modalService.create({
       nzTitle: billTitle,
       nzContent: billContent,
@@ -386,15 +387,15 @@ export class PaymentContractTaxMangeComponent implements OnInit {
         exclude_tax_amount: is_get_bill ? Number(value.exclude_tax_amount) : 0,
         tax_amount: is_get_bill ? Number(value.tax_amount) : 0,
         amount: is_get_bill ? Number(value.exclude_tax_amount) + Number(value.tax_amount) : Number(value.amount),
-        invoice_number: is_get_bill ? String(value.invoice_number) : '暂无',
+        invoice_number: is_get_bill ? String(value.invoice_number) : null,
       }
       const editArray = {
         contract_payment_tax_id: this.contract_payment_tax_id,
-        bill_category_id: value.bill_category_id,
+        bill_category_id: is_get_bill ? value.bill_category_id : null,
         exclude_tax_amount: is_get_bill ? Number(value.exclude_tax_amount) : 0,
         tax_amount: is_get_bill ? Number(value.tax_amount) : 0,
         amount: is_get_bill ? Number(value.exclude_tax_amount) + Number(value.tax_amount) : Number(value.amount),
-        invoice_number: is_get_bill ? String(value.invoice_number) : '暂无',
+        invoice_number: is_get_bill ? String(value.invoice_number) : null,
       }
 
       console.log('createArray', createArray);

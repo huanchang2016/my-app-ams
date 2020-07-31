@@ -19,7 +19,7 @@ export class UsersExecuteFlowComponent implements OnChanges {
   @Input() paymentArr?: any[];
   @Input() listOfData?: any[];
   @Input() contract_pay_id?: number;
-  @Input() treatypayInfo?: any;
+  @Input() treatypayInfo?: any = [];
 
   @Output() executeChange: EventEmitter<any> = new EventEmitter();
 
@@ -59,6 +59,7 @@ export class UsersExecuteFlowComponent implements OnChanges {
   }
 
   ngOnChanges() {
+    console.log('payInfo', this.payInfo);
     console.log('中间组件 listOfData', this.listOfData);
     if (this.progressInfo) {
       this.nodeProcess = [this.progressInfo];
@@ -94,7 +95,7 @@ export class UsersExecuteFlowComponent implements OnChanges {
     }
 
     // 提交
-    // this.executeChange.emit(option);
+    this.executeChange.emit(option);
   }
 
   cancel() { }
@@ -112,6 +113,6 @@ export class UsersExecuteFlowComponent implements OnChanges {
     console.log('submitFlag', submitFlag);
   }
   refreshPage() {
-    console.log('111');
+    this.refresh.emit();
   }
 }

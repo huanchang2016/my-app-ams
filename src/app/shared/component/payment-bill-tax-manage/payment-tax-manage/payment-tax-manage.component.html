@@ -69,6 +69,10 @@
       </tr>
     </tbody>
   </nz-table>
+  <div class="text-right" *ngIf="payInfo">
+    <span class="font-weight-bold">总金额： {{ payInfo.amount | _currency }}</span>
+    <span class="font-weight-bold mx-md">开票总金额： {{ payInfo.tax_use_amount | _currency }}</span>
+  </div>
 
   <ng-container *ngIf="is_execute_user">
     <app-upload-file-attachment-tpl [Attachment]="attachment" [AttachmentCategory]="attachmentCategory"
@@ -92,7 +96,8 @@
             nzPlaceHolder="请选择{{ payType === 'contract' ? '合约支付' : '协议支付'}}支付详情" formControlName="treaty_payment_id"
             (ngModelChange)="treatyPaymentChange($event)">
             <ng-container *ngFor="let item of paymentArray">
-              <nz-option [nzLabel]="item.treaty.supplier.name" [nzValue]="item.id"></nz-option>
+              <nz-option [nzLabel]="item.treaty.supplier.name+'('+item.cost.cost_category.name+')'" [nzValue]="item.id">
+              </nz-option>
             </ng-container>
           </nz-select>
         </nz-form-control>
@@ -116,8 +121,10 @@
               <nz-select style="width: 100%;" id="bill_category_id" nzPlaceHolder="请选择发票类型"
                 formControlName="bill_category_id">
                 <ng-container *ngFor="let item of billCategoryArray">
-                  <nz-option [nzLabel]="item.name" [nzValue]="item.id"
+                  <!-- <nz-option [nzLabel]="item.name" [nzValue]="item.id"
                     [nzDisabled]="checkedOption[currentPayment?.cost.cost_category.id + '-' + currentPayment?.treaty.supplier.id + '-' + item.id]">
+                  </nz-option> -->
+                  <nz-option [nzLabel]="item.name" [nzValue]="item.id">
                   </nz-option>
 
                 </ng-container>

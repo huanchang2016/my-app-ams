@@ -15,6 +15,7 @@ import { filter, map } from 'rxjs/operators';
     }
     nz-form-control {
         flex-grow: 1;
+        min-width: 352px;
     }
   `]
 })
@@ -270,7 +271,7 @@ export class PaymentTaxManageComponent implements OnChanges, OnInit {
       amount: is_get_bill ? null : opt.amount,
       exclude_tax_amount: is_get_bill ? opt.exclude_tax_amount : null,
       tax_amount: is_get_bill ? opt.tax_amount : null,
-      invoice_number: is_get_bill ? opt.invoice_number : '暂无'
+      invoice_number: is_get_bill ? opt.invoice_number : null
     });
     this.isGetBillChange(is_get_bill);
   }
@@ -286,6 +287,7 @@ export class PaymentTaxManageComponent implements OnChanges, OnInit {
   }
   treatyPaymentChange(treaty_payment_id: number): void {
     [this.currentPayment] = this.paymentArray.filter(v => v.id === treaty_payment_id);
+    console.log('this.currentPayment', this.currentPayment);
     console.log(this.currentPayment, 'current selected payment');
     this.amountChange();
   }
@@ -393,7 +395,7 @@ export class PaymentTaxManageComponent implements OnChanges, OnInit {
       exclude_tax_amount: is_get_bill ? +opt.exclude_tax_amount : 0,
       tax_amount: is_get_bill ? +opt.tax_amount : 0,
       amount: is_get_bill ? opt.exclude_tax_amount + opt.tax_amount : +opt.amount,
-      invoice_number: is_get_bill ? String(opt.invoice_number) : '暂无'
+      invoice_number: is_get_bill ? String(opt.invoice_number) : null
 
     }
 
@@ -415,7 +417,7 @@ export class PaymentTaxManageComponent implements OnChanges, OnInit {
       exclude_tax_amount: is_get_bill ? +opt.exclude_tax_amount : 0,
       tax_amount: is_get_bill ? +opt.tax_amount : 0,
       amount: is_get_bill ? 0 : +opt.amount,
-      invoice_number: is_get_bill ? String(opt.invoice_number) : '暂无'
+      invoice_number: is_get_bill ? String(opt.invoice_number) : null
     }
     this.settingsConfigService.post('/api/treaty/payment/tax/create', option).subscribe((res: ApiData) => {
       this.submitCostLoading = false;

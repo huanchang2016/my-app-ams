@@ -1,0 +1,109 @@
+<!-- <page-header [action]="action">
+
+    <ng-template #action>
+        <button class="hidden-pc" nz-button (click)="add()" [nzType]="'primary'">新增</button >
+    </ng-template>
+</page-header> -->
+
+<!-- <div class="hidden-pc search-btn-mobile rounded-sm bg-primary text-white text-lg text-center">
+    <i nz-icon nzType="menu-{{ isCollapsed ? 'unfold' : 'fold' }}" nzTheme="outline" (click)="openComponent()"></i>
+</div> -->
+
+<!-- <div class="hidden-mobile">
+    <app-product-search-option [COMPANY]="companyArray" (searchOptionsEmit)="searchOptionsChange($event)" (addContentEmit)="add()" (companyValueChange)="companyValueChange($event)"></app-product-search-option>
+</div> -->
+
+<nz-table #ajaxTable nzShowSizeChanger [nzFrontPagination]="false" [nzData]="listOfData" [nzLoading]="loading"
+    [nzTotal]="total" [(nzPageIndex)]="pageOption.page" [(nzPageSize)]="pageOption.page_size"
+    (nzPageIndexChange)="pageIndexChange($event)" (nzPageSizeChange)="pageSizeChange($event)"
+    class="mt-md hidden-mobile">
+    <thead>
+        <tr>
+            <th nzShowCheckbox [(nzChecked)]="isAllDisplayDataChecked" [nzIndeterminate]="isIndeterminate"
+                (nzCheckedChange)="checkAll($event)"></th>
+            <th>项目</th>
+            <th>类型</th>
+            <th>来源</th>
+            <th>创建人</th>
+            <th>部门</th>
+            <th>单位</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let data of ajaxTable.data; let i = index">
+            <td nzShowCheckbox [(nzChecked)]="mapOfCheckedId[data.id]" (nzCheckedChange)="refreshStatus()"></td>
+            <td>{{ data.name }}</td>
+            <td>{{ data.category?.name }}</td>
+            <td>{{ data.origin?.code.code_name + data.origin?.name }}</td>
+            <td>{{ data.user?.name }}</td>
+            <td>{{ data.department?.name }}</td>
+            <td>{{ data.company?.name }}</td>
+            <td>
+                <a (click)="edit(data)" class="text-nowrap"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
+                <nz-divider nzType="vertical"></nz-divider>
+                <a (click)="view(data)"><i nz-icon nzType="eye" nzTheme="outline"></i></a>
+
+                <nz-divider nzType="vertical"></nz-divider>
+                <a nz-popconfirm class="text-nowrap" nzPopconfirmTitle="请确认项目信息全部填写完整，无误后确认提交！！！"
+                    (nzOnConfirm)="submitProject(data.id)" (nzOnCancel)="cancel()">
+                    提交
+                </a>
+                <nz-divider nzType="vertical"></nz-divider>
+                <a nz-popconfirm class="text-error text-nowrap" nzPopconfirmTitle="是否确认删除当前项目信息？"
+                    (nzOnConfirm)="deletedProject(data.id)" (nzOnCancel)="cancel()">
+                    删除
+                </a>
+            </td>
+        </tr>
+    </tbody>
+</nz-table>
+<div class="hidden-pc mt-md">
+    <div *ngIf="loading && listOfData.length === 0" class="p-md text-center">
+        <nz-spin nzSimple></nz-spin>
+    </div>
+    <div *ngIf="!loading && listOfData.length === 0" class="p-md text-center">
+        无数据
+    </div>
+    <div *ngIf="!loading && listOfData.length !== 0">
+        <ng-container *ngFor="let data of listOfData">
+            <nz-card [nzActions]="[ actionEdit, actionView, actionDelete, actionSubmit ]" class="mt-md">
+                <nz-skeleton [nzActive]="true" [nzLoading]="false">
+                    <nz-card-meta [nzTitle]="data.name"></nz-card-meta>
+                    <div class="pt-md">
+                        <sv-container size="small">
+                            <sv label="类型">{{ data.category?.name }}</sv>
+                            <sv label="来源">{{ data.origin?.code.code_name + data.origin?.name }}</sv>
+                            <sv label="创建人">{{ data.user?.name }}</sv>
+                            <sv label="部门">{{ data.department?.name }}</sv>
+                            <sv label="单位">{{ data.company?.name }}</sv>
+                        </sv-container>
+                    </div>
+                </nz-skeleton>
+                <ng-template #actionEdit>
+                    <a (click)="edit(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
+                </ng-template>
+                <ng-template #actionView>
+                    <a (click)="view(data)"><i nz-icon nzType="eye" nzTheme="outline"></i></a>
+                </ng-template>
+                <ng-template #actionDelete>
+                    <a nz-popconfirm class="text-error" nzPopconfirmTitle="是否确认删除当前项目信息？"
+                        (nzOnConfirm)="deletedProject(data.id)" (nzOnCancel)="cancel()">
+                        删除
+                    </a>
+                </ng-template>
+                <ng-template #actionSubmit>
+                    <a nz-popconfirm nzPopconfirmTitle="请确认项目信息全部填写完整，无误后确认提交！！！" (nzOnConfirm)="submitProject(data.id)"
+                        (nzOnCancel)="cancel()">
+                        提交
+                    </a>
+                </ng-template>
+            </nz-card>
+        </ng-container>
+        <div class="mt-md text-center">
+            <nz-pagination [nzSize]="'small'" nzShowSizeChanger [(nzPageSize)]="pageOption.page_size"
+                [nzPageIndex]="pageOption.page" [nzTotal]="total" (nzPageIndexChange)="pageIndexChange($event)"
+                (nzPageSizeChange)="pageSizeChange($event)"></nz-pagination>
+        </div>
+    </div>
+</div>

@@ -450,9 +450,21 @@ export class StartupService {
           },
           {
             text: '派遣流程',
-            link: '/dispatch',
+            link: '/',
             icon: { type: 'icon', value: 'key' },
-            hide: this.isHideRouter(['permission_list'], permissionGroup)
+            hide: this.isHideRouter(['permission_list'], permissionGroup),
+            children: [
+              {
+                text: '派遣流程',
+                link: '/dispatch',
+                hide: this.isHideRouter(['permission_list'], permissionGroup),
+              },
+              {
+                text: '派遣创建',
+                link: '/dispatch/create',
+                hide: this.isHideRouter(['permission_list'], permissionGroup)
+              }
+            ]
           }
         ]
       }
@@ -916,9 +928,17 @@ export class StartupService {
           },
           {
             text: '派遣流程',
-            link: '/dispatch/dispatch-create',
             icon: { type: 'icon', value: 'key' },
-            // hide: this.isHideRouter(['permission_list'], permissionGroup)
+            children: [
+              {
+                text: '派遣流程',
+                link: '/dispatch',
+              },
+              {
+                text: '派遣创建',
+                link: '/dispatch/create',
+              }
+            ]
           }
         ]
       }

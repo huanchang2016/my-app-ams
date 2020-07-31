@@ -79,15 +79,15 @@
 
   <div class="steps-content" *ngIf="isExecuteUser && !progressInfo.complete">
     <div class="check-box mt-md">
-      <nz-radio-group *ngIf="contractInfo.pay_status?.name==='待执行'" [(ngModel)]="checkOption.status"
-        [nzButtonStyle]="'solid'"
+      <nz-radio-group *ngIf="contractInfo.pay_status?.name==='待执行'||payInfo?.pay_status.name==='待执行'"
+        [(ngModel)]="checkOption.status" [nzButtonStyle]="'solid'"
         [nzDisabled]="progressInfo.workflow_status.name === '无法执行' || progressInfo.workflow_status.name === '已完成'">
         <label nz-radio-button [nzValue]="'A'">已付款</label>
         <label nz-radio-button [nzValue]="'B'">已执行</label>
         <label nz-radio-button [nzValue]="'C'">无法执行</label>
       </nz-radio-group>
-      <nz-radio-group *ngIf="contractInfo.pay_status?.name==='已付款'" [(ngModel)]="checkOption.status"
-        [nzButtonStyle]="'solid'"
+      <nz-radio-group *ngIf="contractInfo.pay_status?.name==='已付款'||payInfo?.pay_status.name==='已付款'"
+        [(ngModel)]="checkOption.status" [nzButtonStyle]="'solid'"
         [nzDisabled]="progressInfo.workflow_status.name === '无法执行' || progressInfo.workflow_status.name === '已完成'">
         <label nz-radio-button [nzValue]="'B'">已执行</label>
       </nz-radio-group>

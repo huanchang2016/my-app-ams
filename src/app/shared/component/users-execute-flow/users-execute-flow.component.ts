@@ -94,7 +94,7 @@ export class UsersExecuteFlowComponent implements OnChanges {
     }
 
     // 提交
-    // this.executeChange.emit(option);
+    this.executeChange.emit(option);
   }
 
   cancel() { }

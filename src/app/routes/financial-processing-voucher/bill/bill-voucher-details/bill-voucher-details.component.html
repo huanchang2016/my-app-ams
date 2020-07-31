@@ -18,9 +18,10 @@
             <button nz-button nzType="primary" (click)="generateCertificate()" [nzLoading]="loading">生成凭证</button>
         </ng-container>
     </ng-template>
-    
+
     <button nz-button (click)="download()" [disabled]="list.length === 0" nzType="primary">下载excel</button>
-    <st [data]="listOfData" [ps]="999" [columns]="columns" class="mt-sm" (change)="change($event)" [loading]="loadingData"></st>
+    <st [data]="listOfData" [ps]="999" [columns]="columns" class="mt-sm" (change)="change($event)"
+        [loading]="loadingData"></st>
 </nz-card>
 
 <div class="info_box mt-md" *ngIf="billInfo">
@@ -119,32 +120,33 @@
         </tbody>
     </nz-table>
 </div>
-<div class="info_box bg-white border-radius-xs my-md">
+
+<nz-card nzTitle="发票管理" class="info_box mt-md" [nzBodyStyle]="{ padding: '0' }">
     <nz-table #invoiceTable [nzData]="invoiceOfData" [nzShowPagination]="false" [nzFooter]="invoiceTotalTpl">
         <thead>
-          <tr>
-            <th nzWidth="80px">序号</th>
-            <th>发票号码</th>
-            <th>发票金额</th>
-            <th>发票税额</th>
-          </tr>
+            <tr>
+                <th nzWidth="80px">序号</th>
+                <th>发票号码</th>
+                <th>发票金额</th>
+                <th>发票税额</th>
+            </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let data of invoiceTable.data; let i = index">
-            <td>{{ i + 1}}</td>
-            <td>{{ data.invoice_number }}</td>
-            <td>{{ data.invoice_amount | _currency}}</td>
-            <td>{{ data.tax_amount | _currency}}</td>
-          </tr>
+            <tr *ngFor="let data of invoiceTable.data; let i = index">
+                <td>{{ i + 1}}</td>
+                <td>{{ data.invoice_number }}</td>
+                <td>{{ data.invoice_amount | _currency}}</td>
+                <td>{{ data.tax_amount | _currency}}</td>
+            </tr>
         </tbody>
-      </nz-table>
-      <ng-template #invoiceTotalTpl>
+    </nz-table>
+    <ng-template #invoiceTotalTpl>
         <div class="text-right" *ngIf="billInfo">
             <span><span class="font-weight-bold">总金额： </span>{{ billInfo.amount | _currency }}</span>
-            <span class="mx-md"><span class="font-weight-bold">开票总金额： </span>{{ billInfo.invoice_amount | _currency }}</span>
+            <span class="mx-md"><span class="font-weight-bold">开票总金额：
+                </span>{{ billInfo.invoice_amount | _currency }}</span>
             <span><span class="font-weight-bold">总税额： </span>{{ billInfo.tax_amount | _currency }}</span>
         </div>
-      </ng-template>
+    </ng-template>
 
-      
-</div>
+</nz-card>

@@ -22,7 +22,10 @@ export class FinancialProcessingVoucherContractVoucherDetailsComponent implement
   loading:boolean = false; // 生成凭证
 
   listOfData:any[] = [];
-  list:any[] = []; // download list of data;
+  listOfDataA:any[] = [];
+  listOfDataB:any[] = [];
+  listA:any[] = []; // download list of data;
+  listB:any[] = []; // download list of data;
 
   billCategoryArray:any[] = [];
 
@@ -63,13 +66,13 @@ export class FinancialProcessingVoucherContractVoucherDetailsComponent implement
   ngOnInit() { }
 
 
-  download() {
-    if(this.list.length < 1) {
+  downloadA() {
+    if(this.listA.length < 1) {
       this.msg.error('未选择任何数据');
       return;
     }
     const data = [this.columns.filter( v => v.index !== 'id').map(i => i.title)];
-    this.list.forEach(i =>
+    this.listA.forEach(i =>
       data.push(this.columns.filter( v => v.index !== 'id').map(c => {
         if(c.index !== 'id') {
           if(c.title === '制单人') {
@@ -81,7 +84,30 @@ export class FinancialProcessingVoucherContractVoucherDetailsComponent implement
         
       })),
     );
-
+    this.exportExcel(data);
+  }
+  downloadB() {
+    if(this.listB.length < 1) {
+      this.msg.error('未选择任何数据');
+      return;
+    }
+    const data = [this.columns.filter( v => v.index !== 'id').map(i => i.title)];
+    this.listB.forEach(i =>
+      data.push(this.columns.filter( v => v.index !== 'id').map(c => {
+        if(c.index !== 'id') {
+          if(c.title === '制单人') {
+            return i.user.name;
+          }else {
+            return i[c.index as string];
+          }
+        }
+        
+      })),
+    );
+    this.exportExcel(data);
+    
+  }
+  exportExcel(data:any[]):void {
     this.xlsx.export({
       sheets: [
         {
@@ -93,10 +119,17 @@ export class FinancialProcessingVoucherContractVoucherDetailsComponent implement
     });
   }
 
-  change(e: STChange) {
+  changeA(e: STChange) {
     switch (e.type) {
       case 'checkbox':
-        this.list = e.checkbox;
+        this.listA = e.checkbox;
+        break;
+    }
+  }
+  changeB(e: STChange) {
+    switch (e.type) {
+      case 'checkbox':
+        this.listB = e.checkbox;
         break;
     }
   }
@@ -133,6 +166,9 @@ export class FinancialProcessingVoucherContractVoucherDetailsComponent implement
       console.log(res.data, '凭证详情信息')
       if(res.code === 200) {
         this.listOfData = res.data.certificate_detail;
+        // 根据version 字段分
+        this.listOfDataA = this.listOfData.filter(v => v.version === 'A');
+        this.listOfDataB = this.listOfData.filter(v => v.version === 'B');
       }
     })
     

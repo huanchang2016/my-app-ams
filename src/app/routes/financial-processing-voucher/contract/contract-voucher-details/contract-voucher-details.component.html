@@ -19,9 +19,11 @@
         </ng-container>
     </ng-template>
 
-    <button nz-button (click)="download()" [disabled]="list.length === 0" nzType="primary">下载excel</button>
-    <st [data]="listOfData" [ps]="999" [columns]="columns" class="mt-sm" (change)="change($event)" [loading]="loading">
-    </st>
+    <button nz-button (click)="downloadA()" [disabled]="listA.length === 0" nzType="primary">下载excel</button>
+    <st [data]="listOfDataA" [ps]="999" [columns]="columns" class="mt-sm" (change)="changeA($event)" [loading]="loading"></st>
+
+    <button nz-button (click)="downloadB()" [disabled]="listB.length === 0" nzType="primary" class="mt-lg">下载excel</button>
+    <st [data]="listOfDataB" [ps]="999" [columns]="columns" class="mt-sm" (change)="changeB($event)" [loading]="loading"></st>
 </nz-card>
 
 <div class="info_box mt-md" *ngIf="info">
@@ -109,17 +111,16 @@
                 </td>
             </tr>
             <tr>
-                <td colspan="6">
-                    <app-upload-file-attachment-show-c
-                        [attachmentUrl]="'/api/attachment/contract_pay/' + info.id">
+                <!-- <td colspan="6">
+                    <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/contract_pay/' + info.id">
                     </app-upload-file-attachment-show-c>
-                </td>
+                </td> -->
             </tr>
         </tbody>
     </nz-table>
 </div>
 
-<div class="mt-md bg-white">
+<nz-card nzTitle="合约支付发票台账" class="mt-md" [nzBodyStyle]="{ padding: '0' }">
     <nz-table #taxSelectTable [nzData]="paymentTaxList" [nzShowPagination]="false">
         <thead>
             <tr>
@@ -150,4 +151,4 @@
         <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/contract_pay/' + this.id">
         </app-upload-file-attachment-show-c>
     </div>
-</div>
+</nz-card>

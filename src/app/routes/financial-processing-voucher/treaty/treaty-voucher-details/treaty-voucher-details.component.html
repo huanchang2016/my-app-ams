@@ -20,7 +20,8 @@
     </ng-template>
 
     <button nz-button (click)="download()" [disabled]="list.length === 0" nzType="primary">下载excel</button>
-    <st [data]="listOfData" [ps]="999" [columns]="columns" class="mt-sm" (change)="change($event)" [loading]="loadingData">
+    <st [data]="listOfData" [ps]="999" [columns]="columns" class="mt-sm" (change)="change($event)"
+        [loading]="loadingData">
     </st>
 </nz-card>
 
@@ -128,50 +129,50 @@
     </nz-table>
 </div>
 
-<div class="mt-md bg-white">
+<nz-card nzTitle="非合约支付发票台账" class="mt-md" [nzBodyStyle]="{ padding: '0' }">
     <nz-table #costSelectTable [nzData]="paymentTaxList" [nzShowPagination]="false">
         <thead>
-          <tr>
-            <th>支付单序号</th>
-            <th>票号</th>
-            <th>费用类别</th>
-            <th nzWidth="300px">出票单位</th>
-            <th>发票类型</th>
-            <th>发票金额（不含税）</th>
-            <th>税额</th>
-            <th>价税合计</th>
-          </tr>
+            <tr>
+                <th>支付单序号</th>
+                <th>票号</th>
+                <th>费用类别</th>
+                <th nzWidth="300px">出票单位</th>
+                <th>发票类型</th>
+                <th>发票金额（不含税）</th>
+                <th>税额</th>
+                <th>价税合计</th>
+            </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let data of costSelectTable.data; let i = index">
-            <td>{{ i + 1 }}</td>
-            <td>{{ data.invoice_number }}</td>
-            <td>{{ data.contract_payment.treaty.service_category.name }}</td>
-            <td>{{ data.company.name }}</td>
-            <td>
-              <ng-container *ngIf="data.bill_category">
-                {{ data.bill_category.name }}
-              </ng-container>
-              <ng-container *ngIf="!data.bill_category">
-                暂未取得发票
-              </ng-container>
-            </td>
-            <td>{{ data.exclude_tax_amount | _currency }}</td>
-            <td>{{ data.tax_amount | _currency }}</td>
-            <td>
-              <ng-container *ngIf="data.bill_category">
-                {{ data.exclude_tax_amount + data.tax_amount | _currency }}
-              </ng-container>
-              <ng-container *ngIf="!data.bill_category">
-                {{ data.amount | _currency }}
-              </ng-container>
-            </td>
-          </tr>
+            <tr *ngFor="let data of costSelectTable.data; let i = index">
+                <td>{{ i + 1 }}</td>
+                <td>{{ data.invoice_number }}</td>
+                <td>{{ data.contract_payment.treaty.service_category.name }}</td>
+                <td>{{ data.company.name }}</td>
+                <td>
+                    <ng-container *ngIf="data.bill_category">
+                        {{ data.bill_category.name }}
+                    </ng-container>
+                    <ng-container *ngIf="!data.bill_category">
+                        暂未取得发票
+                    </ng-container>
+                </td>
+                <td>{{ data.exclude_tax_amount | _currency }}</td>
+                <td>{{ data.tax_amount | _currency }}</td>
+                <td>
+                    <ng-container *ngIf="data.bill_category">
+                        {{ data.exclude_tax_amount + data.tax_amount | _currency }}
+                    </ng-container>
+                    <ng-container *ngIf="!data.bill_category">
+                        {{ data.amount | _currency }}
+                    </ng-container>
+                </td>
+            </tr>
         </tbody>
-      </nz-table>
-    
-      <div class="mt-sm pl-sm">
+    </nz-table>
+
+    <div class="mt-sm pl-sm">
         <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/treaty_pay/' + this.id">
         </app-upload-file-attachment-show-c>
-      </div>
-</div>
+    </div>
+</nz-card>

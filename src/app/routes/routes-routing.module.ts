@@ -39,6 +39,8 @@ const routes: Routes = [
       { path: 'bill', loadChildren: () => import('./bill-reminder/bill-reminder.module').then(m => m.BillReminderModule) },
       // 合同管理
       { path: 'contract', loadChildren: () => import('./contract/contract.module').then(m => m.ContractModule) },
+      // 财务处理凭证
+      { path: 'financial', loadChildren: () => import('./financial-processing-voucher/financial-processing-voucher.module').then(m => m.FinancialProcessingVoucherModule) },
       // 项目流程管理
       { path: 'workflow', loadChildren: () => import('./workflow/workflow.module').then(m => m.WorkflowModule) },
       // 基础配置

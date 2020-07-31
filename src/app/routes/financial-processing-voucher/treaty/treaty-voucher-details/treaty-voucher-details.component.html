@@ -1,0 +1,120 @@
+<page-header [title]="'项目非合同付款凭证'" [breadcrumb]="breadcrumb">
+
+    <ng-template #breadcrumb>
+        <nz-breadcrumb>
+            <nz-breadcrumb-item><a [routerLink]="['/dashboard']">首页</a></nz-breadcrumb-item>
+            <nz-breadcrumb-item><a [routerLink]="['/financial/treaty']">协议支付</a></nz-breadcrumb-item>
+            <nz-breadcrumb-item>凭证详情</nz-breadcrumb-item>
+        </nz-breadcrumb>
+    </ng-template>
+
+    <app-project-info-show-tpl [projectInfo]="projectInfo"></app-project-info-show-tpl>
+
+</page-header>
+
+<nz-card nzTitle="项目非合同付款凭证" [nzExtra]="generateBtnTpl" *ngIf="info">
+    <ng-template #generateBtnTpl>
+        <ng-container *ngIf="info.certificate && !info.certificate.is_deal">
+            <button nz-button nzType="primary" (click)="generateCertificate()" [nzLoading]="loading">生成凭证</button>
+        </ng-container>
+    </ng-template>
+
+    <button nz-button (click)="download()" [disabled]="list.length === 0" nzType="primary">下载excel</button>
+    <st [data]="listOfData" [ps]="999" [columns]="columns" class="mt-sm" (change)="change($event)" [loading]="loadingData">
+    </st>
+</nz-card>
+
+<div class="info_box mt-md" *ngIf="info && projectInfo">
+    <nz-table #borderedTable nzBordered nzData="[1]" [nzFrontPagination]="false">
+        <tbody>
+            <tr>
+                <td colspan="2" class="text-md text-center font-weight-bold">项目名称</td>
+                <td colspan="4" class="text-md text-center">{{ projectInfo.name }}</td>
+            </tr>
+            <tr>
+                <td colspan="2" class="text-md text-center font-weight-bold">项目类型</td>
+                <td colspan="4" class="text-md text-center">{{ projectInfo.category?.name }}</td>
+            </tr>
+            <tr>
+                <td class="font-weight-bold">收款单位</td>
+                <td colspan="2">{{ info.pay_company }}</td>
+                <td class="font-weight-bold">开户银行</td>
+                <td colspan="2">{{ info.bank_name }}</td>
+            </tr>
+            <tr>
+                <td colspan="2" class="font-weight-bold">银行账号</td>
+                <td colspan="4">{{ info.bank_account }}</td>
+            </tr>
+            <tr>
+                <td class="font-weight-bold">是否抵扣借款</td>
+                <td colspan="2">
+                    <span *ngIf="info">
+                        {{ info.if_write_off ? '是' : '否' }}
+                    </span>
+                </td>
+                <td class="font-weight-bold">抵扣金额</td>
+                <td colspan="2">
+                    <span
+                        *ngIf="info.if_write_off;else notWriteOff">{{ info.write_off_amount | currency: 'CNY' }}</span>
+                    <ng-template #notWriteOff>
+                        <span class="font-weight-bold">无冲抵</span>
+                    </ng-template>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="6" class="text-right font-weight-bold">单位: 元(人民币)</td>
+            </tr>
+            <tr class="font-weight-bold">
+                <td rowspan="2">序号</td>
+                <td rowspan="2">费用类型</td>
+                <td rowspan="2">本期支付金额</td>
+                <td colspan="2" class="text-center">成本预算</td>
+                <td rowspan="2" class="text-center">备注</td>
+            </tr>
+
+            <tr class="font-weight-bold">
+                <td>费用预算累计金额</td>
+                <td>成本类型预算总金额</td>
+            </tr>
+
+            <ng-container *ngFor="let data of treatyPayment;let i = index">
+                <tr>
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ data.cost.cost_category.name }}</td>
+                    <td>{{ data.amount | _currency }}</td>
+                    <td>{{ data.cost.amount | _currency }}</td>
+                    <td>{{ data.cost.pay_amount | _currency }}</td>
+                    <td>
+                        <span [innerHTML]="data.remark | showTextareaContent"></span>
+                    </td>
+                </tr>
+            </ng-container>
+            <tr>
+                <td colspan="2" class="font-weight-bold text-center">合计</td>
+                <td>
+                    <ng-container *ngIf="info">
+                        <span>{{ info.before_deduct_amount | _currency }}</span>
+                        <span class="ml-sm">{{ info.before_deduct_amount | n2c }}</span>
+                    </ng-container>
+                </td>
+                <td colspan="3"></td>
+            </tr>
+            <tr>
+                <td colspan="2" class="font-weight-bold text-center">本期支付金额(大写)</td>
+                <td colspan="4">
+                    <ng-container *ngIf="info">
+                        <span>{{ info.amount | _currency }}</span>
+                        <span class="ml-sm">{{ info.amount | n2c }}</span>
+                    </ng-container>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="6">
+                    <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/treaty_pay/' + id">
+                    </app-upload-file-attachment-show-c>
+                </td>
+            </tr>
+
+        </tbody>
+    </nz-table>
+</div>

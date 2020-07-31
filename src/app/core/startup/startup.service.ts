@@ -318,6 +318,29 @@ export class StartupService {
             ]
           },
           {
+            text: '财务处理凭证',
+            link: '/financial',
+            icon: { type: 'icon', value: 'heat-map' },
+            // hide: this.isHideRouter(['cost_list', 'tax_list', 'supplier_service_list'], permissionGroup),
+            children: [
+              {
+                text: '合约支付',
+                link: '/financial/contract',
+                // hide: this.isHideRouter(['cost_list'], permissionGroup)
+              },
+              {
+                text: '协议支付',
+                link: '/financial/treaty',
+                // hide: this.isHideRouter(['cost_list'], permissionGroup)
+              },
+              {
+                text: '已开发票',
+                link: '/financial/bill',
+                // hide: this.isHideRouter(['cost_list'], permissionGroup)
+              }
+            ]
+          },
+          {
             text: '项目配置管理',
             link: '/pro-settings',
             icon: { type: 'icon', value: 'control' },

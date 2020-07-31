@@ -1,0 +1,31 @@
+<form nz-form [formGroup]="validateForm" class="ant-advanced-search-form search-option-form">
+    <div nz-row [nzGutter]="24">
+        <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="8">
+            <nz-form-item>
+                <nz-form-label nzFor="project_id">项目名称</nz-form-label>
+                <nz-form-control>
+                    <nz-select style="width: 100%;" nzShowSearch nzAllowClear nzPlaceHolder="请选择项目"
+                        formControlName="project_id" id="project_id" (ngModelChange)="projectChange()">
+                        <ng-container *ngFor="let item of projectList">
+                            <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
+                        </ng-container>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <!-- <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="8">
+            <nz-form-item>
+                <nz-form-label nzFor="number">项目编号</nz-form-label>
+                <nz-form-control>
+                    <input nz-input placeholder="输入项目编号查询" formControlName="number" id="number" />
+                </nz-form-control>
+            </nz-form-item>
+        </div> -->
+
+        <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="8">
+            <button nz-button [nzType]="'primary'" (click)="submit()">查询</button>
+            <button nz-button (click)="resetForm($event)" class="ml-sm">清空条件</button>
+        </div>
+    </div>
+
+</form>

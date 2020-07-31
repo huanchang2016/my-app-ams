@@ -11,9 +11,16 @@ import { DispatchInfoComponent } from './component/dispatch-info/dispatch-info.c
 // import { ProductSearchOptionComponent } from './component/search-option/search-option.component';
 // import { ProductSearchOptionComponent } from '../project/component/search-option/search-option.component';
 
+const COMPONENTS = [
+  DispatchCreateComponent,
+  DispathIndexComponent,
+  DraftListComponent,
+  DispatchSearchComponent,
+  DispatchInfoComponent,];
+
 
 @NgModule({
-  declarations: [DispatchCreateComponent, DispathIndexComponent, DraftListComponent, DispatchSearchComponent, DispatchInfoComponent],
+  declarations: [...COMPONENTS],
   imports: [
     // ProductSearchOptionComponent,
     SharedModule,

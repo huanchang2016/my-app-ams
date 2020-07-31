@@ -244,7 +244,7 @@
 
   <!-- <div class="mt-md" *ngIf="listOfData.length !== 0 && treatypayInfo"> -->
   <div class="mt-md" *ngIf="listOfData.length !== 0">
-    <app-payment-tax-manage [is_execute_user]="false" [payType]="'treaty'" [payInfo]="treatypayInfo"
+    <app-payment-tax-manage [is_execute_user]="true" [payType]="'treaty'" [payInfo]="treatypayInfo"
       [paymentArray]="listOfData" [billCategoryArray]="billCategoryArray" (outer)="readOuter()">
     </app-payment-tax-manage>
   </div>

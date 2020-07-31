@@ -20,11 +20,6 @@ import { filter, map } from 'rxjs/operators';
   `]
 })
 export class PaymentTaxManageComponent implements OnChanges, OnInit {
-  @Output() private outer = new EventEmitter();
-
-  @Output() private submitFlag = new EventEmitter();
-
-  @Output() private refresh = new EventEmitter();
 
   constructor(
     public msg: NzMessageService,
@@ -34,11 +29,16 @@ export class PaymentTaxManageComponent implements OnChanges, OnInit {
   ) {
     this.getCategoryList();
   }
+  @Output() private outer = new EventEmitter();
+
+  @Output() private submitFlag = new EventEmitter();
+
+  @Output() private refresh = new EventEmitter();
   @Input() payInfo?: any;
   @Input() paymentArray?: any[];
   @Input() billCategoryArray: any[];
 
-  @Input() is_execute_user = false;
+  @Input() is_execute_user = true;
   @Input() payType = 'treaty';
   @Input() getTreatyPayDetail: any;
   @Input() treaty_pay_id: any;
@@ -75,6 +75,8 @@ export class PaymentTaxManageComponent implements OnChanges, OnInit {
   totalAmountError = false;
 
   isSubmit: boolean;
+
+  attachmentUrl: string = '';
 
   ngOnChanges() {
     console.log('payInfo', this.payInfo);
@@ -129,8 +131,6 @@ export class PaymentTaxManageComponent implements OnChanges, OnInit {
       }
     })
   }
-
-  attachmentUrl:string = '';
   getAttachment() {
     // `/api/attachment/treaty_pay/${this.payInfo.id}`
     if (this.payType === 'treaty') {

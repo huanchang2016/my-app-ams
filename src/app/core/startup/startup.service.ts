@@ -473,13 +473,13 @@ export class StartupService {
           },
           {
             text: '派遣流程',
-            link: '/',
+            link: '/dispatch',
             icon: { type: 'icon', value: 'key' },
             hide: this.isHideRouter(['permission_list'], permissionGroup),
             children: [
               {
-                text: '派遣流程',
-                link: '/dispatch',
+                text: '派遣管理',
+                link: '/dispatch/index',
                 hide: this.isHideRouter(['permission_list'], permissionGroup),
               },
               {

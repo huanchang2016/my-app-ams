@@ -6,8 +6,10 @@ import { DispathIndexComponent } from './dispath-index/dispath-index.component'
 
 const routes: Routes = [
   // { path: '', component: DispathIndexComponent },
-  { path: '', component: DispatchCreateComponent },
-  // { path: '/create', component: DispatchCreateComponent },
+  // { path: '', redirectTo: 'dispatch/index', component: DispathIndexComponent },
+  // { path: '', component: DispathIndexComponent },
+  { path: 'dispatch/create', component: DispatchCreateComponent },
+  { path: 'dispatch/index', component: DispathIndexComponent },
 ];
 
 @NgModule({

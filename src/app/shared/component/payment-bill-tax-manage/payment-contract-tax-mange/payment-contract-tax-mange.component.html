@@ -1,7 +1,7 @@
 <!-- 发票台账 -->
 <nz-card nzTitle="发票台账" [nzBordered]="false" [nzExtra]="costTpl" class="mt-md" *ngIf="listOfData.length>0">
     <ng-template #costTpl>
-        <button nz-button [nzType]="'primary'"
+        <button nz-button [nzType]="'primary'" *ngIf="is_execute_user"
             (click)="addBillTicket(billTitle, billContent, billFooter, $event)">新增发票台账</button>
     </ng-template>
 
@@ -14,7 +14,7 @@
                     <th>成本类型</th>
                     <th>发票类型</th>
                     <th nzWidth="250px">金额</th>
-                    <th>操作</th>
+                    <th *ngIf="is_execute_user">操作</th>
                 </tr>
             </thead>
             <tbody>
@@ -30,7 +30,7 @@
                             <sv label="总金额"><span>{{ data.amount | currency: 'CNY' }}</span></sv>
                         </sv-container>
                     </td>
-                    <td>
+                    <td *ngIf="is_execute_user">
                         <a (click)="editBillTicket(billTitle, billContent, billFooter, data, i)"><i nz-icon
                                 nzType="edit" nzTheme="outline"></i></a>
                         <nz-divider nzType="vertical"></nz-divider>
@@ -74,11 +74,11 @@
                 </nz-skeleton>
 
                 <ng-template #actionEdit>
-                    <a (click)="editBillTicket(billTitle, billContent, billFooter, data, i)"><i nz-icon nzType="edit"
+                    <a *ngIf="is_execute_user" (click)="editBillTicket(billTitle, billContent, billFooter, data, i)"><i nz-icon nzType="edit"
                             nzTheme="outline"></i></a>
                 </ng-template>
                 <ng-template #actionDelete>
-                    <a nz-popconfirm nzPopconfirmTitle="确认删除当前成本支付?" (nzOnConfirm)="deleteTax(data.id)"
+                    <a *ngIf="is_execute_user" nz-popconfirm nzPopconfirmTitle="确认删除当前发票台账?" (nzOnConfirm)="deleteTax(data.id)"
                         (nzOnCancel)="cancel()">删除</a>
                 </ng-template>
             </nz-card>

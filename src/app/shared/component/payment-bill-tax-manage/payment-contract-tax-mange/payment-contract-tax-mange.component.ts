@@ -22,6 +22,7 @@ export class PaymentContractTaxMangeComponent implements OnInit {
   @Input() listOfData?: any[];
 
   @Input() contract_pay_id?: number;
+  @Input() is_execute_user?: boolean = true;
 
   @Output() private outer = new EventEmitter();
 

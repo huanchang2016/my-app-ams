@@ -80,8 +80,9 @@ export class PaymentTaxManageComponent implements OnChanges, OnInit {
     console.log('payInfo', this.payInfo);
     console.log('paymentArray', this.paymentArray);
     console.log('billCategoryArray', this.billCategoryArray);
+    console.log('is_execute_useris_execute_useris_execute_useris_execute_useris_execute_user', this.is_execute_user);
 
-    if (this.is_execute_user && this.payInfo) {
+    if (this.payInfo) { // this.is_execute_user && 
       // 是执行者访问， 需要展示  附件绑定
       this.getAttachment();
     }
@@ -128,18 +129,19 @@ export class PaymentTaxManageComponent implements OnChanges, OnInit {
       }
     })
   }
+
+  attachmentUrl:string = '';
   getAttachment() {
     // `/api/attachment/treaty_pay/${this.payInfo.id}`
-    let attachmentUrl = '';
     if (this.payType === 'treaty') {
-      attachmentUrl = '/api/attachment/treaty_pay/' + this.payInfo.id;
+      this.attachmentUrl = '/api/attachment/treaty_pay/' + this.payInfo.id;
     }
 
     if (this.payType === 'contract') {
-      attachmentUrl = '/api/attachment/contract_pay/' + this.payInfo.id;
+      this.attachmentUrl = '/api/attachment/contract_pay/' + this.payInfo.id;
     }
 
-    this.settingsConfigService.get(attachmentUrl).subscribe((res: ApiData) => {
+    this.settingsConfigService.get(this.attachmentUrl).subscribe((res: ApiData) => {
       console.log(' 基础附件：', res, this.payType);
       if (res.code === 200) {
         this.attachment = res.data.attachment;

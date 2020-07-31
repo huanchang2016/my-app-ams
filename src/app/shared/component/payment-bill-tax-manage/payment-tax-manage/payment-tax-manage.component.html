@@ -4,7 +4,7 @@
     <span>发票台账</span>
   </ng-template>
   <ng-template #paymentTaxTpl>
-    <button nz-button [nzType]="'primary'"
+    <button nz-button [nzType]="'primary'" *ngIf="is_execute_user"
       (click)="addPaymentCost(tplTitle, tplContent, tplFooter, $event)">新增台账</button>
   </ng-template>
   <nz-table #costSelectTable [nzData]="listOfData" [nzFrontPagination]="false">
@@ -18,7 +18,7 @@
         <th>发票金额（不含税）</th>
         <th>税额</th>
         <th>价税合计</th>
-        <th>操作</th>
+        <th *ngIf="is_execute_user">操作</th>
       </tr>
     </thead>
     <tbody>
@@ -60,7 +60,7 @@
           </ng-container>
         </td>
 
-        <td>
+        <td *ngIf="is_execute_user">
           <a (click)="edit(tplTitle, tplContent, tplFooter, data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
           <nz-divider nzType="vertical"></nz-divider>
           <a nz-popconfirm nzPopconfirmTitle="确认删除当前非合同支付详情对应台账?" (nzOnConfirm)="disabledPayment(data.id)"
@@ -74,11 +74,17 @@
     <span class="font-weight-bold mx-md">开票总金额： {{ payInfo.tax_use_amount | _currency }}</span>
   </div>
 
+  <!-- <ng-container *ngIf="is_execute_user"> -->
   <ng-container *ngIf="is_execute_user">
     <app-upload-file-attachment-tpl [Attachment]="attachment" [AttachmentCategory]="attachmentCategory"
       [isAttachmentChange]="isAttachmentChange" (attachmentChange)="attachmentChange($event)">
     </app-upload-file-attachment-tpl>
   </ng-container>
+  <ng-container *ngIf="!is_execute_user">
+    <app-upload-file-attachment-show-c [attachmentUrl]="attachmentUrl"></app-upload-file-attachment-show-c>
+  </ng-container>
+    
+  <!-- </ng-container> -->
 </nz-card>
 <!-- 成本支付新增 modal -->
 

@@ -76,7 +76,9 @@ export class PaymentTaxManageComponent implements OnChanges, OnInit {
 
   isSubmit: boolean;
 
-  attachmentUrl: string = '';
+  attachmentUrl = '';
+
+  amountTaxUse: any = null;
 
   ngOnChanges() {
     console.log('payInfo', this.payInfo);
@@ -181,6 +183,7 @@ export class PaymentTaxManageComponent implements OnChanges, OnInit {
 
     if (this.payInfo) {
       this.getDataList();
+      console.log('payInfo', this.payInfo);
     }
   }
 
@@ -210,6 +213,9 @@ export class PaymentTaxManageComponent implements OnChanges, OnInit {
             if ((this.payInfo.amount === this.payInfo.tax_use_amount) && item.bill_category) {
               this.isSubmit = false;
               this.submitFlag.emit(this.isSubmit);
+            } else if ((this.payInfo.amount === (this.payInfo.tax_use_amount - this.payInfo.write_off_amount)) && item.bill_category) {
+              this.isSubmit = false;
+              this.submitFlag.emit(this.isSubmit);
             } else {
               this.isSubmit = true;
               this.submitFlag.emit(this.isSubmit);
@@ -236,6 +242,9 @@ export class PaymentTaxManageComponent implements OnChanges, OnInit {
 
   addPaymentCost(tplTitle: TemplateRef<{}>, tplContent: TemplateRef<{}>, tplFooter: TemplateRef<{}>, e: MouseEvent): void {
     e.preventDefault();
+    this.validateForm.patchValue({
+      is_get_bill: true
+    })
     this.tplModal = this.modalService.create({
       nzTitle: tplTitle,
       nzContent: tplContent,
@@ -341,6 +350,7 @@ export class PaymentTaxManageComponent implements OnChanges, OnInit {
       return;
     }
     if (this.validateForm.get('is_get_bill').value) {
+      this.amountTaxUse = this.currentPayment.amount - this.currentPayment.tax_use_amount;
       const _exclude_tax_amount: number = +this.validateForm.get('exclude_tax_amount').value;
       const _tax_amount: number = +this.validateForm.get('tax_amount').value;
 
@@ -412,6 +422,8 @@ export class PaymentTaxManageComponent implements OnChanges, OnInit {
     })
   }
   createPayment(opt: any) {
+    console.log('opt', opt);
+    console.log('listOfData', this.listOfData);
     const is_get_bill: boolean = opt.is_get_bill;
     const option = {
       treaty_payment_id: opt.treaty_payment_id,

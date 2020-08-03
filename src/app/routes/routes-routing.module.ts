@@ -16,6 +16,7 @@ import { QrAuthComponent } from './passport/qr-auth/qr-auth.component';
 // single pages
 import { CallbackComponent } from './callback/callback.component';
 import { UserLockComponent } from './passport/lock/lock.component';
+import { BillListComponent } from './financial-processing-voucher/bill/bill-list/bill-list.component'
 // dispatch
 
 const routes: Routes = [
@@ -37,6 +38,7 @@ const routes: Routes = [
       { path: 'approve', loadChildren: () => import('./payment-approve/payment-approve.module').then(m => m.PaymentApproveModule) },
       // 账务管理 （发票、账务处理）
       { path: 'bill', loadChildren: () => import('./bill-reminder/bill-reminder.module').then(m => m.BillReminderModule) },
+      { path: 'bill/list', component: BillListComponent },
       // 合同管理
       { path: 'contract', loadChildren: () => import('./contract/contract.module').then(m => m.ContractModule) },
       // 财务处理凭证

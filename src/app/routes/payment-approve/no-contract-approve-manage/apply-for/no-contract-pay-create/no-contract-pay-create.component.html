@@ -29,7 +29,7 @@
       [nzLoading]="saveLoading">保存</button> -->
 
     <ng-container
-      *ngIf="treaty_pay_id  &&  treatypayInfo?.amount===treatypayInfo?.tax_use_amount && treatypayInfo?.amount!==0">
+      *ngIf="treaty_pay_id  &&  treatypayInfo?.amount === (treatypayInfo?.write_off_amount ? treatypayInfo?.tax_use_amount - treatypayInfo?.write_off_amount : treatypayInfo?.tax_use_amount) && treatypayInfo?.amount!==0">
       <a *ngIf="!treatypayInfo || treatypayInfo.draft" nz-popconfirm nz-button [nzType]="'primary'" class="mx-sm"
         nzPopconfirmTitle="请确认非合约支付信息填写完整，无误后继续提交！！！" (nzOnConfirm)="submitContractPay()" (nzOnCancel)="cancel()">
         提交

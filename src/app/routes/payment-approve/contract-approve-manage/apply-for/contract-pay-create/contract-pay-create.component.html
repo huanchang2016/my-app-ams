@@ -28,7 +28,7 @@
         [nzLoading]="submitLoading" class="ml-xs">保存</button>
 
       <ng-container *ngIf="!contractInfo || contractInfo.draft">
-        <button *ngIf="contract_pay_id && contractInfo.amount===contractInfo.tax_use_amount" nz-popconfirm nz-button
+        <button *ngIf="contract_pay_id && contractInfo?.amount===contractInfo?.tax_use_amount" nz-popconfirm nz-button
           [nzType]="'primary'" class="ml-xs" nzPopconfirmTitle="请确认合约支付信息填写完整，无误后继续提交！！！"
           (nzOnConfirm)="submitContractPay()" (nzOnCancel)="cancel()">
           提交

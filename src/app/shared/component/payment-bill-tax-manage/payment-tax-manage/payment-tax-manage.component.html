@@ -25,7 +25,7 @@
       <tr *ngFor="let data of costSelectTable.data; let i = index">
         <td>{{ i + 1 }}</td>
         <td>{{ data.invoice_number }}</td>
-        <td>{{ data.contract_payment.treaty.service_category.name }}</td>
+        <td>{{ data.contract_payment.cost.cost_category.name }}</td>
         <td>{{ data.company.name }}</td>
         <td>
           <ng-container *ngIf="data.bill_category">
@@ -72,6 +72,8 @@
   <div class="text-right" *ngIf="payInfo">
     <span class="font-weight-bold">总金额： {{ payInfo.amount | _currency }}</span>
     <span class="font-weight-bold mx-md">开票总金额： {{ payInfo.tax_use_amount | _currency }}</span>
+    <span *ngIf="payInfo.write_off_amount" class="font-weight-bold mx-md">冲抵金额：
+      {{ payInfo.write_off_amount | _currency }}</span>
   </div>
 
   <!-- <ng-container *ngIf="is_execute_user"> -->
@@ -83,7 +85,7 @@
   <ng-container *ngIf="!is_execute_user">
     <app-upload-file-attachment-show-c [attachmentUrl]="attachmentUrl"></app-upload-file-attachment-show-c>
   </ng-container>
-    
+
   <!-- </ng-container> -->
 </nz-card>
 <!-- 成本支付新增 modal -->
@@ -140,10 +142,10 @@
           <nz-form-item>
             <nz-form-label nzFor="exclude_tax_amount" [nzRequired]="validateForm.get('is_get_bill').value">除税金额
             </nz-form-label>
-            <nz-form-control nzErrorTip="请填写支付金额中除税金额{{ currentPayment ? '，不得超过' + currentPayment.amount + '元' : '' }}">
+            <nz-form-control nzErrorTip="请填写支付金额中除税金额{{ currentPayment ? '，不得超过' + amountTaxUse + '元' : '' }}">
               <nz-input-group nzSuffix="RMB" nzPrefix="￥" style="width: 100%;">
                 <input type="text" nz-input (ngModelChange)="amountChange()"
-                  placeholder="请填写支付金额中除税金额{{ currentPayment ? '，不得超过' + currentPayment.amount + '元' : '' }}"
+                  placeholder="请填写支付金额中除税金额{{ currentPayment ? '，不得超过' + amountTaxUse + '元' : '' }}"
                   formControlName="exclude_tax_amount" />
               </nz-input-group>
             </nz-form-control>
@@ -161,10 +163,10 @@
         <ng-container *ngIf="!validateForm.get('is_get_bill').value">
           <nz-form-item>
             <nz-form-label nzFor="amount" nzRequired>支付总金额</nz-form-label>
-            <nz-form-control nzErrorTip="请填写非合约支付总金额{{ currentPayment ? '，不得超过' + currentPayment.amount + '元' : '' }}">
+            <nz-form-control nzErrorTip="请填写非合约支付总金额{{ currentPayment ? '，不得超过' + amountTaxUse + '元' : '' }}">
               <nz-input-group nzSuffix="RMB" nzPrefix="￥" style="width: 100%;">
                 <input type="text" nz-input (ngModelChange)="amountChange()"
-                  placeholder="非合约支付总金额{{ currentPayment ? '，不得超过' + currentPayment.amount + '元' : '' }}"
+                  placeholder="非合约支付总金额{{ currentPayment ? '，不得超过' + amountTaxUse + '元' : '' }}"
                   formControlName="amount" />
               </nz-input-group>
             </nz-form-control>
@@ -178,10 +180,10 @@
         </nz-form-control>
       </nz-form-item>
       <ng-container *ngIf="validateForm.get('is_get_bill').value && totalAmountError && currentPayment">
-        <div class="text-center text-error">除税金额和税金总和不得超过 {{ currentPayment.amount }} 元</div>
+        <div class="text-center text-error">除税金额和税金总和不得超过 {{ amountTaxUse }} 元</div>
       </ng-container>
       <ng-container *ngIf="!validateForm.get('is_get_bill').value && totalAmountError && currentPayment">
-        <div class="text-center text-error">支付总金额不得超过 {{ currentPayment.amount }} 元</div>
+        <div class="text-center text-error">支付总金额不得超过 {{ amountTaxUse }} 元</div>
       </ng-container>
     </form>
   </div>

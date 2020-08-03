@@ -8,6 +8,8 @@ import { FinancialProcessingVoucherBillComponent } from './bill/bill.component';
 import { FinancialProcessingVoucherBillVoucherDetailsComponent } from './bill/bill-voucher-details/bill-voucher-details.component';
 import { FinancialProcessingVoucherContractVoucherDetailsComponent } from './contract/contract-voucher-details/contract-voucher-details.component';
 import { FinancialProcessingVoucherTreatyVoucherDetailsComponent } from './treaty/treaty-voucher-details/treaty-voucher-details.component';
+import { BillListComponent } from './bill/bill-list/bill-list.component';
+import { BillListSearchComponent } from './bill/bill-list-search/bill-list-search.component';
 
 const COMPONENTS = [
   FinancialProcessingVoucherContractComponent,
@@ -27,7 +29,9 @@ const COMPONENTS_NOROUNT = [
   ],
   declarations: [
     ...COMPONENTS,
-    ...COMPONENTS_NOROUNT
+    ...COMPONENTS_NOROUNT,
+    BillListComponent,
+    BillListSearchComponent
   ],
 })
 export class FinancialProcessingVoucherModule { }

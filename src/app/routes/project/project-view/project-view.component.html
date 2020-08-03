@@ -118,7 +118,8 @@
               <td>{{ project.info?.plan_execution_start_time }} - {{ project.info?.plan_execution_end_time }}</td>
               <td>
                 <ng-container *ngIf="project.info">
-                  <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/project/' + project.info.id" [isShowName]="false"></app-upload-file-attachment-show-c>
+                  <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/project/' + project.info.id"
+                    [isShowName]="false"></app-upload-file-attachment-show-c>
                 </ng-container>
               </td>
             </tr>
@@ -182,7 +183,7 @@
                     <th>合同</th>
                     <th>分割情况</th>
                     <th>收款信息</th>
-                    <th>项目金额</th>
+                    <th>项目合同金额</th>
                     <th>附件</th>
                   </tr>
                 </thead>
@@ -272,7 +273,8 @@
                   <sv label="银行账号">{{ data.contract.bank_account }}</sv>
                   <sv label="收款单位">{{ data.contract.pay_company }}</sv>
                   <sv label="合同附件">
-                    <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/contract/' + data.id" [isShowName]="false">
+                    <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/contract/' + data.id"
+                      [isShowName]="false">
                     </app-upload-file-attachment-show-c>
                   </sv>
                   <sv label="起止时间">{{ data.contract.start_time }} 至 {{ data.contract.end_time }}</sv>

@@ -59,6 +59,10 @@ import { NoContractPayPayedComponent } from './no-contract-approve-manage/apply-
 import { NoContractExcutePayedListComponent } from './no-contract-approve-manage/excute-pay/no-contract-excute-payed-list/no-contract-excute-payed-list.component';
 import { ContractPayForPayedComponent } from './contract-approve-manage/apply-for/contract-pay-for-payed/contract-pay-for-payed.component';
 import { ContractExcuteForPayedComponent } from './contract-approve-manage/excute-pay/contract-excute-for-payed/contract-excute-for-payed.component';
+import { ApplyListIndexComponent } from './contract-approve-manage/apply-list/apply-list-index/apply-list-index.component';
+import { ApplyListSearchComponent } from './contract-approve-manage/apply-list/apply-list-search/apply-list-search.component';
+import { NoContractApplyListIndexComponent } from './no-contract-approve-manage/apply-list/no-contract-apply-list-index/no-contract-apply-list-index.component';
+import { NoContractApplyListSearchComponent } from './no-contract-approve-manage/apply-list/no-contract-apply-list-search/no-contract-apply-list-search.component';
 
 const COMPONENTS = [
   // 有合约  合约审批管理
@@ -129,7 +133,11 @@ const COMPONENTS_NOROUNT = [
   ],
   declarations: [
     ...COMPONENTS,
-    ...COMPONENTS_NOROUNT
+    ...COMPONENTS_NOROUNT,
+    ApplyListIndexComponent,
+    ApplyListSearchComponent,
+    NoContractApplyListIndexComponent,
+    NoContractApplyListSearchComponent
 
   ],
   entryComponents: COMPONENTS_NOROUNT

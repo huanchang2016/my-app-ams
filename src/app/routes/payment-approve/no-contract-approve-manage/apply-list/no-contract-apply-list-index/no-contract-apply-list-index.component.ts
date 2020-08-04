@@ -1,25 +1,18 @@
-import { ApiData, List } from 'src/app/data/interface.data';
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, ActivationEnd } from '@angular/router';
-import { filter } from 'rxjs/operators';
-import { Subscription } from 'rxjs';
-import { SettingsConfigService } from 'src/app/routes/service/settings-config.service';
-
+import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-bill-list',
-  templateUrl: './bill-list.component.html',
+  selector: 'app-no-contract-apply-list-index',
+  templateUrl: './no-contract-apply-list-index.component.html',
   styles: [`
   :host ::ng-deep .ant-tabs-nav-wrap>div {
     text-align: right;
   }
-  `
-  ]
+  `]
 })
-export class BillListComponent implements OnInit {
+export class NoContractApplyListIndexComponent implements OnInit {
 
-  constructor(
-  ) { }
+
+  constructor() { }
 
   tabs: any[] = [
     {
@@ -56,7 +49,6 @@ export class BillListComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
   to(item: any) {
     this.type_id = item.id;
     this.type_name = item.name;

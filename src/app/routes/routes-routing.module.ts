@@ -19,6 +19,10 @@ import { UserLockComponent } from './passport/lock/lock.component';
 import { BillListComponent } from './financial-processing-voucher/bill/bill-list/bill-list.component'
 // dispatch
 
+// 合约支付列表
+import { ApplyListIndexComponent } from './payment-approve/contract-approve-manage/apply-list/apply-list-index/apply-list-index.component'
+// 非合约支付列表
+import { NoContractApplyListIndexComponent } from './payment-approve/no-contract-approve-manage/apply-list/no-contract-apply-list-index/no-contract-apply-list-index.component'
 const routes: Routes = [
   {
     path: '',
@@ -41,6 +45,8 @@ const routes: Routes = [
       { path: 'bill/list', component: BillListComponent },
       // 合同管理
       { path: 'contract', loadChildren: () => import('./contract/contract.module').then(m => m.ContractModule) },
+      { path: 'approve/contract/list', component: ApplyListIndexComponent },
+      { path: 'approve/no-contract/applyList', component: NoContractApplyListIndexComponent },
       // 财务处理凭证
       { path: 'financial', loadChildren: () => import('./financial-processing-voucher/financial-processing-voucher.module').then(m => m.FinancialProcessingVoucherModule) },
       // 项目流程管理

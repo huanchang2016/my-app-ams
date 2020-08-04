@@ -164,6 +164,10 @@ export class StartupService {
                 //     link: '/approve/contract/excute/finished'
                 //   }
                 // ]
+              },
+              {
+                text: '支付列表',
+                link: '/approve/contract/list'
               }
             ]
           },
@@ -231,7 +235,11 @@ export class StartupService {
                 //     link: '/approve/no-contract/excute/finished'
                 //   }
                 // ]
-              }
+              },
+              {
+                text: '支付列表',
+                link: '/approve/no-contract/applyList',
+              },
 
 
             ]
@@ -288,7 +296,7 @@ export class StartupService {
                 // ]
               },
               {
-                text: '开票执行',
+                text: '发票执行',
                 link: '/bill/excute',
                 // hide: this.isHideRouter(['bill_approval'], permissionGroup),
                 // children: [

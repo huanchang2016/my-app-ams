@@ -2,47 +2,28 @@
     <div nz-row [nzGutter]="24">
         <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="8">
             <nz-form-item>
-                <nz-form-label nzFor="bill_category_id">发票类型</nz-form-label>
+                <nz-form-label nzFor="invoice_number">发票编号</nz-form-label>
                 <nz-form-control style="flex-grow: 1;">
-                    <nz-select id="bill_category_id" nzShowSearch nzAllowClear [nzDisabled]="" nzPlaceHolder="请选择发票类型"
-                        formControlName="bill_category_id">
-                        <ng-container *ngFor="let item of bill_category">
-                            <nz-option [nzLabel]="item.name" [nzValue]="item.id" [nzDisabled]=""></nz-option>
-                        </ng-container>
-                    </nz-select>
+                    <input nz-input placeholder="请输入发票编号" formControlName="invoice_number" id="invoice_number" />
                 </nz-form-control>
             </nz-form-item>
         </div>
         <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="8">
             <nz-form-item>
-                <nz-form-label nzFor="customer_id">客户名称</nz-form-label>
+                <nz-form-label nzFor="pay_company">支付公司</nz-form-label>
                 <nz-form-control style="flex-grow: 1;">
-                    <nz-select id="customer_id" nzShowSearch nzAllowClear [nzDisabled]="" nzPlaceHolder="请选择客户名称"
-                        formControlName="customer_id">
-                        <ng-container *ngFor="let item of customer">
-                            <nz-option [nzLabel]="item.name" [nzValue]="item.id" [nzDisabled]=""></nz-option>
-                        </ng-container>
-                    </nz-select>
+                    <input nz-input placeholder="请输入支付公司" formControlName="pay_company" id="pay_company" />
                 </nz-form-control>
             </nz-form-item>
         </div>
         <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="8">
             <nz-form-item>
-                <nz-form-label nzFor="customer_contract_code">客户合同编码</nz-form-label>
+                <nz-form-label nzFor="if_write_off">是否冲销</nz-form-label>
                 <nz-form-control style="flex-grow: 1;">
-                    <input nz-input placeholder="输入客户合同编码查询" formControlName="customer_contract_code"
-                        id="customer_contract_code" />
-                </nz-form-control>
-            </nz-form-item>
-        </div>
-        <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="8">
-            <nz-form-item>
-                <nz-form-label nzFor="tax_id">税目</nz-form-label>
-                <nz-form-control style="flex-grow: 1;">
-                    <nz-select id="tax_id" nzShowSearch nzAllowClear [nzDisabled]="" nzPlaceHolder="请选择税目"
-                        formControlName="tax_id">
-                        <ng-container *ngFor="let item of taxArr">
-                            <nz-option [nzLabel]="item.name" [nzValue]="item.id" [nzDisabled]=""></nz-option>
+                    <nz-select id="if_write_off" nzShowSearch nzAllowClear [nzDisabled]="" nzPlaceHolder="请选择是否冲销"
+                        formControlName="if_write_off">
+                        <ng-container *ngFor="let item of if_write_off_arr">
+                            <nz-option [nzLabel]="item.name" [nzValue]="item.disabled" [nzDisabled]=""></nz-option>
                         </ng-container>
                     </nz-select>
                 </nz-form-control>
@@ -66,20 +47,20 @@
     <thead>
         <tr>
             <th nzWidth="80px">序号</th>
-            <th>发票类型</th>
-            <th>金额(元)</th>
-            <th>客户信息</th>
+            <th>合同名称</th>
+            <!-- <th>合同编号</th>
+            <th>供应商</th>
             <th>申请人</th>
             <th>状态</th>
-            <th>备注</th>
+            <th>备注</th> -->
             <th nzWidth="80px">操作</th>
         </tr>
     </thead>
     <tbody>
         <tr *ngFor="let data of ajaxTable.data; let i = index">
             <td>{{ i + 1 }}</td>
-            <td>{{ data.bill_category.name }}</td>
-            <td>{{ data.amount | currency: 'CNY' }}</td>
+            <td>{{ data.project.name }}</td>
+            <!-- <td class="text-error">{{ data.amount | currency: 'CNY' }}</td>
             <td>
                 <sv-container size="small" col="1">
                     <sv label="单位">{{ data.customer.name }}</sv>
@@ -97,7 +78,7 @@
             <td class="text-primary text-nowrap">{{ data.bill_status.name }}</td>
             <td>
                 <span [innerHTML]="data.remark | showTextareaContent"></span>
-            </td>
+            </td> -->
             <td>
                 <!-- approve/view/ -->
                 <a [routerLink]="['/bill/approve/view', data.id]" [queryParams]="{ project_id: data.project.id }"><i
@@ -106,7 +87,7 @@
         </tr>
     </tbody>
 </nz-table>
-<div class="hidden-pc mt-md">
+<!-- <div class="hidden-pc mt-md">
     <div *ngIf="loading && listOfData.length === 0" class="p-md text-center">
         <nz-spin nzSimple></nz-spin>
     </div>
@@ -144,4 +125,4 @@
                 (nzPageSizeChange)="pageSizeChange($event)"></nz-pagination>
         </div>
     </div>
-</div>
+</div> -->

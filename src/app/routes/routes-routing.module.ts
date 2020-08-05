@@ -12,17 +12,28 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { UserLoginComponent } from './passport/login/login.component';
 import { RoutesResetPasswordComponent } from './passport/reset-password/reset-password.component';
 import { QrAuthComponent } from './passport/qr-auth/qr-auth.component';
-
+// project
+import { ProjectListComponent } from './project/project-list-search/project-list/project-list.component'
 // single pages
 import { CallbackComponent } from './callback/callback.component';
 import { UserLockComponent } from './passport/lock/lock.component';
 import { BillListComponent } from './financial-processing-voucher/bill/bill-list/bill-list.component'
+import { MyBillListComponent } from './financial-processing-voucher/bill/my-bill-list/my-bill-list.component'
+import { BillApprovalListComponent } from './financial-processing-voucher/bill/bill-approval-list/bill-approval-list.component'
+import { BillExcuteListComponent } from './financial-processing-voucher/bill/bill-excute-list/bill-excute-list.component'
 // dispatch
 
 // 合约支付列表
 import { ApplyListIndexComponent } from './payment-approve/contract-approve-manage/apply-list/apply-list-index/apply-list-index.component'
+import { MyApplyListComponent } from './payment-approve/contract-approve-manage/apply-for/my-apply-list/my-apply-list.component'
+import { ApproveListComponent } from './payment-approve/contract-approve-manage/apply-for/approve-list/approve-list.component'
+import { ApplyExcuteListComponent } from './payment-approve/contract-approve-manage/apply-for/apply-excute-list/apply-excute-list.component'
 // 非合约支付列表
 import { NoContractApplyListIndexComponent } from './payment-approve/no-contract-approve-manage/apply-list/no-contract-apply-list-index/no-contract-apply-list-index.component'
+import { NoMyApplyListComponent } from './payment-approve/no-contract-approve-manage/apply-for/no-contract-list-search/my-apply/no-my-apply-list/no-my-apply-list.component'
+import { NoApplyApproveListComponent } from './payment-approve/no-contract-approve-manage/apply-for/no-contract-list-search/apply-approve/no-apply-approve-list/no-apply-approve-list.component'
+import { NoApplyExcuteListComponent } from './payment-approve/no-contract-approve-manage/apply-for/no-contract-list-search/apply-excute/no-apply-excute-list/no-apply-excute-list.component'
+
 const routes: Routes = [
   {
     path: '',
@@ -38,15 +49,26 @@ const routes: Routes = [
       // 项目管理
       { path: 'project', loadChildren: () => import('./project/project.module').then(m => m.ProjecttModule) },
       { path: 'pro-settings', loadChildren: () => import('./project-settings/project-settings.module').then(m => m.ProjectSettingsModule) },
+      { path: 'project/projectList', component: ProjectListComponent },
       // 支付审批管理
       { path: 'approve', loadChildren: () => import('./payment-approve/payment-approve.module').then(m => m.PaymentApproveModule) },
       // 账务管理 （发票、账务处理）
       { path: 'bill', loadChildren: () => import('./bill-reminder/bill-reminder.module').then(m => m.BillReminderModule) },
       { path: 'bill/list', component: BillListComponent },
-      // 合同管理
+      { path: 'bill/myBill', component: MyBillListComponent },
+      { path: 'bill/approveList', component: BillApprovalListComponent },
+      { path: 'bill/excuteList', component: BillExcuteListComponent },
+      // 合约 合同管理
       { path: 'contract', loadChildren: () => import('./contract/contract.module').then(m => m.ContractModule) },
       { path: 'approve/contract/list', component: ApplyListIndexComponent },
+      { path: 'approve/contract/myApply', component: MyApplyListComponent },
+      { path: 'approve/contract/approve', component: ApproveListComponent },
+      { path: 'approve/contract/excuteList', component: ApplyExcuteListComponent },
+      // 非合约 合同管理
       { path: 'approve/no-contract/applyList', component: NoContractApplyListIndexComponent },
+      { path: 'approve/no-contract/myApply', component: NoMyApplyListComponent },
+      { path: 'approve/no-contract/excuteList', component: NoApplyApproveListComponent },
+      { path: 'approve/no-contract/approve', component: NoApplyExcuteListComponent },
       // 财务处理凭证
       { path: 'financial', loadChildren: () => import('./financial-processing-voucher/financial-processing-voucher.module').then(m => m.FinancialProcessingVoucherModule) },
       // 项目流程管理

@@ -5,12 +5,12 @@ import { SettingsConfigService } from 'src/app/routes/service/settings-config.se
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-no-contract-apply-list-search',
-  templateUrl: './no-contract-apply-list-search.component.html',
+  selector: 'app-project-search',
+  templateUrl: './project-search.component.html',
   styles: [
   ]
 })
-export class NoContractApplyListSearchComponent implements OnInit {
+export class ProjectSearchComponent implements OnInit {
   @Output() private outer = new EventEmitter();
   @Input() type_id: number;
   @Input() type_name: number;
@@ -49,23 +49,38 @@ export class NoContractApplyListSearchComponent implements OnInit {
 
   supplierList: any = [];
 
+  companyList: any = [];
+
+  departmentList: any = [];
+
+  projectCategory: any = [];
+
+  disableFlag = true;
+
+  company_id: any = null;
+
+  department_id: any = null;
+
   if_write_off_arr: any = [
     { name: '是', disabled: true },
     { name: '否', disabled: false }
   ];
 
   ngOnInit(): void {
+    console.log(this.disableFlag, 'this.disableFlag');
     this.validateForm = this.fb.group({
+      name: [null],  // 项目名称
       status_name: ['全部'], // 状态名称
-      invoice_number: [null],  // 发票编号
-      pay_company: [null],  // 支付公司
-      if_write_off: [null],  // 是否冲销
+      number: [null],  // 发票编号
+      company_id: [null],  // 客户单位
+      department_id: [null],  // 部门
+      category_id: [null],  // 项目类型
       page: [null], // 页
       page_size: [null] // 页码
     });
-    const user = JSON.parse(localStorage.getItem('user'));
-    this.customerId = user.company.id;
-    this.getSupplier();
+    // const user = JSON.parse(localStorage.getItem('user'));
+    // this.customerId = user.company.id;
+    this.getCompany();
     this.submit();
   }
 
@@ -80,18 +95,58 @@ export class NoContractApplyListSearchComponent implements OnInit {
     }
   }
 
+  chooseCompany(e) {
+    if (e) {
+      console.log('e', e);
+      this.company_id = e;
+      e ? this.disableFlag = false : this.disableFlag = true;
+      console.log(this.disableFlag, 'disableFlag');
+      this.getDepartment();
+    }
+  }
 
-  getSupplier() {
-    this.settingsConfigService.get('/api/company/supplier/all').subscribe((res: ApiData) => {
+  chooseDepartment(e) {
+    if (e) {
+      this.department_id = e;
+      this.getProjectCategory();
+    }
+  }
+
+
+  getCompany() {
+    this.settingsConfigService.get('/api/company/user/all').subscribe((res: ApiData) => {
       if (res.code === 200) {
-        console.log('获取所有供应商', res.data);
-        this.supplierList = res.data.company;
+        console.log('获取所有单位', res.data);
+        this.companyList = res.data.company;
       }
     })
   }
 
+  getDepartment() {
+    if (!this.disableFlag) {
+      this.settingsConfigService.get('/api/department/' + this.company_id).subscribe((res: ApiData) => {
+        if (res.code === 200) {
+          console.log('获取部门', res.data);
+          this.departmentList = res.data.department;
+        }
+      })
+    }
+  }
+
+  getProjectCategory() {
+    if (!this.disableFlag) {
+      this.settingsConfigService.get('/api/project_category/company/' + this.company_id).subscribe((res: ApiData) => {
+        if (res.code === 200) {
+          console.log('获取项目类型', res.data);
+          this.projectCategory = res.data.project_category;
+        }
+      })
+    }
+  }
+
   view(data: any) {
-    this.router.navigateByUrl(`/approve/no-contract/pay/view/${data.project.id}?treaty_pay_id=${data.id}`);
+    // this.router.navigateByUrl(`/approve/no-contract/pay/view/${data.project.id}?treaty_pay_id=${data.id}`);
+    this.router.navigateByUrl(`/project/view/${data.id}`);
   }
 
   submit() {
@@ -112,11 +167,11 @@ export class NoContractApplyListSearchComponent implements OnInit {
 
   listRequest(option) {
     console.log('listRequest option', option);
-    this.settingsConfigService.post('/api/treaty_pay', option).subscribe((res: ApiData) => {
+    this.settingsConfigService.post('/api/project', option).subscribe((res: ApiData) => {
       console.log('listRequest res', res.data);
       if (res.code === 200) {
-        console.log('非合约 支付列表');
-        this.listOfData = res.data.treaty_pay;
+        console.log('项目列表');
+        this.listOfData = res.data.project;
         // this.total = res.data.count;
         console.log('listRequest listOfData', this.listOfData);
         return;
@@ -129,10 +184,12 @@ export class NoContractApplyListSearchComponent implements OnInit {
     console.log('........reset start')
     this.outer.emit();
     this.validateForm.patchValue({
+      name: null,  // 项目名称
       status_name: '全部', // 状态名称
-      invoice_number: '',  // 发票编号
-      pay_company: '',  // 支付公司
-      if_write_off: null,  // 是否冲销
+      number: null,  // 发票编号
+      company_id: null,  // 客户单位
+      department_id: null,  // 部门
+      category_id: null,  // 项目类型
       page: null, // 页
       page_size: null // 页码
     });

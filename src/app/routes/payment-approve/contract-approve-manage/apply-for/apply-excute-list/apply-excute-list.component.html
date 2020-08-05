@@ -1,9 +1,9 @@
-<page-header [title]="'发票列表'" [breadcrumb]="breadcrumb" [tab]="tab">
+<page-header [title]="'支付执行'" [breadcrumb]="breadcrumb" [tab]="tab">
     <ng-template #breadcrumb>
         <nz-breadcrumb>
             <nz-breadcrumb-item><a [routerLink]="['/dashboard']">首页</a></nz-breadcrumb-item>
-            <nz-breadcrumb-item>发票管理</nz-breadcrumb-item>
-            <nz-breadcrumb-item>发票列表</nz-breadcrumb-item>
+            <nz-breadcrumb-item>合约支付管理</nz-breadcrumb-item>
+            <nz-breadcrumb-item>支付执行</nz-breadcrumb-item>
         </nz-breadcrumb>
     </ng-template>
 
@@ -16,5 +16,6 @@
 </page-header>
 
 <nz-card [nzBordered]="false">
-    <app-bill-list-search [type_id]="type_id" [type_name]="type_name" (outer)="readOuter()"></app-bill-list-search>
+    <app-apply-excute-search [type_id]="type_id" [type_name]="type_name" (outer)="readOuter()">
+    </app-apply-excute-search>
 </nz-card>

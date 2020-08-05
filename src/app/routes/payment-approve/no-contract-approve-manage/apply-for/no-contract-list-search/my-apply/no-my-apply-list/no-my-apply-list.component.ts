@@ -1,26 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 
-
-
 @Component({
-  selector: 'app-bill-list',
-  templateUrl: './bill-list.component.html',
+  selector: 'app-no-my-apply-list',
+  templateUrl: './no-my-apply-list.component.html',
   styles: [`
   :host ::ng-deep .ant-tabs-nav-wrap>div {
     text-align: right;
   }
-  `]
+  `
+  ]
 })
-export class BillListComponent implements OnInit {
+export class NoMyApplyListComponent implements OnInit {
 
-  constructor(
-  ) { }
+
+  constructor() { }
 
   tabs: any[] = [
-    {
-      id: 0,
-      name: '全部'
-    },
     {
       id: 1,
       name: '进行中'
@@ -31,11 +26,11 @@ export class BillListComponent implements OnInit {
     },
     {
       id: 3,
-      name: '已付款'
+      name: '已完成'
     },
     {
       id: 4,
-      name: '已完成'
+      name: '无法执行'
     },
     {
       id: 5,
@@ -47,11 +42,10 @@ export class BillListComponent implements OnInit {
 
   type_id = 0;
 
-  type_name = '全部';
+  type_name = '进行中';
 
   ngOnInit(): void {
   }
-
   to(item: any) {
     this.type_id = item.id;
     this.type_name = item.name;
@@ -59,7 +53,8 @@ export class BillListComponent implements OnInit {
     console.log(this.type_name, 'type_name', item);
   }
   readOuter() {
-    this.type_name = '全部';
+    this.type_name = '进行中';
   }
+
 
 }

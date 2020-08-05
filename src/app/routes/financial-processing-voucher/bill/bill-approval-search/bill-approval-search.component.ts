@@ -2,15 +2,14 @@ import { Component, OnInit, EventEmitter, Output, Input, SimpleChanges } from '@
 import { ApiData, List } from 'src/app/data/interface.data';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { SettingsConfigService } from 'src/app/routes/service/settings-config.service';
-import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-no-contract-apply-list-search',
-  templateUrl: './no-contract-apply-list-search.component.html',
+  selector: 'app-bill-approval-search',
+  templateUrl: './bill-approval-search.component.html',
   styles: [
   ]
 })
-export class NoContractApplyListSearchComponent implements OnInit {
+export class BillApprovalSearchComponent implements OnInit {
   @Output() private outer = new EventEmitter();
   @Input() type_id: number;
   @Input() type_name: number;
@@ -18,13 +17,12 @@ export class NoContractApplyListSearchComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private settingsConfigService: SettingsConfigService,
-    private router: Router
   ) { }
   validateForm: FormGroup;
 
   @Output() searchOptionsEmit: EventEmitter<any> = new EventEmitter();
 
-  contract: any = [];
+  bill_category: any = [];
 
   customer: any = [];
 
@@ -47,25 +45,21 @@ export class NoContractApplyListSearchComponent implements OnInit {
 
   status: any;
 
-  supplierList: any = [];
-
-  if_write_off_arr: any = [
-    { name: '是', disabled: true },
-    { name: '否', disabled: false }
-  ];
-
   ngOnInit(): void {
     this.validateForm = this.fb.group({
-      status_name: ['全部'], // 状态名称
-      invoice_number: [null],  // 发票编号
-      pay_company: [null],  // 支付公司
-      if_write_off: [null],  // 是否冲销
+      status_name: ['待审批'], // 状态名称
+      bill_category_id: [null],  // 发票类别
+      customer_id: [null],  // 客户id
+      customer_contract_code: [null],  // 客户合同编码
+      tax_id: [null],  // 税目id
       page: [null], // 页
       page_size: [null] // 页码
     });
     const user = JSON.parse(localStorage.getItem('user'));
     this.customerId = user.company.id;
-    this.getSupplier();
+    this.getBillCategory();
+    this.getCustomerList();
+    this.getTax();
     this.submit();
   }
 
@@ -81,23 +75,37 @@ export class NoContractApplyListSearchComponent implements OnInit {
   }
 
 
-  getSupplier() {
-    this.settingsConfigService.get('/api/company/supplier/all').subscribe((res: ApiData) => {
+  getBillCategory() {
+    this.settingsConfigService.get('/api/bill/category/all').subscribe((res: ApiData) => {
       if (res.code === 200) {
-        console.log('获取所有供应商', res.data);
-        this.supplierList = res.data.company;
+        console.log('获取所有发票类型', res.data);
+        this.bill_category = res.data.bill_category;
       }
     })
   }
 
-  view(data: any) {
-    this.router.navigateByUrl(`/approve/no-contract/pay/view/${data.project.id}?treaty_pay_id=${data.id}`);
+  getCustomerList() {
+    this.settingsConfigService.get('/api/company/customer/all').subscribe((res: ApiData) => {
+      if (res.code === 200) {
+        console.log('获取所有客户列表', res.data);
+        this.customer = res.data.company;
+      }
+    })
+  }
+
+  getTax() {
+    this.settingsConfigService.get(`/api/tax/company/${this.customerId}`).subscribe((res: ApiData) => {
+      if (res.code === 200) {
+        console.log('获取税目', res.data);
+        this.taxArr = res.data.tax;
+      }
+    })
   }
 
   submit() {
     const option: any = this.validateForm.value;
     console.log(option, 'option');
-    this.listRequest(option);
+    this.billList(option);
   }
 
   pageIndexChange($event: number) {
@@ -110,15 +118,15 @@ export class NoContractApplyListSearchComponent implements OnInit {
     this.submit();
   }
 
-  listRequest(option) {
-    console.log('listRequest option', option);
-    this.settingsConfigService.post('/api/treaty_pay', option).subscribe((res: ApiData) => {
-      console.log('listRequest res', res.data);
+  billList(option) {
+    console.log('billList option', option);
+    this.settingsConfigService.post('/api/bill/approval/list', option).subscribe((res: ApiData) => {
+      console.log('billList res', res.data);
       if (res.code === 200) {
-        console.log('非合约 支付列表');
-        this.listOfData = res.data.treaty_pay;
-        // this.total = res.data.count;
-        console.log('listRequest listOfData', this.listOfData);
+        console.log('发票审批');
+        this.listOfData = res.data.bill;
+        this.total = res.data.count;
+        console.log('billList listOfData', this.listOfData);
         return;
       }
       return;
@@ -129,14 +137,16 @@ export class NoContractApplyListSearchComponent implements OnInit {
     console.log('........reset start')
     this.outer.emit();
     this.validateForm.patchValue({
-      status_name: '全部', // 状态名称
-      invoice_number: '',  // 发票编号
-      pay_company: '',  // 支付公司
-      if_write_off: null,  // 是否冲销
-      page: null, // 页
-      page_size: null // 页码
+      status_name: '待审批',
+      bill_category_id: null,
+      customer_id: null,
+      customer_contract_code: '',
+      tax_id: null,
+      page: '',
+      page_size: '',
     });
     this.submit();
     console.log('........reset end')
   }
+
 }

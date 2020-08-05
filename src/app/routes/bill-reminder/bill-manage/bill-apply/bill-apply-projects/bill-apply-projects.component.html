@@ -1,48 +1,43 @@
 <page-header></page-header>
 
 <nz-card>
-    <app-bill-apply-project-search [COMPANY]="companyArray" (searchOptionsEmit)="searchOptionsChange($event)"></app-bill-apply-project-search>
+    <app-bill-apply-project-search [COMPANY]="companyArray" (searchOptionsEmit)="searchOptionsChange($event)">
+    </app-bill-apply-project-search>
 
-    <nz-table
-    #ajaxTable
-    nzShowSizeChanger
-    [nzFrontPagination]="false"
-    [nzData]="listOfData"
-    [nzLoading]="loading"
-    [nzTotal]="total"
-    [(nzPageIndex)]="pageOption.page"
-    [(nzPageSize)]="pageOption.page_size"
-    (nzPageIndexChange)="pageIndexChange($event)"
-    (nzPageSizeChange)="pageSizeChange($event)"
-    class="mt-md hidden-mobile">
-    <thead>
-        <tr>
-            <th nzWidth="80px">序号</th>
-            <th>项目</th>
-            <th>类型</th>
-            <th>来源</th>
-            <th>基础信息</th>
-            <th>操作</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let data of ajaxTable.data; let i = index">
-            <td>{{ i + 1}}</td>
-            <td>{{ data.name }}</td>
-            <td>{{ data.category?.name }}</td>
-            <td>{{ data.origin?.code.code_name + data.origin?.name }}</td>
-            <td>
-                <sv-container size="small" col="1">
-                    <sv label="部门">{{ data.department?.name }}</sv>
-                    <sv label="单位">{{ data.company?.name }}</sv>
-                </sv-container>
-            </td>
-            <td>
-                <a [routerLink]="['/bill/project/invoices/list', data.id]">发票管理</a>
-            </td>
-        </tr>
-    </tbody>
-</nz-table>
+    <nz-table #ajaxTable nzShowSizeChanger [nzFrontPagination]="false" [nzData]="listOfData" [nzLoading]="loading"
+        [nzTotal]="total" [(nzPageIndex)]="pageOption.page" [(nzPageSize)]="pageOption.page_size"
+        (nzPageIndexChange)="pageIndexChange($event)" (nzPageSizeChange)="pageSizeChange($event)"
+        class="mt-md hidden-mobile">
+        <thead>
+            <tr>
+                <th nzWidth="80px">序号</th>
+                <th>项目</th>
+                <th>类型</th>
+                <th>来源</th>
+                <th>基础信息</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let data of ajaxTable.data; let i = index">
+                <td>{{ i + 1}}</td>
+                <td>{{ data.name }}</td>
+                <td>{{ data.category?.name }}</td>
+                <td>{{ data.origin?.code.code_name + data.origin?.name }}</td>
+                <td>
+                    <sv-container size="small" col="1">
+                        <sv label="部门">{{ data.department?.name }}</sv>
+                        <sv label="单位">{{ data.company?.name }}</sv>
+                    </sv-container>
+                </td>
+                <td>
+                    <!-- <a [routerLink]="['/bill/project/invoices/list', data.id]">发票管理</a> -->
+                    <a [routerLink]="['/bill/project/invoices/list', data.id]"><i nz-icon nzType="eye"
+                            nzTheme="outline"></i></a>
+                </td>
+            </tr>
+        </tbody>
+    </nz-table>
 
 </nz-card>
 <div class="hidden-pc mt-md">
@@ -69,7 +64,9 @@
             </nz-card>
         </ng-container>
         <div class="mt-md text-center">
-            <nz-pagination [nzSize]="'small'" nzShowSizeChanger [(nzPageSize)]="pageOption.page_size" [nzPageIndex]="pageOption.page" [nzTotal]="total" (nzPageIndexChange)="pageIndexChange($event)" (nzPageSizeChange)="pageSizeChange($event)"></nz-pagination>
+            <nz-pagination [nzSize]="'small'" nzShowSizeChanger [(nzPageSize)]="pageOption.page_size"
+                [nzPageIndex]="pageOption.page" [nzTotal]="total" (nzPageIndexChange)="pageIndexChange($event)"
+                (nzPageSizeChange)="pageSizeChange($event)"></nz-pagination>
         </div>
     </div>
 </div>

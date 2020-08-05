@@ -2,30 +2,57 @@
     <div nz-row [nzGutter]="24">
         <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="8">
             <nz-form-item>
+                <nz-form-label nzFor="contract_name">合同</nz-form-label>
+                <nz-form-control style="flex-grow: 1;">
+                    <input nz-input placeholder="输入合同" formControlName="contract_name" id="contract_name" />
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="8">
+            <nz-form-item>
+                <nz-form-label nzFor="contract_number">合同编号</nz-form-label>
+                <nz-form-control style="flex-grow: 1;">
+                    <input nz-input placeholder="输入合同编号" formControlName="contract_number" id="contract_number" />
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="8">
+            <nz-form-item>
+                <nz-form-label nzFor="supplier_id">供应商</nz-form-label>
+                <nz-form-control style="flex-grow: 1;">
+                    <nz-select id="supplier_id" nzShowSearch nzAllowClear [nzDisabled]="" nzPlaceHolder="请选择供应商"
+                        formControlName="supplier_id">
+                        <ng-container *ngFor="let item of supplierList">
+                            <nz-option [nzLabel]="item.name" [nzValue]="item.id" [nzDisabled]=""></nz-option>
+                        </ng-container>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <!-- <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="8">
+            <nz-form-item>
+                <nz-form-label nzFor="start_amount">起始金额</nz-form-label>
+                <nz-form-control style="flex-grow: 1;">
+                    <input nz-input placeholder="请输入起始金额" (ngModelChange)="startChange($event)"
+                        formControlName="start_amount" id="start_amount" />
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="8">
+            <nz-form-item>
+                <nz-form-label nzFor="end_amount">终止金额</nz-form-label>
+                <nz-form-control style="flex-grow: 1;"
+                    nzErrorTip="终止金额{{ start_amount ? '，不得超过' + start_amount + '元' : '' }}">
+                    <input nz-input placeholder="请输入终止金额" (ngModelChange)="endChange($event)"
+                        formControlName="end_amount" id="end_amount" />
+                </nz-form-control>
+            </nz-form-item>
+        </div> -->
+        <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="8">
+            <nz-form-item>
                 <nz-form-label nzFor="invoice_number">发票编号</nz-form-label>
                 <nz-form-control style="flex-grow: 1;">
                     <input nz-input placeholder="请输入发票编号" formControlName="invoice_number" id="invoice_number" />
-                </nz-form-control>
-            </nz-form-item>
-        </div>
-        <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="8">
-            <nz-form-item>
-                <nz-form-label nzFor="pay_company">支付公司</nz-form-label>
-                <nz-form-control style="flex-grow: 1;">
-                    <input nz-input placeholder="请输入支付公司" formControlName="pay_company" id="pay_company" />
-                </nz-form-control>
-            </nz-form-item>
-        </div>
-        <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="8">
-            <nz-form-item>
-                <nz-form-label nzFor="if_write_off">是否冲销</nz-form-label>
-                <nz-form-control style="flex-grow: 1;">
-                    <nz-select id="if_write_off" nzShowSearch nzAllowClear [nzDisabled]="" nzPlaceHolder="请选择是否冲销"
-                        formControlName="if_write_off">
-                        <ng-container *ngFor="let item of if_write_off_arr">
-                            <nz-option [nzLabel]="item.name" [nzValue]="item.disabled" [nzDisabled]=""></nz-option>
-                        </ng-container>
-                    </nz-select>
                 </nz-form-control>
             </nz-form-item>
         </div>
@@ -47,12 +74,11 @@
     <thead>
         <tr>
             <th nzWidth="80px">序号</th>
-            <th>非合约支付编号</th>
-            <th>收款信息</th>
-            <th>冲抵情况</th>
-            <th nzWidth="100px">项目名称</th>
-            <th>申请人信息</th>
-            <th nzWidth="80px">状态</th>
+            <th>合同支付编号</th>
+            <th>合同信息</th>
+            <th>支付金额</th>
+            <th>项目信息</th>
+            <th>状态</th>
             <th nzWidth="80px">操作</th>
         </tr>
     </thead>
@@ -63,38 +89,26 @@
             <td *ngIf="!data.number">/</td>
             <td>
                 <sv-container size="small" col="1">
-                    <sv label="收款单位/个人">{{ data.pay_company }}</sv>
-                    <sv label="银行名称">{{ data.bank_name }}</sv>
-                    <sv label="银行账号">{{ data.bank_account }}</sv>
+                    <sv label="合同名称">{{ data.deal.contract.name }}</sv>
+                    <sv label="合同编号">{{ data.deal.contract.number }}</sv>
+                    <sv label="合同单位">{{ data.deal.contract.company.name }}</sv>
                 </sv-container>
             </td>
+            <td>{{ data.amount | currency: 'CNY' }}</td>
             <td>
                 <sv-container size="small" col="1">
-                    <sv label="支付金额（冲抵前）">{{ data.before_deduct_amount | currency: 'CNY' }}</sv>
-                    <sv label="支付金额（冲抵后）">{{ data.amount | currency: 'CNY' }}</sv>
-                </sv-container>
-            </td>
-            <td>
-                <sv-container size="small" col="1">
-                    <sv>{{ data.project.name }}</sv>
-                </sv-container>
-            </td>
-            <td>
-                <sv-container size="small" col="1">
-                    <sv label="名称">{{ data.user.name }}</sv>
-                    <sv label="部门">{{ data.user.department.name }}</sv>
-                    <sv label="单位">{{ data.user.company.name }}</sv>
+                    <sv label="项目名称">{{ data.project.name }}</sv>
+                    <sv label="创建人">{{ data.user.name }}</sv>
+                    <sv label="所在部门">{{ data.user.department.name }}</sv>
+                    <sv label="所属单位">{{ data.user.company.name }}</sv>
                 </sv-container>
             </td>
             <td class="text-primary text-nowrap">{{ data.pay_status.name }}</td>
-            <!-- <td>
-                <span [innerHTML]="data.remark | showTextareaContent"></span>
-            </td> -->
             <td>
-                <!-- approve/view/ -->
                 <!-- <a [routerLink]="['/bill/approve/view', data.id]" [queryParams]="{ project_id: data.project.id }"><i
                         nz-icon nzType="eye" nzTheme="outline"></i></a> -->
-                <a (click)="view(data)"><i nz-icon nzType="eye" nzTheme="outline"></i></a>
+                <a class="text-nowrap" [routerLink]="['/approve/contract/pay/view', data.project.id ]"
+                    [queryParams]="{ contract_pay_id: data.id }"><i nz-icon nzType="eye" nzTheme="outline"></i></a>
             </td>
         </tr>
     </tbody>

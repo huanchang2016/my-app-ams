@@ -10,6 +10,12 @@ import { FinancialProcessingVoucherContractVoucherDetailsComponent } from './con
 import { FinancialProcessingVoucherTreatyVoucherDetailsComponent } from './treaty/treaty-voucher-details/treaty-voucher-details.component';
 import { BillListComponent } from './bill/bill-list/bill-list.component';
 import { BillListSearchComponent } from './bill/bill-list-search/bill-list-search.component';
+import { MyBillListComponent } from './bill/my-bill-list/my-bill-list.component';
+import { MyBillSearchComponent } from './bill/my-bill-search/my-bill-search.component';
+import { BillApprovalListComponent } from './bill/bill-approval-list/bill-approval-list.component';
+import { BillApprovalSearchComponent } from './bill/bill-approval-search/bill-approval-search.component';
+import { BillExcuteListComponent } from './bill/bill-excute-list/bill-excute-list.component';
+import { BillExcuteSearchComponent } from './bill/bill-excute-search/bill-excute-search.component';
 
 const COMPONENTS = [
   FinancialProcessingVoucherContractComponent,
@@ -31,7 +37,13 @@ const COMPONENTS_NOROUNT = [
     ...COMPONENTS,
     ...COMPONENTS_NOROUNT,
     BillListComponent,
-    BillListSearchComponent
+    BillListSearchComponent,
+    MyBillListComponent,
+    MyBillSearchComponent,
+    BillApprovalListComponent,
+    BillApprovalSearchComponent,
+    BillExcuteListComponent,
+    BillExcuteSearchComponent
   ],
 })
 export class FinancialProcessingVoucherModule { }

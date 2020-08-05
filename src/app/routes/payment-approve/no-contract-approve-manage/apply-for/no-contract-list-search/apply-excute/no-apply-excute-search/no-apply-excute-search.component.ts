@@ -5,12 +5,12 @@ import { SettingsConfigService } from 'src/app/routes/service/settings-config.se
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-no-contract-apply-list-search',
-  templateUrl: './no-contract-apply-list-search.component.html',
+  selector: 'app-no-apply-excute-search',
+  templateUrl: './no-apply-excute-search.component.html',
   styles: [
   ]
 })
-export class NoContractApplyListSearchComponent implements OnInit {
+export class NoApplyExcuteSearchComponent implements OnInit {
   @Output() private outer = new EventEmitter();
   @Input() type_id: number;
   @Input() type_name: number;
@@ -56,7 +56,7 @@ export class NoContractApplyListSearchComponent implements OnInit {
 
   ngOnInit(): void {
     this.validateForm = this.fb.group({
-      status_name: ['全部'], // 状态名称
+      status_name: ['待审批'], // 状态名称
       invoice_number: [null],  // 发票编号
       pay_company: [null],  // 支付公司
       if_write_off: [null],  // 是否冲销
@@ -112,10 +112,10 @@ export class NoContractApplyListSearchComponent implements OnInit {
 
   listRequest(option) {
     console.log('listRequest option', option);
-    this.settingsConfigService.post('/api/treaty_pay', option).subscribe((res: ApiData) => {
+    this.settingsConfigService.post('/api/treaty_pay/approval/list', option).subscribe((res: ApiData) => {
       console.log('listRequest res', res.data);
       if (res.code === 200) {
-        console.log('非合约 支付列表');
+        console.log('非合约 支付审批');
         this.listOfData = res.data.treaty_pay;
         // this.total = res.data.count;
         console.log('listRequest listOfData', this.listOfData);
@@ -129,7 +129,7 @@ export class NoContractApplyListSearchComponent implements OnInit {
     console.log('........reset start')
     this.outer.emit();
     this.validateForm.patchValue({
-      status_name: '全部', // 状态名称
+      status_name: '待审批', // 状态名称
       invoice_number: '',  // 发票编号
       pay_company: '',  // 支付公司
       if_write_off: null,  // 是否冲销

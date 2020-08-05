@@ -98,6 +98,10 @@ export class StartupService {
                 //   }
                 // ]
               },
+              {
+                text: '项目列表',
+                link: '/project/projectList',
+              },
             ]
           },
           {
@@ -106,12 +110,14 @@ export class StartupService {
             icon: { type: 'icon', value: 'audit' },
             children: [
               {
-                text: '支付项目',
+                text: '支付草稿',
+                // link: '/approve/list'
                 link: '/approve/list'
               },
               {
-                text: '支付申请',
-                link: '/approve/contract/apply'
+                text: '我的支付',
+                // link: '/approve/contract/apply'
+                link: '/approve/contract/myApply'
                 // children: [
                 //   {
                 //     text: '审批中',
@@ -129,7 +135,8 @@ export class StartupService {
               },
               {
                 text: '支付审批',
-                link: '/approve/contract/pay',
+                // link: '/approve/contract/pay',
+                link: '/approve/contract/approve',
                 hide: this.isHideRouter(['contract_pay_approval'], permissionGroup),
                 // children: [
                 //   {
@@ -152,7 +159,8 @@ export class StartupService {
               },
               {
                 text: '支付执行',
-                link: '/approve/contract/excute'
+                // link: '/approve/contract/excute'
+                link: '/approve/contract/excuteList'
                 // hide: this.isHideRouter(['treaty_pay_approval'], permissionGroup),
                 // children: [
                 //   {
@@ -177,12 +185,13 @@ export class StartupService {
             icon: { type: 'icon', value: 'exception' },
             children: [
               {
-                text: '支付项目',
+                text: '支付草稿',
                 link: '/approve/no-contract/list'
               },
               {
-                text: '支付申请',
-                link: '/approve/no-contract/apply'
+                text: '我的支付',
+                // link: '/approve/no-contract/apply'
+                link: '/approve/no-contract/myApply'
                 // children: [
                 //   {
                 //     text: '审批中',
@@ -200,7 +209,8 @@ export class StartupService {
               },
               {
                 text: '支付审批',
-                link: '/approve/no-contract/pay',
+                // link: '/approve/no-contract/pay',
+                link: '/approve/no-contract/approve',
                 hide: this.isHideRouter(['treaty_pay_approval'], permissionGroup)
                 // children: [
                 //   {
@@ -223,7 +233,8 @@ export class StartupService {
               },
               {
                 text: '支付执行',
-                link: '/approve/no-contract/excute',
+                // link: '/approve/no-contract/excute',
+                link: '/approve/no-contract/excuteList',
                 // hide: this.isHideRouter(['treaty_pay_approval'], permissionGroup),
                 // children: [
                 //   {
@@ -251,12 +262,13 @@ export class StartupService {
             icon: { type: 'icon', value: 'transaction' },
             children: [
               {
-                text: '发票项目',
+                text: '发票草稿',
                 link: '/bill/project'
               },
               {
-                text: '发票申请',
-                link: '/bill/apply'
+                text: '我的发票',
+                // link: '/bill/apply'
+                link: '/bill/myBill'
                 // children: [
                 //   {
                 //     text: '开票项目',
@@ -278,7 +290,8 @@ export class StartupService {
               },
               {
                 text: '发票审批',
-                link: '/bill/approve',
+                // link: '/bill/approve',
+                link: '/bill/approveList',
                 hide: this.isHideRouter(['bill_approval'], permissionGroup)
                 // children: [
                 //   {
@@ -297,7 +310,8 @@ export class StartupService {
               },
               {
                 text: '发票执行',
-                link: '/bill/excute',
+                // link: '/bill/excute',
+                link: '/bill/excuteList',
                 // hide: this.isHideRouter(['bill_approval'], permissionGroup),
                 // children: [
                 //   {

@@ -78,17 +78,18 @@
             <th>合同信息</th>
             <th>支付金额</th>
             <th>项目信息</th>
-            <th>审批状态</th>
+            <th>状态</th>
             <th nzWidth="80px">操作</th>
         </tr>
     </thead>
     <tbody>
         <tr *ngFor="let data of ajaxTable.data; let i = index">
             <td>{{ i + 1 }}</td>
-            <td>{{ data.number }}</td>
+            <td *ngIf="data.number">{{ data.number }}</td>
+            <td *ngIf="!data.number">/</td>
             <td>
                 <sv-container size="small" col="1">
-                    <sv label="合同名称">{{ data.deal.company.name }}</sv>
+                    <sv label="合同名称">{{ data.deal.contract.name }}</sv>
                     <sv label="合同编号">{{ data.deal.contract.number }}</sv>
                     <sv label="合同单位">{{ data.deal.contract.company.name }}</sv>
                 </sv-container>
@@ -96,7 +97,7 @@
             <td>{{ data.amount | currency: 'CNY' }}</td>
             <td>
                 <sv-container size="small" col="1">
-                    <sv label="项目名称">{{ data.project }}</sv>
+                    <sv label="项目名称">{{ data.project.name }}</sv>
                     <sv label="创建人">{{ data.user.name }}</sv>
                     <sv label="所在部门">{{ data.user.department.name }}</sv>
                     <sv label="所属单位">{{ data.user.company.name }}</sv>
@@ -105,8 +106,10 @@
             <td class="text-primary text-nowrap">{{ data.pay_status.name }}</td>
             <td>
                 <!-- approve/view/ -->
-                <a [routerLink]="['/bill/approve/view', data.id]" [queryParams]="{ project_id: data.project.id }"><i
-                        nz-icon nzType="eye" nzTheme="outline"></i></a>
+                <!-- <a [routerLink]="['/bill/approve/view', data.id]" [queryParams]="{ project_id: data.project.id }"><i
+                        nz-icon nzType="eye" nzTheme="outline"></i></a> -->
+                <a class="text-nowrap" [routerLink]="['/approve/contract/pay/view', data.project.id ]"
+                    [queryParams]="{ contract_pay_id: data.id }"><i nz-icon nzType="eye" nzTheme="outline"></i></a>
             </td>
         </tr>
     </tbody>

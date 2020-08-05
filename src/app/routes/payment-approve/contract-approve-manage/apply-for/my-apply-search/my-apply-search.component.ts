@@ -5,12 +5,12 @@ import { SettingsConfigService } from 'src/app/routes/service/settings-config.se
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-no-contract-apply-list-search',
-  templateUrl: './no-contract-apply-list-search.component.html',
+  selector: 'app-my-apply-search',
+  templateUrl: './my-apply-search.component.html',
   styles: [
   ]
 })
-export class NoContractApplyListSearchComponent implements OnInit {
+export class MyApplySearchComponent implements OnInit {
   @Output() private outer = new EventEmitter();
   @Input() type_id: number;
   @Input() type_name: number;
@@ -49,17 +49,17 @@ export class NoContractApplyListSearchComponent implements OnInit {
 
   supplierList: any = [];
 
-  if_write_off_arr: any = [
-    { name: '是', disabled: true },
-    { name: '否', disabled: false }
-  ];
+  start_amount: number;
 
   ngOnInit(): void {
     this.validateForm = this.fb.group({
-      status_name: ['全部'], // 状态名称
+      status_name: ['进行中'], // 状态名称
+      contract_name: [null],  // 合同名称
+      contract_number: [null],  // 合同编号
+      supplier_id: [null],  // 供应商
+      // start_amount: [null], // 起始金额
+      // end_amount: [null],  // 终止金额
       invoice_number: [null],  // 发票编号
-      pay_company: [null],  // 支付公司
-      if_write_off: [null],  // 是否冲销
       page: [null], // 页
       page_size: [null] // 页码
     });
@@ -90,10 +90,6 @@ export class NoContractApplyListSearchComponent implements OnInit {
     })
   }
 
-  view(data: any) {
-    this.router.navigateByUrl(`/approve/no-contract/pay/view/${data.project.id}?treaty_pay_id=${data.id}`);
-  }
-
   submit() {
     const option: any = this.validateForm.value;
     console.log(option, 'option');
@@ -110,13 +106,25 @@ export class NoContractApplyListSearchComponent implements OnInit {
     this.submit();
   }
 
+  endChange($event: number) {
+
+  }
+
+  startChange($event: number) {
+
+  }
+
+  view(data: any) {
+    this.router.navigateByUrl(`/approve/contract/pay/view/${data.project.id}?contract_pay_id=${data.id}`);
+  }
+
   listRequest(option) {
     console.log('listRequest option', option);
-    this.settingsConfigService.post('/api/treaty_pay', option).subscribe((res: ApiData) => {
+    this.settingsConfigService.post('/api/contract_pay/my', option).subscribe((res: ApiData) => {
       console.log('listRequest res', res.data);
       if (res.code === 200) {
-        console.log('非合约 支付列表');
-        this.listOfData = res.data.treaty_pay;
+        console.log('支付列表');
+        this.listOfData = res.data.contract_pay;
         // this.total = res.data.count;
         console.log('listRequest listOfData', this.listOfData);
         return;
@@ -129,14 +137,18 @@ export class NoContractApplyListSearchComponent implements OnInit {
     console.log('........reset start')
     this.outer.emit();
     this.validateForm.patchValue({
-      status_name: '全部', // 状态名称
+      status_name: '进行中', // 状态名称
+      contract_name: '',  // 合同名称
+      contract_number: null,  // 合同编号
+      supplier_id: null,  // 供应商
+      // start_amount: null, // 起始金额
+      // end_amount: null,  // 终止金额
       invoice_number: '',  // 发票编号
-      pay_company: '',  // 支付公司
-      if_write_off: null,  // 是否冲销
       page: null, // 页
       page_size: null // 页码
     });
     this.submit();
     console.log('........reset end')
   }
+
 }

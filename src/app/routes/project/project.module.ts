@@ -54,6 +54,10 @@ import { SubsidyIncomeTypeAndAmountComponent } from './project-adjust/adjust-bud
 import { SubsidyIncomeTypeAmountComponent } from './component/project-budget/budget-index/subsidy-income-c/subsidy-income-type-amount/subsidy-income-type-amount.component';
 import { ProjectSearchComponent } from './project-list-search/project-search/project-search.component';
 import { ProjectListComponent } from './project-list-search/project-list/project-list.component';
+import { ProjectMyProjectListComponent } from './my-project/list-search/project-my-project-list/project-my-project-list.component';
+import { ProjectMyProjectSearchComponent } from './my-project/list-search/project-my-project-search/project-my-project-search.component';
+import { ProjectApprovalListComponent } from './approval-project/list-search/project-approval-list/project-approval-list.component';
+import { ProjectApprovalSearchComponent } from './approval-project/list-search/project-approval-search/project-approval-search.component';
 
 const COMPONENTS = [
   DraftListComponent,
@@ -120,6 +124,10 @@ const COMPONENTS_NOROUNT = [
     ...COMPONENTS_NOROUNT,
     SubsidyIncomeTypeAmountComponent,
     ProjectSearchComponent,
+    ProjectMyProjectListComponent,
+    ProjectMyProjectSearchComponent,
+    ProjectApprovalListComponent,
+    ProjectApprovalSearchComponent,
   ],
   entryComponents: COMPONENTS_NOROUNT
 })

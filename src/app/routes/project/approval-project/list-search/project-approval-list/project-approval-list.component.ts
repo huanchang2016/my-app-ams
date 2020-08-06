@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-project-list',
-  templateUrl: './project-list.component.html',
+  selector: 'app-project-approval-list',
+  templateUrl: './project-approval-list.component.html',
   styles: [`
   :host ::ng-deep .ant-tabs-nav-wrap>div {
     text-align: right;
@@ -10,31 +10,17 @@ import { Component, OnInit } from '@angular/core';
   `
   ]
 })
-export class ProjectListComponent implements OnInit {
-
-
+export class ProjectApprovalListComponent implements OnInit {
   constructor() { }
 
   tabs: any[] = [
     {
       id: 1,
-      name: '全部'
+      name: '待审批'
     },
     {
       id: 2,
-      name: '已提交，待审核'
-    },
-    {
-      id: 3,
-      name: '已提交，未通过'
-    },
-    {
-      id: 4,
-      name: '进行中'
-    },
-    {
-      id: 5,
-      name: '已完成'
+      name: '已审批'
     },
   ];
 
@@ -42,7 +28,7 @@ export class ProjectListComponent implements OnInit {
 
   type_id = 0;
 
-  type_name = '全部';
+  type_name = '待审批';
 
   ngOnInit(): void {
   }
@@ -53,6 +39,7 @@ export class ProjectListComponent implements OnInit {
     console.log(this.type_name, 'type_name', item);
   }
   readOuter() {
-    this.type_name = '全部';
+    this.type_name = '待审批';
   }
+
 }

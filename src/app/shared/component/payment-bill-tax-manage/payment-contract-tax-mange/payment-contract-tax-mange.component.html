@@ -1,7 +1,7 @@
 <!-- 发票台账 -->
 <nz-card nzTitle="发票台账" [nzBordered]="false" [nzExtra]="costTpl" class="mt-md" *ngIf="listOfData.length>0">
     <ng-template #costTpl>
-        <button nz-button [nzType]="'primary'" *ngIf="is_execute_user"
+        <button nz-button [nzType]="'primary'" *ngIf="is_execute_user&&approveFlag"
             (click)="addBillTicket(billTitle, billContent, billFooter, $event)">新增发票台账</button>
     </ng-template>
 
@@ -74,12 +74,12 @@
                 </nz-skeleton>
 
                 <ng-template #actionEdit>
-                    <a *ngIf="is_execute_user" (click)="editBillTicket(billTitle, billContent, billFooter, data, i)"><i nz-icon nzType="edit"
-                            nzTheme="outline"></i></a>
+                    <a *ngIf="is_execute_user" (click)="editBillTicket(billTitle, billContent, billFooter, data, i)"><i
+                            nz-icon nzType="edit" nzTheme="outline"></i></a>
                 </ng-template>
                 <ng-template #actionDelete>
-                    <a *ngIf="is_execute_user" nz-popconfirm nzPopconfirmTitle="确认删除当前发票台账?" (nzOnConfirm)="deleteTax(data.id)"
-                        (nzOnCancel)="cancel()">删除</a>
+                    <a *ngIf="is_execute_user" nz-popconfirm nzPopconfirmTitle="确认删除当前发票台账?"
+                        (nzOnConfirm)="deleteTax(data.id)" (nzOnCancel)="cancel()">删除</a>
                 </ng-template>
             </nz-card>
         </ng-container>
@@ -99,8 +99,9 @@
             <nz-form-item>
                 <nz-form-label nzFor="contract_payment_id" nzRequired>成本类型</nz-form-label>
                 <nz-form-control nzErrorTip="请选择成本类型">
-                    <nz-select style="width: 100%;" id="contract_payment_id" [nzDisabled]="isEditCost" nzShowSearch nzPlaceHolder="请选择成本类型"
-                        formControlName="contract_payment_id" (ngModelChange)="contractPaymentChange($event)">
+                    <nz-select style="width: 100%;" id="contract_payment_id" [nzDisabled]="isEditCost" nzShowSearch
+                        nzPlaceHolder="请选择成本类型" formControlName="contract_payment_id"
+                        (ngModelChange)="contractPaymentChange($event)">
                         <ng-container *ngFor="let item of listOfData">
                             <nz-option [nzLabel]="item.cost.cost_category.name" [nzValue]="item.cost.cost_category.id">
                             </nz-option>

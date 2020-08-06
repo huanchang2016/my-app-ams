@@ -236,7 +236,7 @@
 
 <ng-container *ngIf="progressInfo && progressInfo.execute_user">
   <app-users-execute-flow [payType]="'contract'" [payInfo]="contractInfo" [paymentArr]="listOfData"
-    [listOfData]="listOfData" [contract_pay_id]="contract_pay_id" [progressInfo]="progressInfo"
-    (executeChange)="executeChange($event)">
+    [isCurrentCheck]="isCurrentCheck" [listOfData]="listOfData" [contract_pay_id]="contract_pay_id"
+    [progressInfo]="progressInfo" (executeChange)="executeChange($event)">
   </app-users-execute-flow>
 </ng-container>

@@ -20,6 +20,7 @@ export class UsersExecuteFlowComponent implements OnChanges {
   @Input() listOfData?: any[];
   @Input() contract_pay_id?: number;
   @Input() treatypayInfo?: any = [];
+  @Input() isCurrentCheck?: boolean;
 
   @Output() executeChange: EventEmitter<any> = new EventEmitter();
 
@@ -42,6 +43,8 @@ export class UsersExecuteFlowComponent implements OnChanges {
   flag: boolean;
 
   contractInfo: any = [];
+
+  approveFlag: boolean;
 
   constructor(
     private settings: SettingsService,
@@ -114,5 +117,9 @@ export class UsersExecuteFlowComponent implements OnChanges {
   }
   refreshPage() {
     this.refresh.emit();
+  }
+
+  submitDisplay(flag) {
+    this.approveFlag = flag
   }
 }

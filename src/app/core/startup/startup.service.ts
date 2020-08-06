@@ -59,7 +59,8 @@ export class StartupService {
               },
               {
                 text: '我的项目',
-                link: '/project/list'
+                // link: '/project/list'
+                link: '/project/my-project'
                 // children: [
                 //   {
                 //     text: '草稿',
@@ -81,7 +82,8 @@ export class StartupService {
               },
               {
                 text: '项目审批',
-                link: '/project/approval',
+                // link: '/project/approval',
+                link: '/project/approvalList',
                 hide: this.isHideRouter(['project_approval'], permissionGroup)
                 // children: [
                 //   {
@@ -351,17 +353,20 @@ export class StartupService {
             children: [
               {
                 text: '合约支付',
-                link: '/financial/contract',
+                // link: '/financial/contract',
+                link: '/financial/contractList',
                 // hide: this.isHideRouter(['cost_list'], permissionGroup)
               },
               {
                 text: '协议支付',
-                link: '/financial/treaty',
+                // link: '/financial/treaty',
+                link: '/financial/treatyList',
                 // hide: this.isHideRouter(['cost_list'], permissionGroup)
               },
               {
                 text: '已开发票',
-                link: '/financial/bill',
+                // link: '/financial/bill',
+                link: '/financial/billList',
                 // hide: this.isHideRouter(['cost_list'], permissionGroup)
               }
             ]
@@ -497,24 +502,21 @@ export class StartupService {
               }
             ]
           },
-          {
-            text: '派遣流程',
-            // link: '/dispatch',
-            icon: { type: 'icon', value: 'key' },
-            // hide: this.isHideRouter(['permission_list'], permissionGroup),
-            children: [
-              {
-                text: '派遣管理',
-                link: '/dispatch/index',
-                // hide: this.isHideRouter(['permission_list'], permissionGroup),
-              },
-              {
-                text: '派遣创建',
-                link: '/dispatch/create',
-                // hide: this.isHideRouter(['permission_list'], permissionGroup)
-              }
-            ]
-          }
+          // {
+          //   text: '派遣流程',
+          //   link: '/dispatch',
+          //   icon: { type: 'icon', value: 'key' },
+          //   children: [
+          //     {
+          //       text: '派遣管理',
+          //       link: '/dispatch/index',
+          //     },
+          //     // {
+          //     //   text: '派遣创建',
+          //     //   link: '/dispatch/create',
+          //     // }
+          //   ]
+          // }
         ]
       }
     ];
@@ -616,7 +618,8 @@ export class StartupService {
               },
               {
                 text: '我的项目',
-                link: '/project/list'
+                // link: '/project/list'
+                link: '/project/my-project'
                 // children: [
                 //   {
                 //     text: '草稿',

@@ -1,0 +1,177 @@
+<form nz-form [formGroup]="validateForm" class="ant-advanced-search-form search-option-form">
+    <div nz-row [nzGutter]="24">
+        <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="8">
+            <nz-form-item>
+                <nz-form-label nzFor="name">项目名称</nz-form-label>
+                <nz-form-control style="flex-grow: 1;">
+                    <input nz-input placeholder="请输入项目名称" formControlName="name" id="name" />
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="8">
+            <nz-form-item>
+                <nz-form-label nzFor="number">项目编号</nz-form-label>
+                <nz-form-control style="flex-grow: 1;">
+                    <input nz-input placeholder="请输入项目编号" formControlName="number" id="number" />
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="8">
+            <nz-form-item>
+                <nz-form-label nzFor="company_id">客户单位</nz-form-label>
+                <nz-form-control style="flex-grow: 1;">
+                    <nz-select id="company_id" nzShowSearch nzAllowClear (ngModelChange)="chooseCompany($event)"
+                        [nzDisabled]="" nzPlaceHolder="请选择客户单位" formControlName="company_id">
+                        <ng-container *ngFor="let item of companyList">
+                            <nz-option [nzLabel]="item.name" [nzValue]="item.id" [nzDisabled]=""></nz-option>
+                        </ng-container>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="8">
+            <nz-form-item>
+                <nz-form-label nzFor="department_id">部门</nz-form-label>
+                <nz-form-control style="flex-grow: 1;">
+                    <nz-select id="department_id" nzShowSearch nzAllowClear [nzDisabled]="disableFlag"
+                        (ngModelChange)="chooseDepartment($event)" nzPlaceHolder="请选择部门"
+                        formControlName="department_id">
+                        <ng-container *ngFor="let item of departmentList">
+                            <nz-option [nzLabel]="item.name" [nzValue]="item.id" [nzDisabled]=""></nz-option>
+                        </ng-container>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="8">
+            <nz-form-item>
+                <nz-form-label nzFor="category_id">项目类型</nz-form-label>
+                <nz-form-control style="flex-grow: 1;">
+                    <nz-select id="category_id" nzShowSearch nzAllowClear [nzDisabled]="disableFlag"
+                        nzPlaceHolder="请选择项目类型" formControlName="category_id">
+                        <ng-container *ngFor="let item of projectCategory">
+                            <nz-option [nzLabel]="item.name" [nzValue]="item.id" [nzDisabled]=""></nz-option>
+                        </ng-container>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+    </div>
+    <div nz-row>
+        <div nz-col [nzSpan]="24" class="search-area">
+            <button nz-button [nzType]="'primary'" (click)="submit()">查询</button>
+            <button nz-button (click)="resetForm()" class="ml-sm">清空条件</button>
+        </div>
+    </div>
+</form>
+
+<div class="hidden-mobile">
+</div>
+<nz-table #ajaxTable nzShowSizeChanger [nzFrontPagination]="false" [nzData]="listOfData" [nzLoading]="loading"
+    [nzTotal]="total" [(nzPageIndex)]="pageOption.page" [(nzPageSize)]="pageOption.page_size"
+    (nzPageIndexChange)="pageIndexChange($event)" (nzPageSizeChange)="pageSizeChange($event)"
+    class="mt-md hidden-mobile">
+    <thead>
+        <tr>
+            <th nzWidth="80px">序号</th>
+            <th>项目编号</th>
+            <th>基本信息</th>
+            <th>创建人信息</th>
+            <th nzWidth="80px">状态</th>
+            <th nzWidth="200px">操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let data of ajaxTable.data; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td *ngIf="data.number">{{ data.number }}</td>
+            <td *ngIf="!data.number">/</td>
+            <td>
+                <sv-container size="small" col="1">
+                    <sv label="项目名称">{{ data.name }}</sv>
+                    <sv label="项目类型">{{ data.category.name }}</sv>
+                    <sv label="项目来源">{{ data.origin.code.code_name + data.origin.code.name }}</sv>
+                </sv-container>
+            </td>
+            <td>
+                <sv-container size="small" col="1">
+                    <sv label="创建人">{{ data.user.name }}</sv>
+                    <sv label="部门">{{ data.department.name }}</sv>
+                    <sv label="单位">{{ data.company.name }}</sv>
+                </sv-container>
+            </td>
+            <!-- <td>
+                <sv-container size="small" col="1">
+                    <sv>{{ data.project.name }}</sv>
+                </sv-container>
+            </td>
+            <td>
+                <sv-container size="small" col="1">
+                    <sv label="名称">{{ data.user.name }}</sv>
+                    <sv label="部门">{{ data.user.department.name }}</sv>
+                    <sv label="单位">{{ data.user.company.name }}</sv>
+                </sv-container>
+            </td> -->
+            <td class="text-primary text-nowrap">{{ data.project_status.name }}</td>
+            <!-- <td>
+                <span [innerHTML]="data.remark | showTextareaContent"></span>
+            </td> -->
+            <td>
+                <a *ngIf="swithFlag" (click)="edit(data)" class="text-nowrap"><i nz-icon nzType="edit"
+                        nzTheme="outline"></i></a>
+                <nz-divider nzType="vertical"></nz-divider>
+                <a (click)="view(data)"><i nz-icon nzType="eye" nzTheme="outline"></i></a>
+
+                <nz-divider nzType="vertical"></nz-divider>
+                <a *ngIf="swithFlag" nz-popconfirm class="text-nowrap" nzPopconfirmTitle="请确认项目信息全部填写完整，无误后确认提交！！！"
+                    (nzOnConfirm)="submitProject(data.id)" (nzOnCancel)="cancel()">
+                    提交
+                </a>
+                <nz-divider nzType="vertical"></nz-divider>
+                <a *ngIf="swithFlag" nz-popconfirm class="text-error text-nowrap" nzPopconfirmTitle="是否确认删除当前项目信息？"
+                    (nzOnConfirm)="deletedProject(data.id)" (nzOnCancel)="cancel()">
+                    删除
+                </a>
+            </td>
+        </tr>
+    </tbody>
+</nz-table>
+<!-- <div class="hidden-pc mt-md">
+    <div *ngIf="loading && listOfData.length === 0" class="p-md text-center">
+        <nz-spin nzSimple></nz-spin>
+    </div>
+    <div *ngIf="!loading && listOfData.length !== 0">
+        <ng-container *ngFor="let data of listOfData">
+            <nz-card [nzActions]="[actionEdit]" class="mt-md">
+                <nz-skeleton [nzActive]="true" [nzLoading]="false">
+                    <nz-card-meta [nzTitle]="treatyTitltTpl"></nz-card-meta>
+                    <ng-template #treatyTitltTpl>
+                        <span>{{ data.bill_category.name }}</span>
+                        <span class="text-primary text-xs ml-md" [class.text-error]="data.bill_status?.name === '未通过'"
+                            [class.text-success]="data.bill_status?.name === '已通过'">{{ data.bill_status?.name }}</span>
+                    </ng-template>
+                    <div class="pt-md">
+                        <sv-container size="small">
+                            <sv label="发票金额"><span class="font-weight-bold">{{ data.amount | currency: 'CNY' }}</span>
+                            </sv>
+                            <sv label="申请人">{{ data.user.name }}</sv>
+                            <sv label="部&nbsp;&nbsp;&nbsp;门">{{ data.department.name }}</sv>
+                            <sv label="公&nbsp;&nbsp;&nbsp;司">{{ data.company.name }}</sv>
+                            <sv label="开票单位">{{ data.customer.name }}</sv>
+                            <sv label="开票地址">{{ data.customer.address }}</sv>
+                        </sv-container>
+                    </div>
+                </nz-skeleton>
+                <ng-template #actionEdit>
+                    <a [routerLink]="['/bill/approve/view', data.id]" [queryParams]="{ project_id: data.project.id }"><i
+                            nz-icon nzType="eye" nzTheme="outline"></i></a>
+                </ng-template>
+            </nz-card>
+        </ng-container>
+        <div class="mt-md text-center">
+            <nz-pagination [nzSize]="'small'" nzShowSizeChanger [(nzPageSize)]="pageOption.page_size"
+                [nzPageIndex]="pageOption.page" [nzTotal]="total" (nzPageIndexChange)="pageIndexChange($event)"
+                (nzPageSizeChange)="pageSizeChange($event)"></nz-pagination>
+        </div>
+    </div>
+</div> -->

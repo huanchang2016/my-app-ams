@@ -13,13 +13,13 @@ import { Router } from '@angular/router';
 export class NoContractNotStartedComponent implements OnInit {
 
   list: any[] = [];
-  listOfData:any[] = [];
-  loading: boolean = false;
-  searchOption:any = {};
+  listOfData: any[] = [];
+  loading = false;
+  searchOption: any = {};
 
   total = 0;
 
-  pageOption:any = {
+  pageOption: any = {
     page: 1,
     page_size: 10
   };
@@ -39,7 +39,7 @@ export class NoContractNotStartedComponent implements OnInit {
     private msg: NzMessageService,
     private drawerService: NzDrawerService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.getDataList();
@@ -47,11 +47,11 @@ export class NoContractNotStartedComponent implements OnInit {
 
   getDataList() { // 获取单位下的数据
     this.loading = true;
-    this.settingsConfigService.get('/api/my/pay/project', this.pageOption).subscribe((res:ApiData) => {
+    this.settingsConfigService.get('/api/my/pay/project', this.pageOption).subscribe((res: ApiData) => {
       console.log(res);
       this.loading = false;
-      if(res.code === 200) {
-        let data:any[] = res.data.project;
+      if (res.code === 200) {
+        const data: any[] = res.data.project;
         this.total = res.data.count;
         this.list = data;
         this.listOfDisplayData = this.list;
@@ -60,26 +60,26 @@ export class NoContractNotStartedComponent implements OnInit {
     });
   }
 
-  
-  view(data:any) {
+
+  view(data: any) {
     this.router.navigateByUrl(`/approve/contract/view/${data.id}`);
   }
-  pageIndexChange($event:number) {
+  pageIndexChange($event: number) {
     this.pageOption.page = $event;
     this.getDataList();
   }
-  pageSizeChange($event:number) {
+  pageSizeChange($event: number) {
     this.pageOption.page_size = $event;
     this.getDataList();
   }
 
   refreshStatus(): void {
-    if(this.listOfDisplayData.length !== 0) {
+    if (this.listOfDisplayData.length !== 0) {
       this.isAllDisplayDataChecked = this.listOfDisplayData.every(item => this.mapOfCheckedId[item.id]);
       this.isIndeterminate =
         this.listOfDisplayData.some(item => this.mapOfCheckedId[item.id]) &&
         !this.isAllDisplayDataChecked;
-    }else {
+    } else {
       this.isIndeterminate = false;
     }
   }
@@ -87,19 +87,20 @@ export class NoContractNotStartedComponent implements OnInit {
   checkAll(value: boolean): void {
     // this.listOfDisplayData.forEach(item => (this.mapOfCheckedId[item.id] = value));
     this.listOfDisplayData.forEach(item => (this.mapOfCheckedId[item.id] = value));
+    console.log(this.listOfDisplayData, 'listOfDisplayData');
     this.refreshStatus();
   }
 
   // 搜索条件发生变化
-  searchOptionsChange(option?:any) {
-    
-    if(option) this.searchOption = option;
+  searchOptionsChange(option?: any) {
+
+    if (option) this.searchOption = option;
 
     option = option || this.searchOption;
 
-    if(this.list.length !== 0) {
+    if (this.list.length !== 0) {
       this.isIndeterminate = false;
-      let object:any = {};
+      const object: any = {};
       for (const key in option) {
         if (option.hasOwnProperty(key)) {
           const element = option[key];

@@ -97,8 +97,9 @@ export class DispatchInfoComponent implements OnInit {
       name: [null, [Validators.required]],  //  申请人
       // plan_time: [null],
       // actual_time: [null],
-      // description: [null],
+      description: [null],  //  内容
       // progress: [null],
+      isNotice: [null],
       flow_type_id: [null],  //  流程类型
       priority_id: [null],  //  优先级
       theme: [null],  //  主题

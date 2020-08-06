@@ -126,7 +126,7 @@ export class UsersBillExecuteFlowComponent implements OnChanges {
 
     this.validateForm.get('invoice_amount').valueChanges.subscribe(v => {
       const _amount = Number(v) || 0;
-      const _tax_amount = (_amount * (this.billInfo.tax ? this.billInfo.tax.rate : this.billInfo.subsidy_income_detail.tax_rate)).toFixed(2);
+      const _tax_amount = (_amount / (1 + (this.billInfo.tax ? this.billInfo.tax.rate : this.billInfo.subsidy_income_detail.tax_rate)) * (this.billInfo.tax ? this.billInfo.tax.rate : this.billInfo.subsidy_income_detail.tax_rate)).toFixed(2);
       this.validateForm.patchValue({
         tax_amount: _tax_amount
       })

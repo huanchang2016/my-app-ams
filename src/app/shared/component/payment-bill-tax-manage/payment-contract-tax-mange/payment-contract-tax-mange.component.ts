@@ -5,6 +5,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { ApiData, List } from 'src/app/data/interface.data';
 import { SettingsConfigService } from 'src/app/routes/service/settings-config.service';
 import { filter, map } from 'rxjs/operators';
+import { SettingsService } from '@delon/theme';
 
 @Component({
   selector: 'app-payment-contract-tax-mange',
@@ -22,11 +23,15 @@ export class PaymentContractTaxMangeComponent implements OnInit {
   @Input() listOfData?: any[];
 
   @Input() contract_pay_id?: number;
-  @Input() is_execute_user?: boolean = true;
+  @Input() is_execute_user = true;
+  @Input() isCurrentCheck?: boolean;
+
 
   @Output() private outer = new EventEmitter();
 
   @Output() private contractInformation = new EventEmitter();
+
+  @Output() private submitDisplay = new EventEmitter();
 
   billModal: NzModalRef;
 
@@ -80,12 +85,21 @@ export class PaymentContractTaxMangeComponent implements OnInit {
 
   isSubmit: boolean;
 
+  approveFlag: boolean;
+
+  // 流程进程信息
+  // progressInfo: any = null;
+  // nodeProcess: any[] = [];
+  // currentNodeProcess: any = null;
+  // isCurrentCheck = false;
+
   constructor(
     public msg: NzMessageService,
     private modalService: NzModalService,
     private settingsConfigService: SettingsConfigService,
     private activatedRoute: ActivatedRoute,
     private fb: FormBuilder,
+    private settings: SettingsService
   ) {
     this.activatedRoute.params.subscribe((params: Params) => {
       if (params && params.id) {
@@ -98,6 +112,7 @@ export class PaymentContractTaxMangeComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log(this.isCurrentCheck, 'payment isCurrentCheck');
     this.getContractTax();
     console.log("最下层组件 listOfData", this.listOfData);
     console.log("最下层组件 listOfTax", this.listOfTax);
@@ -285,24 +300,25 @@ export class PaymentContractTaxMangeComponent implements OnInit {
           this.summary = this.contractInfo.summary; // 合约支付摘要
           [this.selectedContract] = this.contractList.filter(v => v.contract.id === this.contract_id);
           this.contractTaxTotal = res.data.tax_use_amount;
-          // if (!this.contractInfo.draft) {
-          //   this.getWorkflow();
-          // }
+          if (!this.contractInfo.draft) {
+            this.getWorkflow();
+          }
         }
       })
   }
 
-  // getWorkflow() {
-  //   this.settingsConfigService
-  //     .get(`/api/contract/pay/process/${this.contract_pay_id}`)
-  //     .subscribe((res: ApiData) => {
-  //       console.log(res, 'workflow');
-  //       if (res.code === 200) {
-  //         // this.progressInfo = res.data;
-  //         // this.getNodeProcess();
-  //       }
-  //     })
-  // }
+  getWorkflow() {
+    this.settingsConfigService
+      .get(`/api/contract/pay/process/${this.contract_pay_id}`)
+      .subscribe((res: ApiData) => {
+        console.log(res, 'workflow');
+        if (res.code === 200) {
+          this.approveFlag = res.data.finished;
+          console.log(this.approveFlag, 'approveFlag');
+          this.submitDisplay.emit(this.approveFlag);
+        }
+      })
+  }
 
   getContractPayment() {
     this.settingsConfigService.get(`/api/contract/payment/${this.contract_pay_id}`)

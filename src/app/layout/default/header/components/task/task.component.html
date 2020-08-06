@@ -1,106 +1,72 @@
-<div
-      class="alain-default__nav-item"
-      nz-dropdown
-      [nzDropdownMenu]="taskMenu"
-      nzTrigger="hover"
-      nzPlacement="bottomRight"
-      *ngIf="globalService.taskOption.totalTaskNumber > 0"
-    >
-      <!-- (nzVisibleChange)="change()" -->
-      <nz-badge [nzCount]="globalService.taskOption.totalTaskNumber" [nzOverflowCount]="99">
-        <a class="head-task-box"></a>
-      </nz-badge>
-    </div>
-    <nz-dropdown-menu #taskMenu="nzDropdownMenu">
-      <div nz-menu class="wd-lg">
-        <!-- <div *ngIf="loading" class="mx-lg p-lg"><nz-spin></nz-spin></div> -->
-        <nz-card nzTitle="待办任务列表" nzBordered="false">
-          
-          <div nz-menu-item
-            nz-row *ngIf="globalService.taskOption.projectNumber"
-            [nzType]="'flex'"
-            [nzJustify]="'center'"
-            [nzAlign]="'middle'"
-            nzGutter="16"
-            class="py-sm bg-grey-lighter-h point"
-            (click)="navToApproval('/project/approval/pending')"
-            acl [acl-ability]="'project_approval'" 
-          >
-            <div nz-col [nzSpan]="4" class="text-center">
-              <i class="text-xl text-primary" nz-icon nzType="bars" nzTheme="outline"></i>
-            </div>
-            <div nz-col [nzSpan]="20">
-              <div>
-                <strong>待审批项目</strong>
-                <nz-badge [nzCount]="globalService.taskOption.projectNumber" class="float-right"></nz-badge>
-              </div>
-              <p class="mb0">请立即查看并审核相关项目信息</p>
-            </div>
+<div class="alain-default__nav-item" nz-dropdown [nzDropdownMenu]="taskMenu" nzTrigger="hover" nzPlacement="bottomRight"
+  *ngIf="globalService.taskOption.totalTaskNumber > 0">
+  <!-- (nzVisibleChange)="change()" -->
+  <nz-badge [nzCount]="globalService.taskOption.totalTaskNumber" [nzOverflowCount]="99">
+    <a class="head-task-box"></a>
+  </nz-badge>
+</div>
+<nz-dropdown-menu #taskMenu="nzDropdownMenu">
+  <div nz-menu class="wd-lg">
+    <!-- <div *ngIf="loading" class="mx-lg p-lg"><nz-spin></nz-spin></div> -->
+    <nz-card nzTitle="待办任务列表" nzBordered="false">
+
+      <div nz-menu-item nz-row *ngIf="globalService.taskOption.projectNumber" [nzType]="'flex'" [nzJustify]="'center'"
+        [nzAlign]="'middle'" nzGutter="16" class="py-sm bg-grey-lighter-h point"
+        (click)="navToApproval('/project/approvalList')" acl [acl-ability]="'project_approval'">
+        <div nz-col [nzSpan]="4" class="text-center">
+          <i class="text-xl text-primary" nz-icon nzType="bars" nzTheme="outline"></i>
+        </div>
+        <div nz-col [nzSpan]="20">
+          <div>
+            <strong>待审批项目</strong>
+            <nz-badge [nzCount]="globalService.taskOption.projectNumber" class="float-right"></nz-badge>
           </div>
-          <div nz-menu-item
-            nz-row *ngIf="globalService.taskOption.contractNumber"
-            [nzType]="'flex'"
-            [nzJustify]="'center'"
-            [nzAlign]="'middle'"
-            nzGutter="16"
-            class="py-sm bg-grey-lighter-h point"
-            (click)="navToApproval('/approve/contract/pay/forApproval')"
-            acl [acl-ability]="'contract_pay_approval'" 
-          >
-            <div nz-col [nzSpan]="4" class="text-center">
-              <i class="text-xl text-primary" nz-icon nzType="audit" nzTheme="outline"></i>
-            </div>
-            <div nz-col [nzSpan]="20">
-              <div>
-                <strong>待审批合约支付</strong>
-                <nz-badge [nzCount]="globalService.taskOption.contractNumber" class="float-right"></nz-badge>
-              </div>
-              <p class="mb0">请立即查看并审核相关合约支付信息</p>
-            </div>
-          </div>
-          <div nz-menu-item
-            nz-row *ngIf="globalService.taskOption.treatyNumber"
-            [nzType]="'flex'"
-            [nzJustify]="'center'"
-            [nzAlign]="'middle'"
-            nzGutter="16"
-            class="py-sm bg-grey-lighter-h point"
-            (click)="navToApproval('/approve/no-contract/pay/forApproval')"
-            acl [acl-ability]="'treaty_pay_approval'" 
-          >
-            <div nz-col [nzSpan]="4" class="text-center">
-              <i class="text-xl text-primary" nz-icon nzType="exception" nzTheme="outline"></i>
-            </div>
-            <div nz-col [nzSpan]="20">
-              <div>
-                <strong>待审批非合约</strong>
-                <nz-badge [nzCount]="globalService.taskOption.treatyNumber" class="float-right"></nz-badge>
-              </div>
-              <p class="mb0">请立即查看并审核相关非合约信息</p>
-            </div>
-          </div>
-          <div nz-menu-item
-            nz-row *ngIf="globalService.taskOption.billNumber"
-            [nzType]="'flex'"
-            [nzJustify]="'center'"
-            [nzAlign]="'middle'"
-            nzGutter="16"
-            class="py-sm bg-grey-lighter-h point"
-            (click)="navToApproval('/bill/approve/forApprove')"
-            acl [acl-ability]="'bill_approval'" 
-          >
-            <div nz-col [nzSpan]="4" class="text-center">
-              <i class="text-xl text-primary" nz-icon nzType="transaction" nzTheme="outline"></i>
-            </div>
-            <div nz-col [nzSpan]="20">
-              <div>
-                <strong>待审批发票开具</strong>
-                <nz-badge [nzCount]="globalService.taskOption.billNumber" class="float-right"></nz-badge>
-              </div>
-              
-              <p class="mb0">请立即查看并审核相关发票开具信息</p>
-            </div>
-          </div>
-        </nz-card>
+          <p class="mb0">请立即查看并审核相关项目信息</p>
+        </div>
       </div>
-    </nz-dropdown-menu>
+      <div nz-menu-item nz-row *ngIf="globalService.taskOption.contractNumber" [nzType]="'flex'" [nzJustify]="'center'"
+        [nzAlign]="'middle'" nzGutter="16" class="py-sm bg-grey-lighter-h point"
+        (click)="navToApproval('/approve/contract/approve')" acl [acl-ability]="'contract_pay_approval'">
+        <div nz-col [nzSpan]="4" class="text-center">
+          <i class="text-xl text-primary" nz-icon nzType="audit" nzTheme="outline"></i>
+        </div>
+        <div nz-col [nzSpan]="20">
+          <div>
+            <strong>待审批合约支付</strong>
+            <nz-badge [nzCount]="globalService.taskOption.contractNumber" class="float-right"></nz-badge>
+          </div>
+          <p class="mb0">请立即查看并审核相关合约支付信息</p>
+        </div>
+      </div>
+      <div nz-menu-item nz-row *ngIf="globalService.taskOption.treatyNumber" [nzType]="'flex'" [nzJustify]="'center'"
+        [nzAlign]="'middle'" nzGutter="16" class="py-sm bg-grey-lighter-h point"
+        (click)="navToApproval('/approve/no-contract/approve')" acl [acl-ability]="'treaty_pay_approval'">
+        <div nz-col [nzSpan]="4" class="text-center">
+          <i class="text-xl text-primary" nz-icon nzType="exception" nzTheme="outline"></i>
+        </div>
+        <div nz-col [nzSpan]="20">
+          <div>
+            <strong>待审批非合约</strong>
+            <nz-badge [nzCount]="globalService.taskOption.treatyNumber" class="float-right"></nz-badge>
+          </div>
+          <p class="mb0">请立即查看并审核相关非合约信息</p>
+        </div>
+      </div>
+      <div nz-menu-item nz-row *ngIf="globalService.taskOption.billNumber" [nzType]="'flex'" [nzJustify]="'center'"
+        [nzAlign]="'middle'" nzGutter="16" class="py-sm bg-grey-lighter-h point"
+        (click)="navToApproval('/bill/approveList')" acl [acl-ability]="'bill_approval'">
+        <div nz-col [nzSpan]="4" class="text-center">
+          <i class="text-xl text-primary" nz-icon nzType="transaction" nzTheme="outline"></i>
+        </div>
+        <div nz-col [nzSpan]="20">
+          <div>
+            <strong>待审批发票开具</strong>
+            <nz-badge [nzCount]="globalService.taskOption.billNumber" class="float-right"></nz-badge>
+          </div>
+
+          <p class="mb0">请立即查看并审核相关发票开具信息</p>
+        </div>
+      </div>
+    </nz-card>
+  </div>
+</nz-dropdown-menu>

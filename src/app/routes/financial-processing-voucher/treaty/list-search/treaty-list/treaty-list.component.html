@@ -1,0 +1,20 @@
+<page-header [title]="'协议支付'" [breadcrumb]="breadcrumb">
+    <ng-template #breadcrumb>
+        <nz-breadcrumb>
+            <nz-breadcrumb-item><a [routerLink]="['/dashboard']">首页</a></nz-breadcrumb-item>
+            <nz-breadcrumb-item><a [routerLink]="['/financial/bill']">财务处理凭证</a></nz-breadcrumb-item>
+            <nz-breadcrumb-item>协议支付</nz-breadcrumb-item>
+        </nz-breadcrumb>
+    </ng-template>
+
+    <!-- <ng-template #tab>
+        <nz-tabset [nzSelectedIndex]="pos">
+            <nz-tab *ngFor="let i of tabs" [nzTitle]="i.name" (nzClick)="to(i)">
+            </nz-tab>
+        </nz-tabset>
+    </ng-template> -->
+</page-header>
+
+<nz-card [nzBordered]="false">
+    <app-contract-search [type_name]="type_name" (outer)="readOuter()"></app-contract-search>
+</nz-card>

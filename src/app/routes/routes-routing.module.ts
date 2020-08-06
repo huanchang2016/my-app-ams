@@ -14,6 +14,8 @@ import { RoutesResetPasswordComponent } from './passport/reset-password/reset-pa
 import { QrAuthComponent } from './passport/qr-auth/qr-auth.component';
 // project
 import { ProjectListComponent } from './project/project-list-search/project-list/project-list.component'
+import { ProjectMyProjectListComponent } from './project/my-project/list-search/project-my-project-list/project-my-project-list.component'
+import { ProjectApprovalListComponent } from './project/approval-project/list-search/project-approval-list/project-approval-list.component'
 // single pages
 import { CallbackComponent } from './callback/callback.component';
 import { UserLockComponent } from './passport/lock/lock.component';
@@ -22,6 +24,8 @@ import { MyBillListComponent } from './financial-processing-voucher/bill/my-bill
 import { BillApprovalListComponent } from './financial-processing-voucher/bill/bill-approval-list/bill-approval-list.component'
 import { BillExcuteListComponent } from './financial-processing-voucher/bill/bill-excute-list/bill-excute-list.component'
 // dispatch
+import { DispatchCreateComponent } from './dispatch/dispatch-create/dispatch-create.component'
+import { DispathIndexComponent } from './dispatch/dispath-index/dispath-index.component'
 
 // 合约支付列表
 import { ApplyListIndexComponent } from './payment-approve/contract-approve-manage/apply-list/apply-list-index/apply-list-index.component'
@@ -33,6 +37,10 @@ import { NoContractApplyListIndexComponent } from './payment-approve/no-contract
 import { NoMyApplyListComponent } from './payment-approve/no-contract-approve-manage/apply-for/no-contract-list-search/my-apply/no-my-apply-list/no-my-apply-list.component'
 import { NoApplyApproveListComponent } from './payment-approve/no-contract-approve-manage/apply-for/no-contract-list-search/apply-approve/no-apply-approve-list/no-apply-approve-list.component'
 import { NoApplyExcuteListComponent } from './payment-approve/no-contract-approve-manage/apply-for/no-contract-list-search/apply-excute/no-apply-excute-list/no-apply-excute-list.component'
+// 凭证
+import { ContractListComponent } from './financial-processing-voucher/contract/contract-list-search/contract-list/contract-list.component'
+import { TreatyListComponent } from './financial-processing-voucher/treaty/list-search/treaty-list/treaty-list.component'
+import { FinancialBillListComponent } from './financial-processing-voucher/bill/list-search/financial-bill-list/financial-bill-list.component'
 
 const routes: Routes = [
   {
@@ -50,6 +58,8 @@ const routes: Routes = [
       { path: 'project', loadChildren: () => import('./project/project.module').then(m => m.ProjecttModule) },
       { path: 'pro-settings', loadChildren: () => import('./project-settings/project-settings.module').then(m => m.ProjectSettingsModule) },
       { path: 'project/projectList', component: ProjectListComponent },
+      { path: 'project/my-project', component: ProjectMyProjectListComponent },
+      { path: 'project/approvalList', component: ProjectApprovalListComponent },
       // 支付审批管理
       { path: 'approve', loadChildren: () => import('./payment-approve/payment-approve.module').then(m => m.PaymentApproveModule) },
       // 账务管理 （发票、账务处理）
@@ -71,6 +81,9 @@ const routes: Routes = [
       { path: 'approve/no-contract/approve', component: NoApplyExcuteListComponent },
       // 财务处理凭证
       { path: 'financial', loadChildren: () => import('./financial-processing-voucher/financial-processing-voucher.module').then(m => m.FinancialProcessingVoucherModule) },
+      { path: 'financial/contractList', component: ContractListComponent },
+      { path: 'financial/treatyList', component: TreatyListComponent },
+      { path: 'financial/billList', component: FinancialBillListComponent },
       // 项目流程管理
       { path: 'workflow', loadChildren: () => import('./workflow/workflow.module').then(m => m.WorkflowModule) },
       // 基础配置
@@ -84,7 +97,9 @@ const routes: Routes = [
       // 个人中心
       { path: 'person-center', loadChildren: () => import('./person-center/person-center.module').then(m => m.PersonCenterModule) },
       // 派遣
-      { path: 'dispatch', loadChildren: () => import('./dispatch/dispatch.module').then(m => m.DispatchModule) }
+      { path: 'dispatch', loadChildren: () => import('./dispatch/dispatch.module').then(m => m.DispatchModule) },
+      { path: 'dispatch/create', component: DispatchCreateComponent },
+      { path: 'dispatch/index', component: DispathIndexComponent },
     ]
   },
   // 全屏布局

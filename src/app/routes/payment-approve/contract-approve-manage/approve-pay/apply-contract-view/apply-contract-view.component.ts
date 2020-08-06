@@ -29,16 +29,16 @@ export class ApplyContractViewComponent implements OnInit {
     private settings: SettingsService
   ) {
     this.activatedRoute.params.subscribe((params: Params) => {
-      if (params && params['id']) {
-        this.projectId = +params['id'];
+      if (params && params.id) {
+        this.projectId = +params.id;
         this.getContractList();
         this.getProjectInfo();
       }
     });
     // 如果有 contract_pay_id 参数， 则表示为编辑 合约支付
     this.activatedRoute.queryParams.subscribe(params => {
-      if (params && params['contract_pay_id']) {
-        this.contract_pay_id = +(params['contract_pay_id']);
+      if (params && params.contract_pay_id) {
+        this.contract_pay_id = +(params.contract_pay_id);
         this.getContractPayment();
       }
     })
@@ -58,26 +58,31 @@ export class ApplyContractViewComponent implements OnInit {
   selectedContract: any = null;
   contractList: any[] = [];
 
-  costTotalPay: number = 0;
-  payPercent: string = '0%';
-  submitLoading: boolean = false;
+  costTotalPay = 0;
+  payPercent = '0%';
+  submitLoading = false;
 
   // 流程进程信息
   progressInfo: any = null;
   nodeProcess: any[] = [];
   currentNodeProcess: any = null;
-  isCurrentCheck: boolean = false;
+  isCurrentCheck = false;
 
   checkOption: any = {
     agree: null,
     remark: ''
   }
 
-  isPrinter: boolean = false;
-  pdfPosition: number = 0;
+  isPrinter = false;
+  pdfPosition = 0;
 
 
   ngOnInit() {
+    console.log(this.isCurrentCheck, '通过不通过 isCurrentCheck');
+  }
+
+  ngOnChanges(): void {
+    console.log(this.isCurrentCheck, '通过不通过change isCurrentCheck');
   }
 
   getContractList(): void { // 通过项目获取合约
@@ -143,7 +148,7 @@ export class ApplyContractViewComponent implements OnInit {
     this.settingsConfigService
       .get(`/api/contract/pay/process/${this.contract_pay_id}`)
       .subscribe((res: ApiData) => {
-        // console.log(res, 'workflow');
+        console.log(res, 'workflow');
         if (res.code === 200) {
           this.progressInfo = res.data;
           this.getNodeProcess();
@@ -156,13 +161,14 @@ export class ApplyContractViewComponent implements OnInit {
     this.settingsConfigService
       .get(`/api/node/process/${this.progressInfo.id}`)
       .subscribe((res: ApiData) => {
-        // console.log(res, 'node_process');
+        console.log(res, 'node_process');
         if (res.code === 200) {
           this.nodeProcess = res.data.node_process;
           this.currentNodeProcess = this.nodeProcess.filter(v => v.current)[0];
           // console.log(this.currentNodeProcess, this.isCurrentCheck, this.settings.user);
           if (this.currentNodeProcess) {
             this.isCurrentCheck = this.currentNodeProcess.user.id === this.settings.user.id;
+            console.log(this.isCurrentCheck, 'apply getNodeProcess isCurrentCheck');
           }
         }
       })
@@ -193,7 +199,7 @@ export class ApplyContractViewComponent implements OnInit {
 
   executeChange(data: any) {
     console.log('执行情况信息 提交: ', data);
-    const option: any = Object.assign(data, { process_id: this.progressInfo.id });
+    const option: any = { ...data, process_id: this.progressInfo.id };
     this.settingsConfigService.post('/api/contract/pay/execute', option).subscribe((res: ApiData) => {
       console.log(res, '执行情况确认');
       if (res.code === 200) {
@@ -210,10 +216,10 @@ export class ApplyContractViewComponent implements OnInit {
   }
   // 打印
   printCurrentModal(idname: string, title: string) {
-    let printWindow = window.open();
+    const printWindow = window.open();
 
     html2canvas(document.querySelector(`#${idname}`)).then(canvas => {
-      let compress = document.createElement('canvas');
+      const compress = document.createElement('canvas');
 
       // change the image size
 
@@ -223,7 +229,7 @@ export class ApplyContractViewComponent implements OnInit {
 
       const imageStr = canvas.toDataURL("image/png");
 
-      let image = new Image();
+      const image = new Image();
 
       image.src = imageStr;
 
@@ -235,7 +241,7 @@ export class ApplyContractViewComponent implements OnInit {
 
         // const iframe = '<iframe src="' + imageStr + '" frameborder="0" style="border:0;" allowfullscreen></iframe>'
         const head: string = document.querySelector('head').innerHTML;;
-        const style: string = `<style>body {-webkit-print-color-adjust: exact; padding: 12px!important;}</style>`;
+        const style = `<style>body {-webkit-print-color-adjust: exact; padding: 12px!important;}</style>`;
         const div: string = '<div>' + '<img src="' + imgString + '" />' + '</div>';
 
         const docStr = head + style + div;
@@ -263,10 +269,10 @@ export class ApplyContractViewComponent implements OnInit {
       html2canvas(data).then(canvas => {
         this.isPrinter = false;
         // Few necessary setting options  
-        const imgWidth: number = 208;
+        const imgWidth = 208;
         const imgHeight: number = canvas.height * imgWidth / canvas.width;
         console.log(canvas, imgWidth, imgHeight);
-        const pageHeight: number = 295;
+        const pageHeight = 295;
         const leftHeight: number = imgHeight;
 
         const contentDataURL = canvas.toDataURL('image/png', 1.0)
@@ -282,7 +288,7 @@ export class ApplyContractViewComponent implements OnInit {
 
   }
   exportPdf(contentDataURL: any, imgWidth: number, imgHeight: number, pageHeight: number, leftHeight: number) {
-    let pdf = new jspdf('p', 'mm', 'a4'); // A4 size page of PDF  
+    const pdf = new jspdf('p', 'mm', 'a4'); // A4 size page of PDF  
     if (leftHeight + 10 < pageHeight) {
       pdf.addImage(contentDataURL, 'PNG', 0, 0, imgWidth, imgHeight)
     } else {
@@ -302,11 +308,11 @@ export class ApplyContractViewComponent implements OnInit {
   }
   // 图片和 pdf 下载 功能
   exportImage(contentDataURL: any) {
-    var base64Img = contentDataURL;
-    let oA: any = document.createElement('a');
+    const base64Img = contentDataURL;
+    const oA: any = document.createElement('a');
     oA.href = base64Img;
     oA.download = this.projectInfo.name + "_" + (new Date().getTime());
-    var event = document.createEvent('MouseEvents');
+    const event = document.createEvent('MouseEvents');
     event.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
     oA.dispatchEvent(event);
   }

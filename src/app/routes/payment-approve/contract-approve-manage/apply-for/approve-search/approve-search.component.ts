@@ -61,6 +61,7 @@ export class ApproveSearchComponent implements OnInit {
       page: [null], // 页
       page_size: [null] // 页码
     });
+    console.log(this.pageOption, 'pageOption');
     const user = JSON.parse(localStorage.getItem('user'));
     this.customerId = user.company.id;
     this.getSupplier();
@@ -96,11 +97,13 @@ export class ApproveSearchComponent implements OnInit {
 
   pageIndexChange($event: number) {
     this.pageOption.page = $event;
+    console.log(this.pageOption.page, 'page');
     this.submit();
   }
 
   pageSizeChange($event: number) {
     this.pageOption.page_size = $event;
+    console.log(this.pageOption.page_size, 'page_size');
     this.submit();
   }
 
@@ -119,7 +122,7 @@ export class ApproveSearchComponent implements OnInit {
       if (res.code === 200) {
         console.log('支付审批');
         this.listOfData = res.data.contract_pay;
-        // this.total = res.data.count;
+        this.total = res.data.count;
         console.log('listRequest listOfData', this.listOfData);
         return;
       }
@@ -138,8 +141,8 @@ export class ApproveSearchComponent implements OnInit {
       // start_amount: null, // 起始金额
       // end_amount: null,  // 终止金额
       invoice_number: '',  // 发票编号
-      page: null, // 页
-      page_size: null // 页码
+      page: '', // 页
+      page_size: '' // 页码
     });
     this.submit();
     console.log('........reset end')

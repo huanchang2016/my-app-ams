@@ -172,7 +172,7 @@ export class ProjectSearchComponent implements OnInit {
       if (res.code === 200) {
         console.log('项目列表');
         this.listOfData = res.data.project;
-        // this.total = res.data.count;
+        this.total = res.data.count;
         console.log('listRequest listOfData', this.listOfData);
         return;
       }

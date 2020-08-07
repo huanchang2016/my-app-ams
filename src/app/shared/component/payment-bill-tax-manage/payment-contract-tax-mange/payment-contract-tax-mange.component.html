@@ -1,7 +1,7 @@
 <!-- 发票台账 -->
 <nz-card nzTitle="发票台账" [nzBordered]="false" [nzExtra]="costTpl" class="mt-md" *ngIf="listOfData.length>0">
     <ng-template #costTpl>
-        <button nz-button [nzType]="'primary'" *ngIf="is_execute_user&&approveFlag"
+        <button nz-button [nzType]="'primary'" *ngIf="is_execute_user&&approveFlag&&filterUser"
             (click)="addBillTicket(billTitle, billContent, billFooter, $event)">新增发票台账</button>
     </ng-template>
 

@@ -171,7 +171,7 @@ export class ProjectApprovalSearchComponent implements OnInit {
       if (res.code === 200) {
         console.log('项目审批');
         this.listOfData = res.data.project;
-        // this.total = res.data.count;
+        this.total = res.data.count;
         console.log('listRequest listOfData', this.listOfData);
         return;
       }

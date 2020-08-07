@@ -4,7 +4,8 @@
     <span>发票台账</span>
   </ng-template>
   <ng-template #paymentTaxTpl>
-    <button nz-button [nzType]="'primary'" *ngIf="is_execute_user"
+    <button nz-button [nzType]="'primary'"
+      *ngIf="is_execute_user&&approveFlag&&(payInfo?.pay_status.name==='待执行'||payInfo?.pay_status.name==='草稿')"
       (click)="addPaymentCost(tplTitle, tplContent, tplFooter, $event)">新增台账</button>
   </ng-template>
   <nz-table #costSelectTable [nzData]="listOfData" [nzFrontPagination]="false">

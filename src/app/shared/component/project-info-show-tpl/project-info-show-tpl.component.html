@@ -25,7 +25,8 @@
             <div>{{ i + 1}}. {{ data.name }}</div>
         </ng-container>
     </sv>
-    <sv label="项目名称">{{ projectInfo?.name }}</sv>
+    <sv label="项目名称" class="text-nowrap"><a (click)="view(projectInfo)" title="点击进入项目详情页">{{ projectInfo?.name }}</a>
+    </sv>
     <sv label="项目编号">{{ projectInfo?.number }}</sv>
     <sv label="项目类型">{{ projectInfo?.category?.name }}</sv>
 

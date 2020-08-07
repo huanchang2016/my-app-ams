@@ -33,6 +33,10 @@ export class PaymentContractTaxMangeComponent implements OnInit {
 
   @Output() private submitDisplay = new EventEmitter();
 
+  @Output() private submitFilter = new EventEmitter();
+
+  @Output() private getData = new EventEmitter();
+
   billModal: NzModalRef;
 
   validateBillForm!: FormGroup;
@@ -87,6 +91,8 @@ export class PaymentContractTaxMangeComponent implements OnInit {
 
   approveFlag: boolean;
 
+  filterUser: boolean;
+
   // 流程进程信息
   // progressInfo: any = null;
   // nodeProcess: any[] = [];
@@ -127,6 +133,7 @@ export class PaymentContractTaxMangeComponent implements OnInit {
     });
     this.getCategoryList();
     this.getTaxCategoryList();
+    this.getData.emit(this.getContractTax());
   }
 
   getTaxCategoryList() {
@@ -314,8 +321,13 @@ export class PaymentContractTaxMangeComponent implements OnInit {
         console.log(res, 'workflow');
         if (res.code === 200) {
           this.approveFlag = res.data.finished;
-          console.log(this.approveFlag, 'approveFlag');
+          console.log(this.approveFlag, 'getWorkflow approveFlag');
+          const user = JSON.parse(localStorage.getItem('user'));
+          console.log(user, 'user');
+          this.filterUser = res.data.execute_user.id === user.id;
+          console.log(this.filterUser, 'filterUser');
           this.submitDisplay.emit(this.approveFlag);
+          this.submitFilter.emit(this.filterUser);
         }
       })
   }

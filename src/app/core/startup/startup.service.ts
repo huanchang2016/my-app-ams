@@ -107,6 +107,17 @@ export class StartupService {
             ]
           },
           {
+            text: '项目调整',
+            link: '/projectAdjust',
+            icon: { type: 'icon', value: 'bars' },
+            children: [
+              {
+                text: '我的项目',
+                link: '/projectAdjust/my'
+              },
+            ]
+          },
+          {
             text: '合约支付管理',
             link: '/approve/contract',
             icon: { type: 'icon', value: 'audit' },
@@ -656,6 +667,17 @@ export class StartupService {
                 //     link: '/project/approved'
                 //   }
                 // ]
+              },
+            ]
+          },
+          {
+            text: '项目调整',
+            link: '/projectAdjust',
+            icon: { type: 'icon', value: 'bars' },
+            children: [
+              {
+                text: '我的项目',
+                link: '/projectAdjust/my'
               },
             ]
           },

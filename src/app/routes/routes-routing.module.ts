@@ -16,6 +16,8 @@ import { QrAuthComponent } from './passport/qr-auth/qr-auth.component';
 import { ProjectListComponent } from './project/project-list-search/project-list/project-list.component'
 import { ProjectMyProjectListComponent } from './project/my-project/list-search/project-my-project-list/project-my-project-list.component'
 import { ProjectApprovalListComponent } from './project/approval-project/list-search/project-approval-list/project-approval-list.component'
+// project-adjust
+import { ProjectAdjustListComponent } from './project-adjust/project-adjust-list/project-adjust-list.component'
 // single pages
 import { CallbackComponent } from './callback/callback.component';
 import { UserLockComponent } from './passport/lock/lock.component';
@@ -60,6 +62,9 @@ const routes: Routes = [
       { path: 'project/projectList', component: ProjectListComponent },
       { path: 'project/my-project', component: ProjectMyProjectListComponent },
       { path: 'project/approvalList', component: ProjectApprovalListComponent },
+      // 项目调整
+      { path: 'projectAdjust', loadChildren: () => import('./project-adjust/project-adjust.module').then(m => m.ProjectAdjustModule) },
+      { path: 'projectAdjust/my', component: ProjectAdjustListComponent },
       // 支付审批管理
       { path: 'approve', loadChildren: () => import('./payment-approve/payment-approve.module').then(m => m.PaymentApproveModule) },
       // 账务管理 （发票、账务处理）

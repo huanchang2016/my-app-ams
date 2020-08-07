@@ -209,6 +209,7 @@ export class ApplyContractViewComponent implements OnInit {
           .subscribe((res: ApiData) => {
             if (res.code === 200) {
               this.progressInfo = res.data;
+              location.reload();
             }
           })
       }

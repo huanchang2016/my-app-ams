@@ -111,7 +111,7 @@
             <!-- <app-payment-tax-manage [is_execute_user]="true" [payType]="payType" [payInfo]="payInfo" [paymentArray]="paymentArr" [billCategoryArray]="billCategoryArray"></app-payment-tax-manage> -->
             <app-payment-contract-tax-mange [listOfData]="listOfData" [is_execute_user]="!progressInfo.complete"
               [contract_pay_id]="contract_pay_id" (outer)="readOuter($event)"
-              (contractInformation)="readContractInfo($event)" (submitDisplay)="submitDisplay()"
+              (contractInformation)="readContractInfo($event)" (submitDisplay)="submitDisplay($event)"
               [isCurrentCheck]="isCurrentCheck">
             </app-payment-contract-tax-mange>
           </ng-container>

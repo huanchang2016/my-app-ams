@@ -1,0 +1,59 @@
+<form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()" class="info-form">
+
+    <div nz-row [nzGutter]="24">
+        <div nz-col [nzSpan]="24" formArrayName="costArr">
+            <div nz-row [nzGutter]="24" *ngFor="let item of formGroupArrayControls; let i = index" [formGroupName]="i.toString()">
+                <div nz-col [nzSpan]="2" class="text-center font-weight-bold" style="line-height: 32px;">{{ i + 1 }}</div>
+                
+                <div nz-col [nzSpan]="8">
+                    <nz-form-item>
+                        <nz-form-label nzFor="cost_category" nzRequired>成本类型</nz-form-label>
+                        <nz-form-control nzErrorTip="请选择成本类型">
+                            <nz-select style="width: 100%;" nzShowSearch
+                                nzPlaceHolder="请选择成本类型" formControlName="cost_category">
+                                <ng-container *ngFor="let item of costCategoryArr">
+                                    <nz-option [nzLabel]="item.name" [nzValue]="item.id" [nzDisabled]="checkIsSelectedCost(item.id)"></nz-option>
+                                </ng-container>
+                            </nz-select>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="8">
+                    <nz-form-item>
+                        <nz-form-label nzFor="amount" nzRequired>金额</nz-form-label>
+                        <nz-form-control nzErrorTip="预算成本只能输入数字且最多保留2位小数">
+                            <nz-input-group nzSuffix="元" nzPrefix="￥" style="width: 100%">
+                                <input type="text" nzPlaceHolder="填写预算成本金额" formControlName="amount" (ngModelChange)="countTotal()" nz-input />
+                            </nz-input-group>
+                        </nz-form-control>
+                    </nz-form-item>
+                    
+                </div>
+                <div nz-col [nzSpan]="2">
+                    <a nz-popconfirm nzPopconfirmTitle="是否确定删除当前项目预算成本？" nzPopconfirmPlacement="bottom"
+                        (nzOnConfirm)="deleted(i)" (nzOnCancel)="cancel()"
+                        class="text-error delete_btn border-radius-sm bg-white">
+                        <i nz-icon nzType="delete" nzTheme="outline"></i> <span class="text-xs">删除</span>
+                    </a>
+                </div>
+            </div>
+            <div class="font-weight-bold">合计： {{ total | _currency }}</div>
+            <div class="font-weight-bold">
+                <!-- <span class="font-weight-bold">含税收入： {{ totalOption.income | _currency }}</span>
+                <span class="font-weight-bold mx-md">税金合计： {{ totalOption.tax_amount | _currency }}</span>
+                <span class="font-weight-bold">不含税收入： {{ totalOption.exclude_tax_income | _currency }}</span> -->
+
+                <button nzBlock nz-button nzType="dashed" (click)="add($event)"><i nz-icon nzType="plus"></i>添加项目成本</button>
+            </div>
+        </div>
+    </div>
+    <nz-form-item nz-row class="mt-lg">
+        <nz-form-control [nzSpan]="24" class="text-right">
+            <a [nzLoading]="submitLoading" [disabled]="!validateForm.valid" nz-popconfirm class="text-nowrap" nz-button
+                nzType="primary" nzPopconfirmTitle="请确认项目成本调整内容是否已经全部填写完整，仔细核对无误后确认提交！！！" (nzOnConfirm)="submitForm()"
+                (nzOnCancel)="cancel()">
+                保存项目成本调整表单
+            </a>
+        </nz-form-control>
+    </nz-form-item>
+</form>

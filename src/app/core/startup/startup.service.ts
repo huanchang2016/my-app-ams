@@ -108,12 +108,12 @@ export class StartupService {
           },
           {
             text: '项目调整',
-            link: '/projectAdjust',
+            link: '/adjust',
             icon: { type: 'icon', value: 'bars' },
             children: [
               {
                 text: '我的项目',
-                link: '/projectAdjust/my'
+                link: '/adjust/my'
               },
               {
                 text: '我的调整',

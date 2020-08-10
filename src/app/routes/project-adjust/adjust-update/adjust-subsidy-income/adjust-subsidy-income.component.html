@@ -1,0 +1,118 @@
+<form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()" class="info-form pt-md">
+    <div nz-row [nzGutter]="24">
+        <div nz-col [nzSpan]="12">
+
+            <nz-form-item>
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="company_id" nzRequired>拨款单位</nz-form-label>
+                <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请选择拨款单位">
+                    <nz-select style="width: 100%;" nzShowSearch id="company_id" nzPlaceHolder="请选择拨款单位"
+                        formControlName="company_id">
+                        <ng-container *ngFor="let item of adjustInfo?.project.customer">
+                            <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
+                        </ng-container>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="12">
+
+            <nz-form-item>
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="name" nzRequired>补贴名称</nz-form-label>
+                <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请输入补贴名称">
+                    <input nz-input id="name" formControlName="name" placeholder="请输入补贴名称" />
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="12">
+            <nz-form-item>
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="condition" nzRequired>申请条件</nz-form-label>
+                <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请填写申请条件">
+                    <textarea nz-input id="condition" placeholder="请填写申请条件" formControlName="condition"
+                        [nzAutosize]="{ minRows: 2, maxRows: 6 }"></textarea>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="12">
+            <nz-form-item>
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="calculation_basis" nzRequired>测算依据</nz-form-label>
+                <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请填写测算依据">
+                    <textarea nz-input id="calculation_basis" placeholder="请填写测算依据，如： 根据《***》文件，***标准，测算出补贴为**元。"
+                        formControlName="calculation_basis" [nzAutosize]="{ minRows: 2, maxRows: 6 }"></textarea>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="24">
+            <nz-form-item>
+                <nz-form-label [nzSm]="3" [nzXs]="24" nzFor="remark" nzRequired>备注说明</nz-form-label>
+                <nz-form-control [nzSm]="21" [nzXs]="24" nzErrorTip="请填写备注说明">
+                    <textarea nz-input id="remark" placeholder="请填写备注说明" formControlName="remark"
+                        [nzAutosize]="{ minRows: 4, maxRows: 8 }"></textarea>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        
+        <div nz-col [nzSpan]="3" class="font-weight-bold my-md">补贴收入明细</div>
+
+        <div nz-col [nzSpan]="24" formArrayName="incomeArr">
+            <div nz-row [nzGutter]="24" *ngFor="let item of formGroupArrayControls; let i = index"
+                [formGroupName]="i.toString()">
+                <div nz-col [nzSpan]="2" class="text-center font-weight-bold" style="line-height: 32px;">{{ i + 1 }}
+                </div>
+                <div nz-col [nzSpan]="8">
+                    <nz-form-item>
+                        <nz-form-label nzFor="income" nzRequired>收入金额</nz-form-label>
+                        <nz-form-control nzErrorTip="项目预算收入金额只能输入数字且最多保留2位小数">
+                            <nz-input-group nzSuffix="元" nzPrefix="￥" style="width: 100%">
+                                <input type="text" id="income" nzPlaceHolder="填写项目预算收入金额" formControlName="income" nz-input />
+                            </nz-input-group>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="6">
+                    <nz-form-item>
+                        <nz-form-label nzFor="is_bill" nzRequired>是否开票</nz-form-label>
+                        <nz-form-control nzErrorTip="请选择是否开具发票">
+                            <nz-radio-group formControlName="is_bill" (ngModelChange)="isBillChange($event, i)">
+                                <label nz-radio [nzValue]="true">是</label>
+                                <label nz-radio [nzValue]="false">否</label>
+                            </nz-radio-group>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="6">
+                    
+                    <nz-form-item *ngIf="item.get('is_bill')?.value">
+                        <nz-form-label nzFor="tax_rate" nzRequired>开票税率</nz-form-label>
+                        <nz-form-control nzErrorTip="请填写开票税率">
+                            <nz-input-number formControlName="tax_rate" [nzMin]="0" [nzMax]="1" [nzStep]="0.01" nzPrecision="2" [nzPlaceHolder]="'请填写开票税率，如：0.06'"></nz-input-number>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="2">
+                    <a nz-popconfirm nzPopconfirmTitle="是否确定删除当前补贴收入预算？" nzPopconfirmPlacement="bottom"
+                        (nzOnConfirm)="deleted(i)" (nzOnCancel)="cancel()"
+                        class="text-error delete_btn border-radius-sm bg-white">
+                        <i nz-icon nzType="delete" nzTheme="outline"></i> <span class="text-xs">删除</span>
+                    </a>
+                </div>
+            </div>
+            <div class="font-weight-bold">
+                <!-- <span class="font-weight-bold">含税收入： {{ totalOption.income | _currency }}</span>
+                <span class="font-weight-bold mx-md">税金合计： {{ totalOption.tax_amount | _currency }}</span>
+                <span class="font-weight-bold">不含税收入： {{ totalOption.exclude_tax_income | _currency }}</span> -->
+
+                <button nzBlock nz-button nzType="dashed" (click)="add($event)"><i nz-icon
+                        nzType="plus"></i>添加补贴收入</button>
+            </div>
+        </div>
+    </div>
+    <nz-form-item nz-row class="mt-lg">
+        <nz-form-control [nzSpan]="24" class="text-right">
+            <a [nzLoading]="submitLoading" [disabled]="!validateForm.valid" nz-popconfirm class="text-nowrap" nz-button
+                nzType="primary" nzPopconfirmTitle="请确认项目收入调整内容是否已经全部填写完整，仔细核对无误后确认提交！！！" (nzOnConfirm)="submitForm()"
+                (nzOnCancel)="cancel()">
+                保存项目收入调整表单
+            </a>
+        </nz-form-control>
+    </nz-form-item>
+</form>

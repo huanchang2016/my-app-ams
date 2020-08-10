@@ -18,6 +18,7 @@ export class ProjectAdjustListComponent implements OnInit {
 
   ngOnInit(): void {
   }
+  
   readOuter() {
     this.type_name = '进行中';
   }

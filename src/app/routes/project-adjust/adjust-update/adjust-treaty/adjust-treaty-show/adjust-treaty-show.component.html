@@ -1,0 +1,21 @@
+<div class="mt-lg mb-md text-md font-weight-bold">原非合约数据</div>
+<nz-table #treatyTable [nzData]="treatyList" [nzLoading]="loadingTreaty" [nzShowPagination]="false">
+    <thead>
+        <tr>
+            <th nzWidth="80px">序号</th>
+            <th>供应商</th>
+            <th>服务类型</th>
+            <th>金额（元）</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let data of treatyTable.data;let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{  data.supplier?.name }}</td>
+            <td>{{  data.service_category?.name }}</td>
+            <td>
+                <span>{{ data.amount | _currency }}</span>
+            </td>
+        </tr>
+    </tbody>
+</nz-table>

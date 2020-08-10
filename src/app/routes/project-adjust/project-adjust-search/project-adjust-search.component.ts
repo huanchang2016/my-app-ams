@@ -158,7 +158,7 @@ export class ProjectAdjustSearchComponent implements OnInit {
   }
 
   edit(data: any): void {
-    this.router.navigateByUrl(`/project/edit/${data.id}`);
+    this.router.navigateByUrl(`/adjust/update/${data.id}`);
   }
 
   view(data: any) {

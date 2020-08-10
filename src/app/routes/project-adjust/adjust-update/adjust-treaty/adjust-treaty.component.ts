@@ -52,6 +52,7 @@ export class AdjustTreatyComponent implements OnInit {
       this.treatyList = this.adjustInfo.treaty_adjustment.treaty;
       this.resetForm(this.adjustInfo.treaty_adjustment.treaty);
       this.getConfigs();
+      this.countLimitAmount(); // 计算当前的金额限制
     }
 
   }
@@ -96,6 +97,7 @@ export class AdjustTreatyComponent implements OnInit {
         amount: [null, [Validators.required, this.confirmValidator, Validators.pattern(/^\d+(\.\d{1,2})?$/)]]
       })
     )
+    this.countLimitAmount();
   }
   
   deleted(index: number): void {
@@ -161,6 +163,8 @@ export class AdjustTreatyComponent implements OnInit {
   countTotal():void {
     const list:any[] = this.validateForm.get('treatyArr').value;
     this.total = list.filter(v => v.amount).map( item => Number(item.amount) ).reduce((a:number, b:number) => a + b, 0);
+    
+    // this.countLimitAmount();
   }
 
   getConfigs():void {
@@ -177,9 +181,11 @@ export class AdjustTreatyComponent implements OnInit {
         this.serviceCategoryList = list.filter( v => v.active );
       }
     });
-
-    // 计算 限制金额  重新获取最新的 预算（成本）金额信息计算
-    this.settingsConfigService.get(`/api/project/detail/${this.adjustInfo.project.id}`).subscribe((res:ApiData) => {
+  }
+  
+  countLimitAmount() {
+     // 计算 限制金额  重新获取最新的 预算（成本）金额信息计算
+     this.settingsConfigService.get(`/api/project/detail/${this.adjustInfo.project.id}`).subscribe((res:ApiData) => {
       if(res.code === 200) {
         const info:any = res.data;
         this.limtAmount = info.budget.cost_amount - info.budget.surplus_cost_amount;
@@ -189,5 +195,4 @@ export class AdjustTreatyComponent implements OnInit {
       }
     })
   }
-  
 }

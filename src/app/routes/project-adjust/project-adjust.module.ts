@@ -19,6 +19,7 @@ import { AdjustContractShowComponent } from './adjust-update/adjust-contract/adj
 import { AdjustCostShowComponent } from './adjust-update/adjust-cost/adjust-cost-show/adjust-cost-show.component';
 import { AdjustSubsidyIncomeShowComponent } from './adjust-update/adjust-subsidy-income/adjust-subsidy-income-show/adjust-subsidy-income-show.component';
 import { AdjustProjectIncomeShowComponent } from './adjust-update/adjust-project-income/adjust-project-income-show/adjust-project-income-show.component';
+import { AdjustContractFormCComponent } from './adjust-update/adjust-contract/adjust-contract-form-c/adjust-contract-form-c.component';
 
 
 @NgModule({
@@ -37,11 +38,15 @@ import { AdjustProjectIncomeShowComponent } from './adjust-update/adjust-project
     AdjustContractShowComponent,
     AdjustCostShowComponent,
     AdjustSubsidyIncomeShowComponent,
-    AdjustProjectIncomeShowComponent
+    AdjustProjectIncomeShowComponent,
+    AdjustContractFormCComponent
   ],
   imports: [
     SharedModule,
     ProjectAdjustRoutingModule
+  ],
+  entryComponents: [
+    AdjustContractFormCComponent
   ]
 })
 export class ProjectAdjustModule { }

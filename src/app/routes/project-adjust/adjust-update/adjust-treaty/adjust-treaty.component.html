@@ -11,7 +11,7 @@
                         <nz-form-label nzFor="supplier_id" nzRequired>供应商</nz-form-label>
                         <nz-form-control nzErrorTip="请选择供应商">
                             <nz-select style="width: 100%;" id="supplier_id" nzShowSearch
-                                nzPlaceHolder="请选择供应商" formControlName="supplier_id" [nzDisabled]="data">
+                                nzPlaceHolder="请选择供应商" formControlName="supplier_id">
                                 <ng-container *ngFor="let item of supplierList">
                                     <nz-option [nzLabel]="item.name" [nzValue]="item.id" [nzDisabled]="checkIsSelected(item.id)"></nz-option>
                                </ng-container>
@@ -35,14 +35,15 @@
                 <div nz-col [nzSpan]="7">
                     <nz-form-item>
                         <nz-form-label nzFor="amount" nzRequired>金额</nz-form-label>
-                        <nz-form-control nzErrorTip="请填写金额，金额应小于或等于{{ limtAmount }}元">
+                        <nz-form-control nzErrorTip="请填写金额">
+                            <!-- <nz-form-control nzErrorTip="请填写金额，金额应小于或等于{{ limtAmount }}元"> -->
                             <nz-input-group nzSuffix="元" style="width: 100%;">
-                                <input type="text" #treatyAmount id="amount" formControlName="amount" (ngModelChange)="countTotal()" nz-input placeholder="请填写金额，金额小于或等于{{ limtAmount }}元" />
+                                <input type="text" #treatyAmount id="amount" formControlName="amount" (ngModelChange)="countTotal()" nz-input placeholder="请填写金额" />
                             </nz-input-group>
                         </nz-form-control>
                     </nz-form-item>
                 </div>
-                <div nz-col [nzSpan]="2">
+                <div nz-col [nzSpan]="2" style="line-height: 32px;">
                     <a nz-popconfirm nzPopconfirmTitle="是否确定删除当前非合约数据？" nzPopconfirmPlacement="bottom"
                         (nzOnConfirm)="deleted(i)" (nzOnCancel)="cancel()"
                         class="text-error delete_btn border-radius-sm bg-white">

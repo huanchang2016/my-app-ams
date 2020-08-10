@@ -30,11 +30,11 @@
             </tr>
             <tr *ngFor="let data of incomeList; let i = index">
                 <td>{{ i + 1 }}</td>
-                <td>{{ data.income | _currency }}</td>
+                <td class="text-nowrap">{{ data.income | _currency }}</td>
                 <td>{{ data.is_bill ? '是' : '否' }}</td>
                 <td>{{ data.tax_rate * 100 }}%</td>
-                <td>{{ data.tax_amount | _currency }}</td>
-                <td>{{ data.exclude_tax_income | _currency }}</td>
+                <td class="text-nowrap">{{ data.tax_amount | _currency }}</td>
+                <td class="text-nowrap">{{ data.exclude_tax_income | _currency }}</td>
             </tr>
 
         </tbody>

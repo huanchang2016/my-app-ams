@@ -45,10 +45,10 @@
                 <tr>
                     <td>{{ i + 1 }}</td>
                     <td>{{ data.tax.name }}</td>
-                    <td>{{ data.income | _currency }}</td>
+                    <td class="text-nowrap">{{ data.income | _currency }}</td>
                     <td>{{ data.tax.rate * 100 }} %</td>
-                    <td>{{ data.tax_amount | _currency }}</td>
-                    <td>{{ data.exclude_tax_income | _currency }}</td>
+                    <td class="text-nowrap">{{ data.tax_amount | _currency }}</td>
+                    <td class="text-nowrap">{{ data.exclude_tax_income | _currency }}</td>
                 </tr>
             </ng-container>
         </ng-container>

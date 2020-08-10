@@ -53,7 +53,8 @@
             <app-adjust-cost *ngIf="!adjustLoading && adjustInfo" [adjustInfo]="adjustInfo"></app-adjust-cost>
         </ng-container>
         <ng-container *ngIf="validateForm.get('category_name').value === '合约调整'">
-            555555555555555555555555555
+            <app-adjust-contract-show [projectInfo]="projectInfo"></app-adjust-contract-show>
+            <app-adjust-contract *ngIf="!adjustLoading && adjustInfo" [adjustInfo]="adjustInfo"></app-adjust-contract>
         </ng-container>
         <ng-container *ngIf="validateForm.get('category_name').value === '非合约调整'">
             <app-adjust-treaty-show [projectInfo]="projectInfo"></app-adjust-treaty-show>

@@ -1,1 +1,36 @@
-<p>adjust-contract-show works!</p>
+<div class="mt-lg mb-md text-md font-weight-bold">原合约数据</div>
+<nz-table #contracTable [nzData]="contractList" [nzLoading]="loadingContract" [nzShowPagination]="false">
+    <thead>
+        <tr>
+            <th nzWidth="80px">序号</th>
+            <th>供应商</th>
+            <th>合同</th>
+            <th>分割情况</th>
+            <th>项目金额</th>
+            <th>附件</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let data of contracTable.data;let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ data.supplier.name }}</td>
+            <td>
+                <div>合同名称：{{ data.contract.name }}</div>
+                <div>合同金额：<span class="text-nowrap">{{ data.contract.amount | _currency }}</span></div>
+            </td>
+            <td>
+                <ng-container *ngIf="data.split_contract">
+                    <div>部门：{{ data.split_contract.department.name }}</div>
+                    <div>金额：<span class="text-nowrap">{{ data.split_contract.amount | _currency }}</span></div>
+                </ng-container>
+                <ng-container *ngIf="!data.split_contract">
+                    <div [innerHTML]="data.split_contract | yn"></div>
+                </ng-container>
+            </td>
+            <td class="text-nowrap">{{ data.amount | _currency }}</td>
+            <td>
+                <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/contract/' + data.contract.id" [isShowName]="false"></app-upload-file-attachment-show-c>
+            </td>
+        </tr>
+    </tbody>
+</nz-table>

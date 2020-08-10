@@ -63,11 +63,11 @@ const routes: Routes = [
       { path: 'project/my-project', component: ProjectMyProjectListComponent },
       { path: 'project/approvalList', component: ProjectApprovalListComponent },
       // 项目调整
-      { path: 'projectAdjust', loadChildren: () => import('./project-adjust/project-adjust.module').then(m => m.ProjectAdjustModule) },
-      { path: 'projectAdjust/my', component: ProjectAdjustListComponent },
-      { path: 'projectAdjust/myAdjust', component: MyAdjustListComponent },
-      { path: 'projectAdjust/approvel', component: ApprovelAdjustListComponent },
-      { path: 'projectAdjust/list', component: AdjustListListComponent },
+      { path: 'adjust', loadChildren: () => import('./project-adjust/project-adjust.module').then(m => m.ProjectAdjustModule) },
+      { path: 'adjust/my', component: ProjectAdjustListComponent },
+      { path: 'adjust/myAdjust', component: MyAdjustListComponent },
+      { path: 'adjust/approvel', component: ApprovelAdjustListComponent },
+      { path: 'adjust/list', component: AdjustListListComponent },
       // 支付审批管理
       { path: 'approve', loadChildren: () => import('./payment-approve/payment-approve.module').then(m => m.PaymentApproveModule) },
       // 账务管理 （发票、账务处理）

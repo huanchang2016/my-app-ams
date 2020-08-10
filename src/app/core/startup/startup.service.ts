@@ -117,15 +117,15 @@ export class StartupService {
               },
               {
                 text: '我的调整',
-                link: '/projectAdjust/myAdjust'
+                link: '/adjust/myAdjust'
               },
               {
                 text: '调整审批',
-                link: '/projectAdjust/approvel'
+                link: '/adjust/approvel'
               },
               {
                 text: '调整列表',
-                link: '/projectAdjust/list'
+                link: '/adjust/list'
               },
             ]
           },
@@ -684,12 +684,12 @@ export class StartupService {
           },
           {
             text: '项目调整',
-            link: '/projectAdjust',
+            link: '/adjust',
             icon: { type: 'icon', value: 'bars' },
             children: [
               {
                 text: '我的项目',
-                link: '/projectAdjust/my'
+                link: '/adjust/my'
               },
             ]
           },

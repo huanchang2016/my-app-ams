@@ -1,1 +1,72 @@
-<p>adjust-treaty works!</p>
+<div class="mt-lg mb-md text-md font-weight-bold">非合约调整数据</div>
+<form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()" class="info-form">
+
+    <div nz-row [nzGutter]="24">
+        <div nz-col [nzSpan]="24" formArrayName="treatyArr">
+            <div nz-row [nzGutter]="24" *ngFor="let item of formGroupArrayControls; let i = index" [formGroupName]="i.toString()">
+                <div nz-col [nzSpan]="1" class="text-center font-weight-bold" style="line-height: 32px;">{{ i + 1 }}</div>
+                
+                <div nz-col [nzSpan]="7">
+                    <nz-form-item>
+                        <nz-form-label nzFor="supplier_id" nzRequired>供应商</nz-form-label>
+                        <nz-form-control nzErrorTip="请选择供应商">
+                            <nz-select style="width: 100%;" id="supplier_id" nzShowSearch
+                                nzPlaceHolder="请选择供应商" formControlName="supplier_id" [nzDisabled]="data">
+                                <ng-container *ngFor="let item of supplierList">
+                                    <nz-option [nzLabel]="item.name" [nzValue]="item.id" [nzDisabled]="checkIsSelected(item.id)"></nz-option>
+                               </ng-container>
+                             </nz-select>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="7">
+                    <nz-form-item>
+                        <nz-form-label nzFor="service_category_id" nzRequired>服务商类型</nz-form-label>
+                        <nz-form-control nzErrorTip="请选择服务商类型">
+                            <nz-select style="width: 100%;" id="service_category_id" nzShowSearch
+                                nzPlaceHolder="请选择服务商类型" formControlName="service_category_id">
+                                <ng-container *ngFor="let item of serviceCategoryList">
+                                    <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
+                               </ng-container>
+                             </nz-select>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="7">
+                    <nz-form-item>
+                        <nz-form-label nzFor="amount" nzRequired>金额</nz-form-label>
+                        <nz-form-control nzErrorTip="请填写金额，金额应小于或等于{{ limtAmount }}元">
+                            <nz-input-group nzSuffix="元" style="width: 100%;">
+                                <input type="text" #treatyAmount id="amount" formControlName="amount" (ngModelChange)="countTotal()" nz-input placeholder="请填写金额，金额小于或等于{{ limtAmount }}元" />
+                            </nz-input-group>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="2">
+                    <a nz-popconfirm nzPopconfirmTitle="是否确定删除当前非合约数据？" nzPopconfirmPlacement="bottom"
+                        (nzOnConfirm)="deleted(i)" (nzOnCancel)="cancel()"
+                        class="text-error delete_btn border-radius-sm bg-white">
+                        <i nz-icon nzType="delete" nzTheme="outline"></i> <span class="text-xs">删除</span>
+                    </a>
+                </div>
+            </div>
+            <div class="font-weight-bold">合计： {{ total | _currency }}</div>
+            <div class="font-weight-bold">
+                <!-- <span class="font-weight-bold">含税收入： {{ totalOption.income | _currency }}</span>
+                <span class="font-weight-bold mx-md">税金合计： {{ totalOption.tax_amount | _currency }}</span>
+                <span class="font-weight-bold">不含税收入： {{ totalOption.exclude_tax_income | _currency }}</span> -->
+
+                <button nzBlock nz-button nzType="dashed" (click)="add($event)"><i nz-icon nzType="plus"></i>添加项目非合约</button>
+            </div>
+        </div>
+    </div>
+    <nz-form-item nz-row class="mt-lg">
+        <nz-form-control [nzSpan]="24" class="text-right">
+            <a [nzLoading]="submitLoading" [disabled]="!validateForm.valid" nz-popconfirm class="text-nowrap" nz-button
+                nzType="primary" nzPopconfirmTitle="请确认项目非合约调整内容是否已经全部填写完整，仔细核对无误后确认提交！！！" (nzOnConfirm)="submitForm()"
+                (nzOnCancel)="cancel()">
+                保存项目非合约调整表单
+            </a>
+        </nz-form-control>
+    </nz-form-item>
+</form>

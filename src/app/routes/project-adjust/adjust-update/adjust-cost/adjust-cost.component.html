@@ -9,7 +9,7 @@
                     <nz-form-item>
                         <nz-form-label nzFor="cost_category" nzRequired>成本类型</nz-form-label>
                         <nz-form-control nzErrorTip="请选择成本类型">
-                            <nz-select style="width: 100%;" nzShowSearch nzAllowClear
+                            <nz-select style="width: 100%;" nzShowSearch
                                 nzPlaceHolder="请选择成本类型" formControlName="cost_category">
                                 <ng-container *ngFor="let item of costCategoryArr">
                                     <nz-option [nzLabel]="item.name" [nzValue]="item.id" [nzDisabled]="checkIsSelectedCost(item.id)"></nz-option>
@@ -37,7 +37,7 @@
                     </a>
                 </div>
             </div>
-            <div class="font-weight-bold">合计： {{ total }}</div>
+            <div class="font-weight-bold">合计： {{ total | _currency }}</div>
             <div class="font-weight-bold">
                 <!-- <span class="font-weight-bold">含税收入： {{ totalOption.income | _currency }}</span>
                 <span class="font-weight-bold mx-md">税金合计： {{ totalOption.tax_amount | _currency }}</span>
@@ -52,7 +52,7 @@
             <a [nzLoading]="submitLoading" [disabled]="!validateForm.valid" nz-popconfirm class="text-nowrap" nz-button
                 nzType="primary" nzPopconfirmTitle="请确认项目成本调整内容是否已经全部填写完整，仔细核对无误后确认提交！！！" (nzOnConfirm)="submitForm()"
                 (nzOnCancel)="cancel()">
-                提交项目成本调整表单
+                保存项目成本调整表单
             </a>
         </nz-form-control>
     </nz-form-item>

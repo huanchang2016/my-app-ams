@@ -60,6 +60,11 @@ export class AdjustCostComponent implements OnInit {
         if(index > 0) {
           this.add();
         }
+      });
+      opt.forEach( (el, index) => {
+        if(index > 0) {
+          this.add();
+        }
       })
       this.validateForm.patchValue({
         costArr: opt.map( v => {
@@ -165,8 +170,8 @@ export class AdjustCostComponent implements OnInit {
 
   total:number = 0;
   countTotal():void {
-    const list:any[] = this.formGroupArrayControls;
-    this.total = list.filter(v => v.amount).map( num => +num ).reduce((a:number, b:number) => a + b, 0);
+    const list:any[] = this.validateForm.get('costArr').value;
+    this.total = list.filter(v => v.amount).map( item => Number(item.amount) ).reduce((a:number, b:number) => a + b, 0);
   }
   
 }

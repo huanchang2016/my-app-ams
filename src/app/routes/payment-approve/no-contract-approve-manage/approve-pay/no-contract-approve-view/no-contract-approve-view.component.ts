@@ -96,6 +96,7 @@ export class NoContractApproveViewComponent implements OnInit {
   getProjectInfo() { // 项目基础信息
     this.settingsConfigService.get(`/api/project/detail/${this.projectId}`).subscribe((res: ApiData) => {
       if (res.code === 200) {
+        console.log('项目基础信息', res.data);
         this.projectInfo = res.data;
       }
     })

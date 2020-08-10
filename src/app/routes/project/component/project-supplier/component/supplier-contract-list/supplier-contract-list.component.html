@@ -3,7 +3,7 @@
         <span class="float-left text-primary">签订合约</span>
         <a (click)="addContract()" *ngIf="!isView" class="float-right">新增合约</a>
     </div>
-    
+
     <ng-container *ngIf="contractList.length !== 0;else noDataContractMobile">
         <ng-container *ngFor="let data of contractList">
             <nz-card [nzActions]="!isView ? [actionEdit, actionDisabled] : []" class="mb-sm">
@@ -15,17 +15,17 @@
                     </sv>
                     <ng-container *ngIf="data.split_contract">
                         <sv label="分割部门">{{ data.split_contract.department.name }}</sv>
-                        <sv label="分割金额">{{ data.split_contract.amount | _currency }}</sv>
+                        <sv label="分割金额" class="text-nowrap">{{ data.split_contract.amount | _currency }}</sv>
                     </ng-container>
-                    <sv label="合同总金额">{{ data.contract.amount | _currency }}</sv>
-                    <sv label="项目金额">{{ data.amount | _currency }}</sv>
+                    <sv label="合同总金额" class="text-nowrap">{{ data.contract.amount | _currency }}</sv>
+                    <sv label="项目金额" class="text-nowrap">{{ data.amount | _currency }}</sv>
                 </sv-container>
                 <ng-template #actionEdit>
                     <a *ngIf="!isView" (click)="editContract(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
                 </ng-template>
                 <ng-template #actionDisabled>
-                    <a *ngIf="!isView" nz-popconfirm nzPopconfirmTitle="确定禁用当前合约？" (nzOnConfirm)="disabled(data)" (nzOnCancel)="cancel()"
-                        class="text-error">
+                    <a *ngIf="!isView" nz-popconfirm nzPopconfirmTitle="确定禁用当前合约？" (nzOnConfirm)="disabled(data)"
+                        (nzOnCancel)="cancel()" class="text-error">
                         禁用
                     </a>
                 </ng-template>
@@ -35,20 +35,16 @@
     <ng-template #noDataContractMobile>
         <p>无数据</p>
     </ng-template>
-    
+
 </div>
 
 <div class="contract-box hidden-mobile">
     <ng-template #contractAddTemplate>
-        <button *ngIf="!isView"
-            class="mr-lg"
-            nz-button
-            [nzType]="'primary'"
-            (click)="addContract()"
-        >新增合约</button>
+        <button *ngIf="!isView" class="mr-lg" nz-button [nzType]="'primary'" (click)="addContract()">新增合约</button>
     </ng-template>
     <nz-card class="mb-md" nzTitle="签订合约" [nzExtra]="contractAddTemplate" [nzBordered]="false">
-        <nz-table #contracTable [nzData]="contractList" nzSize="small" [nzLoading]="loadingContract" [nzShowPagination]="false" [nzFrontPagination]="false">
+        <nz-table #contracTable [nzData]="contractList" nzSize="small" [nzLoading]="loadingContract"
+            [nzShowPagination]="false" [nzFrontPagination]="false">
             <thead>
                 <tr>
                     <th nzWidth="80px">序号</th>
@@ -66,26 +62,28 @@
                     <td>{{ data.supplier.name }}</td>
                     <td>
                         <div>合同名称：{{ data.contract.name }}</div>
-                        <div>合同金额：{{ data.contract.amount | _currency }}</div>
+                        <div class="text-nowrap">合同金额：{{ data.contract.amount | _currency }}</div>
                     </td>
                     <td>
                         <ng-container *ngIf="data.split_contract">
                             <div>部门：{{ data.split_contract.department.name }}</div>
-                            <div>金额：{{ data.split_contract.amount | _currency }}</div>
+                            <div class="text-nowrap">金额：{{ data.split_contract.amount | _currency }}</div>
                         </ng-container>
                         <ng-container *ngIf="!data.split_contract">
                             <div [innerHTML]="data.split_contract | yn"></div>
                         </ng-container>
                     </td>
-                    <td>{{ data.amount | _currency }}</td>
+                    <td class="text-nowrap">{{ data.amount | _currency }}</td>
                     <td>
-                        <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/contract/' + data.contract.id" [isShowName]="false"></app-upload-file-attachment-show-c>
+                        <app-upload-file-attachment-show-c
+                            [attachmentUrl]="'/api/attachment/contract/' + data.contract.id" [isShowName]="false">
+                        </app-upload-file-attachment-show-c>
                     </td>
                     <td *ngIf="!isView">
                         <a (click)="editContract(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
                         <nz-divider nzType="vertical"></nz-divider>
-                        <a nz-popconfirm nzPopconfirmTitle="确定禁用当前项目合同？" (nzOnConfirm)="disabled(data)" (nzOnCancel)="cancel()"
-                            class="text-error">
+                        <a nz-popconfirm nzPopconfirmTitle="确定禁用当前项目合同？" (nzOnConfirm)="disabled(data)"
+                            (nzOnCancel)="cancel()" class="text-error">
                             禁用
                         </a>
                     </td>

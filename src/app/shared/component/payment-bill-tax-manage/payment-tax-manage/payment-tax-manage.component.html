@@ -71,7 +71,7 @@
     </tbody>
   </nz-table>
   <div class="text-right" *ngIf="payInfo">
-    <span class="font-weight-bold">总金额： {{ payInfo.amount | _currency }}</span>
+    <span class="font-weight-bold">实际支付金额： {{ payInfo.amount | _currency }}</span>
     <span class="font-weight-bold mx-md">开票总金额： {{ payInfo.tax_use_amount | _currency }}</span>
     <span *ngIf="payInfo.write_off_amount" class="font-weight-bold mx-md">冲抵金额：
       {{ payInfo.write_off_amount | _currency }}</span>

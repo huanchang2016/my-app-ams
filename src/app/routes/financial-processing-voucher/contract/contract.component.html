@@ -1,12 +1,12 @@
 <page-header></page-header>
 
 <nz-card>
-  <app-financial-processing-voucher-search-component (selectProjectChange)="selectProjectChange($event)" (searchValueChange)="searchValueChange($event)"></app-financial-processing-voucher-search-component>
+  <app-financial-processing-voucher-search-component (selectProjectChange)="selectProjectChange($event)"
+    (searchValueChange)="searchValueChange($event)"></app-financial-processing-voucher-search-component>
 
   <nz-table #ajaxTable nzShowSizeChanger [nzFrontPagination]="false" [nzData]="listOfData" [nzLoading]="loading"
     [nzTotal]="total" [(nzPageIndex)]="pageOption.page" [(nzPageSize)]="pageOption.page_size"
-    (nzPageIndexChange)="pageIndexChange($event)" (nzPageSizeChange)="pageSizeChange($event)"
-    class="mt-md">
+    (nzPageIndexChange)="pageIndexChange($event)" (nzPageSizeChange)="pageSizeChange($event)" class="mt-md">
     <thead>
       <tr>
         <th>项目</th>
@@ -31,10 +31,10 @@
         <td>{{ data.deal.contract.name }}</td>
         <td>
           <ng-container *ngIf="data.certificate">
-           {{ data.certificate.is_deal ? '已生成' : '未生成' }}
+            {{ data.certificate.is_deal ? '已生成' : '未生成' }}
           </ng-container>
         </td>
-        <td>{{ data.amount | _currency }}</td>
+        <td class="text-nowrap">{{ data.amount | _currency }}</td>
         <td>
           <a [routerLink]="['/financial/contract/voucher', data.id]">凭证详情</a>
         </td>

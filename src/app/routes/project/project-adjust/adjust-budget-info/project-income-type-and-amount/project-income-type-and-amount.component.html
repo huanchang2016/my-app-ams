@@ -1,4 +1,5 @@
-<button nzBlock nz-button nzType="primary" (click)="createTplModal(tplTitle, tplContent, tplFooter, $event)" class="mb-sm">
+<button nzBlock nz-button nzType="primary" (click)="createTplModal(tplTitle, tplContent, tplFooter, $event)"
+    class="mb-sm">
     <i nz-icon nzType="plus"></i>
     添加项目收入
 </button>
@@ -19,10 +20,10 @@
             <tr *ngFor="let data of basicTable.data; let i = index">
                 <td>{{ i + 1 }}</td>
                 <td>{{ data.tax.name }}</td>
-                <td>{{ data.income | _currency }}</td>
+                <td class="text-nowrap">{{ data.income | _currency }}</td>
                 <td>{{ data.tax.rate * 100 }} %</td>
-                <td>{{ data.tax_amount | _currency }}</td>
-                <td>{{ data.exclude_tax_income | _currency }}</td>
+                <td class="text-nowrap">{{ data.tax_amount | _currency }}</td>
+                <td class="text-nowrap">{{ data.exclude_tax_income | _currency }}</td>
                 <td>
                     <a (click)="createTplModal(tplTitle, tplContent, tplFooter, $event, data)"><i nz-icon nzType="edit"
                             nzTheme="outline"></i></a>
@@ -34,12 +35,12 @@
                 </td>
             </tr>
         </tbody>
-        
+
         <ng-template #footerTpl>
             <div class="text-right" *ngIf="staticOpt">
-                <span class="font-weight-bold">含税收入： {{ staticOpt.pro_income | _currency }}</span>
-                <span class="font-weight-bold mx-md">税金合计： {{ staticOpt.tax_amount | _currency }}</span>
-                <span class="font-weight-bold">不含税收入： {{ staticOpt.exclude_tax_income | _currency }}</span>
+                <span class="font-weight-bold text-nowrap">含税收入： {{ staticOpt.pro_income | _currency }}</span>
+                <span class="font-weight-bold mx-md text-nowrap">税金合计： {{ staticOpt.tax_amount | _currency }}</span>
+                <span class="font-weight-bold text-nowrap">不含税收入： {{ staticOpt.exclude_tax_income | _currency }}</span>
             </div>
         </ng-template>
     </nz-table>
@@ -74,7 +75,7 @@
                 <div class="text-sm font-weight-bold">
                     <span>开票方式：{{ currentModalInfo.invoice.name }}</span>
                     <span class="mx-md">税率：{{ currentModalInfo.rate }} %</span>
-                    <span>税额：{{ currentModalInfo.income | _currency }}</span>
+                    <span class="text-nowrap">税额：{{ currentModalInfo.income | _currency }}</span>
                 </div>
             </nz-form-item>
         </form>

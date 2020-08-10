@@ -18,6 +18,9 @@ import { ProjectMyProjectListComponent } from './project/my-project/list-search/
 import { ProjectApprovalListComponent } from './project/approval-project/list-search/project-approval-list/project-approval-list.component'
 // project-adjust
 import { ProjectAdjustListComponent } from './project-adjust/project-adjust-list/project-adjust-list.component'
+import { MyAdjustListComponent } from './project-adjust/my-adjust/my-adjust-list/my-adjust-list.component'
+import { ApprovelAdjustListComponent } from './project-adjust/approvel-adjust/approvel-adjust-list/approvel-adjust-list.component'
+import { AdjustListListComponent } from './project-adjust/adjust-list/adjust-list-list/adjust-list-list.component'
 // single pages
 import { CallbackComponent } from './callback/callback.component';
 import { UserLockComponent } from './passport/lock/lock.component';
@@ -25,9 +28,6 @@ import { BillListComponent } from './financial-processing-voucher/bill/bill-list
 import { MyBillListComponent } from './financial-processing-voucher/bill/my-bill-list/my-bill-list.component'
 import { BillApprovalListComponent } from './financial-processing-voucher/bill/bill-approval-list/bill-approval-list.component'
 import { BillExcuteListComponent } from './financial-processing-voucher/bill/bill-excute-list/bill-excute-list.component'
-// dispatch
-import { DispatchCreateComponent } from './dispatch/dispatch-create/dispatch-create.component'
-import { DispathIndexComponent } from './dispatch/dispath-index/dispath-index.component'
 
 // 合约支付列表
 import { ApplyListIndexComponent } from './payment-approve/contract-approve-manage/apply-list/apply-list-index/apply-list-index.component'
@@ -65,6 +65,9 @@ const routes: Routes = [
       // 项目调整
       { path: 'projectAdjust', loadChildren: () => import('./project-adjust/project-adjust.module').then(m => m.ProjectAdjustModule) },
       { path: 'projectAdjust/my', component: ProjectAdjustListComponent },
+      { path: 'projectAdjust/myAdjust', component: MyAdjustListComponent },
+      { path: 'projectAdjust/approvel', component: ApprovelAdjustListComponent },
+      { path: 'projectAdjust/list', component: AdjustListListComponent },
       // 支付审批管理
       { path: 'approve', loadChildren: () => import('./payment-approve/payment-approve.module').then(m => m.PaymentApproveModule) },
       // 账务管理 （发票、账务处理）

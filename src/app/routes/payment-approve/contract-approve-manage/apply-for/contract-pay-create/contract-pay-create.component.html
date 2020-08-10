@@ -67,8 +67,9 @@
       <sv label="开户银行">{{ selectedContract.contract.bank_name }}</sv>
       <sv label="合同单位"><strong>{{ selectedContract.contract.supplier?.name }}</strong></sv>
       <sv label="银行账号">{{ selectedContract.contract.bank_account }}</sv>
-      <sv label="合同金额"><span class="mr-md">{{ selectedContract.contract.amount | _currency }}</span></sv>
-      <sv label="已使用金额"><span class="mr-md">{{ selectedContract.contract.use_amount | _currency }}</span></sv>
+      <sv label="合同金额"><span class="mr-md text-nowrap">{{ selectedContract.contract.amount | _currency }}</span></sv>
+      <sv label="已使用金额"><span class="mr-md text-nowrap">{{ selectedContract.contract.use_amount | _currency }}</span>
+      </sv>
       <sv label="合同附件">
         <div>
           <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/contract/' + contract_id"
@@ -78,14 +79,15 @@
       <ng-container *ngIf="selectedContract.contract.is_split">
         <sv-title style="font-weight:700;">分割合同</sv-title>
         <!-- <sv col="3" label="分割合同"><span class="text-primary">是</span></sv> -->
-        <sv col="3" label="分割总金额"><span class="mr-md">{{ selectedContract.split_contract.amount | _currency }}</span>
+        <sv col="3" label="分割总金额"><span
+            class="mr-md text-nowrap">{{ selectedContract.split_contract.amount | _currency }}</span>
         </sv>
         <sv col="3" label="已使用分割金额"><span
-            class="mr-md">{{ selectedContract.split_contract.use_amount | _currency }}</span></sv>
+            class="mr-md text-nowrap">{{ selectedContract.split_contract.use_amount | _currency }}</span></sv>
       </ng-container>
       <ng-container>
         <sv-title>开票金额</sv-title>
-        <sv col="3" label="开票总金额"><span class="mr-md">{{ contractTaxTotal || 0 | _currency }}</span>
+        <sv col="3" label="开票总金额"><span class="mr-md text-nowrap">{{ contractTaxTotal || 0 | _currency }}</span>
         </sv>
       </ng-container>
     </sv-container>
@@ -128,13 +130,14 @@
           <tr *ngFor="let data of costSelectTable.data; let i = index">
             <td>{{ i + 1}}</td>
             <td>{{ data.cost.cost_category.name }}</td>
-            <td>{{ data.amount | _currency}}</td>
-            <td>{{ data.tax_use_amount | _currency}}</td>
+            <td class="text-nowrap">{{ data.amount | _currency}}</td>
+            <td class="text-nowrap">{{ data.tax_use_amount | _currency}}</td>
             <td>
               <sv-container size="small" col="1">
-                <sv label="预算金额"><span>{{ data.cost.amount | currency: 'CNY' }}</span></sv>
-                <sv label="累计支付"><span>{{ data.cost.pay_amount | currency: 'CNY' }}</span></sv>
-                <sv label="剩余支付"><span>{{ (data.cost.amount - data.cost.pay_amount) | currency: 'CNY' }}</span></sv>
+                <sv label="预算金额"><span class="text-nowrap">{{ data.cost.amount | currency: 'CNY' }}</span></sv>
+                <sv label="累计支付"><span class="text-nowrap">{{ data.cost.pay_amount | currency: 'CNY' }}</span></sv>
+                <sv label="剩余支付"><span
+                    class="text-nowrap">{{ (data.cost.amount - data.cost.pay_amount) | currency: 'CNY' }}</span></sv>
               </sv-container>
             </td>
             <td>
@@ -162,11 +165,12 @@
             </ng-template>
             <div class="pt-md">
               <sv-container size="small">
-                <sv label="总计支付"><span>{{ data.cost.amount | currency: 'CNY' }}</span></sv>
-                <sv label="累计支付"><span>{{ data.cost.pay_amount | currency: 'CNY' }}</span></sv>
+                <sv label="总计支付"><span class="text-nowrap">{{ data.cost.amount | currency: 'CNY' }}</span></sv>
+                <sv label="累计支付"><span class="text-nowrap">{{ data.cost.pay_amount | currency: 'CNY' }}</span></sv>
                 <sv label="剩余支付"><span
-                    class="text-primary">{{ (data.cost.amount - data.cost.pay_amount) | currency: 'CNY' }}</span></sv>
-                <sv label="本期支付"><span class="font-weight-bold">{{ data.amount | currency: 'CNY' }}</span>
+                    class="text-primary text-nowrap">{{ (data.cost.amount - data.cost.pay_amount) | currency: 'CNY' }}</span>
+                </sv>
+                <sv label="本期支付"><span class="font-weight-bold text-nowrap">{{ data.amount | currency: 'CNY' }}</span>
                 </sv>
                 <sv label="描述"><span [innerHTML]="data.remark | showTextareaContent"></span></sv>
               </sv-container>
@@ -215,9 +219,9 @@
             <td>{{ data.bill_category===null?'未开发票':data.bill_category.name }}</td>
             <td>
               <sv-container size="small" col="1">
-                <sv label="除税金额"><span>{{ data.exclude_tax_amount | currency: 'CNY' }}</span></sv>
-                <sv label="税金"><span>{{ data.tax_amount | currency: 'CNY' }}</span></sv>
-                <sv label="总金额"><span>{{ data.amount | currency: 'CNY' }}</span></sv>
+                <sv label="除税金额"><span class="text-nowrap">{{ data.exclude_tax_amount | currency: 'CNY' }}</span></sv>
+                <sv label="税金"><span class="text-nowrap">{{ data.tax_amount | currency: 'CNY' }}</span></sv>
+                <sv label="总金额"><span class="text-nowrap">{{ data.amount | currency: 'CNY' }}</span></sv>
               </sv-container>
             </td>
             <td *ngIf="!contractInfo || contractInfo.draft">
@@ -231,8 +235,8 @@
         </tbody>
       </nz-table>
       <div class="text-right" *ngIf="contractInfo">
-        <span class="font-weight-bold">总金额： {{ contractInfo.amount | _currency }}</span>
-        <span class="font-weight-bold mx-md">开票总金额： {{ contractInfo.tax_use_amount | _currency }}</span>
+        <span class="font-weight-bold text-nowrap">总金额： {{ contractInfo.amount | _currency }}</span>
+        <span class="font-weight-bold mx-md text-nowrap">开票总金额： {{ contractInfo.tax_use_amount | _currency }}</span>
       </div>
     </div>
 
@@ -251,11 +255,12 @@
                 <sv label="发票类型"><span
                     class="font-weight-bold">{{ data.bill_category===null?'未开发票':data.bill_category.name  }}</span>
                 </sv>
-                <sv label="除税金额"><span class="font-weight-bold">{{ data.exclude_tax_amount | currency: 'CNY' }}</span>
+                <sv label="除税金额"><span
+                    class="font-weight-bold text-nowrap">{{ data.exclude_tax_amount | currency: 'CNY' }}</span>
                 </sv>
-                <sv label="税金"><span class="font-weight-bold">{{ data.tax_amount | currency: 'CNY' }}</span>
+                <sv label="税金"><span class="font-weight-bold text-nowrap">{{ data.tax_amount | currency: 'CNY' }}</span>
                 </sv>
-                <sv label="总金额"><span class="font-weight-bold">{{ data.amount | currency: 'CNY' }}</span>
+                <sv label="总金额"><span class="font-weight-bold text-nowrap">{{ data.amount | currency: 'CNY' }}</span>
                 </sv>
               </sv-container>
             </div>

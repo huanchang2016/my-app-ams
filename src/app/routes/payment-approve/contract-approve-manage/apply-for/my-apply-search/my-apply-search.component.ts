@@ -28,7 +28,7 @@ export class MyApplySearchComponent implements OnInit {
 
   customer: any = [];
 
-  customerId: any = null;
+  // customerId: any = null;
 
   taxArr: any = [];
 
@@ -64,7 +64,7 @@ export class MyApplySearchComponent implements OnInit {
       page_size: [null] // 页码
     });
     const user = JSON.parse(localStorage.getItem('user'));
-    this.customerId = user.company.id;
+    // this.customerId = user.company?.id;
     this.getSupplier();
     this.submit();
   }
@@ -116,6 +116,10 @@ export class MyApplySearchComponent implements OnInit {
 
   view(data: any) {
     this.router.navigateByUrl(`/approve/contract/pay/view/${data.project.id}?contract_pay_id=${data.id}`);
+  }
+
+  routerTo(data: any) {
+    this.router.navigateByUrl(`/project/view/${data.project.id}`);
   }
 
   listRequest(option) {

@@ -19,7 +19,6 @@ export class ProjectInfoShowTplComponent implements OnChanges {
   }
 
   view(data: any) {
-    // this.router.navigateByUrl(`/approve/no-contract/pay/view/${data.project.id}?treaty_pay_id=${data.id}`);
     this.router.navigateByUrl(`/project/view/${data.id}`);
   }
 }

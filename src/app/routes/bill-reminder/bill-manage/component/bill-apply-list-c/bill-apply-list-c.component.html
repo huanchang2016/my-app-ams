@@ -1,18 +1,10 @@
-
 <div class="hidden-mobile">
-    <app-bill-apply-project-search [COMPANY]="companyArray" (searchOptionsEmit)="searchOptionsChange($event)"></app-bill-apply-project-search>
+    <app-bill-apply-project-search [COMPANY]="companyArray" (searchOptionsEmit)="searchOptionsChange($event)">
+    </app-bill-apply-project-search>
 </div>
-<nz-table
-    #ajaxTable
-    nzShowSizeChanger
-    [nzFrontPagination]="false"
-    [nzData]="listOfData"
-    [nzLoading]="loading"
-    [nzTotal]="total"
-    [(nzPageIndex)]="pageOption.page"
-    [(nzPageSize)]="pageOption.page_size"
-    (nzPageIndexChange)="pageIndexChange($event)"
-    (nzPageSizeChange)="pageSizeChange($event)"
+<nz-table #ajaxTable nzShowSizeChanger [nzFrontPagination]="false" [nzData]="listOfData" [nzLoading]="loading"
+    [nzTotal]="total" [(nzPageIndex)]="pageOption.page" [(nzPageSize)]="pageOption.page_size"
+    (nzPageIndexChange)="pageIndexChange($event)" (nzPageSizeChange)="pageSizeChange($event)"
     class="mt-md hidden-mobile">
     <thead>
         <tr>
@@ -30,7 +22,7 @@
         <tr *ngFor="let data of ajaxTable.data; let i = index">
             <td>{{ i + 1 }}</td>
             <td>{{ data.bill_category.name }}</td>
-            <td class="text-error">{{ data.amount | currency: 'CNY' }}</td>
+            <td class="text-error text-nowrap">{{ data.amount | currency: 'CNY' }}</td>
             <td>
                 <sv-container size="small" col="1">
                     <sv label="单位">{{ data.customer.name }}</sv>
@@ -51,7 +43,8 @@
             </td>
             <td>
                 <!-- approve/view/ -->
-                <a [routerLink]="['/bill/approve/view', data.id]" [queryParams]="{ project_id: data.project.id }"><i nz-icon nzType="eye" nzTheme="outline"></i></a>
+                <a [routerLink]="['/bill/approve/view', data.id]" [queryParams]="{ project_id: data.project.id }"><i
+                        nz-icon nzType="eye" nzTheme="outline"></i></a>
             </td>
         </tr>
     </tbody>
@@ -67,11 +60,13 @@
                     <nz-card-meta [nzTitle]="treatyTitltTpl"></nz-card-meta>
                     <ng-template #treatyTitltTpl>
                         <span>{{ data.bill_category.name }}</span>
-                        <span class="text-primary text-xs ml-md" [class.text-error]="data.bill_status?.name === '未通过'" [class.text-success]="data.bill_status?.name === '已通过'">{{ data.bill_status?.name }}</span>
+                        <span class="text-primary text-xs ml-md" [class.text-error]="data.bill_status?.name === '未通过'"
+                            [class.text-success]="data.bill_status?.name === '已通过'">{{ data.bill_status?.name }}</span>
                     </ng-template>
                     <div class="pt-md">
                         <sv-container size="small">
-                            <sv label="发票金额"><span class="font-weight-bold">{{ data.amount | currency: 'CNY' }}</span></sv>
+                            <sv label="发票金额"><span
+                                    class="font-weight-bold text-nowrap">{{ data.amount | currency: 'CNY' }}</span></sv>
                             <sv label="申请人">{{ data.user.name }}</sv>
                             <sv label="部&nbsp;&nbsp;&nbsp;门">{{ data.department.name }}</sv>
                             <sv label="公&nbsp;&nbsp;&nbsp;司">{{ data.company.name }}</sv>
@@ -81,12 +76,15 @@
                     </div>
                 </nz-skeleton>
                 <ng-template #actionEdit>
-                    <a [routerLink]="['/bill/approve/view', data.id]" [queryParams]="{ project_id: data.project.id }"><i nz-icon nzType="eye" nzTheme="outline"></i></a>
+                    <a [routerLink]="['/bill/approve/view', data.id]" [queryParams]="{ project_id: data.project.id }"><i
+                            nz-icon nzType="eye" nzTheme="outline"></i></a>
                 </ng-template>
             </nz-card>
         </ng-container>
         <div class="mt-md text-center">
-            <nz-pagination [nzSize]="'small'" nzShowSizeChanger [(nzPageSize)]="pageOption.page_size" [nzPageIndex]="pageOption.page" [nzTotal]="total" (nzPageIndexChange)="pageIndexChange($event)" (nzPageSizeChange)="pageSizeChange($event)"></nz-pagination>
+            <nz-pagination [nzSize]="'small'" nzShowSizeChanger [(nzPageSize)]="pageOption.page_size"
+                [nzPageIndex]="pageOption.page" [nzTotal]="total" (nzPageIndexChange)="pageIndexChange($event)"
+                (nzPageSizeChange)="pageSizeChange($event)"></nz-pagination>
         </div>
     </div>
 </div>

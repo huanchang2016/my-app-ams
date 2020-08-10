@@ -21,7 +21,7 @@
         <tr *ngFor="let data of ajaxTable.data; let i = index">
             <td nzShowCheckbox [(nzChecked)]="mapOfCheckedId[data.id]" (nzCheckedChange)="refreshStatus()"></td>
             <td>{{ data.deal.contract.name }}</td>
-            <td>{{ data.amount | currency: 'CNY' }}</td>
+            <td class="text-nowrap">{{ data.amount | currency: 'CNY' }}</td>
             <td>
                 <sv-container size="small" col="1">
                     <sv label="项目名称"><span class="font-weight-bold">{{ data.project.name }}</span></sv>
@@ -60,7 +60,8 @@
                     <div class="pt-md">
                         <sv-container size="small">
                             <!-- <sv label="合同名称"><span class="font-weight-bold">{{ data.contract.name }}</span></sv> -->
-                            <sv label="支付金额"><span class="font-weight-bold">{{ data.amount | currency: 'CNY' }}</span>
+                            <sv label="支付金额"><span
+                                    class="font-weight-bold text-nowrap">{{ data.amount | currency: 'CNY' }}</span>
                             </sv>
                             <sv label="项目名称"><span class="font-weight-bold">{{ data.project.name }}</span></sv>
                             <sv label="创 建 人 "><span>{{ data.user.name }}</span></sv>

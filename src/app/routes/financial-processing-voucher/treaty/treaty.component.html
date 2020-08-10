@@ -29,23 +29,25 @@
           <div class="mb-xs"><span class="font-weight-bold">银行&nbsp;账号：</span>{{ data.bank_account }}</div>
         </td>
         <td>
-          <div class="mb-xs"><span class="font-weight-bold">成本总额：</span>{{ data.before_deduct_amount | _currency }}
+          <div class="mb-xs"><span
+              class="font-weight-bold text-nowrap">成本总额：</span>{{ data.before_deduct_amount | _currency }}
           </div>
           <div class="mb-xs">
             <span class="font-weight-bold">抵扣情况：</span>
-            <span *ngIf="data.if_write_off;else notWriteOff">{{ data.write_off_amount | currency: 'CNY' }}</span>
+            <span class="text-nowrap"
+              *ngIf="data.if_write_off;else notWriteOff">{{ data.write_off_amount | currency: 'CNY' }}</span>
             <ng-template #notWriteOff>
               <span>无冲抵</span>
             </ng-template>
           </div>
-          <div class="mb-xs"><span class="font-weight-bold">待支付金额：</span>{{ data.amount | _currency }}</div>
+          <div class="mb-xs"><span class="font-weight-bold text-nowrap">待支付金额：</span>{{ data.amount | _currency }}</div>
         </td>
         <td>
           <ng-container *ngIf="data.certificate">
             {{ data.certificate.is_deal ? '已生成' : '未生成' }}
           </ng-container>
         </td>
-        <td>{{ data.amount | _currency }}</td>
+        <td class="text-nowrap">{{ data.amount | _currency }}</td>
         <td>
           <a [routerLink]="['/financial/treaty/voucher', data.id]">凭证详情</a>
         </td>

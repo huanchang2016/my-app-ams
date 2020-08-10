@@ -80,7 +80,7 @@ export class ProjectAdjustSearchComponent implements OnInit {
       page_size: [null] // 页码
     });
     // const user = JSON.parse(localStorage.getItem('user'));
-    // this.customerId = user.company.id;
+    // this.customerId = user.company?.id;
     this.getCompany();
     this.submit();
   }

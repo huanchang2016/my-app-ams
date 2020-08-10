@@ -43,6 +43,8 @@ export class UsersBillExecuteFlowComponent implements OnChanges {
 
   @Output() executeChange: EventEmitter<any> = new EventEmitter();
 
+  @Output() executeName: EventEmitter<any> = new EventEmitter();
+
   nodeProcess: any[] = [];
 
   isExecuteUser = false;

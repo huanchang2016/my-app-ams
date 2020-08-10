@@ -22,6 +22,14 @@ import { AdjustProjectIncomeShowComponent } from './adjust-update/adjust-project
 import { AdjustContractFormCComponent } from './adjust-update/adjust-contract/adjust-contract-form-c/adjust-contract-form-c.component';
 
 
+import { AdjustListListComponent } from './adjust-list/adjust-list-list/adjust-list-list.component';
+import { AdjustListSearchComponent } from './adjust-list/adjust-list-search/adjust-list-search.component';
+import { MyAdjustListComponent } from './my-adjust/my-adjust-list/my-adjust-list.component';
+import { MyAdjustSearchComponent } from './my-adjust/my-adjust-search/my-adjust-search.component';
+import { ApprovelAdjustListComponent } from './approvel-adjust/approvel-adjust-list/approvel-adjust-list.component';
+import { ApprovelAdjustSearchComponent } from './approvel-adjust/approvel-adjust-search/approvel-adjust-search.component';
+
+
 @NgModule({
   declarations: [
     ProjectAdjustListComponent,
@@ -39,8 +47,15 @@ import { AdjustContractFormCComponent } from './adjust-update/adjust-contract/ad
     AdjustCostShowComponent,
     AdjustSubsidyIncomeShowComponent,
     AdjustProjectIncomeShowComponent,
-    AdjustContractFormCComponent
-  ],
+    AdjustContractFormCComponent,
+    ProjectAdjustListComponent,
+    ProjectAdjustSearchComponent,
+    AdjustListListComponent,
+    AdjustListSearchComponent,
+    MyAdjustListComponent,
+    MyAdjustSearchComponent,
+    ApprovelAdjustListComponent,
+    ApprovelAdjustSearchComponent],
   imports: [
     SharedModule,
     ProjectAdjustRoutingModule

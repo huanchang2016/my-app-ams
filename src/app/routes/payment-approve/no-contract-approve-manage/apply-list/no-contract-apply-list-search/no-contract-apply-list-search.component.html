@@ -45,9 +45,9 @@
         <tr>
             <th nzWidth="80px">序号</th>
             <th>非合约支付编号</th>
+            <th nzWidth="100px">项目名称</th>
             <th>收款信息</th>
             <th>冲抵情况</th>
-            <th nzWidth="100px">项目名称</th>
             <th>申请人信息</th>
             <th nzWidth="80px">状态</th>
             <th nzWidth="80px">操作</th>
@@ -60,6 +60,13 @@
             <td *ngIf="!data.number">/</td>
             <td>
                 <sv-container size="small" col="1">
+                    <!-- <sv>{{ data.project.name }}</sv> -->
+                    <sv class="text-nowrap"><a (click)="routerTo(data)" title="点击进入项目详情页">{{ data.project.name }}</a>
+                    </sv>
+                </sv-container>
+            </td>
+            <td>
+                <sv-container size="small" col="1">
                     <sv label="收款单位/个人">{{ data.pay_company }}</sv>
                     <sv label="银行名称">{{ data.bank_name }}</sv>
                     <sv label="银行账号">{{ data.bank_account }}</sv>
@@ -67,15 +74,11 @@
             </td>
             <td>
                 <sv-container size="small" col="1">
-                    <sv label="支付金额（冲抵前）">{{ data.before_deduct_amount | currency: 'CNY' }}</sv>
-                    <sv label="支付金额（冲抵后）">{{ data.amount | currency: 'CNY' }}</sv>
+                    <sv label="支付金额（冲抵前）" class="text-nowrap">{{ data.before_deduct_amount | currency: 'CNY' }}</sv>
+                    <sv label="支付金额（冲抵后）" class="text-nowrap">{{ data.amount | currency: 'CNY' }}</sv>
                 </sv-container>
             </td>
-            <td>
-                <sv-container size="small" col="1">
-                    <sv>{{ data.project.name }}</sv>
-                </sv-container>
-            </td>
+
             <td>
                 <sv-container size="small" col="1">
                     <sv label="名称">{{ data.user.name }}</sv>

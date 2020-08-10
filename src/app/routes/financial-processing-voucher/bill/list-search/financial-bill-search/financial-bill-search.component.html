@@ -37,7 +37,7 @@
         </div>
         <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="8">
             <nz-form-item>
-                <nz-form-label nzFor="tax_id">税目</nz-form-label>
+                <nz-form-label nzFor="tax_id">税&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;目</nz-form-label>
                 <nz-form-control style="flex-grow: 1;">
                     <nz-select id="tax_id" nzShowSearch nzAllowClear [nzDisabled]="" nzPlaceHolder="请选择税目"
                         formControlName="tax_id">
@@ -78,7 +78,7 @@
             <td nzShowCheckbox [(nzChecked)]="mapOfCheckedId[data.id]" (nzCheckedChange)="refreshStatus()"></td>
             <td>{{ data.number }}</td>
             <td>{{ data.bill_category.name }}</td>
-            <td>{{ data.amount | currency: 'CNY' }}</td>
+            <td class="text-nowrap">{{ data.amount | currency: 'CNY' }}</td>
             <td>
                 <sv-container size="small" col="1">
                     <sv label="单位">{{ data.customer.name }}</sv>
@@ -120,7 +120,8 @@
                     </ng-template>
                     <div class="pt-md">
                         <sv-container size="small">
-                            <sv label="发票金额"><span class="font-weight-bold">{{ data.amount | currency: 'CNY' }}</span>
+                            <sv label="发票金额"><span
+                                    class="font-weight-bold text-nowrap">{{ data.amount | currency: 'CNY' }}</span>
                             </sv>
                             <sv label="申请人">{{ data.user.name }}</sv>
                             <sv label="部&nbsp;&nbsp;&nbsp;门">{{ data.department.name }}</sv>

@@ -9,15 +9,14 @@
             <nz-card [nzActions]="!isView ? [actionEdit, actionDisabled] : []" class="mb-sm">
                 <sv-container>
                     <sv label="服务商类型">{{  data.service_category?.name }}</sv>
-                    <sv label="金额（元）"><span>{{ data.amount | _currency }}</span></sv>
+                    <sv label="金额（元）"><span class="text-nowrap">{{ data.amount | _currency }}</span></sv>
                 </sv-container>
                 <ng-template #actionEdit>
-                    <a *ngIf="!isView" (click)="editContract(data)"><i nz-icon nzType="edit"
-                            nzTheme="outline"></i></a>
+                    <a *ngIf="!isView" (click)="editContract(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
                 </ng-template>
                 <ng-template #actionDisabled>
-                    <a *ngIf="!isView" nz-popconfirm nzPopconfirmTitle="确定禁用当前非合约？"
-                        (nzOnConfirm)="disabled(data)" (nzOnCancel)="cancel()" class="text-error">
+                    <a *ngIf="!isView" nz-popconfirm nzPopconfirmTitle="确定禁用当前非合约？" (nzOnConfirm)="disabled(data)"
+                        (nzOnCancel)="cancel()" class="text-error">
                         禁用
                     </a>
                 </ng-template>
@@ -37,35 +36,35 @@
     </ng-template>
     <nz-card nzTitle="未签订合约" [nzExtra]="treatyAddTemplate" [nzBordered]="false">
 
-            <nz-table #treatyTable [nzData]="treatyList" nzSize="small" [nzLoading]="loadingTreaty" [nzShowPagination]="false"
-                [nzFrontPagination]="false">
-                <thead>
-                    <tr>
-                        <th nzWidth="80px">序号</th>
-                        <th>供应商</th>
-                        <th>服务类型</th>
-                        <th>金额（元）</th>
-                        <th *ngIf="!isView">操作</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let data of treatyTable.data;let i = index">
-                        <td>{{ i + 1 }}</td>
-                        <td>{{  data.supplier?.name }}</td>
-                        <td>{{  data.service_category?.name }}</td>
-                        <td>
-                            <span>{{ data.amount | _currency }}</span>
-                        </td>
-                        <td *ngIf="!isView">
-                            <a (click)="editContract(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
-                            <nz-divider nzType="vertical"></nz-divider>
-                            <a nz-popconfirm nzPopconfirmTitle="确定禁用当前非合约？" (nzOnConfirm)="disabled(data)"
-                                (nzOnCancel)="cancel()" class="text-error">
-                                禁用
-                            </a>
-                        </td>
-                    </tr>
-                </tbody>
-            </nz-table>
+        <nz-table #treatyTable [nzData]="treatyList" nzSize="small" [nzLoading]="loadingTreaty"
+            [nzShowPagination]="false" [nzFrontPagination]="false">
+            <thead>
+                <tr>
+                    <th nzWidth="80px">序号</th>
+                    <th>供应商</th>
+                    <th>服务类型</th>
+                    <th>金额（元）</th>
+                    <th *ngIf="!isView">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let data of treatyTable.data;let i = index">
+                    <td>{{ i + 1 }}</td>
+                    <td>{{  data.supplier?.name }}</td>
+                    <td>{{  data.service_category?.name }}</td>
+                    <td>
+                        <span class="text-nowrap">{{ data.amount | _currency }}</span>
+                    </td>
+                    <td *ngIf="!isView">
+                        <a (click)="editContract(data)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
+                        <nz-divider nzType="vertical"></nz-divider>
+                        <a nz-popconfirm nzPopconfirmTitle="确定禁用当前非合约？" (nzOnConfirm)="disabled(data)"
+                            (nzOnCancel)="cancel()" class="text-error">
+                            禁用
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </nz-table>
     </nz-card>
 </div>

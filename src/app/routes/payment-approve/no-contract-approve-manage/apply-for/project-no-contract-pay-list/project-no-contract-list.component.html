@@ -58,8 +58,8 @@
             <sv label="账号">{{ data.bank_account }}</sv>
           </sv-container>
         </td>
-        <td>{{ data.amount | currency: 'CNY' }}</td>
-        <td>{{ data.tax_use_amount | currency: 'CNY' }}</td>
+        <td class="text-nowrap">{{ data.amount | currency: 'CNY' }}</td>
+        <td class="text-nowrap">{{ data.tax_use_amount | currency: 'CNY' }}</td>
         <td>
           <sv-container size="small" col="1">
             <sv label="冲销借款"><span>{{ data.if_write_off ? '有' : '无' }}</span></sv>
@@ -100,12 +100,13 @@
             <sv label="非合约编号">{{data.number }}</sv>
             <!-- <sv label="收款用户">{{ data.pay_company }}</sv> -->
             <sv label="冲抵情况">
-              <span *ngIf="data.if_write_off;else notWriteOff">{{ data.write_off_amount | currency: 'CNY' }}</span>
+              <span class="text-nowrap"
+                *ngIf="data.if_write_off;else notWriteOff">{{ data.write_off_amount | currency: 'CNY' }}</span>
               <ng-template #notWriteOff>
                 <span class="text-primary">无冲抵金额</span>
               </ng-template>
             </sv>
-            <sv label="支付金额"><span>{{ data.amount | currency: 'CNY' }}</span></sv>
+            <sv label="支付金额"><span class="text-nowrap">{{ data.amount | currency: 'CNY' }}</span></sv>
           </sv-container>
         </div>
       </nz-skeleton>

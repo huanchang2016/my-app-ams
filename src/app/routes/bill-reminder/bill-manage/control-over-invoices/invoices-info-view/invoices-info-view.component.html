@@ -13,6 +13,10 @@
   <app-project-info-show-tpl [projectInfo]="projectDetailInfo"></app-project-info-show-tpl>
 
   <ng-template #action>
+    <!-- 废弃和红冲按钮当有申请人或者执行人的时候显示 -->
+    <button *ngIf="progressInfo?.workflow_status.name==='已完成' && projectDetailInfo?.user.name" nz-button
+      nzType="primary" nzDanger>废弃</button>
+    <button nz-button nzType="primary" nzDanger>红冲</button>
     <button nz-button (click)="printCurrentModal('print-box',  projectDetailInfo?.name)">打印</button>
     <button nz-button nz-dropdown [nzDropdownMenu]="opMenu" class="mx-sm">
       下载 <i nz-icon nzType="download" nzTheme="outline"></i>
@@ -112,7 +116,7 @@
         <tr>
         <tr>
           <td class="font-weight-bold">开票金额</td>
-          <td colspan="4" class="text-error font-weight-bold">{{ billInfo?.amount | currency: 'CNY' }}</td>
+          <td colspan="4" class="text-error font-weight-bold text-nowrap">{{ billInfo?.amount | currency: 'CNY' }}</td>
         </tr>
         <tr>
           <td class="font-weight-bold">经费所属期</td>

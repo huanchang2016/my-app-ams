@@ -121,7 +121,8 @@
           <ng-container *ngIf="income_type === 'project' && currentSelectedTaxAmount">
             <div nz-col [nzSpan]="12">
               <sv-container col="2" class="show_info_box ml-lg">
-                <sv label="收入金额" style="padding: 0; line-height:32px;">{{ currentSelectedTaxAmount.income | _currency }}</sv>
+                <sv class="text-nowrap" label="收入金额" style="padding: 0; line-height:32px;">
+                  {{ currentSelectedTaxAmount.income | _currency }}</sv>
                 <sv label="开票税率" style="padding: 0; line-height:32px;">
                   <span>{{ currentSelectedTaxAmount.tax.rate * 100 }} %</span>
                 </sv>
@@ -131,7 +132,7 @@
           <ng-container *ngIf="income_type === 'subsidy' && currentSelectedTaxAmount">
             <div nz-col [nzSpan]="12">
               <sv-container col="2" class="show_info_box ml-lg">
-                <sv label="补贴金额">{{ currentSelectedTaxAmount.income | _currency }}</sv>
+                <sv class="text-nowrap" label="补贴金额">{{ currentSelectedTaxAmount.income | _currency }}</sv>
                 <sv label="开票税率">
                   <span>{{ currentSelectedTaxAmount.tax_rate * 100 }} %</span>
                 </sv>

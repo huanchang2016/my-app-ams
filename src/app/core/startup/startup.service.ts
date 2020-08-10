@@ -115,6 +115,18 @@ export class StartupService {
                 text: '我的项目',
                 link: '/adjust/my'
               },
+              {
+                text: '我的调整',
+                link: '/projectAdjust/myAdjust'
+              },
+              {
+                text: '调整审批',
+                link: '/projectAdjust/approvel'
+              },
+              {
+                text: '调整列表',
+                link: '/projectAdjust/list'
+              },
             ]
           },
           {
@@ -363,19 +375,19 @@ export class StartupService {
             // hide: this.isHideRouter(['cost_list', 'tax_list', 'supplier_service_list'], permissionGroup),
             children: [
               {
-                text: '合约支付',
+                text: '合约凭证',
                 // link: '/financial/contract',
                 link: '/financial/contractList',
                 // hide: this.isHideRouter(['cost_list'], permissionGroup)
               },
               {
-                text: '协议支付',
+                text: '非合约凭证',
                 // link: '/financial/treaty',
                 link: '/financial/treatyList',
                 // hide: this.isHideRouter(['cost_list'], permissionGroup)
               },
               {
-                text: '已开发票',
+                text: '发票凭证',
                 // link: '/financial/bill',
                 link: '/financial/billList',
                 // hide: this.isHideRouter(['cost_list'], permissionGroup)

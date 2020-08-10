@@ -2,6 +2,7 @@ import { Component, OnInit, EventEmitter, Output, Input, SimpleChanges } from '@
 import { ApiData, List } from 'src/app/data/interface.data';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { SettingsConfigService } from 'src/app/routes/service/settings-config.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-apply-excute-search',
@@ -17,6 +18,7 @@ export class ApplyExcuteSearchComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private settingsConfigService: SettingsConfigService,
+    private router: Router
   ) { }
   validateForm: FormGroup;
 
@@ -26,7 +28,7 @@ export class ApplyExcuteSearchComponent implements OnInit {
 
   customer: any = [];
 
-  customerId: any = null;
+  // customerId: any = null;
 
   taxArr: any = [];
 
@@ -62,7 +64,7 @@ export class ApplyExcuteSearchComponent implements OnInit {
       page_size: [null] // 页码
     });
     const user = JSON.parse(localStorage.getItem('user'));
-    this.customerId = user.company.id;
+    // this.customerId = user.company?.id;
     this.getSupplier();
     this.submit();
   }
@@ -143,5 +145,9 @@ export class ApplyExcuteSearchComponent implements OnInit {
     });
     this.submit();
     console.log('........reset end')
+  }
+
+  view(data: any) {
+    this.router.navigateByUrl(`/project/view/${data.project.id}`);
   }
 }

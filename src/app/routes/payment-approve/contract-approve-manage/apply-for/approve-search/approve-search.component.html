@@ -2,7 +2,7 @@
     <div nz-row [nzGutter]="24">
         <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="8">
             <nz-form-item>
-                <nz-form-label nzFor="contract_name">合&nbsp;&nbsp;&nbsp;&nbsp;同</nz-form-label>
+                <nz-form-label nzFor="contract_name">合&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;同</nz-form-label>
                 <nz-form-control style="flex-grow: 1;">
                     <input nz-input placeholder="输入合同" formControlName="contract_name" id="contract_name" />
                 </nz-form-control>
@@ -87,13 +87,15 @@
                 <sv-container size="small" col="1">
                     <sv label="合同名称">{{ data.deal.contract.name }}</sv>
                     <sv label="合同编号">{{ data.deal.contract.number }}</sv>
-                    <sv label="合同单位">{{ data.deal.contract.company.name }}</sv>
+                    <sv label="供应商">{{ data.deal.supplier.name }}</sv>
                 </sv-container>
             </td>
-            <td>{{ data.amount | currency: 'CNY' }}</td>
+            <td class="text-nowrap">{{ data.amount | currency: 'CNY' }}</td>
             <td>
                 <sv-container size="small" col="1">
-                    <sv label="项目名称">{{ data.project.name }}</sv>
+                    <!-- <sv label="项目名称 ">{{ data.project.name }}</sv> -->
+                    <sv label="项目名称" class="text-nowrap"><a (click)="view(data)"
+                            title="点击进入项目详情页">{{ data.project.name }}</a></sv>
                     <sv label="创建人">{{ data.user.name }}</sv>
                     <sv label="所在部门">{{ data.user.department.name }}</sv>
                     <sv label="所属单位">{{ data.user.company.name }}</sv>

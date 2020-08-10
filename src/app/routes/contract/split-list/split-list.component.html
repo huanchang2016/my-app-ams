@@ -2,7 +2,8 @@
   <button nz-button (click)="openTplModal(tplTitle, tplContent, tplFooter, $event)" nzType="primary"
     class="mb-sm">分割合同</button>
 
-  <span class="ml-md">剩余可分割金额：<span class="font-weight-bold text-error">{{ listTotalAmount | _currency }}</span></span>
+  <span class="ml-md">剩余可分割金额：<span
+      class="font-weight-bold text-error text-nowrap">{{ listTotalAmount | _currency }}</span></span>
 </ng-container>
 <nz-table #basicTable [nzData]="dataSet" [nzLoading]="dataSet.length === 0 && loading" [nzShowPagination]="false">
   <thead>
@@ -21,8 +22,8 @@
         <div>单位：{{ data.company.name }}</div>
         <div>部门：{{ data.department.name }}</div>
       </td>
-      <td>{{ data.amount | _currency }}</td>
-      <td>{{ data.use_amount | _currency }}</td>
+      <td class="text-nowrap">{{ data.amount | _currency }}</td>
+      <td class="text-nowrap">{{ data.use_amount | _currency }}</td>
       <td>
         <a (click)="openTplModal(tplTitle, tplContent, tplFooter, $event, data)"><i nz-icon nzType="edit"
             nzTheme="outline"></i></a>

@@ -1,4 +1,5 @@
-<button nzBlock nz-button nzType="primary" (click)="createTplModal(tplTitle, tplContent, tplFooter, $event)" class="mb-sm">
+<button nzBlock nz-button nzType="primary" (click)="createTplModal(tplTitle, tplContent, tplFooter, $event)"
+    class="mb-sm">
     <i nz-icon nzType="plus"></i>
     添加补贴收入
 </button>
@@ -18,11 +19,11 @@
         <tbody>
             <tr *ngFor="let data of basicTable.data; let i = index">
                 <td>{{ i + 1 }}</td>
-                <td>{{ data.income | _currency }}</td>
+                <td class="text-nowrap">{{ data.income | _currency }}</td>
                 <td>{{ data.is_bill ? '是' : '否' }}</td>
                 <td>{{ data.tax_rate * 100 }}%</td>
-                <td>{{ data.tax_amount | _currency }}</td>
-                <td>{{ data.exclude_tax_income | _currency }}</td>
+                <td class="text-nowrap">{{ data.tax_amount | _currency }}</td>
+                <td class="text-nowrap">{{ data.exclude_tax_income | _currency }}</td>
                 <td>
                     <a (click)="createTplModal(tplTitle, tplContent, tplFooter, $event, data)">
                         <i nz-icon nzType="edit" nzTheme="outline"></i>
@@ -66,14 +67,15 @@
             <nz-form-item *ngIf="validateIncomeForm.get('is_bill')?.value">
                 <nz-form-label nzFor="tax_rate" nzRequired>开票税率</nz-form-label>
                 <nz-form-control nzErrorTip="请填写开票税率">
-                    <nz-input-number formControlName="tax_rate" [nzMin]="0" [nzMax]="1" [nzStep]="0.01" nzPrecision="2" [nzPlaceHolder]="'请填写开票税率，如：0.06'"></nz-input-number>
+                    <nz-input-number formControlName="tax_rate" [nzMin]="0" [nzMax]="1" [nzStep]="0.01" nzPrecision="2"
+                        [nzPlaceHolder]="'请填写开票税率，如：0.06'"></nz-input-number>
                 </nz-form-control>
             </nz-form-item>
             <nz-form-item *ngIf="currentModalInfo">
                 <div class="text-sm font-weight-bold">
-                    <span>收入金额：{{ currentModalInfo.income | _currency }}</span>
+                    <span class="text-nowrap">收入金额：{{ currentModalInfo.income | _currency }}</span>
                     <span class="mx-md">开票税额：{{ currentModalInfo.tax_rate * 100 }}%</span>
-                    <span>开票税额：{{ currentModalInfo.tax_amount | _currency }}</span>
+                    <span class="text-nowrap">开票税额：{{ currentModalInfo.tax_amount | _currency }}</span>
                 </div>
             </nz-form-item>
         </form>

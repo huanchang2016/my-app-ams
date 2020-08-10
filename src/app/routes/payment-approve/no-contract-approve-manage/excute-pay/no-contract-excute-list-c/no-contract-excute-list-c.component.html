@@ -1,18 +1,9 @@
-
 <div class="hidden-mobile">
     <app-approve-search-option (searchOptionsEmit)="searchOptionsChange($event)"></app-approve-search-option>
 </div>
-<nz-table
-    #ajaxTable
-    nzShowSizeChanger
-    [nzFrontPagination]="false"
-    [nzData]="listOfData"
-    [nzLoading]="loading"
-    [nzTotal]="total"
-    [(nzPageIndex)]="pageOption.page"
-    [(nzPageSize)]="pageOption.page_size"
-    (nzPageIndexChange)="pageIndexChange($event)"
-    (nzPageSizeChange)="pageSizeChange($event)"
+<nz-table #ajaxTable nzShowSizeChanger [nzFrontPagination]="false" [nzData]="listOfData" [nzLoading]="loading"
+    [nzTotal]="total" [(nzPageIndex)]="pageOption.page" [(nzPageSize)]="pageOption.page_size"
+    (nzPageIndexChange)="pageIndexChange($event)" (nzPageSizeChange)="pageSizeChange($event)"
     class="mt-md hidden-mobile">
     <thead>
         <tr>
@@ -35,16 +26,17 @@
             </td>
             <td>
                 <sv-container size="small" col="1">
-                    <sv label="成本总额"><span>{{ data.before_deduct_amount | _currency }}</span></sv>
+                    <sv label="成本总额"><span class="text-nowrap">{{ data.before_deduct_amount | _currency }}</span></sv>
                     <sv label="抵扣情况">
-                        <span *ngIf="data.if_write_off;else notWriteOff">{{ data.write_off_amount | currency: 'CNY' }}</span>
+                        <span class="text-nowrap"
+                            *ngIf="data.if_write_off;else notWriteOff">{{ data.write_off_amount | currency: 'CNY' }}</span>
                         <ng-template #notWriteOff>
                             <span class="font-weight-bold">无冲抵</span>
                         </ng-template>
                     </sv>
-                    <sv label="待支付金额"><span>{{ data.amount | _currency }}</span></sv>
+                    <sv label="待支付金额"><span class="text-nowrap">{{ data.amount | _currency }}</span></sv>
                 </sv-container>
-                
+
             </td>
             <td>{{ data.project?.name }}</td>
             <td>
@@ -72,14 +64,16 @@
                         <sv-container size="small" col="1">
                             <sv label="银行名称"><span>{{ data.bank_name }}</span></sv>
                             <sv label="银行账号"><span>{{ data.bank_account }}</span></sv>
-                            <sv label="成本总额"><span>{{ data.before_deduct_amount | _currency }}</span></sv>
+                            <sv label="成本总额"><span
+                                    class="text-nowrap">{{ data.before_deduct_amount | _currency }}</span></sv>
                             <sv label="抵扣情况">
-                                <span *ngIf="data.if_write_off;else notWriteOff">{{ data.write_off_amount | currency: 'CNY' }}</span>
+                                <span *ngIf="data.if_write_off;else notWriteOff"
+                                    class="text-nowrap">{{ data.write_off_amount | currency: 'CNY' }}</span>
                                 <ng-template #notWriteOff>
                                     <span class="font-weight-bold">无冲抵</span>
                                 </ng-template>
                             </sv>
-                            <sv label="待支付金额"><span>{{ data.amount | _currency }}</span></sv>
+                            <sv label="待支付金额"><span class="text-nowrap">{{ data.amount | _currency }}</span></sv>
                             <sv label="项目名称"><span>{{ data.project?.name }}</span></sv>
                         </sv-container>
                     </div>
@@ -90,7 +84,9 @@
             </nz-card>
         </ng-container>
         <div class="mt-md text-center">
-            <nz-pagination [nzSize]="'small'" nzShowSizeChanger [(nzPageSize)]="pageOption.page_size" [nzPageIndex]="pageOption.page" [nzTotal]="total" (nzPageIndexChange)="pageIndexChange($event)" (nzPageSizeChange)="pageSizeChange($event)"></nz-pagination>
+            <nz-pagination [nzSize]="'small'" nzShowSizeChanger [(nzPageSize)]="pageOption.page_size"
+                [nzPageIndex]="pageOption.page" [nzTotal]="total" (nzPageIndexChange)="pageIndexChange($event)"
+                (nzPageSizeChange)="pageSizeChange($event)"></nz-pagination>
         </div>
     </div>
 </div>

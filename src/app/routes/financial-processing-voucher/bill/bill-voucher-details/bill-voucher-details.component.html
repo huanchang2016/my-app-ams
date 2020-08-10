@@ -99,7 +99,8 @@
             <tr>
             <tr>
                 <td class="font-weight-bold">开票金额</td>
-                <td colspan="4" class="text-error font-weight-bold">{{ billInfo.amount | currency: 'CNY' }}</td>
+                <td colspan="4" class="text-error font-weight-bold text-nowrap">{{ billInfo.amount | currency: 'CNY' }}
+                </td>
             </tr>
             <tr>
                 <td class="font-weight-bold">经费所属期</td>
@@ -135,17 +136,17 @@
             <tr *ngFor="let data of invoiceTable.data; let i = index">
                 <td>{{ i + 1}}</td>
                 <td>{{ data.invoice_number }}</td>
-                <td>{{ data.invoice_amount | _currency}}</td>
-                <td>{{ data.tax_amount | _currency}}</td>
+                <td class="text-nowrap">{{ data.invoice_amount | _currency}}</td>
+                <td class="text-nowrap">{{ data.tax_amount | _currency}}</td>
             </tr>
         </tbody>
     </nz-table>
     <ng-template #invoiceTotalTpl>
         <div class="text-right" *ngIf="billInfo">
-            <span><span class="font-weight-bold">总金额： </span>{{ billInfo.amount | _currency }}</span>
-            <span class="mx-md"><span class="font-weight-bold">开票总金额：
+            <span><span class="font-weight-bold text-nowrap">总金额： </span>{{ billInfo.amount | _currency }}</span>
+            <span class="mx-md text-nowrap"><span class="font-weight-bold text-nowrap">开票总金额：
                 </span>{{ billInfo.invoice_amount | _currency }}</span>
-            <span><span class="font-weight-bold">总税额： </span>{{ billInfo.tax_amount | _currency }}</span>
+            <span><span class="font-weight-bold text-nowrap">总税额： </span>{{ billInfo.tax_amount | _currency }}</span>
         </div>
     </ng-template>
 

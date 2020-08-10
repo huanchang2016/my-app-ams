@@ -84,9 +84,10 @@
       </ng-template>
       <sv col="1">
         <div>
-          <div>1.请示金额：{{ contractInfo?.amount | _currency }}</div>
-          <div>2.已使用金额：{{ contractInfo?.pay_amount| _currency }}</div>
-          <div *ngIf="contractInfo?.is_split">3.已分割金额：{{ contractInfo?.pay_amount | _currency }}</div>
+          <div class="text-nowrap">1.请示金额：{{ contractInfo?.amount | _currency }}</div>
+          <div class="text-nowrap">2.已使用金额：{{ contractInfo?.pay_amount| _currency }}</div>
+          <div class="text-nowrap" *ngIf="contractInfo?.is_split">3.已分割金额：{{ contractInfo?.pay_amount | _currency }}
+          </div>
         </div>
       </sv>
     </sv-container>

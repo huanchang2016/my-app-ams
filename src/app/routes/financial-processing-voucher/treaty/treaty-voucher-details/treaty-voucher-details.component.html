@@ -3,7 +3,7 @@
     <ng-template #breadcrumb>
         <nz-breadcrumb>
             <nz-breadcrumb-item><a [routerLink]="['/dashboard']">首页</a></nz-breadcrumb-item>
-            <nz-breadcrumb-item><a [routerLink]="['/financial/treaty']">协议支付</a></nz-breadcrumb-item>
+            <nz-breadcrumb-item><a [routerLink]="['/financial/treaty']">非合约凭证</a></nz-breadcrumb-item>
             <nz-breadcrumb-item>凭证详情</nz-breadcrumb-item>
         </nz-breadcrumb>
     </ng-template>
@@ -64,7 +64,7 @@
                 </td>
                 <td class="font-weight-bold">抵扣金额</td>
                 <td colspan="2">
-                    <span
+                    <span class="text-nowrap"
                         *ngIf="info.if_write_off;else notWriteOff">{{ info.write_off_amount | currency: 'CNY' }}</span>
                     <ng-template #notWriteOff>
                         <span class="font-weight-bold">无冲抵</span>
@@ -91,9 +91,9 @@
                 <tr>
                     <td>{{ i + 1 }}</td>
                     <td>{{ data.cost.cost_category.name }}</td>
-                    <td>{{ data.amount | _currency }}</td>
-                    <td>{{ data.cost.amount | _currency }}</td>
-                    <td>{{ data.cost.pay_amount | _currency }}</td>
+                    <td class="text-nowrap">{{ data.amount | _currency }}</td>
+                    <td class="text-nowrap">{{ data.cost.amount | _currency }}</td>
+                    <td class="text-nowrap">{{ data.cost.pay_amount | _currency }}</td>
                     <td>
                         <span [innerHTML]="data.remark | showTextareaContent"></span>
                     </td>
@@ -103,7 +103,7 @@
                 <td colspan="2" class="font-weight-bold text-center">合计</td>
                 <td>
                     <ng-container *ngIf="info">
-                        <span>{{ info.before_deduct_amount | _currency }}</span>
+                        <span class="text-nowrap">{{ info.before_deduct_amount | _currency }}</span>
                         <span class="ml-sm">{{ info.before_deduct_amount | n2c }}</span>
                     </ng-container>
                 </td>
@@ -113,7 +113,7 @@
                 <td colspan="2" class="font-weight-bold text-center">本期支付金额(大写)</td>
                 <td colspan="4">
                     <ng-container *ngIf="info">
-                        <span>{{ info.amount | _currency }}</span>
+                        <span class="text-nowrap">{{ info.amount | _currency }}</span>
                         <span class="ml-sm">{{ info.amount | n2c }}</span>
                     </ng-container>
                 </td>
@@ -157,9 +157,9 @@
                         暂未取得发票
                     </ng-container>
                 </td>
-                <td>{{ data.exclude_tax_amount | _currency }}</td>
-                <td>{{ data.tax_amount | _currency }}</td>
-                <td>
+                <td class="text-nowrap">{{ data.exclude_tax_amount | _currency }}</td>
+                <td class="text-nowrap">{{ data.tax_amount | _currency }}</td>
+                <td class="text-nowrap">
                     <ng-container *ngIf="data.bill_category">
                         {{ data.exclude_tax_amount + data.tax_amount | _currency }}
                     </ng-container>

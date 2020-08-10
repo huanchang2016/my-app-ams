@@ -4,7 +4,7 @@
     </div>
     <div nz-col [nzSpan]="24" *ngIf="costArr && costArr.length !== 0" class="mt-md mb-md text-right">
         <span class="text-md font-weight-bold">成本总计：</span>
-        <span class="text-md font-weight-bold text-error">{{ total | _currency }}</span>
+        <span class="text-md font-weight-bold text-error text-nowrap">{{ total | _currency }}</span>
     </div>
     <div nz-col [nzSpan]="24">
         <a nzBlock nz-button nzType="dashed" (click)="createTplModal(tplTitle, tplContent, tplFooter, $event)">
@@ -16,15 +16,15 @@
 
 <ng-template #tplTitle>
     <span>添加成本预算</span>
-  </ng-template>
-  <ng-template #tplContent>
+</ng-template>
+<ng-template #tplContent>
     <div class="modal-form">
         <form nz-form [formGroup]="validateCostForm">
             <nz-form-item>
                 <nz-form-label nzFor="cost_category" nzRequired>成本类型</nz-form-label>
                 <nz-form-control nzErrorTip="请选择成本类型">
-                    <nz-select style="width: 100%;" id="cost_category" nzShowSearch nzAllowClear
-                        nzPlaceHolder="请选择成本类型" formControlName="cost_category">
+                    <nz-select style="width: 100%;" id="cost_category" nzShowSearch nzAllowClear nzPlaceHolder="请选择成本类型"
+                        formControlName="cost_category">
                         <ng-container *ngFor="let item of costCategoryArr">
                             <nz-option [nzLabel]="item.name" [nzValue]="item.id" [nzDisabled]="item.active"></nz-option>
                         </ng-container>
@@ -39,11 +39,11 @@
                     </nz-input-group>
                 </nz-form-control>
             </nz-form-item>
-            
+
         </form>
     </div>
-  </ng-template>
-  <ng-template #tplFooter>
+</ng-template>
+<ng-template #tplFooter>
     <button nz-button nzType="default" (click)="closeModal()">取消</button>
-      <button nz-button nzType="primary" (click)="handleOk()">确定</button>
-  </ng-template>
+    <button nz-button nzType="primary" (click)="handleOk()">确定</button>
+</ng-template>

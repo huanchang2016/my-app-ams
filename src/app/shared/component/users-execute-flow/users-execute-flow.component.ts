@@ -1,5 +1,5 @@
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { Component, Input, OnChanges, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnChanges, Output, EventEmitter, ViewChild } from '@angular/core';
 import { SettingsService } from '@delon/theme';
 import { SettingsConfigService } from 'src/app/routes/service/settings-config.service';
 import { ApiData } from 'src/app/data/interface.data';
@@ -12,6 +12,8 @@ import { ApiData } from 'src/app/data/interface.data';
 })
 
 export class UsersExecuteFlowComponent implements OnChanges {
+  @ViewChild('sonComponent') sonComponent: any;
+  @ViewChild('nosonComponent') nosonComponent: any;
   @Input() progressInfo: any;
 
   @Input() payType?: string;
@@ -21,12 +23,13 @@ export class UsersExecuteFlowComponent implements OnChanges {
   @Input() contract_pay_id?: number;
   @Input() treatypayInfo?: any = [];
   @Input() isCurrentCheck?: boolean;
+  @Input() approveFlag?: any;
+  @Input() filterUser?: any;
+
 
   @Output() executeChange: EventEmitter<any> = new EventEmitter();
 
   @Output() refresh: EventEmitter<any> = new EventEmitter();
-
-
 
   nodeProcess: any[] = [];
 
@@ -43,8 +46,6 @@ export class UsersExecuteFlowComponent implements OnChanges {
   flag: boolean;
 
   contractInfo: any = [];
-
-  approveFlag: boolean;
 
   constructor(
     private settings: SettingsService,
@@ -99,6 +100,11 @@ export class UsersExecuteFlowComponent implements OnChanges {
 
     // 提交
     this.executeChange.emit(option);
+    // 刷新列表
+    // console.log("触发子元素事件之前 before");
+    // console.log(this.sonComponent, 'this.sonComponent');
+    // this.sonComponent?.getContractList();  // 通过项目获取合约
+    // console.log("触发子元素事件之后 after");
   }
 
   cancel() { }
@@ -107,6 +113,7 @@ export class UsersExecuteFlowComponent implements OnChanges {
     this.flag = isSubmit;
     console.log('isSubmit', isSubmit);
   }
+  // 来自子组件的数据
   readContractInfo(infoData) {
     this.contractInfo = infoData;
     console.log('this.contractInfo', this.contractInfo);
@@ -121,5 +128,10 @@ export class UsersExecuteFlowComponent implements OnChanges {
 
   submitDisplay(flag) {
     this.approveFlag = flag
+  }
+
+  submitFilter(flag) {
+    this.filterUser = flag;
+    console.log(this.filterUser, 'submitFilter');
   }
 }

@@ -117,7 +117,7 @@ export class NoApplyExcuteSearchComponent implements OnInit {
       if (res.code === 200) {
         console.log('非合约 支付审批');
         this.listOfData = res.data.treaty_pay;
-        // this.total = res.data.count;
+        this.total = res.data.count;
         console.log('listRequest listOfData', this.listOfData);
         return;
       }

@@ -78,7 +78,6 @@ export class ApplyListSearchComponent implements OnInit {
     }
   }
 
-
   getSupplier() {
     this.settingsConfigService.get('/api/company/supplier/all').subscribe((res: ApiData) => {
       if (res.code === 200) {
@@ -96,11 +95,13 @@ export class ApplyListSearchComponent implements OnInit {
 
   pageIndexChange($event: number) {
     this.pageOption.page = $event;
+    console.log(this.pageOption, 'pageOption');
     this.submit();
   }
 
   pageSizeChange($event: number) {
     this.pageOption.page_size = $event;
+    console.log(this.pageOption, 'pageOption');
     this.submit();
   }
 
@@ -119,7 +120,7 @@ export class ApplyListSearchComponent implements OnInit {
       if (res.code === 200) {
         console.log('支付列表');
         this.listOfData = res.data.contract_pay;
-        // this.total = res.data.count;
+        this.total = res.data.count;
         console.log('listRequest listOfData', this.listOfData);
         return;
       }

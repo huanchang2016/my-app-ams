@@ -65,10 +65,9 @@
     </div>
 </form>
 
-<nz-table #ajaxTable nzShowSizeChanger [nzFrontPagination]="false" [nzData]="listOfData" [nzLoading]="loading"
-    [nzTotal]="total" [(nzPageIndex)]="pageOption.page" [(nzPageSize)]="pageOption.page_size"
-    (nzPageIndexChange)="pageIndexChange($event)" (nzPageSizeChange)="pageSizeChange($event)"
-    class="mt-md hidden-mobile">
+<div class="hidden-mobile">
+</div>
+<nz-table #ajaxTable [nzData]="listOfData" [nzLoading]="loading" class="mt-md hidden-mobile">
     <thead>
         <tr>
             <th nzWidth="80px">序号</th>

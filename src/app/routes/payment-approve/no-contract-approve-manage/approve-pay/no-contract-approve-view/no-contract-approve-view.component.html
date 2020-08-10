@@ -33,6 +33,9 @@
     </ng-template> -->
     <tbody>
       <tr>
+        <td colspan="6" class="text-md text-center font-weight-bold">项目非合约支付</td>
+      </tr>
+      <tr>
         <td colspan="2" class="text-md text-center font-weight-bold">项目名称</td>
         <td colspan="4" class="text-md text-center">{{ projectInfo?.name }}</td>
       </tr>
@@ -244,6 +247,7 @@
 
 <ng-container *ngIf="progressInfo && progressInfo.execute_user">
   <app-users-execute-flow [payType]="'treaty'" (refresh)="refreshPage()" [payInfo]="treatypayInfo"
-    [paymentArr]="listOfData" [progressInfo]="progressInfo" (executeChange)="executeChange($event)">
+    [paymentArr]="listOfData" [approveFlag]="approveFlag" [progressInfo]="progressInfo"
+    (executeChange)="executeChange($event)">
   </app-users-execute-flow>
 </ng-container>

@@ -117,7 +117,7 @@ export class NoContractApplyListSearchComponent implements OnInit {
       if (res.code === 200) {
         console.log('非合约 支付列表');
         this.listOfData = res.data.treaty_pay;
-        // this.total = res.data.count;
+        this.total = res.data.count;
         console.log('listRequest listOfData', this.listOfData);
         return;
       }

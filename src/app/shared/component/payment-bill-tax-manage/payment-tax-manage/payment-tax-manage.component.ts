@@ -45,6 +45,7 @@ export class PaymentTaxManageComponent implements OnChanges, OnInit {
   @Input() setTreatyForm: any;
   @Input() validateTreatyForm: any;
   @Input() getTreatyPayment: any;
+  @Input() approveFlag: any;
 
   listOfData: any[] = [];
   validateForm: FormGroup;
@@ -171,6 +172,11 @@ export class PaymentTaxManageComponent implements OnChanges, OnInit {
 
 
   ngOnInit(): void {
+    console.log(this.approveFlag, 'approveFlag before');
+    if (this.approveFlag === undefined) {
+      this.approveFlag = true;
+    }
+    console.log(this.approveFlag, 'approveFlag after');
     this.validateForm = this.fb.group({
       treaty_payment_id: [null, [Validators.required]],
       is_get_bill: [null, [Validators.required]],

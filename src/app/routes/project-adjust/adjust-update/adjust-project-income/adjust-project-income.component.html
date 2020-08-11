@@ -56,49 +56,62 @@
                 </nz-form-control>
             </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="24" formArrayName="incomeArr">
-            <div nz-row [nzGutter]="24" *ngFor="let item of formGroupArrayControls; let i = index" [formGroupName]="i.toString()">
-                <div nz-col [nzSpan]="2" class="text-center font-weight-bold" style="line-height: 32px;">{{ i + 1 }}</div>
-                <div nz-col [nzSpan]="8">
-                    <nz-form-item>
-                        <nz-form-label nzFor="tax_id" nzRequired>收入税目</nz-form-label>
-                        <nz-form-control nzErrorTip="请选择项目收入税目">
-                            <nz-select style="width: 100%;" nzShowSearch nzPlaceHolder="请选择项目收入税目"
-                                formControlName="tax_id">
-                                <ng-container *ngFor="let item of taxList">
-                                    <nz-option [nzLabel]="item.name" [nzValue]="item.id" [nzDisabled]="checkIsSelectedCost(item.id)"></nz-option>
-                                </ng-container>
-                            </nz-select>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="8">
-                    <nz-form-item>
-                        <nz-form-label nzFor="income" nzRequired>收入金额</nz-form-label>
-                        <nz-form-control nzErrorTip="项目预算收入金额只能输入数字且最多保留2位小数">
-                            <nz-input-group nzSuffix="元" nzPrefix="￥" style="width: 100%">
-                                <input type="text" nzPlaceHolder="填写项目预算收入金额" formControlName="income" nz-input />
-                            </nz-input-group>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="4" style="line-height: 32px;"><span style="color: #000000d9">税率：</span> {{ currentTaxChange(formGroupArrayControls[i].get('tax_id').value) }}</div>
-                <div nz-col [nzSpan]="2" style="line-height: 32px;">
-                    <a nz-popconfirm nzPopconfirmTitle="是否确定删除当前收入预算？" nzPopconfirmPlacement="bottom"
-                        (nzOnConfirm)="deleted(i)" (nzOnCancel)="cancel()"
-                        class="text-error delete_btn border-radius-sm bg-white">
-                        <i nz-icon nzType="delete" nzTheme="outline"></i> <span class="text-xs">删除</span>
-                    </a>
-                </div>
+        <ng-template #incomeItemLoadingTpl>
+            <div class="text-center py-lg">
+                <nz-spin nzSimple></nz-spin>
             </div>
-            <div class="font-weight-bold">
-                <!-- <span class="font-weight-bold">含税收入： {{ totalOption.income | _currency }}</span>
+        </ng-template>
+        <ng-container *ngIf="!incomeListLoading; else incomeItemLoadingTpl">
+            <div nz-col [nzSpan]="24" formArrayName="incomeArr">
+                <div nz-row [nzGutter]="24" *ngFor="let item of formGroupArrayControls; let i = index"
+                    [formGroupName]="i.toString()">
+                    <div nz-col [nzSpan]="2" class="text-center font-weight-bold" style="line-height: 32px;">{{ i + 1 }}
+                    </div>
+                    <div nz-col [nzSpan]="8">
+                        <nz-form-item>
+                            <nz-form-label nzFor="tax_id" nzRequired>收入税目</nz-form-label>
+                            <nz-form-control nzErrorTip="请选择项目收入税目">
+                                <nz-select style="width: 100%;" nzShowSearch nzPlaceHolder="请选择项目收入税目"
+                                    formControlName="tax_id">
+                                    <ng-container *ngFor="let item of taxList">
+                                        <nz-option [nzLabel]="item.name" [nzValue]="item.id"
+                                            [nzDisabled]="checkIsSelectedCost(item.id)"></nz-option>
+                                    </ng-container>
+                                </nz-select>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col [nzSpan]="8">
+                        <nz-form-item>
+                            <nz-form-label nzFor="income" nzRequired>收入金额</nz-form-label>
+                            <nz-form-control nzErrorTip="项目预算收入金额只能输入数字且最多保留2位小数">
+                                <nz-input-group nzSuffix="元" nzPrefix="￥" style="width: 100%">
+                                    <input type="text" nzPlaceHolder="填写项目预算收入金额" formControlName="income" nz-input />
+                                </nz-input-group>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col [nzSpan]="4" style="line-height: 32px;"><span style="color: #000000d9">税率：</span>
+                        {{ currentTaxChange(formGroupArrayControls[i].get('tax_id').value) }}</div>
+                    <div nz-col [nzSpan]="2" style="line-height: 32px;">
+                        <a nz-popconfirm nzPopconfirmTitle="是否确定删除当前收入预算？" nzPopconfirmPlacement="bottom"
+                            (nzOnConfirm)="deleted(i, formGroupArrayControls[i].get('project_revenue_detail_id').value)"
+                            (nzOnCancel)="cancel()" class="text-error delete_btn border-radius-sm bg-white">
+                            <i nz-icon nzType="delete" nzTheme="outline"></i> <span class="text-xs">删除</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="font-weight-bold">
+                    <!-- <span class="font-weight-bold">含税收入： {{ totalOption.income | _currency }}</span>
                 <span class="font-weight-bold mx-md">税金合计： {{ totalOption.tax_amount | _currency }}</span>
                 <span class="font-weight-bold">不含税收入： {{ totalOption.exclude_tax_income | _currency }}</span> -->
 
-                <button nzBlock nz-button nzType="dashed" (click)="add($event)"><i nz-icon nzType="plus"></i>添加项目收入</button>
+                    <button nzBlock nz-button nzType="dashed" (click)="add($event)"><i nz-icon
+                            nzType="plus"></i>添加项目收入</button>
+                </div>
             </div>
-        </div>
+        </ng-container>
+
     </div>
     <nz-form-item nz-row class="mt-lg">
         <nz-form-control [nzSpan]="24" class="text-right">

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, Output, EventEmitter } from '@angular/core';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { SettingsConfigService } from 'src/app/routes/service/settings-config.service';
 import { ApiData } from 'src/app/data/interface.data';
@@ -10,17 +10,16 @@ import { AdjustContractFormCComponent } from './adjust-contract-form-c/adjust-co
   styles: [
   ]
 })
-export class AdjustContractComponent implements OnInit {
+export class AdjustContractComponent implements OnChanges, OnInit {
   @Input() adjustInfo: any;
+  @Input() submitLoading:boolean;
+  @Output() adjustmentChange:EventEmitter<any> = new EventEmitter();
 
   supplierList: any[] = [];
 
   contractList: any[] = [];
   selectedOption:{ [key:string]: boolean } = {};
   selectedSplitOption:{ [key:string]: boolean } = {};
-
-  loadingContract: boolean = false;
-  submitLoading: boolean = false;
 
   constructor(
     private msg: NzMessageService,
@@ -30,10 +29,36 @@ export class AdjustContractComponent implements OnInit {
     this.getConfigs();
   }
 
+  ngOnChanges() {
+    if(this.adjustInfo.deal_adjustment) {
+      this.contractList = this.adjustInfo.deal_adjustment.deal_adjustment;
+      this.selectedItems();
+    }
+  }
+
   ngOnInit() {
     if(this.adjustInfo) {
-      this.contractList = this.adjustInfo.deal_adjustment.deal;
-      this.getDataList();
+      this.contractList = this.adjustInfo.deal_adjustment.deal_adjustment;
+      this.selectedItems();
+    }
+  }
+
+  selectedItems():void {
+    /******
+     *  如果不是分割合同，记录已选合同
+     *   是分割合同，则记录分割合同  split_id
+     * ******/
+    this.selectedOption = {};
+    this.selectedSplitOption = {};
+    if(this.contractList && this.contractList.length !== 0) {
+      this.contractList.forEach(v => {
+        if (!v.split_contract) {
+          this.selectedOption[v.contract.id] = true;
+        } else {
+          this.selectedSplitOption[v.split_contract.id] = true;
+        }
+
+      });
     }
   }
 
@@ -54,6 +79,7 @@ export class AdjustContractComponent implements OnInit {
       nzComponentParams: {
         data: data,
         supplierList: this.supplierList,
+        // selectArr: this.contractList
         selectedOption: this.selectedOption,
         selectedSplitOption: this.selectedSplitOption
       },
@@ -71,46 +97,71 @@ export class AdjustContractComponent implements OnInit {
         }else {
           this.contractList.push(result);
         }
+        this.contractList = [...this.contractList];
+        this.selectedItems();
       }
     });
   }
 
-  getDataList() {
-    this.loadingContract = true;
-    this.settingsConfigService.get(`/api/deal/project/${this.adjustInfo.project.id}`).subscribe((res: ApiData) => {
-      // console.log(res, 'get contract list  by supplier info!');
-      this.loadingContract = false;
-      if (res.code === 200) {
-        const data:any[] = res.data.deal;
-        this.contractList = data.filter( v => v.active );
-        this.contractList.forEach( v => {
-           /******
-            *  如果不时分割合同，记录已选合同
-            *   是分割合同，则记录分割合同  split_id
-            * ******/
-          if(!v.split_contract) {
-            this.selectedOption[v.contract.id] = true;
-          } else {
-            this.selectedSplitOption[v.split_contract.id] = true;
+  deleted(idx: number, deal_id:number | null): void {
+    // 删除时需要判断 当前数据是否可以删除， 如果可以删除，则继续删除。
+    // 如果不能删除，则提示用户，当前数据不可删除。
+    if(deal_id) {
+      this.settingsConfigService.get(`/api/is_delete_cost_adjustment/${deal_id}`).subscribe((res:ApiData) => {
+        const data = res.data;
+        if(res.code === 200) {
+          if(data.delete) {
+            this.contractList = this.contractList.filter(v => {
+              if(v.deal) {
+                return v.deal.id !== deal_id;
+              }else {
+                return true;
+              }
+            });
+            this.selectedItems();
+          }else {
+            this.msg.warning(data.msg);
           }
           
-        });
-      }
-    })
-  }
+        }else {
+          this.msg.warning(res.error || '删除失败');
+        }
+      })
+    }else {
+      this.contractList.splice(idx, 1);
+      this.contractList = [...this.contractList];
 
-
-  deleted(idx:number): void {
-    this.contractList.splice(idx, 1);
+      this.selectedItems();
+    }
+    
   }
 
   submitForm():void {
-    console.log(this.contractList, 'submit contract list adjust');
-    this.submitLoading = true;
+    // this.submitLoading = true;
 
-    setTimeout(() => {
-      this.submitLoading = false;
-    }, 1000);
+    // setTimeout(() => {
+    //   this.submitLoading = false;
+    // }, 1000);
+    // 处理 表单组 里面的数据
+    const dealArr:any[] = this.contractList.map( v => {
+      return {
+        deal_adjustment_id: v.id ? v.id : null,
+
+        contract_id: v.contract.id,
+        split_contract_id: v.split_contract ? v.split_contract.id : null,
+        amount: v.amount
+      }
+    });
+    let option:any = {
+      adjustment_id: this.adjustInfo.id,
+      category_name: '合约调整',
+      
+      deal_adjustments: dealArr
+    };
+
+    // this.submitLoading = true;
+    this.adjustmentChange.emit(option);
+
   }
 
   cancel(): void { }

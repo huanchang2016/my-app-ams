@@ -28,7 +28,6 @@ export class AdjustProjectIncomeShowComponent implements OnInit {
   getIncomeList(proId:number) {
     // 获取项目收入
     this.settingsConfigService.get(`/api/project/revenue/${proId}`).subscribe((res:ApiData) => {
-      // console.log('项目收入', res);
       if(res.code === 200) {
         this.incomeInfo = res.data.project_revenue[0];
         if(this.incomeInfo) {
@@ -41,7 +40,6 @@ export class AdjustProjectIncomeShowComponent implements OnInit {
 
   getProjectIncomeList() {
     this.settingsConfigService.get(`/api/project_revenue_detail/revenue/${this.incomeInfo.id}`).subscribe((res:ApiData) => {
-      // console.log(res, '通过项目收入获取详情');
       if(res.code === 200) {
         this.projectIncomeList = res.data.project_revenue_detail;
         this.countCostTotal();

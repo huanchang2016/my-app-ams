@@ -27,10 +27,18 @@ export class AdjustUpdateComponent implements OnInit {
 
   projectInfo:any;
 
-  adjustInfo:any;
+  adjustInfo:any = null;
+  adjustLoading: boolean = false;
 
   id:number;
-
+  stepsCategoryLoading:{ [key:string]: boolean } = {
+    '项目信息调整': false,
+    '项目收入调整': false,
+    '补贴收入调整': false,
+    '成本调整': false,
+    '合约调整': false,
+    '非合约调整': false
+  };
   stepsCategory:any[] = [
     { key: 1, label: '项目信息调整', value: '项目信息调整' },
     { key: 2, label: '项目收入调整', value: '项目收入调整' },
@@ -68,21 +76,26 @@ export class AdjustUpdateComponent implements OnInit {
 
     });
 
-    this.validateForm.valueChanges.subscribe( _ => this.adjustInfo = null ); // 切换调整 模块时，调整的信息需要重置
+    // this.validateForm.valueChanges.subscribe( _ => this.adjustInfo = null ); // 切换调整 模块时，调整的信息需要重置
 
 
   }
 
-  adjustLoading: boolean = false;
+
+  submitLoading:boolean = false;
+  adjustmentChange(option:any):void {
+    // this.adjustInfo = data;
+      this.submitLoading = true;
+    this.settingsConfigService.post('/api/adjustment/update', option).subscribe((res:ApiData) => {
+      this.submitLoading = false;
+      if(res.code === 200) {
+        this.adjustInfo = res.data;
+      }
+    })
+  }
 
 
   submitForm(): void {
-    // for (const i in this.validateForm.controls) {
-    //   this.validateForm.controls[i].markAsDirty();
-    //   this.validateForm.controls[i].updateValueAndValidity();
-    // }
-    console.log(this.validateForm.value);
-
     if (this.validateForm.valid) {
       const opt: any = {
         ...this.validateForm.value,
@@ -95,6 +108,7 @@ export class AdjustUpdateComponent implements OnInit {
         if(res.code === 200) {
           this.msg.success('初始化成功');
           this.adjustInfo = res.data;
+          this.stepsCategoryLoading[this.validateForm.value.category_name] = true;
         }
       })
     }
@@ -107,6 +121,30 @@ export class AdjustUpdateComponent implements OnInit {
     this.settingsConfigService.get(`/api/project/detail/${this.id}`).subscribe((res:ApiData) => {
       if(res.code === 200) {
         this.projectInfo = res.data;
+      }
+    })
+    this.settingsConfigService.get(`/api/adjustment/${this.id}`).subscribe((res:ApiData) => {
+      if(res.code === 200) {
+        const data = res.data;
+        if(data.info_adjustment) { // 项目信息调整
+          this.stepsCategoryLoading['项目信息调整'] = true;
+        }
+        if(data.project_revenue_adjustment) { // 项目收入调整
+          this.stepsCategoryLoading['项目收入调整'] = true;
+        }
+        if(data.subsidy_income_adjustment) { // 补贴收入调整
+          this.stepsCategoryLoading['补贴收入调整'] = true;
+        }
+        if(data.cost_adjustment) { // 成本调整
+          this.stepsCategoryLoading['成本调整'] = true;
+        }
+        if(data.deal_adjustment) { // 合约调整
+          this.stepsCategoryLoading['合约调整'] = true;
+        }
+        if(data.treaty_adjustment) { // 非合约调整
+          this.stepsCategoryLoading['非合约调整'] = true;
+        }
+        this.adjustInfo = res.data;
       }
     })
   }
@@ -129,7 +167,6 @@ export class AdjustUpdateComponent implements OnInit {
         origin,
         project_category
       }
-      console.log(this.configs, 'project base info configs');
     });
 
 

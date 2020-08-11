@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd';
 import { Router } from '@angular/router';
@@ -7,6 +7,7 @@ import { SettingsConfigService } from 'src/app/routes/service/settings-config.se
 import { SettingsService } from '@delon/theme';
 import { filter, map } from 'rxjs/operators';
 import { zip } from 'rxjs';
+import { FindValueSubscriber } from 'rxjs/internal/operators/find';
 
 @Component({
   selector: 'app-adjust-base-info',
@@ -19,15 +20,16 @@ import { zip } from 'rxjs';
     `
   ]
 })
-export class AdjustBaseInfoComponent implements OnInit {
+export class AdjustBaseInfoComponent implements OnChanges, OnInit {
 
   @Input() adjustInfo:any;
+  @Input() projectInfo:any;
   @Input() configs:any;
+  @Input() submitLoading:boolean;
+  
+  @Output() adjustmentChange:EventEmitter<any> = new EventEmitter();
   
   validateForm: FormGroup;
-
-
-  submitLoading:boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -38,6 +40,13 @@ export class AdjustBaseInfoComponent implements OnInit {
     this.getCategoryList();
   }
 
+  ngOnChanges():void {
+    if(this.adjustInfo) {
+      if(this.validateForm) {
+        this.resetForm(this.adjustInfo.info_adjustment);
+      }
+    }
+  }
 
   ngOnInit(): void {
     this.validateForm = this.fb.group({
@@ -85,13 +94,24 @@ export class AdjustBaseInfoComponent implements OnInit {
       this.validateForm.controls[i].markAsDirty();
       this.validateForm.controls[i].updateValueAndValidity();
     }
-    console.log(this.validateForm, 'submit');
 
     if (this.validateForm.valid) {
-      let opt: any = this.validateForm.value;
+      const value: any = this.validateForm.value;
+      const option:any = {
+        adjustment_id: this.adjustInfo.id,
+        category_name: '项目信息调整',
+
+        project_category_id: value.category_id,
+        project_origin_id: value.origin_id,
+        project_name: value.name,
+        description: value.description,
+        progress: value.progress,
+        plan_execution_start_time: value.plan_time.start,
+        plan_execution_end_time: value.plan_time.end
+      };
+      this.adjustmentChange.emit(option);
       
-        
-        
+      
     } else {
       this.msg.warning('信息填写不完整');
     }
@@ -115,10 +135,7 @@ export class AdjustBaseInfoComponent implements OnInit {
       info_adjustment_id: this.adjustInfo.info_adjustment.id,
       is_basic: true
     };
-    console.log(opt);
     this.settingsConfigService.post('/api/attachment/bind', opt).subscribe((res:ApiData) => {
-      console.log(res);
-      this.submitLoading = false;
       if(res.code === 200) {
         this.msg.success('附件绑定成功');
         this.getAttachment();
@@ -130,7 +147,6 @@ export class AdjustBaseInfoComponent implements OnInit {
 
   getAttachment() {
     this.settingsConfigService.post(`/api/info_adjustment/attachment`, { info_adjustment_id: this.adjustInfo.info_adjustment.id }).subscribe((res:ApiData) => {
-      console.log('项目 基础附件：', res);
       if(res.code === 200) {
         this.attachment = res.data.attachment;
       }

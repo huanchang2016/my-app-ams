@@ -28,7 +28,6 @@ export class AdjustSubsidyIncomeShowComponent implements OnInit {
   getIncomeList(proId:number) {
     // 获取项目收入
     this.settingsConfigService.get(`/api/subsidy/income/${this.projectInfo.id}`).subscribe((res:ApiData) => {
-      console.log('补贴收入', res);
       if(res.code === 200) {
         this.incomeInfo = res.data.subsidy_income[0];
         if(this.incomeInfo) {
@@ -41,7 +40,6 @@ export class AdjustSubsidyIncomeShowComponent implements OnInit {
   getIncomeDetailList() {
      // 获取补贴收入
      this.settingsConfigService.get(`/api/subsidy_income_detail/subsidy/${this.incomeInfo.id}`).subscribe((res: ApiData) => {
-      console.log(res, '通过补贴收入获取详情');
       if (res.code === 200) {
         this.incomeList = res.data.subsidy_income_detail;
         this.countCostTotal();

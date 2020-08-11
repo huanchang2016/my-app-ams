@@ -32,13 +32,14 @@ export class AdjustContractFormCComponent implements OnInit {
 
   @Input() data?: any;
   @Input() supplierList: any;
+  // @Input() selectArr: any[];
   @Input() selectedOption: { [key:string]: boolean };
   @Input() selectedSplitOption: { [key:string]: boolean };
 
   split_selected:{ [key:string]: boolean } = {};
 
   validateForm: FormGroup; // 基本资料
-  submitLoading: boolean = false;
+  // submitLoading: boolean = false;
 
   contractList: any[] = [];
   splitContractList: any[] = [];
@@ -66,7 +67,6 @@ export class AdjustContractFormCComponent implements OnInit {
       
       this.getContractList(this.data.contract.supplier.id);
 
-      console.log(this.data);
       this.validateForm.patchValue({
         supplier_id: this.data.contract.supplier.id,
         contract_id: this.data.contract.id,
@@ -85,6 +85,20 @@ export class AdjustContractFormCComponent implements OnInit {
       }
     }
   }
+
+  // checkIsSelected(id: number): boolean {
+  //   if(this.selectArr && this.selectArr.length !== 0) {
+  //     return this.selectArr.filter(v => {
+  //       if(v.split_contract) {
+  //         return v.split_contract.id !== id;
+  //       }else {
+  //         return v.contract.id
+  //       }
+  //     }).length > 0;
+  //   }
+  //   return false;
+  // }
+
   supplierChange(supplier_id: any):void {
     if (supplier_id) {
       this.validateForm.patchValue({
@@ -122,7 +136,6 @@ export class AdjustContractFormCComponent implements OnInit {
   splitContractChange(split_contract_id: number):void {
     if (split_contract_id) { // 分割合同值变化时，计算合同金额上限。
       const currentSplitContract:any = this.splitContractList.filter(v => v.id === split_contract_id)[0];
-      console.log(currentSplitContract, 'split contract')
       this.limtAmount = Number((currentSplitContract.amount - currentSplitContract.use_amount).toFixed(2));
     }
   }
@@ -161,7 +174,7 @@ export class AdjustContractFormCComponent implements OnInit {
     if (this.validateForm.valid) {
       const value: any = this.validateForm.value;
 
-      this.submitLoading = true;
+      // this.submitLoading = true;
       //  请求 新增接口
 
       const contract:any = this.contractList.filter( v => v.id === value.contract_id)[0];
@@ -173,7 +186,6 @@ export class AdjustContractFormCComponent implements OnInit {
         amount: +value.amount
       };
 
-      console.log(opt);
       this.destroyModal(opt);
     } else {
       this.msg.warning('信息填写不完整');

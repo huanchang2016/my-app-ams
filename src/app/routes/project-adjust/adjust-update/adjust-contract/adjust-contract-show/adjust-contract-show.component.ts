@@ -33,7 +33,6 @@ export class AdjustContractShowComponent implements OnInit {
   getDataList():void {
     this.loadingContract = true;
     this.settingsConfigService.get(`/api/deal/project/${this.projectInfo.id}`).subscribe((res: ApiData) => {
-      // console.log(res, 'get contract list  by supplier info!');
       this.loadingContract = false;
       if (res.code === 200) {
         const data:any[] = res.data.deal;

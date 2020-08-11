@@ -12,7 +12,6 @@ export class AdjustBaseInfoShowComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
 }

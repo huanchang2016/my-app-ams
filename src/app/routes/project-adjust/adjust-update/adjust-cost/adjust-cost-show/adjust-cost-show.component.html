@@ -1,4 +1,4 @@
-<div nz-row nzGutter="24">
+<!-- <div nz-row nzGutter="24">
     <div nz-col [nzSm]="24" [nzMd]="6" *ngFor="let item of costList; let i = index">
         <div class="d-flex justify-content-between align-items-center pt-md pb-md">
             <span>{{ item.cost_category.name }}</span>
@@ -10,4 +10,16 @@
     <div nz-col [nzSpan]="24">
         <span class="font-weight-bold">合计：{{ total | _currency }}</span>
     </div>
-</div>
+</div> -->
+<sv-container>
+    <ng-container *ngFor="let item of costList">
+        <sv [label]="item.cost_category.name"><span class="font-weight-bold text-nowrap">{{ item.amount | currency: 'CNY' }}</span>
+        </sv>
+    </ng-container>
+    <sv [label]="costTpl" col="1">
+        <ng-template #costTpl>
+            <span class="font-weight-bold">总 &nbsp;计</span>
+        </ng-template>
+        <strong>{{ projectInfo.budget?.cost_amount | currency: 'CNY' }}</strong>
+    </sv>
+</sv-container>

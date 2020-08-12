@@ -1,0 +1,144 @@
+<page-header title="项目调整" [breadcrumb]="breadcrumb" [action]="actionTpl">
+    <ng-template #breadcrumb>
+        <nz-breadcrumb>
+            <nz-breadcrumb-item><a [routerLink]="['/dashboard']">首页</a></nz-breadcrumb-item>
+            <nz-breadcrumb-item><a [routerLink]="['/adjust/myAdjust']">我的调整</a></nz-breadcrumb-item>
+            <nz-breadcrumb-item>项目调整详情预览</nz-breadcrumb-item>
+        </nz-breadcrumb>
+    </ng-template>
+
+    <ng-template #actionTpl>
+        <button nz-button (click)="printCurrentModal('print-box')">打印</button>
+        <button nz-button nz-dropdown [nzDropdownMenu]="opMenu" class="mx-sm">
+          下载 <i nz-icon nzType="download" nzTheme="outline"></i>
+        </button>
+        <nz-dropdown-menu #opMenu="nzDropdownMenu">
+          <ul nz-menu>
+            <li nz-menu-item (click)="downloadFile('pdf')"><i nz-icon nzType="file-pdf" nzTheme="outline"></i> .pdf</li>
+            <li nz-menu-item (click)="downloadFile('image')"><i nz-icon nzType="file-excel" nzTheme="outline"></i> .image
+            </li>
+          </ul>
+        </nz-dropdown-menu>
+    
+        <a *ngIf="adjustInfo?.draft" nz-button [nzType]="'primary'" [routerLink]="['/adjust/update', id]">编辑</a>
+    
+        <a nz-popconfirm nz-button [nzType]="'primary'" *ngIf="adjustInfo?.draft"
+          nzPopconfirmTitle="请确认项目信息全部填写完整，无误后确认提交！！！" (nzOnConfirm)="submitProject()" (nzOnCancel)="cancel()">
+          提交项目
+        </a>
+      </ng-template>
+
+
+</page-header>
+
+<div *ngIf="loadingData && !adjustInfo" class="text-center mt-lg py-lg">
+    <nz-spin nzSimple></nz-spin>
+</div>
+<div class="print-box" [class.p-lg]="isPrinter" id="print-box" #printBox *ngIf="!loadingData && adjustInfo">
+
+    <!-- modify start -->
+    <nz-card [nzTitle]="printerTitle" [nzBordered]="false" class="mb-md">
+        <ng-template #printerTitle>
+            <!-- <ng-container *ngIf="isPrinter;else noPrinter">
+          <div class="clearfix">
+            <div class="float-left title-logo">
+              <img src="/assets/imgs/export_logo.png" alt="天府人资">
+            </div>
+            <div class="float-right title-name text-right">我们以扎根新区、深耕新区、服务新区为己任，秉承拓荒牛精神，以专业优质的服务，致力于推动各类
+              人才向天府新区聚集，打造天府新区人才高地，成就天府新区人力资源服务第一品牌。</div>
+          </div>
+        </ng-container> -->
+            <div class="plan-title text-center text-lg font-weight-bold bg-white">
+                关于{{ project_name }}项目计划书
+            </div>
+        </ng-template>
+
+        <div class="show_item">
+            <ng-container *ngIf="showAdjustmentCategory('项目信息调整'); else projectInfoTpl">
+                <app-adjust-info-details-show [adjustInfo]="adjustInfo"></app-adjust-info-details-show>
+            </ng-container>
+            <ng-template #projectInfoTpl>
+                <app-adjust-base-info-show [projectInfo]="projectInfo"></app-adjust-base-info-show>
+            </ng-template>
+
+        </div>
+        <sv-container class="mb-lg" [title]="proBudgetTpl">
+            <ng-template #proBudgetTpl>
+                <span class="font-weight-bold text-md">三、项目预算</span>
+            </ng-template>
+
+            <sv-title>1. 收入</sv-title>
+            <sv col="1" class="sv_block_width">
+                <ng-container *ngIf="showAdjustmentCategory('项目收入调整'); else projectIncomeTpl">
+                    <app-adjust-project-income-details-show [adjustInfo]="adjustInfo">
+                    </app-adjust-project-income-details-show>
+                </ng-container>
+                <ng-template #projectIncomeTpl>
+                    <app-adjust-project-income-show [projectInfo]="projectInfo"></app-adjust-project-income-show>
+                </ng-template>
+
+                <ng-container *ngIf="showAdjustmentCategory('补贴收入调整'); else subsidyIncomeTpl">
+                    <app-adjust-subsidy-income-details-show [adjustInfo]="adjustInfo">
+                    </app-adjust-subsidy-income-details-show>
+                </ng-container>
+                <ng-template #subsidyIncomeTpl>
+                    <app-adjust-subsidy-income-show [projectInfo]="projectInfo"></app-adjust-subsidy-income-show>
+                </ng-template>
+            </sv>
+
+
+            <sv-title>2. 成本</sv-title>
+            <sv class="sv_block_width" col="1">
+                <ng-container *ngIf="showAdjustmentCategory('成本调整'); else costTpl">
+                    <app-adjust-cost-details-show [adjustInfo]="adjustInfo"></app-adjust-cost-details-show>
+                </ng-container>
+                <ng-template #costTpl>
+                    <app-adjust-cost-show [projectInfo]="projectInfo"></app-adjust-cost-show>
+                </ng-template>
+            </sv>
+
+            <!-- <ng-container *ngFor="let cost of project.budget?.cost">
+              <sv [label]="cost.cost_category.name"><span class="font-weight-bold">{{ cost.amount | currency: 'CNY' }}</span>
+              </sv>
+            </ng-container>
+            <sv [label]="costTpl" col="1">
+              <ng-template #costTpl>
+                <span class="font-weight-bold">总 &nbsp;计</span>
+              </ng-template>
+              <strong>{{ project.budget?.cost_amount | currency: 'CNY' }}</strong>
+            </sv>
+      
+            <sv-title>3. 项目利润</sv-title>
+            <ng-container *ngIf="project.budget">
+              <sv label="毛利润"><span>{{ project.budget?.gross_profit | currency: 'CNY' }}</span></sv>
+              <sv label="毛利率"><span>{{ countPercent(project.budget?.gross_profit_rate, 100) }} %</span></sv>
+            </ng-container> -->
+
+        </sv-container>
+
+        <sv-container class="mb-lg mt-mb" [title]="proContractTpl">
+            <ng-template #proContractTpl>
+                <span class="font-weight-bold text-md">四、合约/非合约</span>
+            </ng-template>
+            <sv col="1" class="sv_block_width">
+
+                <ng-container *ngIf="showAdjustmentCategory('合约调整'); else projectIncomeTpl">
+                    <app-adjust-contract-details-show [adjustInfo]="adjustInfo"></app-adjust-contract-details-show>
+                </ng-container>
+                <ng-template #projectIncomeTpl>
+                    <app-adjust-contract-show [projectInfo]="projectInfo"></app-adjust-contract-show>
+                </ng-template>
+
+                <ng-container *ngIf="showAdjustmentCategory('非合约调整'); else subsidyIncomeTpl">
+                    <app-adjust-treaty-details-show [adjustInfo]="adjustInfo"></app-adjust-treaty-details-show>
+                </ng-container>
+                <ng-template #subsidyIncomeTpl>
+                    <app-adjust-treaty-show [projectInfo]="projectInfo"></app-adjust-treaty-show>
+                </ng-template>
+            </sv>
+        </sv-container>
+
+
+
+    </nz-card>
+</div>

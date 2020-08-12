@@ -75,6 +75,10 @@ import { NoApplyApproveSearchComponent } from './no-contract-approve-manage/appl
 import { NoApplyApproveListComponent } from './no-contract-approve-manage/apply-for/no-contract-list-search/apply-approve/no-apply-approve-list/no-apply-approve-list.component';
 import { NoApplyExcuteListComponent } from './no-contract-approve-manage/apply-for/no-contract-list-search/apply-excute/no-apply-excute-list/no-apply-excute-list.component';
 import { NoApplyExcuteSearchComponent } from './no-contract-approve-manage/apply-for/no-contract-list-search/apply-excute/no-apply-excute-search/no-apply-excute-search.component';
+import { ContractDepartmentHeadListComponent } from './contract-approve-manage/contract-department-head/contract-department-head-list/contract-department-head-list.component';
+import { ContractDepartmentHeadSearchComponent } from './contract-approve-manage/contract-department-head/contract-department-head-search/contract-department-head-search.component';
+import { NoContractDepartmentHeadListComponent } from './no-contract-approve-manage/no-contract-department-head/no-contract-department-head-list/no-contract-department-head-list.component';
+import { NoContractDepartmentHeadSearchComponent } from './no-contract-approve-manage/no-contract-department-head/no-contract-department-head-search/no-contract-department-head-search.component';
 
 const COMPONENTS = [
   // 有合约  合约审批管理
@@ -161,7 +165,11 @@ const COMPONENTS_NOROUNT = [
     NoApplyApproveSearchComponent,
     NoApplyApproveListComponent,
     NoApplyExcuteListComponent,
-    NoApplyExcuteSearchComponent
+    NoApplyExcuteSearchComponent,
+    ContractDepartmentHeadListComponent,
+    ContractDepartmentHeadSearchComponent,
+    NoContractDepartmentHeadListComponent,
+    NoContractDepartmentHeadSearchComponent,
 
   ],
   entryComponents: COMPONENTS_NOROUNT

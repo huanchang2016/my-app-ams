@@ -103,6 +103,12 @@ export class StartupService {
               {
                 text: '项目列表',
                 link: '/project/projectList',
+                hide: this.isHideRouter(['project_management_list'], permissionGroup),
+              },
+              {
+                text: '项目列表(部门负责人)',
+                link: '/project/department_head_list',
+                hide: this.isHideRouter(['project_department_management_list'], permissionGroup),
               },
             ]
           },
@@ -125,7 +131,8 @@ export class StartupService {
               },
               {
                 text: '调整列表',
-                link: '/adjust/list'
+                link: '/adjust/list',
+                hide: this.isHideRouter(['adjustment_management_list'], permissionGroup),
               },
             ]
           },
@@ -185,8 +192,8 @@ export class StartupService {
               {
                 text: '支付执行',
                 // link: '/approve/contract/excute'
-                link: '/approve/contract/excuteList'
-                // hide: this.isHideRouter(['treaty_pay_approval'], permissionGroup),
+                link: '/approve/contract/excuteList',
+                hide: this.isHideRouter(['contract_pay_execute'], permissionGroup),
                 // children: [
                 //   {
                 //     text: '待执行',
@@ -200,8 +207,14 @@ export class StartupService {
               },
               {
                 text: '支付列表',
-                link: '/approve/contract/list'
-              }
+                link: '/approve/contract/list',
+                hide: this.isHideRouter(['contract_pay_management_list'], permissionGroup),
+              },
+              {
+                text: '支付列表(部门负责人)',
+                link: '/approve/contract/department_head_list',
+                hide: this.isHideRouter(['contract_pay_department_management_list'], permissionGroup),
+              },
             ]
           },
           {
@@ -260,7 +273,7 @@ export class StartupService {
                 text: '支付执行',
                 // link: '/approve/no-contract/excute',
                 link: '/approve/no-contract/excuteList',
-                // hide: this.isHideRouter(['treaty_pay_approval'], permissionGroup),
+                hide: this.isHideRouter(['treaty_pay_execute'], permissionGroup),
                 // children: [
                 //   {
                 //     text: '待执行',
@@ -275,8 +288,13 @@ export class StartupService {
               {
                 text: '支付列表',
                 link: '/approve/no-contract/applyList',
+                hide: this.isHideRouter(['treaty_pay_management_list'], permissionGroup),
               },
-
+              {
+                text: '支付列表(部门负责人)',
+                link: '/approve/no-contract/department_head_list',
+                hide: this.isHideRouter(['treaty_pay_department_management_list'], permissionGroup),
+              },
 
             ]
           },
@@ -337,7 +355,7 @@ export class StartupService {
                 text: '发票执行',
                 // link: '/bill/excute',
                 link: '/bill/excuteList',
-                // hide: this.isHideRouter(['bill_approval'], permissionGroup),
+                hide: this.isHideRouter(['bill_execute'], permissionGroup),
                 // children: [
                 //   {
                 //     text: "待执行",
@@ -351,8 +369,14 @@ export class StartupService {
               },
               {
                 text: '发票列表',
-                link: '/bill/list'
-              }
+                link: '/bill/list',
+                hide: this.isHideRouter(['bill_management_list'], permissionGroup),
+              },
+              {
+                text: '发票列表(部门负责人)',
+                link: '/bill/department_head_list',
+                hide: this.isHideRouter(['bill_department_management_list'], permissionGroup),
+              },
             ]
           },
           {
@@ -378,19 +402,19 @@ export class StartupService {
                 text: '合约凭证',
                 // link: '/financial/contract',
                 link: '/financial/contractList',
-                // hide: this.isHideRouter(['cost_list'], permissionGroup)
+                hide: this.isHideRouter(['contract_pay_certificate'], permissionGroup)
               },
               {
                 text: '非合约凭证',
                 // link: '/financial/treaty',
                 link: '/financial/treatyList',
-                // hide: this.isHideRouter(['cost_list'], permissionGroup)
+                hide: this.isHideRouter(['treaty_pay_certificate'], permissionGroup)
               },
               {
                 text: '发票凭证',
                 // link: '/financial/bill',
                 link: '/financial/billList',
-                // hide: this.isHideRouter(['cost_list'], permissionGroup)
+                hide: this.isHideRouter(['bill_certificate'], permissionGroup)
               }
             ]
           },

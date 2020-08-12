@@ -32,7 +32,6 @@ export class AdjustCostShowComponent implements OnInit {
   
   getBudgetData() {
     this.settingsConfigService.get(`/api/budget/project/${this.projectInfo.id}`).subscribe((res:ApiData) => {
-      // console.log(res);
       if(res.code === 200) {
         this.getCostList(res.data);
       }

@@ -28,6 +28,13 @@ import { MyAdjustListComponent } from './my-adjust/my-adjust-list/my-adjust-list
 import { MyAdjustSearchComponent } from './my-adjust/my-adjust-search/my-adjust-search.component';
 import { ApprovelAdjustListComponent } from './approvel-adjust/approvel-adjust-list/approvel-adjust-list.component';
 import { ApprovelAdjustSearchComponent } from './approvel-adjust/approvel-adjust-search/approvel-adjust-search.component';
+import { AdjustViewCComponent } from './adjust-view-c/adjust-view-c.component';
+import { AdjustProjectIncomeDetailsShowComponent } from './adjust-view-c/adjust-project-income-details-show/adjust-project-income-details-show.component';
+import { AdjustSubsidyIncomeDetailsShowComponent } from './adjust-view-c/adjust-subsidy-income-details-show/adjust-subsidy-income-details-show.component';
+import { AdjustCostDetailsShowComponent } from './adjust-view-c/adjust-cost-details-show/adjust-cost-details-show.component';
+import { AdjustContractDetailsShowComponent } from './adjust-view-c/adjust-contract-details-show/adjust-contract-details-show.component';
+import { AdjustTreatyDetailsShowComponent } from './adjust-view-c/adjust-treaty-details-show/adjust-treaty-details-show.component';
+import { AdjustInfoDetailsShowComponent } from './adjust-view-c/adjust-info-details-show/adjust-info-details-show.component';
 
 
 @NgModule({
@@ -55,7 +62,14 @@ import { ApprovelAdjustSearchComponent } from './approvel-adjust/approvel-adjust
     MyAdjustListComponent,
     MyAdjustSearchComponent,
     ApprovelAdjustListComponent,
-    ApprovelAdjustSearchComponent],
+    ApprovelAdjustSearchComponent,
+    AdjustViewCComponent,
+    AdjustProjectIncomeDetailsShowComponent,
+    AdjustSubsidyIncomeDetailsShowComponent,
+    AdjustCostDetailsShowComponent,
+    AdjustContractDetailsShowComponent,
+    AdjustTreatyDetailsShowComponent,
+    AdjustInfoDetailsShowComponent],
   imports: [
     SharedModule,
     ProjectAdjustRoutingModule

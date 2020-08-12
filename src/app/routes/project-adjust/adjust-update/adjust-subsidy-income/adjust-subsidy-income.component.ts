@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd';
 import { ApiData } from 'src/app/data/interface.data';
@@ -9,15 +9,15 @@ import { SettingsService } from '@delon/theme';
   selector: 'app-adjust-subsidy-income',
   templateUrl: './adjust-subsidy-income.component.html',
 })
-export class AdjustSubsidyIncomeComponent implements OnInit {
+export class AdjustSubsidyIncomeComponent implements OnChanges, OnInit {
 
   @Input() adjustInfo:any;
-
-  subsidyIncomeList:any[] = [];
+  @Input() submitLoading:boolean;
+  @Output() adjustmentChange:EventEmitter<any> = new EventEmitter();
+  @Output() adjustmentIncomeChange:EventEmitter<any> = new EventEmitter();
+  @Output() adjustmentIncomeDeleted:EventEmitter<any> = new EventEmitter();
   
   validateForm: FormGroup;
-
-  submitLoading:boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -26,9 +26,22 @@ export class AdjustSubsidyIncomeComponent implements OnInit {
     public settingsConfigService: SettingsConfigService,
   ) { }
 
+  ngOnChanges() {
+    if(this.adjustInfo) {
+      // this.submitLoading = false;
+      if(this.validateForm) {
+        this.initForm();
+      }
+    }
+  }
 
   ngOnInit(): void {
 
+    this.initForm();
+
+  }
+
+  initForm():void {
     this.validateForm = this.fb.group({
       company_id: [null, [Validators.required]],
       name: [null, [Validators.required]],
@@ -38,6 +51,8 @@ export class AdjustSubsidyIncomeComponent implements OnInit {
 
       incomeArr: this.fb.array([
         this.fb.group({
+          subsidy_income_detail_id: [null], // 判断收入是否可以删除  id
+          income_detail_adjustment_id: [null],
           income: [null, [Validators.required, Validators.pattern(/^\d+(\.\d{1,2})?$/)]],
           is_bill: [null, [Validators.required]],
           tax_rate: [null]
@@ -45,13 +60,11 @@ export class AdjustSubsidyIncomeComponent implements OnInit {
       ])
     });
 
-    if(this.adjustInfo) {
+    if(this.adjustInfo && this.adjustInfo.subsidy_income_adjustment) {
       this.getProjectIncomeList();
       this.resetForm(this.adjustInfo.subsidy_income_adjustment);
     }
-
   }
-
 
   resetForm(opt: any): void {
     this.validateForm.patchValue({
@@ -86,6 +99,8 @@ export class AdjustSubsidyIncomeComponent implements OnInit {
     const groupArray:FormArray = this.validateForm.get('incomeArr') as FormArray;
     groupArray.push(
       this.fb.group({
+        subsidy_income_detail_id: [null], // 判断收入是否可以删除  id
+        income_detail_adjustment_id: [null],
         income: [null, [Validators.required]],
         is_bill: [null, [Validators.required]],
         tax_rate: [null]
@@ -93,10 +108,28 @@ export class AdjustSubsidyIncomeComponent implements OnInit {
     )
   }
   
-  deleted(index: number): void {
+  deleted(index: number, subsidy_income_detail_id:number | null): void {
     const groupArray:FormArray = this.validateForm.get('incomeArr') as FormArray;
-
-    groupArray.removeAt(index);
+    // 删除时需要判断 当前数据是否可以删除， 如果可以删除，则继续删除。
+    // 如果不能删除，则提示用户，当前数据不可删除。
+    if(subsidy_income_detail_id) {
+      this.settingsConfigService.get(`/api/is_delete_subsidy_income_detail/${subsidy_income_detail_id}`).subscribe((res:ApiData) => {
+        const data = res.data;
+        if(res.code === 200) {
+          if(data.delete) {
+            groupArray.removeAt(index);
+          }else {
+            this.msg.warning(data.msg);
+          }
+          
+        }else {
+          this.msg.warning(res.error || '删除失败');
+        }
+      })
+    }else {
+      groupArray.removeAt(index);
+    }
+    
   }
 
   submitForm(): void {
@@ -113,47 +146,80 @@ export class AdjustSubsidyIncomeComponent implements OnInit {
       }
     }
 
-    console.log(this.validateForm, 'submit');
 
     if (this.validateForm.valid) {
-      let opt: any = this.validateForm.value;
-      
+      const value: any = this.validateForm.value;
       // 处理 表单组 里面的数据
-      // const incomeArr:any[] = this.validateForm.get('incomeArr').value;
-      // const project:any[] = incomeArr.map( v => {
-      //   return {
-      //     name: v.projectName,
-      //     start_time: v.projectRangeDate[0],
-      //     end_time: v.projectRangeDate[1],
-      //     description: v.projectDescription
-      //   }
-      // });
+      const incomeArr:any[] = value.incomeArr;
+      const incomeTaxList:any[] = incomeArr.map( v => {
+        return {
+          income_detail_adjustment_id: v.income_detail_adjustment_id,
+          is_bill: v.is_bill,
+          tax_rate: v.is_bill ? v.tax_rate : 0,
+          income: +v.income
+        }
+      });
+      let option:any = {
+        adjustment_id: this.adjustInfo.id,
         
+        name: value.name,
+        condition: value.condition,
+        calculation_basis: value.calculation_basis,
+        remark: value.remark,
+        company_id: value.company_id,
+        income_detail_adjustments: incomeTaxList
+      };
+
+      if(this.adjustInfo.subsidy_income_adjustment) {
+        const updateObj:any = Object.assign(option, { category_name: '补贴收入调整', subsidy_income_adjustment_id: this.adjustInfo.subsidy_income_adjustment.id });
+        this.adjustmentChange.emit(updateObj);
+      }else {
+        const createObj:any = option;
+        this.adjustmentIncomeChange.emit({
+          data: createObj,
+          type: 'subsidy'
+        });
+      }
+      
+
+      // this.submitLoading = true;
+      
     } else {
       this.msg.warning('信息填写不完整');
     }
   }
 
+  deletedIncome():void {
+    const opt:any = { subsidy_income_adjustment_id: this.adjustInfo.subsidy_income_adjustment.id };
+    this.adjustmentIncomeDeleted.emit({ data: opt, type: 'subsidy' });
+  }
+
   cancel():void {}
 
   
+  incomeListLoading:boolean = false;
   getProjectIncomeList() {
+    this.incomeListLoading = true;
     this.settingsConfigService.get(`/api/subsidy_income_detail_adjustment/${this.adjustInfo.subsidy_income_adjustment.id}`).subscribe((res:ApiData) => {
-      // console.log(res, '通过项目收入获取详情');
+    this.incomeListLoading = false;
       if(res.code === 200) {
-        this.subsidyIncomeList = res.data.subsidy_income_detail_adjustment;
+        const incomeList:any[] = res.data.subsidy_income_detail_adjustment.filter(v => v.active);
         // this.countCostTotal();
 
-        if(this.subsidyIncomeList.length !== 0) {
+        if(incomeList.length !== 0) {
           // 给表单组赋值
-          this.subsidyIncomeList.forEach( (el, index) => {
-            if(index > 0) {
+          const _incomeArr:any[] = this.validateForm.get('incomeArr').value;
+          incomeList.forEach( (el, index) => {
+            if(index > 0 && _incomeArr.length < incomeList.length) {
+              // 表单组元素长度 小于 数据长度时新增
               this.add();
             }
-          })
+          });
           this.validateForm.patchValue({
-            incomeArr: this.subsidyIncomeList.map( v => {
+            incomeArr: incomeList.map( v => {
               return {
+                subsidy_income_detail_id: v.subsidy_income_detail ? v.subsidy_income_detail.id : null, // 记录已有的数据id
+                income_detail_adjustment_id: v.id,
                 income: v.income,
                 is_bill: v.is_bill,
                 tax_rate: v.tax_rate
@@ -161,7 +227,6 @@ export class AdjustSubsidyIncomeComponent implements OnInit {
             })
           })
           
-          console.log(this.validateForm.value)
         }
       }
     });

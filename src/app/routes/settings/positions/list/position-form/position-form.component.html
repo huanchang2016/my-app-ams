@@ -39,9 +39,9 @@
         </nz-form-control>
     </nz-form-item>
     <nz-form-item *ngIf="validateForm.get('is_leader').value">
-        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="department_ids" nzRequired>所属职位</nz-form-label>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="departments" nzRequired>所属职位</nz-form-label>
         <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请选择所属职位">
-            <nz-select style="width: 100%;" id="department_ids" nzShowSearch nzAllowClear nzPlaceHolder="请选择所属职位"
+            <nz-select style="width: 100%;" id="departments" nzShowSearch nzAllowClear nzPlaceHolder="请选择所属职位"
                 [nzDisabled]="" nzMode="multiple" formControlName="department_ids">
                 <ng-container *ngFor="let item of departmentAll">
                     <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>

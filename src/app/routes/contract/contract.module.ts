@@ -6,7 +6,6 @@ import { ContractContractFormComponent } from './component/contract-form/contrac
 import { ContractContractSearchFormComponent } from './component/contract-search-form/contract-search-form.component';
 import { ContractViewComponent } from './view/view.component';
 import { ContractSplitListComponent } from './split-list/split-list.component';
-
 const COMPONENTS = [
   ContractListComponent,
   ContractViewComponent,
@@ -24,7 +23,7 @@ const COMPONENTS_NOROUNT = [
   ],
   declarations: [
     ...COMPONENTS,
-    ...COMPONENTS_NOROUNT
+    ...COMPONENTS_NOROUNT,
   ],
 })
 export class ContractModule { }

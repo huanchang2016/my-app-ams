@@ -25,6 +25,8 @@ import { BillExcuteListCComponent } from './bill-manage/component/bill-excute-li
 import { BillApplyListComponent } from './bill-manage/bill-apply/bill-apply-list/bill-apply-list.component';
 import { BillApproveListComponent } from './bill-manage/bill-approve/bill-approve-list/bill-approve-list.component';
 import { BillExcuteListComponent } from './bill-manage/bill-excute/bill-excute-list/bill-excute-list.component';
+import { BillDepartmentHeadListComponent } from './bill-manage/bill-department-head/bill-department-head-list/bill-department-head-list.component';
+import { BillDepartmentHeadSearchComponent } from './bill-manage/bill-department-head/bill-department-head-search/bill-department-head-search.component';
 
 const COMPONENTS = [
   BillApplyProjectsComponent,
@@ -63,6 +65,8 @@ const COMPONENTS_NOROUNT = [
     BillApplyListComponent,
     BillApproveListComponent,
     BillExcuteListComponent,
+    BillDepartmentHeadListComponent,
+    BillDepartmentHeadSearchComponent,
   ],
   entryComponents: COMPONENTS_NOROUNT
 })

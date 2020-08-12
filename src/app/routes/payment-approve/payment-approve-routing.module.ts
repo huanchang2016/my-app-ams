@@ -3,10 +3,12 @@ import { NoContractApprovePayListComponent } from './no-contract-approve-manage/
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-  // 有合约  合约审批管理
+// 有合约  合约审批管理
 import { ApproveNotStartedComponent } from './contract-approve-manage/apply-for/approve-not-started/approve-not-started.component';
 import { ProjectContractListComponent } from './contract-approve-manage/apply-for/project-contract-list/project-contract-list.component';
 import { ContractPayCreateComponent } from './contract-approve-manage/apply-for/contract-pay-create/contract-pay-create.component';
+// 合约 列表（部门负责人）
+import { ContractDepartmentHeadListComponent } from './contract-approve-manage/contract-department-head/contract-department-head-list/contract-department-head-list.component';
 
 // 我申请的支付流程（进行中的）
 import { MyApplyForInprogressComponent } from './contract-approve-manage/apply-for/my-apply-for-inprogress/my-apply-for-inprogress.component';
@@ -29,6 +31,9 @@ import { NoContractProjectProgressComponent } from './no-contract-approve-manage
 import { ProjectNoContractListComponent } from './no-contract-approve-manage/apply-for/project-no-contract-pay-list/project-no-contract-list.component';
 import { NoContractApplyPassComponent } from './no-contract-approve-manage/apply-for/no-contract-apply-pass/no-contract-apply-pass.component';
 import { NoContractApplyRefuseComponent } from './no-contract-approve-manage/apply-for/no-contract-apply-refuse/no-contract-apply-refuse.component';
+
+// 非合约 列表（部门负责人）
+import { NoContractDepartmentHeadListComponent } from './no-contract-approve-manage/no-contract-department-head/no-contract-department-head-list/no-contract-department-head-list.component';
 
 // 无合约 非合约支付审批 (我的， 该我审批， 审批完成， 未审批已被拒绝的)
 import { NoContractApproveListComponent } from './no-contract-approve-manage/approve-pay/no-contract-approve-list/no-contract-approve-list.component';
@@ -67,8 +72,10 @@ const routes: Routes = [
   { path: 'list/apply/pay/:id', component: ProjectContractListComponent, data: { title: '项目合约支付列表' } },
   { path: 'list/apply/pay/create/:id', component: ContractPayCreateComponent, data: { title: '创建合约支付' } },
   { path: 'list/apply/pay/edit/:id', component: ContractPayCreateComponent, data: { title: '编辑合约支付' } },
-  
-  { path: 'contract/apply', component: ContractApplyForListComponent,
+  { path: 'contract/department_head_list', component: ContractDepartmentHeadListComponent },
+
+  {
+    path: 'contract/apply', component: ContractApplyForListComponent,
     children: [
       { path: '', redirectTo: 'in_progress', pathMatch: 'full' },
       { path: 'in_progress', component: MyApplyForInprogressComponent, data: { title: '审批中' } },
@@ -83,12 +90,14 @@ const routes: Routes = [
   // { path: 'contract/apply/pay/:id', component: ProjectContractListComponent, data: { title: '项目合约支付列表' } },
   // { path: 'contract/apply/pay/create/:id', component: ContractPayCreateComponent, data: { title: '创建合约支付' } },
   // { path: 'contract/apply/pay/edit/:id', component: ContractPayCreateComponent, data: { title: '编辑合约支付' } },
-  
+
   // 支付审批（该我审批、待我审批、审批完成）列表
-  { path: 'contract/pay', component: ContractApprovePayListComponent,
+  {
+    path: 'contract/pay', component: ContractApprovePayListComponent,
     children: [
       { path: '', redirectTo: 'forApproval', pathMatch: 'full' },
-      { path: 'forApproval', component: ForApprovalListComponent,
+      {
+        path: 'forApproval', component: ForApprovalListComponent,
         canActivate: [ACLGuard],
         data: {
           title: '待审批',
@@ -97,7 +106,8 @@ const routes: Routes = [
           }
         }
       },
-      { path: 'progress', component: InApproveProjectComponent,
+      {
+        path: 'progress', component: InApproveProjectComponent,
         canActivate: [ACLGuard],
         data: {
           title: '我的审批',
@@ -106,7 +116,8 @@ const routes: Routes = [
           }
         }
       },
-      { path: 'finished', component: FinishedApproveProjectComponent,
+      {
+        path: 'finished', component: FinishedApproveProjectComponent,
         canActivate: [ACLGuard],
         data: {
           title: '已审批',
@@ -115,7 +126,8 @@ const routes: Routes = [
           }
         }
       },
-      { path: 'without-pass', component: WithoutApprovalListComponent,
+      {
+        path: 'without-pass', component: WithoutApprovalListComponent,
         canActivate: [ACLGuard],
         data: {
           title: '未审批未通过',
@@ -126,13 +138,14 @@ const routes: Routes = [
       },
     ]
   },
-  
+
   // 合约支付 执行情况
   {
     path: 'contract/excute', component: ExcuteContractPayListComponent,
     children: [
       { path: '', redirectTo: 'my', pathMatch: 'full' },
-      { path: 'my', component: ContractExcuteNotStartComponent,
+      {
+        path: 'my', component: ContractExcuteNotStartComponent,
         // canActivate: [ACLGuard],
         // data: {
         //   guard: <ACLType>{
@@ -140,7 +153,8 @@ const routes: Routes = [
         //   }
         // }
       },
-      { path: 'payed', component: ContractExcuteForPayedComponent,
+      {
+        path: 'payed', component: ContractExcuteForPayedComponent,
         // canActivate: [ACLGuard],
         // data: {
         //   guard: <ACLType>{
@@ -148,7 +162,8 @@ const routes: Routes = [
         //   }
         // }
       },
-      { path: 'finished', component: ContractExcuteFinishedComponent,
+      {
+        path: 'finished', component: ContractExcuteFinishedComponent,
         // canActivate: [ACLGuard],
         // data: {
         //   guard: <ACLType>{
@@ -158,18 +173,20 @@ const routes: Routes = [
       },
     ]
   },
-  
+
   // 查看合约支付信息  及 流程处理 
   { path: 'contract/pay/view/:id', component: ApplyContractViewComponent, data: { title: '合约支付详情查看' } },
-    
+
   // 无合约  支付申请管理
   { path: 'no-contract/list', component: NoContractNotStartedComponent },
   { path: 'no-contract/list/apply/pay/:id', component: ProjectNoContractListComponent, data: { title: '非合约项目支付列表' } },
   { path: 'no-contract/list/apply/pay/create/:id', component: NoContractPayCreateComponent, data: { title: '创建非合约非合约支付' } },
   { path: 'no-contract/list/apply/pay/edit/:id', component: NoContractPayCreateComponent, data: { title: '编辑非合约非合约支付' } },
+  { path: 'no-contract/department_head_list', component: NoContractDepartmentHeadListComponent },
 
 
-  { path: 'no-contract/apply', component: NoContractApplyForListComponent,
+  {
+    path: 'no-contract/apply', component: NoContractApplyForListComponent,
     children: [
       { path: '', redirectTo: 'in_progress', pathMatch: 'full' },
       { path: 'in_progress', component: NoContractProjectProgressComponent },
@@ -180,7 +197,8 @@ const routes: Routes = [
     ]
   },
   // 无合约 支付审批管理
-  { path: 'no-contract/pay', component: NoContractApprovePayListComponent,
+  {
+    path: 'no-contract/pay', component: NoContractApprovePayListComponent,
     children: [
       { path: '', redirectTo: 'forApproval', pathMatch: 'full' },
       {
@@ -222,12 +240,14 @@ const routes: Routes = [
       },
     ]
   },
-  
+
   // 无合约执行情况
-  { path: 'no-contract/excute', component: NoContractExcutePayListComponent,
+  {
+    path: 'no-contract/excute', component: NoContractExcutePayListComponent,
     children: [
       { path: '', redirectTo: 'my', pathMatch: 'full' },
-      { path: 'my', component: NoContractExcuteNotStartComponent,
+      {
+        path: 'my', component: NoContractExcuteNotStartComponent,
         // canActivate: [ACLGuard],
         // data: {
         //   guard: <ACLType>{
@@ -235,7 +255,8 @@ const routes: Routes = [
         //   }
         // }
       },
-      { path: 'payed', component: NoContractExcutePayedListComponent,
+      {
+        path: 'payed', component: NoContractExcutePayedListComponent,
         // canActivate: [ACLGuard],
         // data: {
         //   guard: <ACLType>{
@@ -243,7 +264,8 @@ const routes: Routes = [
         //   }
         // }
       },
-      { path: 'finished', component: NoContractExcuteFinishedComponent,
+      {
+        path: 'finished', component: NoContractExcuteFinishedComponent,
         // canActivate: [ACLGuard],
         // data: {
         //   guard: <ACLType>{
@@ -253,7 +275,7 @@ const routes: Routes = [
       },
     ]
   },
-  
+
 
   // 协议审批  信息查看
   { path: 'no-contract/pay/view/:id', component: NoContractApproveViewComponent, data: { title: '非合约支付详情查看' } }

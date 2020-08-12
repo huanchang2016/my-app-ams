@@ -1,0 +1,46 @@
+<ng-container *ngIf="incomeInfo">
+    <nz-table nzTitle="补贴收入明细" #incomeTable [nzData]="[1]" nzBordered [nzFooter]="footerTpl" [nzShowPagination]="false">
+        <thead>
+            <tr>
+                <th>拨款单位</th>
+                <th>补贴名称</th>
+                <th>申请条件</th>
+                <th colspan="2">测算依据</th>
+                <th>备注</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ incomeInfo.company.name }}</td>
+                <td>{{ incomeInfo.name }}</td>
+                <td><span [innerHTML]="incomeInfo.condition | showTextareaContent"></span></td>
+                <td colspan="2"><span [innerHTML]="incomeInfo.calculation_basis | showTextareaContent"></span></td>
+                <td><span [innerHTML]="incomeInfo.remark | showTextareaContent"></span></td>
+            </tr>
+            <tr>
+                <td>序号</td>
+                <td>补贴金额</td>
+                <td>是否开票</td>
+                <td>开票税率</td>
+                <td>税金</td>
+                <td>不含税补贴</td>
+            </tr>
+            <tr *ngFor="let data of incomeList; let i = index">
+                <td>{{ i + 1 }}</td>
+                <td class="text-nowrap">{{ data.income | _currency }}</td>
+                <td>{{ data.is_bill ? '是' : '否' }}</td>
+                <td>{{ data.tax_rate * 100 }}%</td>
+                <td class="text-nowrap">{{ data.tax_amount | _currency }}</td>
+                <td class="text-nowrap">{{ data.exclude_tax_income | _currency }}</td>
+            </tr>
+
+        </tbody>
+        <ng-template #footerTpl>
+            <div class="text-right" *ngIf="staticOpt">
+                <span class="font-weight-bold">含税收入： {{ staticOpt.sub_income | _currency }}</span>
+                <span class="font-weight-bold mx-md">税金合计： {{ staticOpt.tax_amount | _currency }}</span>
+                <span class="font-weight-bold">不含税收入： {{ staticOpt.exclude_tax_income | _currency }}</span>
+            </div>
+        </ng-template>
+    </nz-table>
+</ng-container>

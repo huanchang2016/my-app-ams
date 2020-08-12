@@ -58,6 +58,8 @@ import { ProjectMyProjectListComponent } from './my-project/list-search/project-
 import { ProjectMyProjectSearchComponent } from './my-project/list-search/project-my-project-search/project-my-project-search.component';
 import { ProjectApprovalListComponent } from './approval-project/list-search/project-approval-list/project-approval-list.component';
 import { ProjectApprovalSearchComponent } from './approval-project/list-search/project-approval-search/project-approval-search.component';
+import { ProjectDepartmentHeadListComponent } from './project-department_head/project-department-head-list/project-department-head-list.component';
+import { ProjectDepartmentHeadSearchComponent } from './project-department_head/project-department-head-search/project-department-head-search.component';
 
 const COMPONENTS = [
   DraftListComponent,
@@ -128,6 +130,8 @@ const COMPONENTS_NOROUNT = [
     ProjectMyProjectSearchComponent,
     ProjectApprovalListComponent,
     ProjectApprovalSearchComponent,
+    ProjectDepartmentHeadListComponent,
+    ProjectDepartmentHeadSearchComponent,
   ],
   entryComponents: COMPONENTS_NOROUNT
 })

@@ -1,4 +1,4 @@
-<form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()" class="info-form">
+<form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()" class="info-form mt-lg pt-lg">
 
     <div nz-row [nzGutter]="24">
         <div nz-col [nzSpan]="24" formArrayName="costArr">
@@ -31,7 +31,7 @@
                 </div>
                 <div nz-col [nzSpan]="2" style="line-height: 32px;">
                     <a nz-popconfirm nzPopconfirmTitle="是否确定删除当前项目预算成本？" nzPopconfirmPlacement="bottom"
-                        (nzOnConfirm)="deleted(i)" (nzOnCancel)="cancel()"
+                        (nzOnConfirm)="deleted(i, formGroupArrayControls[i].get('cost_id').value)" (nzOnCancel)="cancel()"
                         class="text-error delete_btn border-radius-sm bg-white">
                         <i nz-icon nzType="delete" nzTheme="outline"></i> <span class="text-xs">删除</span>
                     </a>

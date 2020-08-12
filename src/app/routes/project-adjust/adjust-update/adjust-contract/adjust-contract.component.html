@@ -8,7 +8,7 @@
     >新增合约</button>
 </ng-template>
 <nz-card class="mb-md" nzTitle="签订合约" [nzExtra]="contractAddTemplate" [nzBordered]="false">
-    <nz-table #contracTable [nzData]="contractList" nzSize="small" [nzLoading]="loadingContract" [nzShowPagination]="false" [nzFrontPagination]="false">
+    <nz-table #contracTable [nzData]="contractList" [nzShowPagination]="false">
         <thead>
             <tr>
                 <th nzWidth="80px">序号</th>
@@ -17,7 +17,7 @@
                 <th>分割情况</th>
                 <th>项目金额</th>
                 <th>附件</th>
-                <th>操作</th>
+                <th nzWidth="100px">操作</th>
             </tr>
         </thead>
         <tbody>
@@ -44,7 +44,7 @@
                 <td>
                     <a (click)="editContract(data, i)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
                     <nz-divider nzType="vertical"></nz-divider>
-                    <a nz-popconfirm nzPopconfirmTitle="确定删除当前项目合同？" (nzOnConfirm)="deleted(i)" (nzOnCancel)="cancel()"
+                    <a nz-popconfirm nzPopconfirmTitle="确定删除当前项目合同？" (nzOnConfirm)="deleted(i, data.deal?.id)" (nzOnCancel)="cancel()"
                         class="text-error">
                         删除
                     </a>

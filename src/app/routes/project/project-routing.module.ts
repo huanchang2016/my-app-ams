@@ -15,6 +15,7 @@ import { ACLGuard, ACLType } from '@delon/acl';
 import { ProjectAdjustComponent } from './project-adjust/project-adjust.component';
 
 import { MyProjectListComponent } from './my-project/my-project-list/my-project-list.component';
+import { ProjectDepartmentHeadListComponent } from './project-department_head/project-department-head-list/project-department-head-list.component';
 
 
 const routes: Routes = [
@@ -70,6 +71,7 @@ const routes: Routes = [
   },
 
   { path: 'create', component: ProjectCreateComponent, data: { title: '创建项目' } },
+  { path: 'department_head_list', component: ProjectDepartmentHeadListComponent, data: { title: '项目列表(部门负责人)' } },
   { path: 'edit/:id', component: ProjectCreateComponent, data: { title: '编辑项目信息' } },
   { path: 'view/:id', component: ProjectViewComponent, data: { title: '预览项目信息' } },
   { path: 'adjust/:id', component: ProjectAdjustComponent, data: { title: '调整项目信息' } },

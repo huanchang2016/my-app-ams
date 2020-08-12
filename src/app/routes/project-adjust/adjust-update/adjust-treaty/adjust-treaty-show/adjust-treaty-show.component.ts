@@ -33,7 +33,6 @@ export class AdjustTreatyShowComponent implements OnInit {
   getDataList():void {
     this.loadingTreaty = true;
     this.settingsConfigService.get(`/api/treaty/${this.projectInfo.id}`).subscribe((res: ApiData) => {
-      // console.log(res, 'get treaty list  by supplier info!');
       this.loadingTreaty = false;
       if (res.code === 200) {
         const treatyList:any[] = res.data.treaty;

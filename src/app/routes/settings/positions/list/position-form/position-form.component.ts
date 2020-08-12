@@ -69,6 +69,11 @@ export class PositionFormComponent implements OnInit {
     } else {
       this.validateForm.get('company_id').setValidators(Validators.required);
       this.validateForm.get('department_id').setValidators(Validators.required);
+      if (!this.validateForm.get('is_leader').value) {
+        this.validateForm.patchValue({
+          department_ids: []
+        });
+      }
     }
 
     // 获取所有职位
@@ -113,7 +118,8 @@ export class PositionFormComponent implements OnInit {
       name: this.validateForm.value.name,
       is_leader: this.validateForm.value.is_leader,
       sequence: this.validateForm.value.sequence,
-      description: this.validateForm.value.description
+      description: this.validateForm.value.description,
+      department_ids: this.validateForm.value.department_ids
     };
 
     const obj: any = { position_id: this.data.id, ...opt };
@@ -131,18 +137,20 @@ export class PositionFormComponent implements OnInit {
   }
 
   setFormValue(data: any): void {
-    console.log(data, 'setformvalue data');
+    console.log(data, 'data');
     const value: any = this.validateForm.value;
-    console.log(value, 'setformvalue value')
-    this.department_ids.push(value.department_ids);
-    const empty: List[] = [];
-    empty.push(null);
+    console.log(value, 'value')
+    // this.department_ids.push(value.department_ids);
+    const arr = [];
+    for (const item of data.departments.department) {
+      arr.push(item.id);
+    }
     this.validateForm.patchValue({
       name: data.name,
       // company_id: data.company.id,
       department_id: data.department.id,
       is_leader: data.is_leader,
-      department_ids: this.department_ids,
+      department_ids: arr,
       description: data.description,
       sequence: data.sequence
     });

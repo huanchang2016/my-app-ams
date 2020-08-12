@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd';
 import { ApiData } from 'src/app/data/interface.data';
@@ -11,11 +11,11 @@ import { SettingsService } from '@delon/theme';
   styles: [
   ]
 })
-export class AdjustTreatyComponent implements OnInit {
+export class AdjustTreatyComponent implements OnChanges, OnInit {
 
   @Input() adjustInfo:any;
-
-  treatyList:any[] = [];
+  @Input() submitLoading:boolean;
+  @Output() adjustmentChange:EventEmitter<any> = new EventEmitter();
 
   supplierList:any[] = []; // 供应商列表
   serviceCategoryList:any[] = []; // 供应商服务类型列表
@@ -24,37 +24,44 @@ export class AdjustTreatyComponent implements OnInit {
   
   validateForm: FormGroup;
 
-  submitLoading:boolean = false;
-
   constructor(
     private fb: FormBuilder,
     private msg: NzMessageService,
     public settings: SettingsService, // 通过个人 所在部门 获取项目类型等信息
     public settingsConfigService: SettingsConfigService,
-  ) {
-    
+  ) { }
+
+  ngOnChanges() {
+    if(this.adjustInfo) {
+      // this.submitLoading = false;
+      if(this.validateForm && this.adjustInfo.treaty_adjustment) {
+        this.initForm();
+      }
+    }
   }
 
-
   ngOnInit(): void {
+    this.initForm();
+  }
 
+  initForm():void {
     this.validateForm = this.fb.group({
       treatyArr: this.fb.array([
         this.fb.group({
+          treaty_id: [null], // 判断是否可以删除
+          treaty_adjustment_id: [null],
           supplier_id: [null, [Validators.required]],
           service_category_id: [null, [Validators.required]],
-          amount: [null, [Validators.required, this.confirmValidator, Validators.pattern(/^\d+(\.\d{1,2})?$/)]]
+          amount: [null, [Validators.required, Validators.pattern(/^\d+(\.\d{1,2})?$/)]] // this.confirmValidator, 金额限制 关闭 
         })
       ])
     });
 
     if(this.adjustInfo) {
-      this.treatyList = this.adjustInfo.treaty_adjustment.treaty;
-      this.resetForm(this.adjustInfo.treaty_adjustment.treaty);
+      this.resetForm(this.adjustInfo.treaty_adjustment.treaty_adjustment);
       this.getConfigs();
-      this.countLimitAmount(); // 计算当前的金额限制
+      // this.countLimitAmount(); // 计算当前的金额限制
     }
-
   }
 
 
@@ -69,6 +76,8 @@ export class AdjustTreatyComponent implements OnInit {
       this.validateForm.patchValue({
         treatyArr: opt.map( v => {
           return {
+            treaty_id: v.treaty ? v.treaty.id : null, // 判断是否可以删除
+            treaty_adjustment_id: v.id,
             supplier_id: v.supplier.id,
             service_category_id: v.service_category.id,
             amount: v.amount
@@ -76,7 +85,6 @@ export class AdjustTreatyComponent implements OnInit {
         })
       });
       this.countTotal();
-      console.log(this.validateForm.value);
     }
   }
 
@@ -92,23 +100,46 @@ export class AdjustTreatyComponent implements OnInit {
     const groupArray:FormArray = this.validateForm.get('treatyArr') as FormArray;
     groupArray.push(
       this.fb.group({
+        treaty_id: [null], // 判断是否可以删除
+        treaty_adjustment_id: [null],
         supplier_id: [null, [Validators.required]],
         service_category_id: [null, [Validators.required]],
         amount: [null, [Validators.required, this.confirmValidator, Validators.pattern(/^\d+(\.\d{1,2})?$/)]]
       })
     )
-    this.countLimitAmount();
+    // this.countLimitAmount();
   }
-  
-  deleted(index: number): void {
+
+  deleted(index: number, treaty_id:number | null): void {
     const groupArray:FormArray = this.validateForm.get('treatyArr') as FormArray;
-    groupArray.removeAt(index);
-    this.countTotal();
+    // 删除时需要判断 当前数据是否可以删除， 如果可以删除，则继续删除。
+    // 如果不能删除，则提示用户，当前数据不可删除。
+    if(treaty_id) {
+      this.settingsConfigService.get(`/api/is_delete_treaty_adjustment/${treaty_id}`).subscribe((res:ApiData) => {
+        const data = res.data;
+        if(res.code === 200) {
+          if(data.delete) {
+            groupArray.removeAt(index);
+            this.countTotal();
+          }else {
+            this.msg.warning(data.msg);
+          }
+          
+        }else {
+          this.msg.warning(res.error || '删除失败');
+        }
+      })
+    }else {
+      groupArray.removeAt(index);
+      this.countTotal();
+    }
+    
   }
 
   checkIsSelected(id: number): boolean {
-    if (this.treatyList && this.treatyList.length !== 0) {
-      return this.treatyList.filter(v => v.supplier.id === id).length > 0;
+    const treatyArr:any[] = this.validateForm.value.treatyArr;
+    if (treatyArr && treatyArr.length !== 0) {
+      return treatyArr.filter(v => v.supplier_id === id).length > 0;
     }
     return false;
   }
@@ -127,21 +158,28 @@ export class AdjustTreatyComponent implements OnInit {
       }
     }
 
-    console.log(this.validateForm, 'submit');
 
     if (this.validateForm.valid) {
-      let opt: any = this.validateForm.value;
-      
       // 处理 表单组 里面的数据
-      // const treatyArr:any[] = this.validateForm.get('treatyArr').value;
-      // const project:any[] = treatyArr.map( v => {
-      //   return {
-      //     name: v.projectName,
-      //     start_time: v.projectRangeDate[0],
-      //     end_time: v.projectRangeDate[1],
-      //     description: v.projectDescription
-      //   }
-      // });
+      const treatyArr: any = this.validateForm.value.treatyArr;
+      const treatyList:any[] = treatyArr.map( v => {
+        return {
+          treaty_adjustment_id: v.treaty_adjustment_id,
+
+          supplier_id: v.supplier_id,
+          service_category_id: v.service_category_id,
+          amount: +v.amount
+        }
+      });
+      let option:any = {
+        adjustment_id: this.adjustInfo.id,
+        category_name: '非合约调整',
+        
+        treaty_adjustments: treatyList
+      };
+
+      // this.submitLoading = true;
+      this.adjustmentChange.emit(option);
         
     } else {
       this.msg.warning('信息填写不完整');
@@ -175,7 +213,6 @@ export class AdjustTreatyComponent implements OnInit {
       }
     })
     this.settingsConfigService.get(`/api/service/category/${this.adjustInfo.project.company.id}`).subscribe((res:ApiData) => {
-      // console.log(res);
       if(res.code === 200) {
         const list:any[] = res.data.service_category;
         this.serviceCategoryList = list.filter( v => v.active );

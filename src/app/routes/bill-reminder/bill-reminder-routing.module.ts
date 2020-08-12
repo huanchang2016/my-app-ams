@@ -27,13 +27,18 @@ import { ACLGuard, ACLType } from '@delon/acl';
 import { BillApplyListComponent } from './bill-manage/bill-apply/bill-apply-list/bill-apply-list.component';
 import { BillApproveListComponent } from './bill-manage/bill-approve/bill-approve-list/bill-approve-list.component';
 
+import { BillDepartmentHeadListComponent } from './bill-manage/bill-department-head/bill-department-head-list/bill-department-head-list.component';
+
 const routes: Routes = [
   { path: 'project', component: BillApplyProjectsComponent },
+  // 发票列表(部门负责人)
+  { path: 'department_head_list', component: BillDepartmentHeadListComponent },
   // 项目下的开票申请列表
-  { path: 'project/invoices/list/:id', component: BillReminderInvoicesListComponent, data: { title: '项目发票'} },
-  { path: 'project/invoices/add', component: InvoicesFormManageComponent, data: { title: '新增项目发票'} },
-  { path: 'project/invoices/edit/:id', component: InvoicesFormManageComponent, data: { title: '编辑项目发票'} },
-  { path: 'apply', component: BillApplyListComponent,
+  { path: 'project/invoices/list/:id', component: BillReminderInvoicesListComponent, data: { title: '项目发票' } },
+  { path: 'project/invoices/add', component: InvoicesFormManageComponent, data: { title: '新增项目发票' } },
+  { path: 'project/invoices/edit/:id', component: InvoicesFormManageComponent, data: { title: '编辑项目发票' } },
+  {
+    path: 'apply', component: BillApplyListComponent,
     children: [
       { path: '', redirectTo: 'in_progress', pathMatch: 'full' },
       { path: 'in_progress', component: BillReminderBillApplyInProgressComponent },
@@ -43,10 +48,12 @@ const routes: Routes = [
   },
 
   // 开票审批
-  { path: 'approve', component: BillApproveListComponent,
+  {
+    path: 'approve', component: BillApproveListComponent,
     children: [
       { path: '', redirectTo: 'forApprove', pathMatch: 'full' },
-      { path: 'forApprove', component: BillApproveFormyComponent,
+      {
+        path: 'forApprove', component: BillApproveFormyComponent,
         canActivate: [ACLGuard],
         data: {
           guard: <ACLType>{
@@ -54,7 +61,8 @@ const routes: Routes = [
           }
         }
       },
-      { path: 'finished', component: BillApproveFinishedComponent,
+      {
+        path: 'finished', component: BillApproveFinishedComponent,
         canActivate: [ACLGuard],
         data: {
           guard: <ACLType>{
@@ -62,7 +70,8 @@ const routes: Routes = [
           }
         }
       },
-      { path: 'my', component: BillApproveBemyComponent,
+      {
+        path: 'my', component: BillApproveBemyComponent,
         canActivate: [ACLGuard],
         data: {
           guard: <ACLType>{
@@ -70,7 +79,8 @@ const routes: Routes = [
           }
         }
       },
-      { path: 'without', component: BillApproveWithoutComponent,
+      {
+        path: 'without', component: BillApproveWithoutComponent,
         canActivate: [ACLGuard],
         data: {
           guard: <ACLType>{
@@ -82,10 +92,12 @@ const routes: Routes = [
   },
   // 开票执行情况，路由
   // 待执行 任务
-  { path: 'excute', component: BillExcuteListComponent,
+  {
+    path: 'excute', component: BillExcuteListComponent,
     children: [
       { path: '', redirectTo: 'my', pathMatch: 'full' },
-      { path: 'my', component: BillExcuteNotStartComponent,
+      {
+        path: 'my', component: BillExcuteNotStartComponent,
         // canActivate: [ACLGuard],
         // data: {
         //   guard: <ACLType>{
@@ -93,7 +105,8 @@ const routes: Routes = [
         //   }
         // }
       },
-      { path: 'finished', component: BillExcuteFinishedComponent,
+      {
+        path: 'finished', component: BillExcuteFinishedComponent,
         // canActivate: [ACLGuard],
         // data: {
         //   guard: <ACLType>{
@@ -103,14 +116,14 @@ const routes: Routes = [
       },
     ]
   },
-  
-  
+
+
 
   // 发票开具 详情
-  { path: 'apply/invoices/view/:id', component: BillReminderInvoicesInfoViewComponent, data: { title: '开票详情'} },
+  { path: 'apply/invoices/view/:id', component: BillReminderInvoicesInfoViewComponent, data: { title: '开票详情' } },
 
   // 发票审批 详情
-  { path: 'approve/view/:id', component: BillReminderInvoicesInfoViewComponent, data: { title: '开票详情'} }
+  { path: 'approve/view/:id', component: BillReminderInvoicesInfoViewComponent, data: { title: '开票详情' } }
 ];
 
 @NgModule({

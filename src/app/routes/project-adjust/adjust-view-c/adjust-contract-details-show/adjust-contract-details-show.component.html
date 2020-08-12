@@ -1,0 +1,47 @@
+<ng-container *ngIf="list.length !== 0">
+    <nz-table class="mt-lg" #contracTable nzTitle="项目合约" [nzData]="list" nzSize="small" [nzShowPagination]="false">
+    <thead>
+        <tr>
+        <th nzWidth="80px">序号</th>
+        <th>供应商</th>
+        <th>合同</th>
+        <th>分割情况</th>
+        <th>收款信息</th>
+        <th>项目合同金额</th>
+        <th>附件</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let data of contracTable.data;let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ data.supplier.name }}</td>
+        <td>
+            <div>合同名称：{{ data.contract.name }}</div>
+            <div>合同金额：{{ data.contract.amount | _currency }}</div>
+            <div>服务类型：{{ data.contract.service_category.name }}</div>
+            <div>起止时间：{{ data.contract.start_time }} 至 {{ data.contract.end_time }}</div>
+        </td>
+        <td>
+            <ng-container *ngIf="data.split_contract">
+            <div>部门：{{ data.split_contract.department.name }}</div>
+            <div>金额：{{ data.split_contract.amount | _currency }}</div>
+            </ng-container>
+            <ng-container *ngIf="!data.split_contract">
+            <div [innerHTML]="data.split_contract | yn"></div>
+            </ng-container>
+        </td>
+        <td>
+            <div>收款银行：{{ data.contract.bank_name }}</div>
+            <div>银行账号：{{ data.contract.bank_account }}</div>
+            <div>收款单位：{{ data.contract.pay_company }}</div>
+            <div>收款金额：{{ data.contract.amount | _currency }}</div>
+        </td>
+        <td>{{ data.amount | _currency }}</td>
+        <td>
+            <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/contract/' + data.id"
+            [isShowName]="false"></app-upload-file-attachment-show-c>
+        </td>
+        </tr>
+    </tbody>
+    </nz-table>
+  </ng-container>

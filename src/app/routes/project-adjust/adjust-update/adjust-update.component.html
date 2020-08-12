@@ -27,7 +27,7 @@
             <div nz-col [nzMd]="12" [nzSm]="24">
                 <nz-form-item nz-row>
                     <nz-form-control [nzSpan]="24">
-                        <button nz-button nzType="primary" [disabled]="!validateForm.valid" [nzLoading]="adjustLoading">生成调整表</button>
+                        <button nz-button nzType="primary" [disabled]="stepsCategoryLoading[validateForm.get('category_name').value]" [nzLoading]="adjustLoading">生成调整表</button>
                     </nz-form-control>
                 </nz-form-item>
             </div>
@@ -38,27 +38,27 @@
         <!-- // 项目信息调整. 项目收入调整. 补贴收入调整. 成本调整. 合约调整. 非合约调整 -->
         <ng-container *ngIf="validateForm.get('category_name').value === '项目信息调整'">
             <app-adjust-base-info-show [projectInfo]="projectInfo"></app-adjust-base-info-show>
-            <app-adjust-base-info *ngIf="!adjustLoading && adjustInfo" [adjustInfo]="adjustInfo" [configs]="configs"></app-adjust-base-info>
+            <app-adjust-base-info *ngIf="stepsCategoryLoading[validateForm.get('category_name').value]" [adjustInfo]="adjustInfo" [submitLoading]="submitLoading" [configs]="configs" (adjustmentChange)="adjustmentChange($event)"></app-adjust-base-info>
         </ng-container>
         <ng-container *ngIf="validateForm.get('category_name').value === '项目收入调整'">
             <app-adjust-project-income-show [projectInfo]="projectInfo"></app-adjust-project-income-show>
-            <app-adjust-project-income *ngIf="!adjustLoading && adjustInfo" [adjustInfo]="adjustInfo"></app-adjust-project-income>
+            <app-adjust-project-income *ngIf="stepsCategoryLoading[validateForm.get('category_name').value]" [adjustInfo]="adjustInfo" [submitLoading]="submitLoading" (adjustmentChange)="adjustmentChange($event)" (adjustmentIncomeChange)="adjustmentIncomeChange($event)" (adjustmentIncomeDeleted)="adjustmentIncomeDeleted($event)"></app-adjust-project-income>
         </ng-container>
         <ng-container *ngIf="validateForm.get('category_name').value === '补贴收入调整'">
             <app-adjust-subsidy-income-show [projectInfo]="projectInfo"></app-adjust-subsidy-income-show>
-            <app-adjust-subsidy-income *ngIf="!adjustLoading && adjustInfo" [adjustInfo]="adjustInfo"></app-adjust-subsidy-income>
+            <app-adjust-subsidy-income *ngIf="stepsCategoryLoading[validateForm.get('category_name').value]" [adjustInfo]="adjustInfo" [submitLoading]="submitLoading" (adjustmentChange)="adjustmentChange($event)" (adjustmentIncomeChange)="adjustmentIncomeChange($event)" (adjustmentIncomeDeleted)="adjustmentIncomeDeleted($event)"></app-adjust-subsidy-income>
         </ng-container>
         <ng-container *ngIf="validateForm.get('category_name').value === '成本调整'">
             <app-adjust-cost-show [projectInfo]="projectInfo"></app-adjust-cost-show>
-            <app-adjust-cost *ngIf="!adjustLoading && adjustInfo" [adjustInfo]="adjustInfo"></app-adjust-cost>
+            <app-adjust-cost *ngIf="stepsCategoryLoading[validateForm.get('category_name').value]" [adjustInfo]="adjustInfo" [submitLoading]="submitLoading" (adjustmentChange)="adjustmentChange($event)"></app-adjust-cost>
         </ng-container>
         <ng-container *ngIf="validateForm.get('category_name').value === '合约调整'">
             <app-adjust-contract-show [projectInfo]="projectInfo"></app-adjust-contract-show>
-            <app-adjust-contract *ngIf="!adjustLoading && adjustInfo" [adjustInfo]="adjustInfo"></app-adjust-contract>
+            <app-adjust-contract *ngIf="stepsCategoryLoading[validateForm.get('category_name').value]" [adjustInfo]="adjustInfo" [submitLoading]="submitLoading" (adjustmentChange)="adjustmentChange($event)"></app-adjust-contract>
         </ng-container>
         <ng-container *ngIf="validateForm.get('category_name').value === '非合约调整'">
             <app-adjust-treaty-show [projectInfo]="projectInfo"></app-adjust-treaty-show>
-            <app-adjust-treaty *ngIf="!adjustLoading && adjustInfo" [adjustInfo]="adjustInfo"></app-adjust-treaty>
+            <app-adjust-treaty *ngIf="stepsCategoryLoading[validateForm.get('category_name').value]" [adjustInfo]="adjustInfo" [submitLoading]="submitLoading" (adjustmentChange)="adjustmentChange($event)"></app-adjust-treaty>
         </ng-container>
     </div>
 </nz-card>

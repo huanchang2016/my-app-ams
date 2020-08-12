@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd';
 import { ApiData } from 'src/app/data/interface.data';
@@ -11,16 +11,16 @@ import { SettingsService } from '@delon/theme';
   styles: [
   ]
 })
-export class AdjustCostComponent implements OnInit {
+export class AdjustCostComponent implements OnChanges, OnInit {
 
   @Input() adjustInfo:any;
+  @Input() submitLoading:boolean;
+  @Output() adjustmentChange:EventEmitter<any> = new EventEmitter();
 
-  costList:any[] = [];
   costCategoryArr:any[] = [];
   
   validateForm: FormGroup;
 
-  submitLoading:boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -33,23 +33,37 @@ export class AdjustCostComponent implements OnInit {
     }
   }
 
+  ngOnChanges() {
+    if(this.adjustInfo) {
+      // this.submitLoading = false;
+      if(this.validateForm && this.adjustInfo.cost_adjustment) {
+        this.initForm();
+      }
+    }
+  }
 
   ngOnInit(): void {
 
+    this.initForm();
+
+  }
+
+  initForm():void {
     this.validateForm = this.fb.group({
       costArr: this.fb.array([
         this.fb.group({
+          cost_id: [null], // 判断是否可以删除
+          cost_adjustment_id: [null],
           cost_category: [null, [Validators.required]],
           amount: [null, [Validators.required]]
         })
       ])
     });
 
-    if(this.adjustInfo) {
-      this.costList = this.adjustInfo.cost_adjustment.cost;
-      this.resetForm(this.adjustInfo.cost_adjustment.cost);
+    if(this.adjustInfo && this.adjustInfo.cost_adjustment) {
+      // this.costList = this.adjustInfo.cost_adjustment.cost;
+      this.resetForm(this.adjustInfo.cost_adjustment.cost_adjustment);
     }
-
   }
 
 
@@ -60,21 +74,17 @@ export class AdjustCostComponent implements OnInit {
         if(index > 0) {
           this.add();
         }
-      });
-      opt.forEach( (el, index) => {
-        if(index > 0) {
-          this.add();
-        }
       })
       this.validateForm.patchValue({
         costArr: opt.map( v => {
           return {
+            cost_id: v.cost ? v.cost.id : null,
+            cost_adjustment_id: v.id,
             cost_category: v.cost_category.id,
             amount: v.amount
           }
         })
       });
-      console.log(this.validateForm.value);
       this.countTotal();
     }
   }
@@ -91,21 +101,42 @@ export class AdjustCostComponent implements OnInit {
     const groupArray:FormArray = this.validateForm.get('costArr') as FormArray;
     groupArray.push(
       this.fb.group({
+        cost_id: [null], // 判断是否可以删除
+        cost_adjustment_id: [null],
         cost_category: [null, [Validators.required]],
         amount: [null, [Validators.required]]
       })
     )
   }
   
-  deleted(index: number): void {
+  deleted(index: number, cost_id:number | null): void {
     const groupArray:FormArray = this.validateForm.get('costArr') as FormArray;
-    groupArray.removeAt(index);
-    this.countTotal();
+    // 删除时需要判断 当前数据是否可以删除， 如果可以删除，则继续删除。
+    // 如果不能删除，则提示用户，当前数据不可删除。
+    if(cost_id) {
+      this.settingsConfigService.get(`/api/is_delete_cost_adjustment/${cost_id}`).subscribe((res:ApiData) => {
+        const data = res.data;
+        if(res.code === 200) {
+          if(data.delete) {
+            groupArray.removeAt(index);
+          }else {
+            this.msg.warning(data.msg);
+          }
+          
+        }else {
+          this.msg.warning(res.error || '删除失败');
+        }
+      })
+    }else {
+      groupArray.removeAt(index);
+    }
+    
   }
 
   checkIsSelectedCost(id: number): boolean {
-    if (this.costList && this.costList.length !== 0) {
-      return this.costList.filter(v => v.cost_category.id === id).length > 0;
+    const costList:any[] = this.validateForm.value.costArr;
+    if(costList && costList.length !== 0) {
+      return costList.filter(v => v.cost_category === id).length > 0;
     }
     return false;
   }
@@ -124,22 +155,26 @@ export class AdjustCostComponent implements OnInit {
       }
     }
 
-    console.log(this.validateForm, 'submit');
 
     if (this.validateForm.valid) {
-      let opt: any = this.validateForm.value;
-      
       // 处理 表单组 里面的数据
-      // const costArr:any[] = this.validateForm.get('costArr').value;
-      // const project:any[] = costArr.map( v => {
-      //   return {
-      //     name: v.projectName,
-      //     start_time: v.projectRangeDate[0],
-      //     end_time: v.projectRangeDate[1],
-      //     description: v.projectDescription
-      //   }
-      // });
-        
+      const costArr: any = this.validateForm.value.costArr;
+      const costArrList:any[] = costArr.map( v => {
+        return {
+          cost_category_id: v.cost_category,
+          cost_adjustment_id: v.cost_adjustment_id,
+          amount: +v.amount
+        }
+      });
+      let option:any = {
+        adjustment_id: this.adjustInfo.id,
+        category_name: '成本调整',
+
+        cost_adjustments: costArrList
+      };
+
+      // this.submitLoading = true;
+      this.adjustmentChange.emit(option);
     } else {
       this.msg.warning('信息填写不完整');
     }
@@ -149,7 +184,6 @@ export class AdjustCostComponent implements OnInit {
 
   getConfigs(id:number):void {
     this.settingsConfigService.get(`/api/cost/category/${id}`).subscribe((res:ApiData) => {
-      // console.log(res);
       if(res.code === 200) {
         this.costCategoryArr = res.data.cost_category;
         this.dealCostCategoryArr();

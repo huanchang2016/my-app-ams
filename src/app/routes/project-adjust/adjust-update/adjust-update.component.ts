@@ -76,20 +76,48 @@ export class AdjustUpdateComponent implements OnInit {
 
     });
 
-    // this.validateForm.valueChanges.subscribe( _ => this.adjustInfo = null ); // 切换调整 模块时，调整的信息需要重置
-
-
   }
 
 
   submitLoading:boolean = false;
   adjustmentChange(option:any):void {
     // this.adjustInfo = data;
-      this.submitLoading = true;
+    this.submitLoading = true;
     this.settingsConfigService.post('/api/adjustment/update', option).subscribe((res:ApiData) => {
       this.submitLoading = false;
       if(res.code === 200) {
         this.adjustInfo = res.data;
+      }
+    })
+  }
+
+  // 项目/补贴  收入调整时： 创建
+  adjustmentIncomeChange(obj:any):void {
+    this.submitLoading = true;
+    const option = obj.data;
+    const url:string = obj.type === 'project' ? '/api/project_revenue_adjustment/create' : '/api/subsidy_income_adjustment/create';
+
+    this.settingsConfigService.post(url, option).subscribe((res:ApiData) => {
+      this.submitLoading = false;
+      if(res.code === 200) {
+        this.adjustInfo = res.data;
+      }
+    })
+  }
+  // 项目/补贴收入 删除
+  adjustmentIncomeDeleted(obj:any):void {
+    const opt:any = obj.data;
+    const url:string = obj.type === 'project' ? '/api/project_revenue_adjustment/delete' : '/api/subsidy_income_adjustment/delete';
+    this.settingsConfigService.post(url, opt).subscribe((res:ApiData) => {
+      console.log(res);
+      if(res.code === 200) {
+        if(res.data.delete) {
+          const message:string = obj.type === 'project' ? '项目收入删除成功' : '补贴收入删除成功';
+          this.msg.success(message);
+          this.adjustInfo = res.data.adjustment;
+        }else {
+          this.msg.error('删除失败');
+        }
       }
     })
   }
@@ -108,7 +136,8 @@ export class AdjustUpdateComponent implements OnInit {
         if(res.code === 200) {
           this.msg.success('初始化成功');
           this.adjustInfo = res.data;
-          this.stepsCategoryLoading[this.validateForm.value.category_name] = true;
+          // this.stepsCategoryLoading[this.validateForm.value.category_name] = true;
+          this.showAdjustmentModal();
         }
       })
     }
@@ -126,27 +155,44 @@ export class AdjustUpdateComponent implements OnInit {
     this.settingsConfigService.get(`/api/adjustment/${this.id}`).subscribe((res:ApiData) => {
       if(res.code === 200) {
         const data = res.data;
-        if(data.info_adjustment) { // 项目信息调整
-          this.stepsCategoryLoading['项目信息调整'] = true;
-        }
-        if(data.project_revenue_adjustment) { // 项目收入调整
-          this.stepsCategoryLoading['项目收入调整'] = true;
-        }
-        if(data.subsidy_income_adjustment) { // 补贴收入调整
-          this.stepsCategoryLoading['补贴收入调整'] = true;
-        }
-        if(data.cost_adjustment) { // 成本调整
-          this.stepsCategoryLoading['成本调整'] = true;
-        }
-        if(data.deal_adjustment) { // 合约调整
-          this.stepsCategoryLoading['合约调整'] = true;
-        }
-        if(data.treaty_adjustment) { // 非合约调整
-          this.stepsCategoryLoading['非合约调整'] = true;
-        }
+        // const category
+        // if(data.info_adjustment) { // 项目信息调整
+        //   this.stepsCategoryLoading['项目信息调整'] = true;
+        // }
+        // if(data.project_revenue_adjustment) { // 项目收入调整
+        //   this.stepsCategoryLoading['项目收入调整'] = true;
+        // }
+        // if(data.subsidy_income_adjustment) { // 补贴收入调整
+        //   this.stepsCategoryLoading['补贴收入调整'] = true;
+        // }
+        // if(data.cost_adjustment) { // 成本调整
+        //   this.stepsCategoryLoading['成本调整'] = true;
+        // }
+        // if(data.deal_adjustment) { // 合约调整
+        //   this.stepsCategoryLoading['合约调整'] = true;
+        // }
+        // if(data.treaty_adjustment) { // 非合约调整
+        //   this.stepsCategoryLoading['非合约调整'] = true;
+        // }
         this.adjustInfo = res.data;
+        console.log('adjustment info update: ', this.adjustInfo);
+        this.showAdjustmentModal();
       }
     })
+  }
+
+  showAdjustmentModal() {
+    const category:any[] = this.adjustInfo.category.adjustment_category;
+    if(category.length > 0) {
+      const _category = category.map( v => v.name );
+      this.stepsCategory.forEach( el => {
+        if(_category.includes(el.value)) {
+          this.stepsCategoryLoading[el.value] = true;
+        }else {
+          this.stepsCategoryLoading[el.value] = false;
+        }
+      });
+    }
   }
 
   

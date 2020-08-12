@@ -42,11 +42,11 @@
         </ng-container>
         <ng-container *ngIf="validateForm.get('category_name').value === '项目收入调整'">
             <app-adjust-project-income-show [projectInfo]="projectInfo"></app-adjust-project-income-show>
-            <app-adjust-project-income *ngIf="stepsCategoryLoading[validateForm.get('category_name').value]" [adjustInfo]="adjustInfo" [submitLoading]="submitLoading" (adjustmentChange)="adjustmentChange($event)"></app-adjust-project-income>
+            <app-adjust-project-income *ngIf="stepsCategoryLoading[validateForm.get('category_name').value]" [adjustInfo]="adjustInfo" [submitLoading]="submitLoading" (adjustmentChange)="adjustmentChange($event)" (adjustmentIncomeChange)="adjustmentIncomeChange($event)" (adjustmentIncomeDeleted)="adjustmentIncomeDeleted($event)"></app-adjust-project-income>
         </ng-container>
         <ng-container *ngIf="validateForm.get('category_name').value === '补贴收入调整'">
             <app-adjust-subsidy-income-show [projectInfo]="projectInfo"></app-adjust-subsidy-income-show>
-            <app-adjust-subsidy-income *ngIf="stepsCategoryLoading[validateForm.get('category_name').value]" [adjustInfo]="adjustInfo" [submitLoading]="submitLoading" (adjustmentChange)="adjustmentChange($event)"></app-adjust-subsidy-income>
+            <app-adjust-subsidy-income *ngIf="stepsCategoryLoading[validateForm.get('category_name').value]" [adjustInfo]="adjustInfo" [submitLoading]="submitLoading" (adjustmentChange)="adjustmentChange($event)" (adjustmentIncomeChange)="adjustmentIncomeChange($event)" (adjustmentIncomeDeleted)="adjustmentIncomeDeleted($event)"></app-adjust-subsidy-income>
         </ng-container>
         <ng-container *ngIf="validateForm.get('category_name').value === '成本调整'">
             <app-adjust-cost-show [projectInfo]="projectInfo"></app-adjust-cost-show>

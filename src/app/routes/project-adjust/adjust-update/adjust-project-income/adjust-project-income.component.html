@@ -115,6 +115,12 @@
     </div>
     <nz-form-item nz-row class="mt-lg">
         <nz-form-control [nzSpan]="24" class="text-right">
+            <a *ngIf="adjustInfo.project_revenue_adjustment" nz-popconfirm class="text-nowrap mr-md" nz-button
+                nzType="danger" nzPopconfirmTitle="请确认是否删除当前项目收入信息， 确认请继续！" (nzOnConfirm)="deletedIncome()"
+                (nzOnCancel)="cancel()">
+                删除项目收入
+            </a>
+
             <a [nzLoading]="submitLoading" [disabled]="!validateForm.valid" nz-popconfirm class="text-nowrap" nz-button
                 nzType="primary" nzPopconfirmTitle="请确认项目收入调整内容是否已经全部填写完整，仔细核对无误后确认提交！！！" (nzOnConfirm)="submitForm()"
                 (nzOnCancel)="cancel()">

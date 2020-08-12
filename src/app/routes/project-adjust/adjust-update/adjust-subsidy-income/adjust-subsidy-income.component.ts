@@ -14,6 +14,8 @@ export class AdjustSubsidyIncomeComponent implements OnChanges, OnInit {
   @Input() adjustInfo:any;
   @Input() submitLoading:boolean;
   @Output() adjustmentChange:EventEmitter<any> = new EventEmitter();
+  @Output() adjustmentIncomeChange:EventEmitter<any> = new EventEmitter();
+  @Output() adjustmentIncomeDeleted:EventEmitter<any> = new EventEmitter();
   
   validateForm: FormGroup;
 
@@ -27,7 +29,7 @@ export class AdjustSubsidyIncomeComponent implements OnChanges, OnInit {
   ngOnChanges() {
     if(this.adjustInfo) {
       // this.submitLoading = false;
-      if(this.validateForm && this.adjustInfo.project_revenue_adjustment) {
+      if(this.validateForm) {
         this.initForm();
       }
     }
@@ -159,10 +161,7 @@ export class AdjustSubsidyIncomeComponent implements OnChanges, OnInit {
       });
       let option:any = {
         adjustment_id: this.adjustInfo.id,
-        category_name: '补贴收入调整',
-
-        subsidy_income_adjustment_id: this.adjustInfo.subsidy_income_adjustment.id,
-
+        
         name: value.name,
         condition: value.condition,
         calculation_basis: value.calculation_basis,
@@ -171,17 +170,34 @@ export class AdjustSubsidyIncomeComponent implements OnChanges, OnInit {
         income_detail_adjustments: incomeTaxList
       };
 
+      if(this.adjustInfo.subsidy_income_adjustment) {
+        const updateObj:any = Object.assign(option, { category_name: '补贴收入调整', subsidy_income_adjustment_id: this.adjustInfo.subsidy_income_adjustment.id });
+        this.adjustmentChange.emit(updateObj);
+      }else {
+        const createObj:any = option;
+        this.adjustmentIncomeChange.emit({
+          data: createObj,
+          type: 'subsidy'
+        });
+      }
+      
+
       // this.submitLoading = true;
-      this.adjustmentChange.emit(option);
+      
     } else {
       this.msg.warning('信息填写不完整');
     }
   }
 
+  deletedIncome():void {
+    const opt:any = { subsidy_income_adjustment_id: this.adjustInfo.subsidy_income_adjustment.id };
+    this.adjustmentIncomeDeleted.emit({ data: opt, type: 'subsidy' });
+  }
+
   cancel():void {}
 
   
-  incomeListLoading:boolean = true;
+  incomeListLoading:boolean = false;
   getProjectIncomeList() {
     this.incomeListLoading = true;
     this.settingsConfigService.get(`/api/subsidy_income_detail_adjustment/${this.adjustInfo.subsidy_income_adjustment.id}`).subscribe((res:ApiData) => {

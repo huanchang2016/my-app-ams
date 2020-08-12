@@ -13,6 +13,8 @@ export class AdjustProjectIncomeComponent implements OnChanges, OnInit {
 
   @Input() adjustInfo:any;
   @Output() adjustmentChange:EventEmitter<any> = new EventEmitter();
+  @Output() adjustmentIncomeChange:EventEmitter<any> = new EventEmitter();
+  @Output() adjustmentIncomeDeleted:EventEmitter<any> = new EventEmitter();
 
   taxList:any[] = [];
   
@@ -27,13 +29,12 @@ export class AdjustProjectIncomeComponent implements OnChanges, OnInit {
     public settingsConfigService: SettingsConfigService,
   ) {
     this.getConfigs();
-    
   }
 
   ngOnChanges() {
     if(this.adjustInfo) {
       // this.submitLoading = false;
-      if(this.validateForm && this.adjustInfo.project_revenue_adjustment) {
+      if(this.validateForm) {
         this.initForm();
       }
     }
@@ -63,7 +64,7 @@ export class AdjustProjectIncomeComponent implements OnChanges, OnInit {
         })
       ])
     });
-
+    
     if(this.adjustInfo.project_revenue_adjustment) {
       this.getProjectIncomeList();
       this.resetForm(this.adjustInfo.project_revenue_adjustment);
@@ -109,7 +110,7 @@ export class AdjustProjectIncomeComponent implements OnChanges, OnInit {
     )
   }
   
-  deleted(index: number, project_revenue_detail_id:number | null): void {
+  Income(index: number, project_revenue_detail_id:number | null): void {
     const groupArray:FormArray = this.validateForm.get('incomeArr') as FormArray;
     // 删除时需要判断 当前数据是否可以删除， 如果可以删除，则继续删除。
     // 如果不能删除，则提示用户，当前数据不可删除。
@@ -143,6 +144,31 @@ export class AdjustProjectIncomeComponent implements OnChanges, OnInit {
     }
     return false;
   }
+  
+  deleted(index: number, project_revenue_detail_id:number | null): void {
+    const groupArray:FormArray = this.validateForm.get('incomeArr') as FormArray;
+    // 删除时需要判断 当前数据是否可以删除， 如果可以删除，则继续删除。
+    // 如果不能删除，则提示用户，当前数据不可删除。
+    if(project_revenue_detail_id) {
+      this.settingsConfigService.get(`/api/is_delete_project_revenue_detail/${project_revenue_detail_id}`).subscribe((res:ApiData) => {
+        const data = res.data;
+        if(res.code === 200) {
+          if(data.delete) {
+            groupArray.removeAt(index);
+          }else {
+            this.msg.warning(data.msg);
+          }
+          
+        }else {
+          this.msg.warning(res.error || '删除失败');
+        }
+      })
+    }else {
+      groupArray.removeAt(index);
+    }
+    
+  }
+
 
   submitForm(): void {
     for (const i in this.validateForm.controls) {
@@ -170,12 +196,10 @@ export class AdjustProjectIncomeComponent implements OnChanges, OnInit {
           income: +v.income
         }
       });
-      let option:any = {
-        adjustment_id: this.adjustInfo.id,
-        category_name: '项目收入调整',
 
-        project_revenue_adjustment_id: this.adjustInfo.project_revenue_adjustment.id,
-        
+      const option:any = {
+        adjustment_id: this.adjustInfo.id,
+
         customer_ids: value.customer_ids,
         partyB: value.partyB,
         partyA_power: value.partyA_power,
@@ -183,13 +207,33 @@ export class AdjustProjectIncomeComponent implements OnChanges, OnInit {
         partyA_condition: value.partyA_condition,
         partyB_condition: value.partyB_condition,
         project_revenue_detail_adjustments: incomeTaxList
-      };
+      }
 
-      // this.submitLoading = true;
-      this.adjustmentChange.emit(option);
+      if(this.adjustInfo.project_revenue_adjustment) {
+        const updateObj:any = Object.assign(option, {
+          category_name: '项目收入调整',
+          project_revenue_adjustment_id: this.adjustInfo.project_revenue_adjustment.id,
+        });
+        this.adjustmentChange.emit(updateObj);
+
+      } else {
+        const createObj:any = option;
+
+        this.adjustmentIncomeChange.emit({
+          data: createObj,
+          type: 'project'
+        });
+      }
+      
     } else {
       this.msg.warning('信息填写不完整');
     }
+  }
+  
+
+  deletedIncome():void {
+    const opt:any = { project_revenue_adjustment_id: this.adjustInfo.project_revenue_adjustment.id };
+    this.adjustmentIncomeDeleted.emit({ data: opt, type: 'project' });
   }
 
   cancel():void {}
@@ -216,7 +260,7 @@ export class AdjustProjectIncomeComponent implements OnChanges, OnInit {
     }
   }
   
-  incomeListLoading:boolean = true;
+  incomeListLoading:boolean = false;
   getProjectIncomeList() {
     this.incomeListLoading = true;
     this.settingsConfigService.get(`/api/project_revenue_detail_adjustment/${this.adjustInfo.project_revenue_adjustment.id}`).subscribe((res:ApiData) => {

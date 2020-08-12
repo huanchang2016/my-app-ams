@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NzMessageService, NzModalService, NzModalRef } from 'ng-zorro-antd';
 import { SettingsConfigService } from 'src/app/routes/service/settings-config.service';
 import { ApiData, List } from 'src/app/data/interface.data';
+import { format } from 'date-fns';
 
 @Component({
   selector: 'app-users-bill-execute-flow',
@@ -67,6 +68,8 @@ export class UsersBillExecuteFlowComponent implements OnChanges {
 
   execute_man: any = null;
 
+  date: any = null;
+
   ngOnChanges() {
     if (this.progressInfo) {
       console.log(this.progressInfo, 'app-users-execute-flow');
@@ -84,12 +87,18 @@ export class UsersBillExecuteFlowComponent implements OnChanges {
     }
   }
 
+  // dateChange(e) {
+  //   this.date = format(e, 'yyyy/MM/dd');
+  //   console.log(this.date, 'this.date');
+  // }
+
   ngOnInit(): void {
 
     this.validateForm = this.fb.group({
       is_execute: ['A', [Validators.required]],
       remark: [null],
       invoice_number: [null, [Validators.required]],
+      invoice_time: [null, [Validators.required]],
       invoice_amount: [null, [Validators.required, Validators.pattern(/^(([1-9]\d*|0)(\.\d{1,})?)$|(0\.0?([1-9]\d?))$/)]],
       tax_amount: [null, [Validators.required, Validators.pattern(/^(([1-9]\d*|0)(\.\d{1,})?)$|(0\.0?([1-9]\d?))$/)]]
     });
@@ -98,6 +107,9 @@ export class UsersBillExecuteFlowComponent implements OnChanges {
       if (val === 'B') {
         this.validateForm.get('invoice_number')!.clearValidators();
         this.validateForm.get('invoice_number')!.markAsPristine();
+
+        this.validateForm.get('invoice_time')!.clearValidators();
+        this.validateForm.get('invoice_time')!.markAsPristine();
 
         this.validateForm.get('invoice_amount')!.clearValidators();
         this.validateForm.get('invoice_amount')!.markAsPristine();
@@ -111,6 +123,9 @@ export class UsersBillExecuteFlowComponent implements OnChanges {
       } else {
         this.validateForm.get('invoice_number')!.setValidators(Validators.required);
         this.validateForm.get('invoice_number')!.markAsDirty();
+
+        this.validateForm.get('invoice_time')!.setValidators(Validators.required);
+        this.validateForm.get('invoice_time')!.markAsDirty();
 
         this.validateForm.get('invoice_amount')!.setValidators(Validators.required);
         this.validateForm.get('invoice_amount')!.markAsDirty();
@@ -213,6 +228,7 @@ export class UsersBillExecuteFlowComponent implements OnChanges {
     this.validateForm.patchValue({
       bill_invoice_id: opt.id,
       invoice_number: opt.invoice_number,
+      invoice_time: opt.invoice_time,
       invoice_amount: opt.invoice_amount,
       tax_amount: opt.tax_amount,
     })
@@ -236,7 +252,7 @@ export class UsersBillExecuteFlowComponent implements OnChanges {
       this.validateForm.controls[i].updateValueAndValidity();
     }
 
-    console.log('submit', this.validateForm);
+    console.log('submit', this.validateForm.value);
 
     if (this.validateForm.valid && !this.totalAmountError) {
       const value: any = this.validateForm.value;
@@ -252,6 +268,7 @@ export class UsersBillExecuteFlowComponent implements OnChanges {
       const createArray = {
         bill_id: this.billInfo.id,
         invoice_number: String(value.invoice_number),
+        invoice_time: String(format(value.invoice_time, 'yyyy/MM/dd')),
         invoice_amount: this.toFixed(value.invoice_amount, 2),
         tax_amount: this.toFixed(value.tax_amount, 2),
       }
@@ -259,11 +276,13 @@ export class UsersBillExecuteFlowComponent implements OnChanges {
       const editArray = {
         bill_invoice_id: this.bill_invoice_id,
         invoice_number: String(value.invoice_number),
+        invoice_time: String(format(value.invoice_time, 'yyyy/MM/dd')),
         invoice_amount: this.toFixed(value.invoice_amount, 2),
         tax_amount: this.toFixed(value.tax_amount, 2),
       }
 
       console.log('createArray', createArray);
+      console.log('editArray', editArray);
       if (this.isCreate) {
         this.createInvoice(createArray);
       } else {

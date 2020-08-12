@@ -131,6 +131,7 @@
               <tr>
                 <th nzWidth="80px">序号</th>
                 <th>发票号码</th>
+                <th>开票时间</th>
                 <th>发票金额</th>
                 <th>发票税额</th>
                 <th>操作</th>
@@ -140,6 +141,7 @@
               <tr *ngFor="let data of costSelectTable.data; let i = index">
                 <td>{{ i + 1}}</td>
                 <td>{{ data.invoice_number }}</td>
+                <td>{{ data.invoice_time | date}}</td>
                 <td class="text-nowrap">{{ data.invoice_amount | _currency}}</td>
                 <td class="text-nowrap">{{ data.tax_amount | _currency}}</td>
                 <!-- <td>
@@ -191,6 +193,12 @@
             <nz-form-item>
               <nz-form-control nzErrorTip="请填写开具的发票号码">
                 <input nz-input placeholder="发票号码" formControlName="invoice_number" />
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-control nzErrorTip="请填写开具日期">
+                <nz-date-picker style="width: 100%;" formControlName="invoice_time" nzFormat="yyyy/MM/dd">
+                </nz-date-picker>
               </nz-form-control>
             </nz-form-item>
             <nz-form-item>

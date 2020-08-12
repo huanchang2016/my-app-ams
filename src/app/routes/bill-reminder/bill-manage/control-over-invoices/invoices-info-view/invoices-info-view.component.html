@@ -280,10 +280,10 @@
           <nz-step [nzTitle]="'废弃申请'" [nzStatus]="'finish'" [nzDescription]="startStep">
             <ng-template #startStep>
               <div class="my-sm">
-                {{ projectDetailInfo?.user.name }}
+                {{ item?.user.name }}
               </div>
               <div>
-                {{ item.create_time }}
+                {{ item.start_time }}
               </div>
             </ng-template>
           </nz-step>
@@ -318,10 +318,10 @@
             <nz-step [nzTitle]="'废弃申请'" [nzStatus]="'finish'" [nzDescription]="startStep">
               <ng-template #startStep>
                 <div class="my-sm">
-                  {{ projectDetailInfo?.user.name }}
+                  {{ item?.user.name }}
                 </div>
                 <div>
-                  {{ item.create_time }}
+                  {{ item.start_time }}
                 </div>
               </ng-template>
             </nz-step>
@@ -386,10 +386,10 @@
           <nz-step [nzTitle]="'红冲申请'" [nzStatus]="'finish'" [nzDescription]="startStep">
             <ng-template #startStep>
               <div class="my-sm">
-                {{ projectDetailInfo?.user.name }}
+                {{ item?.user.name }}
               </div>
               <div>
-                {{ item.create_time }}
+                {{ item.start_time }}
               </div>
             </ng-template>
           </nz-step>
@@ -424,10 +424,10 @@
             <nz-step [nzTitle]="'红冲申请'" [nzStatus]="'finish'" [nzDescription]="startStep">
               <ng-template #startStep>
                 <div class="my-sm">
-                  {{ projectDetailInfo?.user.name }}
+                  {{ item?.user.name }}
                 </div>
                 <div>
-                  {{ item.create_time }}
+                  {{ item.start_time }}
                 </div>
               </ng-template>
             </nz-step>

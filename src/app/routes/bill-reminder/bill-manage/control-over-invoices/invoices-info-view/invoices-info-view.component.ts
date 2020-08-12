@@ -184,6 +184,7 @@ export class BillReminderInvoicesInfoViewComponent implements OnInit {
 
   getExecuteName(event): void {
     this.executeName = event;
+    console.log(this.executeName, 'executeName');
   }
 
   readOuter() {

@@ -7,8 +7,13 @@
   <ng-container *ngIf="nodeProcess.length !== 0;else nodeProcessLoadingTpl">
     <nz-steps nzDirection="vertical" nzProgressDot class="hidden-pc">
       <ng-container *ngFor="let process of nodeProcess">
+<<<<<<< HEAD
+        <nz-step [nzTitle]="progressInfo?.workflow_status.name" [nzStatus]="!progressInfo?.complete ? 'process' : 'finish'"
+          [nzDescription]="createDesc">
+=======
         <nz-step [nzTitle]="progressInfo?.workflow_status.name"
           [nzStatus]="!progressInfo?.complete ? 'process' : 'finish'" [nzDescription]="createDesc">
+>>>>>>> 0457674505824deb0ca56166216f28b8990ba032
           <ng-template #createDesc>
             <div class="desc">
               <div class="my-sm">
@@ -77,6 +82,14 @@
     </div>
   </ng-template>
 
+<<<<<<< HEAD
+  <div class="steps-content" *ngIf="isExecuteUser && !progressInfo.complete">
+    <div class="check-box mt-md">
+      <nz-radio-group [(ngModel)]="checkOption.status" [nzButtonStyle]="'solid'" [nzDisabled]="progressInfo.workflow_status.name === '无法执行' || progressInfo.workflow_status.name === '已完成'">
+        <label nz-radio-button [nzValue]="'A'">已付款</label>
+        <label nz-radio-button [nzValue]="'B'">已执行</label>
+        <label nz-radio-button [nzValue]="'C'">无法执行</label>
+=======
   <div class="steps-content">
     <!-- *ngIf="isExecuteUser && !progressInfo.complete" -->
     <div class="check-box mt-md">
@@ -91,12 +104,24 @@
         [(ngModel)]="checkOption.status" [nzButtonStyle]="'solid'"
         [nzDisabled]="progressInfo.workflow_status.name === '无法执行' || progressInfo.workflow_status.name === '已完成'">
         <label nz-radio-button [nzValue]="'B'">已执行</label>
+>>>>>>> 0457674505824deb0ca56166216f28b8990ba032
       </nz-radio-group>
       <ng-container *ngIf="checkOption.status ==='C'">
         <textarea nz-input placeholder="请填写无法执行的原因" [(ngModel)]="checkOption.remark"
           [nzAutosize]="{ minRows: 3, maxRows: 6 }" class="my-sm">
         </textarea>
       </ng-container>
+<<<<<<< HEAD
+      
+      <div *ngIf="checkOption.status !== 'C'" style="margin-top: 4px;margin-bottom: 4px;">
+        <!-- 选择付款后，需要补充填写资料信息 -->
+        <div class="mt-md" *ngIf="paymentArr.length !== 0 && payInfo">
+          <app-payment-tax-manage [is_execute_user]="true" [payType]="payType" [payInfo]="payInfo" [paymentArray]="paymentArr" [billCategoryArray]="billCategoryArray"></app-payment-tax-manage>
+        </div>
+        <!-- 选择付款后，需要补充填写资料信息 -->
+      </div>
+      <div class="text-right mt-md" *ngIf="progressInfo.workflow_status.name !== '无法执行' && progressInfo.workflow_status.name !== '已完成'">
+=======
 
       <div *ngIf="checkOption.status !== 'C'" style="margin-top: 4px;margin-bottom: 4px;">
         <!-- 选择付款后，需要补充填写资料信息 -->
@@ -122,6 +147,7 @@
       </div>
       <div class="text-right mt-md"
         *ngIf="progressInfo.workflow_status.name !== '无法执行' && progressInfo.workflow_status.name !== '已完成'">
+>>>>>>> 0457674505824deb0ca56166216f28b8990ba032
 
         <ng-container *ngIf="checkOption.status === 'C'">
           <a nz-popconfirm nz-button [nzType]="'primary'" nzPopconfirmTitle="是否确认当前支付无法执行？请详细说明原因！"
@@ -129,6 +155,15 @@
             提交（无法执行）
           </a>
         </ng-container>
+<<<<<<< HEAD
+        <ng-container *ngIf="checkOption.status !== 'C'">
+          <a nz-popconfirm nz-button [nzType]="'primary'" nzPopconfirmTitle="请确认当前付款或者执行情况是否填写完整，确认请继续。"
+            (nzOnConfirm)="submitCheckCurrentProcess()" (nzOnCancel)="cancel()">
+            提交
+          </a>
+        </ng-container>
+        
+=======
         <ng-container
           *ngIf=" checkOption.status !== 'C' && approveFlag && (filterUser||(payInfo?.pay_status.name==='待执行'||payInfo?.pay_status.name==='草稿'))">
           <a nz-popconfirm nz-button [nzType]="'primary'" nzPopconfirmTitle="请确认当前付款或者执行情况是否填写完整，确认请继续。"
@@ -137,6 +172,7 @@
           </a>
         </ng-container>
 
+>>>>>>> 0457674505824deb0ca56166216f28b8990ba032
       </div>
     </div>
   </div>

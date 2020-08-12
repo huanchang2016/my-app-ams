@@ -26,17 +26,29 @@
             </td>
             <td>
                 <sv-container size="small" col="1">
+<<<<<<< HEAD
+                    <sv label="成本总额"><span>{{ data.before_deduct_amount | _currency }}</span></sv>
+                    <sv label="抵扣情况">
+                        <span *ngIf="data.if_write_off;else notWriteOff">{{ data.write_off_amount | currency: 'CNY' }}</span>
+=======
                     <sv label="成本总额"><span class="text-nowrap">{{ data.before_deduct_amount | _currency }}</span></sv>
                     <sv label="抵扣情况">
                         <span class="text-nowrap"
                             *ngIf="data.if_write_off;else notWriteOff">{{ data.write_off_amount | currency: 'CNY' }}</span>
+>>>>>>> 0457674505824deb0ca56166216f28b8990ba032
                         <ng-template #notWriteOff>
                             <span class="font-weight-bold">无冲抵</span>
                         </ng-template>
                     </sv>
+<<<<<<< HEAD
+                    <sv label="待支付金额"><span>{{ data.amount | _currency }}</span></sv>
+                </sv-container>
+                
+=======
                     <sv label="待支付金额"><span class="text-nowrap">{{ data.amount | _currency }}</span></sv>
                 </sv-container>
 
+>>>>>>> 0457674505824deb0ca56166216f28b8990ba032
             </td>
             <td>{{ data.project?.name }}</td>
             <td>
@@ -64,16 +76,26 @@
                         <sv-container size="small" col="1">
                             <sv label="银行名称"><span>{{ data.bank_name }}</span></sv>
                             <sv label="银行账号"><span>{{ data.bank_account }}</span></sv>
+<<<<<<< HEAD
+                            <sv label="成本总额"><span>{{ data.before_deduct_amount | _currency }}</span></sv>
+                            <sv label="抵扣情况">
+                                <span *ngIf="data.if_write_off;else notWriteOff">{{ data.write_off_amount | currency: 'CNY' }}</span>
+=======
                             <sv label="成本总额"><span
                                     class="text-nowrap">{{ data.before_deduct_amount | _currency }}</span></sv>
                             <sv label="抵扣情况">
                                 <span *ngIf="data.if_write_off;else notWriteOff"
                                     class="text-nowrap">{{ data.write_off_amount | currency: 'CNY' }}</span>
+>>>>>>> 0457674505824deb0ca56166216f28b8990ba032
                                 <ng-template #notWriteOff>
                                     <span class="font-weight-bold">无冲抵</span>
                                 </ng-template>
                             </sv>
+<<<<<<< HEAD
+                            <sv label="待支付金额"><span>{{ data.amount | _currency }}</span></sv>
+=======
                             <sv label="待支付金额"><span class="text-nowrap">{{ data.amount | _currency }}</span></sv>
+>>>>>>> 0457674505824deb0ca56166216f28b8990ba032
                             <sv label="项目名称"><span>{{ data.project?.name }}</span></sv>
                         </sv-container>
                     </div>

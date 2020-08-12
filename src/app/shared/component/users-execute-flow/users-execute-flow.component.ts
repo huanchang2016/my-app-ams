@@ -19,6 +19,12 @@ export class UsersExecuteFlowComponent implements OnChanges {
   @Input() payType?: string;
   @Input() payInfo?: any;
   @Input() paymentArr?: any[];
+<<<<<<< HEAD
+
+  @Output() executeChange: EventEmitter<any> = new EventEmitter();
+
+
+=======
   @Input() listOfData?: any[];
   @Input() contract_pay_id?: number;
   @Input() treatypayInfo?: any = [];
@@ -30,6 +36,7 @@ export class UsersExecuteFlowComponent implements OnChanges {
   @Output() executeChange: EventEmitter<any> = new EventEmitter();
 
   @Output() refresh: EventEmitter<any> = new EventEmitter();
+>>>>>>> 0457674505824deb0ca56166216f28b8990ba032
 
   nodeProcess: any[] = [];
 
@@ -41,22 +48,34 @@ export class UsersExecuteFlowComponent implements OnChanges {
     remark: '' // 备注原因
   }
 
+<<<<<<< HEAD
+  billCategoryArray:any[] = []; // 发票类型
+=======
   billCategoryArray: any[] = []; // 发票类型
 
   flag: boolean;
 
   contractInfo: any = [];
+>>>>>>> 0457674505824deb0ca56166216f28b8990ba032
 
   constructor(
     private settings: SettingsService,
     private notice: NzNotificationService,
     private settingsConfigService: SettingsConfigService
   ) {
+<<<<<<< HEAD
+    this.settingsConfigService.get('/api/bill/category/all').subscribe((res:ApiData) => {
+      if(res.code === 200) {
+        const list:any = res.data.bill_category;
+        if(list.length !== 0) {
+          this.billCategoryArray = list.sort((a:any, b:any) => a.sequence - b.sequence);
+=======
     this.settingsConfigService.get('/api/bill/category/all').subscribe((res: ApiData) => {
       if (res.code === 200) {
         const list: any = res.data.bill_category;
         if (list.length !== 0) {
           this.billCategoryArray = list.sort((a: any, b: any) => a.sequence - b.sequence);
+>>>>>>> 0457674505824deb0ca56166216f28b8990ba032
         }
       }
     })
@@ -69,6 +88,19 @@ export class UsersExecuteFlowComponent implements OnChanges {
       this.nodeProcess = [this.progressInfo];
       this.isExecuteUser = this.progressInfo.execute_user.id === this.settings.user.id;
 
+<<<<<<< HEAD
+      let status:string = '';
+      if(this.progressInfo.workflow_status.name === '待执行') {
+        status = 'A';
+      }else if(this.progressInfo.workflow_status.name === '已付款') {
+        status = 'A';
+      }else if(this.progressInfo.workflow_status.name === '无法执行') {
+        status = 'C';
+      }else if(this.progressInfo.workflow_status.name === '已完成') {
+        status = 'B';
+      }
+      
+=======
       let status = '';
       if (this.progressInfo.workflow_status.name === '待执行') {
         status = 'A';
@@ -80,6 +112,7 @@ export class UsersExecuteFlowComponent implements OnChanges {
         status = 'B';
       }
 
+>>>>>>> 0457674505824deb0ca56166216f28b8990ba032
       this.checkOption.status = status;
     }
   }
@@ -91,6 +124,19 @@ export class UsersExecuteFlowComponent implements OnChanges {
     }
     const is_pay = this.checkOption.status === 'A';
     const is_execute = this.checkOption.status === 'B';
+<<<<<<< HEAD
+
+    const option = {
+      is_pay: is_pay,
+      is_execute: is_execute,
+      remark: this.checkOption.remark
+    }
+    this.executeChange.emit(option);
+  }
+
+  cancel() { }
+
+=======
 
     const option = {
       is_pay,
@@ -134,4 +180,5 @@ export class UsersExecuteFlowComponent implements OnChanges {
     this.filterUser = flag;
     console.log(this.filterUser, 'submitFilter');
   }
+>>>>>>> 0457674505824deb0ca56166216f28b8990ba032
 }

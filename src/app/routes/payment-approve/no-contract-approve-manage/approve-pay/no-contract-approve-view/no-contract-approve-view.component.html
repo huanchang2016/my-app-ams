@@ -33,15 +33,12 @@
     </ng-template> -->
     <tbody>
       <tr>
-<<<<<<< HEAD
-=======
         <td colspan="6" class="text-md text-center font-weight-bold">{{ projectInfo?.company.name }}</td>
       </tr>
       <tr>
         <td colspan="6" class="text-md text-center font-weight-bold">项目非合同支付</td>
       </tr>
       <tr>
->>>>>>> 0457674505824deb0ca56166216f28b8990ba032
         <td colspan="2" class="text-md text-center font-weight-bold">项目名称</td>
         <td colspan="4" class="text-md text-center">{{ projectInfo?.name }}</td>
       </tr>
@@ -130,12 +127,8 @@
       </tr>
       <tr>
         <td colspan="6">
-<<<<<<< HEAD
-          <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/treaty_pay/' + treaty_pay_id"></app-upload-file-attachment-show-c>
-=======
           <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/treaty_pay/' + treaty_pay_id">
           </app-upload-file-attachment-show-c>
->>>>>>> 0457674505824deb0ca56166216f28b8990ba032
         </td>
       </tr>
 
@@ -256,12 +249,8 @@
 <!-- 支付流程进展： 草稿 不显示 -->
 
 <ng-container *ngIf="progressInfo && progressInfo.execute_user">
-<<<<<<< HEAD
-  <app-users-execute-flow [payType]="'treaty'" [payInfo]="treatypayInfo" [paymentArr]="listOfData" [progressInfo]="progressInfo" (executeChange)="executeChange($event)"></app-users-execute-flow>
-=======
   <app-users-execute-flow [payType]="'treaty'" (refresh)="refreshPage()" [payInfo]="treatypayInfo"
     [paymentArr]="listOfData" [approveFlag]="approveFlag" [progressInfo]="progressInfo"
     (executeChange)="executeChange($event)">
   </app-users-execute-flow>
->>>>>>> 0457674505824deb0ca56166216f28b8990ba032
 </ng-container>

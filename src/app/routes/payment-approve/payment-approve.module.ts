@@ -59,8 +59,6 @@ import { NoContractPayPayedComponent } from './no-contract-approve-manage/apply-
 import { NoContractExcutePayedListComponent } from './no-contract-approve-manage/excute-pay/no-contract-excute-payed-list/no-contract-excute-payed-list.component';
 import { ContractPayForPayedComponent } from './contract-approve-manage/apply-for/contract-pay-for-payed/contract-pay-for-payed.component';
 import { ContractExcuteForPayedComponent } from './contract-approve-manage/excute-pay/contract-excute-for-payed/contract-excute-for-payed.component';
-<<<<<<< HEAD
-=======
 import { ApplyListIndexComponent } from './contract-approve-manage/apply-list/apply-list-index/apply-list-index.component';
 import { ApplyListSearchComponent } from './contract-approve-manage/apply-list/apply-list-search/apply-list-search.component';
 import { NoContractApplyListIndexComponent } from './no-contract-approve-manage/apply-list/no-contract-apply-list-index/no-contract-apply-list-index.component';
@@ -77,7 +75,6 @@ import { NoApplyApproveSearchComponent } from './no-contract-approve-manage/appl
 import { NoApplyApproveListComponent } from './no-contract-approve-manage/apply-for/no-contract-list-search/apply-approve/no-apply-approve-list/no-apply-approve-list.component';
 import { NoApplyExcuteListComponent } from './no-contract-approve-manage/apply-for/no-contract-list-search/apply-excute/no-apply-excute-list/no-apply-excute-list.component';
 import { NoApplyExcuteSearchComponent } from './no-contract-approve-manage/apply-for/no-contract-list-search/apply-excute/no-apply-excute-search/no-apply-excute-search.component';
->>>>>>> 0457674505824deb0ca56166216f28b8990ba032
 
 const COMPONENTS = [
   // 有合约  合约审批管理
@@ -148,9 +145,6 @@ const COMPONENTS_NOROUNT = [
   ],
   declarations: [
     ...COMPONENTS,
-<<<<<<< HEAD
-    ...COMPONENTS_NOROUNT
-=======
     ...COMPONENTS_NOROUNT,
     ApplyListIndexComponent,
     ApplyListSearchComponent,
@@ -168,7 +162,6 @@ const COMPONENTS_NOROUNT = [
     NoApplyApproveListComponent,
     NoApplyExcuteListComponent,
     NoApplyExcuteSearchComponent
->>>>>>> 0457674505824deb0ca56166216f28b8990ba032
 
   ],
   entryComponents: COMPONENTS_NOROUNT

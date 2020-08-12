@@ -190,43 +190,6 @@ export class ContractPayCreateComponent implements OnInit {
     console.log('3', this.listOfData.length !== 0);
   }
 
-<<<<<<< HEAD
-  // changeCostItemStatus() {
-  //   /***
-  //    * 供应商发生变化, 将当前供应商选择的成本类型设置为 disabled
-  //    * ******/
-  //   if(this.listOfData.length !== 0) {
-  //     this.costArr = this.costArr.map(v => {
-  //       // if (v.id === value.cost_id) {
-  //       //   v.disabled = true;
-  //       // }
-
-
-  //       if(this.supplierCostFind(v.id)) {
-  //         v.disabled = true;
-  //       }else {
-  //         v.disabled = false;
-  //       }
-  //       return v;
-  //     });
-  //     console.log(this.costArr);
-
-  //   }
-
-  // }
-
-  // supplierCostFind(cost_id:number): boolean {
-  //   const supplier:any[] = this.listOfData.filter(v => v.treaty.id === this.currentTreaty.id);
-  //   return supplier.filter( v => v.cost.id === cost_id).length > 0;
-  // }
-
-  contractPaymentChange(contract_payment_id: number): void {
-    [this.currentPayment] = this.listOfData.filter(v => v.id === contract_payment_id);
-    console.log('contract_payment_id', contract_payment_id)
-    console.log(this.currentPayment, 'contractPaymentChange this.currentPayment');
-    console.log('this.listOfData', this.listOfData);
-    this.amountChange();
-=======
   ngOnChanges(): void {
     console.log('1', this.selectedFlag);
     console.log('2', this.summary);
@@ -241,7 +204,6 @@ export class ContractPayCreateComponent implements OnInit {
       console.log(this.currentPayment, '2contractPaymentChange this.currentPayment');
       this.amountChange();
     }
->>>>>>> 0457674505824deb0ca56166216f28b8990ba032
   }
 
   // 动态校验
@@ -426,16 +388,6 @@ export class ContractPayCreateComponent implements OnInit {
   // 成本支出
   addPaymentCost(tplTitle: TemplateRef<{}>, tplContent: TemplateRef<{}>, tplFooter: TemplateRef<{}>, e: MouseEvent): void {
     e.preventDefault();
-<<<<<<< HEAD
-    this.isEditCost = false;
-    // this.costArr = this.costArr.map(v => {
-    //   if (v.id === (this.listOfData[v.id - 1] === undefined ? 0 : this.listOfData[v.id - 1]).cost.id) {
-    //     v.disabled = true;
-    //   }
-    //   return v;
-    // })
-=======
->>>>>>> 0457674505824deb0ca56166216f28b8990ba032
     console.log('111this.costArr', this.costArr)
     console.log('this.listOfData', this.listOfData)
     // this.currentTPaymentCost = this.costArr.filter(checkAdult);

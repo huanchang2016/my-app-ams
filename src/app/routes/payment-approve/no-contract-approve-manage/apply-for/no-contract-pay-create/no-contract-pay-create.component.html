@@ -117,10 +117,6 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-<<<<<<< HEAD
-        <div nz-col [nzSm]="24" class="text-right">
-          <button *ngIf="!treatypayInfo || treatypayInfo.draft" nz-button [nzType]="'primary'" (click)="saveTreatyForm()" [nzLoading]="saveLoading">保存非合约支付</button>
-=======
         <div nz-col [nzSm]="24">
           <nz-form-item>
             <nz-form-label style="line-height: 40px;">开票总金额</nz-form-label>
@@ -132,7 +128,6 @@
         <div nz-col [nzSm]="24" class="text-right">
           <button *ngIf="!treatypayInfo || treatypayInfo.draft" nz-button [nzType]="'primary'"
             (click)="saveTreatyForm()" [nzLoading]="saveLoading">保存非合约支付</button>
->>>>>>> 0457674505824deb0ca56166216f28b8990ba032
         </div>
 
       </div>
@@ -249,16 +244,11 @@
     </div>
   </nz-card>
 
-<<<<<<< HEAD
-  <div class="mt-md" *ngIf="listOfData.length !== 0 && treatypayInfo">
-    <app-payment-tax-manage [is_execute_user]="false" [payType]="'treaty'" [payInfo]="treatypayInfo" [paymentArray]="listOfData" [billCategoryArray]="billCategoryArray"></app-payment-tax-manage>
-=======
   <!-- <div class="mt-md" *ngIf="listOfData.length !== 0 && treatypayInfo"> -->
   <div class="mt-md" *ngIf="listOfData.length !== 0">
     <app-payment-tax-manage [is_execute_user]="true" [payType]="'treaty'" [payInfo]="treatypayInfo"
       [paymentArray]="listOfData" [billCategoryArray]="billCategoryArray" (outer)="readOuter()">
     </app-payment-tax-manage>
->>>>>>> 0457674505824deb0ca56166216f28b8990ba032
   </div>
 
 </div>

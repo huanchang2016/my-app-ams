@@ -34,12 +34,8 @@ import { UsersExecuteFlowComponent } from './component/users-execute-flow/users-
 import { UploadFileAttachmentTplComponent } from './component/upload-file-attachment-tpl/upload-file-attachment-tpl.component';
 import { ProjectInfoShowTplComponent } from './component/project-info-show-tpl/project-info-show-tpl.component';
 import { UsersBillExecuteFlowComponent } from './component/users-bill-execute-flow/users-bill-execute-flow.component';
-<<<<<<< HEAD
-import { PaymentTaxManageComponent } from './component/payment-tax-manage/payment-tax-manage.component';
-=======
 import { PaymentTaxManageComponent } from './component/payment-bill-tax-manage/payment-tax-manage/payment-tax-manage.component';
 import { PaymentContractTaxMangeComponent } from './component/payment-bill-tax-manage/payment-contract-tax-mange/payment-contract-tax-mange.component';
->>>>>>> 0457674505824deb0ca56166216f28b8990ba032
 
 const COMPONENTS = [
   CascaderAreaComponent,
@@ -53,12 +49,8 @@ const COMPONENTS = [
   UsersExecuteFlowComponent,
   ProjectInfoShowTplComponent,
   UsersBillExecuteFlowComponent,
-<<<<<<< HEAD
-  PaymentTaxManageComponent
-=======
   PaymentTaxManageComponent,
   PaymentContractTaxMangeComponent
->>>>>>> 0457674505824deb0ca56166216f28b8990ba032
 ];
 
 const DIRECTIVES = [

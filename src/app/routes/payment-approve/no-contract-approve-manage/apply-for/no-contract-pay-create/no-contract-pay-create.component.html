@@ -116,7 +116,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSm]="24">
+        <div nz-col [nzSm]="24" class="text-right">
           <button *ngIf="!treatypayInfo || treatypayInfo.draft" nz-button [nzType]="'primary'" (click)="saveTreatyForm()" [nzLoading]="saveLoading">保存非合约支付</button>
         </div>
 
@@ -231,7 +231,7 @@
   </nz-card>
 
   <div class="mt-md" *ngIf="listOfData.length !== 0 && treatypayInfo">
-    <app-payment-tax-manage [treaty_pay_id]="treaty_pay_id" [treatypayInfo]="treatypayInfo" [paymentArray]="listOfData" [billCategoryArray]="billCategoryArray"></app-payment-tax-manage>
+    <app-payment-tax-manage [is_execute_user]="false" [payType]="'treaty'" [payInfo]="treatypayInfo" [paymentArray]="listOfData" [billCategoryArray]="billCategoryArray"></app-payment-tax-manage>
   </div>
   
 </div>

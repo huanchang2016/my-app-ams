@@ -34,6 +34,7 @@ import { UsersExecuteFlowComponent } from './component/users-execute-flow/users-
 import { UploadFileAttachmentTplComponent } from './component/upload-file-attachment-tpl/upload-file-attachment-tpl.component';
 import { ProjectInfoShowTplComponent } from './component/project-info-show-tpl/project-info-show-tpl.component';
 import { UsersBillExecuteFlowComponent } from './component/users-bill-execute-flow/users-bill-execute-flow.component';
+import { PaymentTaxManageComponent } from './component/payment-tax-manage/payment-tax-manage.component';
 
 const COMPONENTS = [
   CascaderAreaComponent,
@@ -46,7 +47,8 @@ const COMPONENTS = [
   CustomerCompanyShowListCComponent,
   UsersExecuteFlowComponent,
   ProjectInfoShowTplComponent,
-  UsersBillExecuteFlowComponent
+  UsersBillExecuteFlowComponent,
+  PaymentTaxManageComponent
 ];
 
 const DIRECTIVES = [

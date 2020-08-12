@@ -179,6 +179,35 @@ export class ContractPayCreateComponent implements OnInit {
     console.log('validateCostForm is_get_bill', this.validateBillForm.get('is_get_bill').value);
   }
 
+  // changeCostItemStatus() {
+  //   /***
+  //    * 供应商发生变化, 将当前供应商选择的成本类型设置为 disabled
+  //    * ******/
+  //   if(this.listOfData.length !== 0) {
+  //     this.costArr = this.costArr.map(v => {
+  //       // if (v.id === value.cost_id) {
+  //       //   v.disabled = true;
+  //       // }
+
+
+  //       if(this.supplierCostFind(v.id)) {
+  //         v.disabled = true;
+  //       }else {
+  //         v.disabled = false;
+  //       }
+  //       return v;
+  //     });
+  //     console.log(this.costArr);
+
+  //   }
+
+  // }
+
+  // supplierCostFind(cost_id:number): boolean {
+  //   const supplier:any[] = this.listOfData.filter(v => v.treaty.id === this.currentTreaty.id);
+  //   return supplier.filter( v => v.cost.id === cost_id).length > 0;
+  // }
+
   contractPaymentChange(contract_payment_id: number): void {
     [this.currentPayment] = this.listOfData.filter(v => v.id === contract_payment_id);
     console.log('contract_payment_id', contract_payment_id)
@@ -362,12 +391,12 @@ export class ContractPayCreateComponent implements OnInit {
   addPaymentCost(tplTitle: TemplateRef<{}>, tplContent: TemplateRef<{}>, tplFooter: TemplateRef<{}>, e: MouseEvent): void {
     e.preventDefault();
     this.isEditCost = false;
-    this.costArr = this.costArr.map(v => {
-      if (v.id === this.listOfData[v.id - 1].cost.id) {
-        v.disabled = true;
-      }
-      return v;
-    })
+    // this.costArr = this.costArr.map(v => {
+    //   if (v.id === (this.listOfData[v.id - 1] === undefined ? 0 : this.listOfData[v.id - 1]).cost.id) {
+    //     v.disabled = true;
+    //   }
+    //   return v;
+    // })
     console.log('111this.costArr', this.costArr)
     console.log('this.listOfData', this.listOfData)
     this.tplModal = this.modalService.create({

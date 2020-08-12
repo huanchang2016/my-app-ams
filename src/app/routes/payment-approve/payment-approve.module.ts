@@ -55,7 +55,10 @@ import { NoContractApprovePayListComponent } from './no-contract-approve-manage/
 import { NoContractExcutePayListComponent } from './no-contract-approve-manage/excute-pay/no-contract-excute-pay-list/no-contract-excute-pay-list.component';
 import { ContractPayPendExecuteComponent } from './contract-approve-manage/apply-for/contract-pay-pend-execute/contract-pay-pend-execute.component';
 import { NoContractPayPendExecuteComponent } from './no-contract-approve-manage/apply-for/no-contract-pay-pend-execute/no-contract-pay-pend-execute.component';
-import { PaymentTaxManageComponent } from './no-contract-approve-manage/apply-for/no-contract-pay-create/payment-tax-manage/payment-tax-manage.component';
+import { NoContractPayPayedComponent } from './no-contract-approve-manage/apply-for/no-contract-pay-payed/no-contract-pay-payed.component';
+import { NoContractExcutePayedListComponent } from './no-contract-approve-manage/excute-pay/no-contract-excute-payed-list/no-contract-excute-payed-list.component';
+import { ContractPayForPayedComponent } from './contract-approve-manage/apply-for/contract-pay-for-payed/contract-pay-for-payed.component';
+import { ContractExcuteForPayedComponent } from './contract-approve-manage/excute-pay/contract-excute-for-payed/contract-excute-for-payed.component';
 
 const COMPONENTS = [
   // 有合约  合约审批管理
@@ -67,6 +70,7 @@ const COMPONENTS = [
   ForApprovalListComponent,
   ProjectContractListComponent,
   ContractPayCreateComponent,
+  ContractPayForPayedComponent,
   // 合约审批
   InApproveProjectComponent,
   ForApprovalListComponent,
@@ -78,6 +82,7 @@ const COMPONENTS = [
   NoContractNotStartedComponent,
   NoContractPayCreateComponent,
   NoContractProjectProgressComponent,
+  NoContractPayPayedComponent,
   ProjectNoContractListComponent,
   NoContractApplyPassComponent,
   NoContractApplyRefuseComponent,
@@ -87,10 +92,12 @@ const COMPONENTS = [
   NoContractApprovedFinishedListComponent,
   NoContractApprovedWithoutListComponent,
   NoContractApproveViewComponent,
+  NoContractExcutePayedListComponent,
   // 合约支付 执行情况
   ContractExcuteNotStartComponent,
   ContractExcuteFinishedComponent,
   ContractPayPendExecuteComponent,
+  ContractExcuteForPayedComponent,
   // 无合约执行情况
   NoContractExcuteNotStartComponent,
   NoContractExcuteFinishedComponent,
@@ -113,7 +120,6 @@ const COMPONENTS_NOROUNT = [
   NoContractApplyListCComponent,
   NoContractExcuteListCComponent,
   ContractExcuteListCComponent,
-  PaymentTaxManageComponent
 ];
 
 @NgModule({
@@ -123,8 +129,7 @@ const COMPONENTS_NOROUNT = [
   ],
   declarations: [
     ...COMPONENTS,
-    ...COMPONENTS_NOROUNT,
-    PaymentTaxManageComponent,
+    ...COMPONENTS_NOROUNT
 
   ],
   entryComponents: COMPONENTS_NOROUNT

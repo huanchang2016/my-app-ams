@@ -52,7 +52,7 @@ export class AdjustProjectIncomeComponent implements OnChanges, OnInit {
       customer_ids: [null, [Validators.required]],  // 甲方
       partyA_power: [null ],  // 甲方权责界定
       partyA_condition: [null ], // 甲方费用支付条件
-      partyB: [{value: partyB, disabled: true }, [Validators.required]], // 乙方
+      partyB: [ partyB, [Validators.required]], // 乙方
       partyB_power: [null ], // 乙方服务内容
       partyB_condition: [null ], // 乙方服务 附加条件
       incomeArr: this.fb.array([
@@ -64,6 +64,8 @@ export class AdjustProjectIncomeComponent implements OnChanges, OnInit {
         })
       ])
     });
+
+    this.validateForm.get('partyB').disabled;
     
     if(this.adjustInfo.project_revenue_adjustment) {
       this.getProjectIncomeList();
@@ -208,6 +210,8 @@ export class AdjustProjectIncomeComponent implements OnChanges, OnInit {
         partyB_condition: value.partyB_condition,
         project_revenue_detail_adjustments: incomeTaxList
       }
+
+      console.log(option, 'sl', value);
 
       if(this.adjustInfo.project_revenue_adjustment) {
         const updateObj:any = Object.assign(option, {

@@ -40,7 +40,7 @@ export class ProjectAdjustSearchComponent implements OnInit {
 
   pageOption: any = {
     page: 1,
-    page_size: 10
+    page_size: 1
   };
 
   status: any;
@@ -76,8 +76,8 @@ export class ProjectAdjustSearchComponent implements OnInit {
       company_id: [null],  // 客户单位
       department_id: [null],  // 部门
       category_id: [null],  // 项目类型
-      page: [null], // 页
-      page_size: [null] // 页码
+      // page: [null], // 页
+      // page_size: [null] // 页码
     });
     // const user = JSON.parse(localStorage.getItem('user'));
     // this.customerId = user.company?.id;
@@ -228,7 +228,7 @@ export class ProjectAdjustSearchComponent implements OnInit {
   submit() {
     const option: any = this.validateForm.value;
     console.log(option, 'option');
-    this.listRequest(option);
+    this.listRequest(Object.assign(option, this.pageOption));
   }
 
   pageIndexChange($event: number) {

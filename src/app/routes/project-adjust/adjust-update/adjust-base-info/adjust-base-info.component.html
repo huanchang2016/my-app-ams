@@ -82,7 +82,7 @@
             <nz-form-item>
                 <nz-form-label style="line-height: 40px;">项目附件</nz-form-label>
                 <nz-form-control>
-                    <app-upload-file-attachment-tpl [Attachment]="attachment" [AttachmentCategory]="attachmentCategory"
+                    <app-upload-file-attachment-tpl [Attachment]="attachment" [project_type]="'adjustment_project'" [AttachmentCategory]="attachmentCategory"
     [isAttachmentChange]="isAttachmentChange" (attachmentChange)="attachmentChange($event)"></app-upload-file-attachment-tpl>
                 </nz-form-control>
             </nz-form-item>

@@ -25,9 +25,11 @@
     </div>
 </form>
 
-<div class="hidden-mobile">
-</div>
-<nz-table #ajaxTable [nzData]="listOfData" [nzLoading]="loading" class="mt-md hidden-mobile">
+<!-- <div class="hidden-mobile">
+</div> -->
+<nz-table #ajaxTable [nzFrontPagination]="false" [nzData]="listOfData" [nzLoading]="loading"
+[nzTotal]="total" [(nzPageIndex)]="pageOption.page" [(nzPageSize)]="pageOption.page_size"
+(nzPageIndexChange)="pageIndexChange($event)" (nzPageSizeChange)="pageSizeChange($event)" class="mt-md">
     <thead>
         <tr>
             <th nzWidth="80px">序号</th>
@@ -64,11 +66,11 @@
                 <nz-divider nzType="vertical"></nz-divider>
                 <a (click)="view(data)"><i nz-icon nzType="eye" nzTheme="outline"></i></a>
 
-                <nz-divider nzType="vertical"></nz-divider>
+                <!-- <nz-divider nzType="vertical"></nz-divider>
                 <a *ngIf="swithFlag" nz-popconfirm class="text-nowrap" nzPopconfirmTitle="请确认项目信息全部填写完整，无误后确认提交！！！"
                     (nzOnConfirm)="submitProject(data.id)" (nzOnCancel)="cancel()">
                     提交
-                </a>
+                </a> -->
                 <nz-divider nzType="vertical"></nz-divider>
                 <a *ngIf="swithFlag" nz-popconfirm class="text-error text-nowrap" nzPopconfirmTitle="是否确认删除当前项目信息？"
                     (nzOnConfirm)="deletedProject(data.id)" (nzOnCancel)="cancel()">

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { SettingsConfigService } from 'src/app/routes/service/settings-config.service';
 import { ApiData } from 'src/app/data/interface.data';
 
@@ -13,7 +13,7 @@ import { ApiData } from 'src/app/data/interface.data';
     `
   ]
 })
-export class AdjustCostShowComponent implements OnInit {
+export class AdjustCostShowComponent implements OnChanges {
 
   @Input() projectInfo:any;
 
@@ -25,8 +25,10 @@ export class AdjustCostShowComponent implements OnInit {
     private settingsConfigService: SettingsConfigService
   ) { }
 
-  ngOnInit(): void {
-    this.getBudgetData();
+  ngOnChanges(): void {
+    if(this.projectInfo) {
+      this.getBudgetData();
+    }
   }
 
   

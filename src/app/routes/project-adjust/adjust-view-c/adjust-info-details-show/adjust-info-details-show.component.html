@@ -79,7 +79,7 @@
             </td>
             <td>{{ adjustInfo.info_adjustment.plan_execution_start_time }} - {{ adjustInfo.info_adjustment.plan_execution_end_time }}</td>
             <td>
-              <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/project/' + adjustInfo.info_adjustment.id" [isShowName]="false"></app-upload-file-attachment-show-c>
+              <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment_adjustment/' + adjustInfo.info_adjustment.id" [isShowName]="false"></app-upload-file-attachment-show-c>
             </td>
           </tr>
         </tbody>

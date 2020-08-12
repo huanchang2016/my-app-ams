@@ -176,7 +176,10 @@ export class AdjustUpdateComponent implements OnInit {
         // }
         this.adjustInfo = res.data;
         console.log('adjustment info update: ', this.adjustInfo);
-        this.showAdjustmentModal();
+        if(this.adjustInfo.adjustment_category) {
+          this.showAdjustmentModal();
+        }
+        
       }
     })
   }

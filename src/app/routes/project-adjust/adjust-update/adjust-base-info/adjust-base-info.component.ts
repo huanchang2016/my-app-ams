@@ -61,8 +61,9 @@ export class AdjustBaseInfoComponent implements OnChanges, OnInit {
 
     });
 
-    if(this.adjustInfo) {
+    if(this.adjustInfo.info_adjustment) {
       this.resetForm(this.adjustInfo.info_adjustment);
+      this.getAttachment();
     }
 
   }
@@ -132,10 +133,9 @@ export class AdjustBaseInfoComponent implements OnChanges, OnInit {
   bindAttachment() {
     const opt:any = {
       attachment_ids: this.attachment.map(v => v.id),
-      info_adjustment_id: this.adjustInfo.info_adjustment.id,
-      is_basic: true
+      info_adjustment_id: this.adjustInfo.info_adjustment.id
     };
-    this.settingsConfigService.post('/api/attachment/bind', opt).subscribe((res:ApiData) => {
+    this.settingsConfigService.post('/api/attachment_adjustment/bind', opt).subscribe((res:ApiData) => {
       if(res.code === 200) {
         this.msg.success('附件绑定成功');
         this.getAttachment();
@@ -146,7 +146,7 @@ export class AdjustBaseInfoComponent implements OnChanges, OnInit {
   }
 
   getAttachment() {
-    this.settingsConfigService.post(`/api/info_adjustment/attachment`, { info_adjustment_id: this.adjustInfo.info_adjustment.id }).subscribe((res:ApiData) => {
+    this.settingsConfigService.get(`/api/attachment_adjustment/${this.adjustInfo.info_adjustment.id}`).subscribe((res:ApiData) => {
       if(res.code === 200) {
         this.attachment = res.data.attachment;
       }

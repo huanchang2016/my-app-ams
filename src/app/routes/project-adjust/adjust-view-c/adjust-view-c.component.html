@@ -10,23 +10,25 @@
     <ng-template #actionTpl>
         <button nz-button (click)="printCurrentModal('print-box')">打印</button>
         <button nz-button nz-dropdown [nzDropdownMenu]="opMenu" class="mx-sm">
-          下载 <i nz-icon nzType="download" nzTheme="outline"></i>
+            下载 <i nz-icon nzType="download" nzTheme="outline"></i>
         </button>
         <nz-dropdown-menu #opMenu="nzDropdownMenu">
-          <ul nz-menu>
-            <li nz-menu-item (click)="downloadFile('pdf')"><i nz-icon nzType="file-pdf" nzTheme="outline"></i> .pdf</li>
-            <li nz-menu-item (click)="downloadFile('image')"><i nz-icon nzType="file-excel" nzTheme="outline"></i> .image
-            </li>
-          </ul>
+            <ul nz-menu>
+                <li nz-menu-item (click)="downloadFile('pdf')"><i nz-icon nzType="file-pdf" nzTheme="outline"></i> .pdf
+                </li>
+                <li nz-menu-item (click)="downloadFile('image')"><i nz-icon nzType="file-excel" nzTheme="outline"></i>
+                    .image
+                </li>
+            </ul>
         </nz-dropdown-menu>
-    
+
         <a *ngIf="adjustInfo?.draft" nz-button [nzType]="'primary'" [routerLink]="['/adjust/update', id]">编辑</a>
-    
+
         <a nz-popconfirm nz-button [nzType]="'primary'" *ngIf="adjustInfo?.draft"
-          nzPopconfirmTitle="请确认项目信息全部填写完整，无误后确认提交！！！" (nzOnConfirm)="submitProject()" (nzOnCancel)="cancel()">
-          提交项目
+            nzPopconfirmTitle="请确认项目信息全部填写完整，无误后确认提交！！！" (nzOnConfirm)="submitProject()" (nzOnCancel)="cancel()">
+            提交项目
         </a>
-      </ng-template>
+    </ng-template>
 
 
 </page-header>
@@ -138,6 +140,130 @@
             </sv>
         </sv-container>
 
+        <ng-container *ngIf="!adjustInfo.draft">
+
+            <sv-container class="mb-lg mt-mb" [title]="approveFlowTpl">
+                <ng-template #approveFlowTpl>
+                    <span class="font-weight-bold text-md">五、流程进度</span>
+                </ng-template>
+                <sv col="1" class="sv_block_width">
+
+                    <ng-container *ngIf="nodeProcess.length !== 0;else nodeProcessLoadingTpl">
+                        <nz-steps nzDirection="vertical" nzProgressDot class="hidden-pc">
+                            <nz-step [nzTitle]="'项目提交'" [nzStatus]="'finish'" [nzDescription]="startDes">
+                                <ng-template #startDes>
+                                    <div class="my-sm">
+                                        {{ progressInfo.user.name }}
+                                    </div>
+                                    <div>
+                                        {{ progressInfo.start_time }}
+                                    </div>
+                                </ng-template>
+                            </nz-step>
+                            <ng-container *ngFor="let process of nodeProcess">
+                                <nz-step [nzTitle]="process.node.name"
+                                    [nzStatus]=" process.current ? 'process' : ( !process.finished ? 'wait' : ( !process.agree ?  'error' : 'finish') )"
+                                    [nzDescription]="createDesc">
+                                    <ng-template #createDesc>
+                                        <div class="desc">
+                                            <div class="my-sm">
+                                                {{ process.user.name }}
+                                            </div>
+                                            <div *ngIf="process.finished; else notFinished">
+                                                {{ process.finished_time }}
+                                            </div>
+                                            <span class="text-sm text-primary"
+                                                [class.text-error]="process.finished && !process.agree">{{ process.remark }}</span>
+                                            <ng-template #notFinished>
+                                                <!-- TODO:暂不开发 -->
+                                                <!-- <a *ngIf="process.current" (click)="msg.success('click')">催一下</a> -->
+                                            </ng-template>
+                                        </div>
+                                    </ng-template>
+                                </nz-step>
+                            </ng-container>
+
+                            <nz-step [nzTitle]="'完成'"
+                                [nzStatus]=" !progressInfo.finished ? 'wait' : ( progressInfo.agree ? 'finish' : 'error' ) ">
+                            </nz-step>
+                        </nz-steps>
+                        <nz-steps nzProgressDot class="hidden-mobile">
+                            <nz-step [nzTitle]="'项目提交'" [nzStatus]="'finish'" [nzDescription]="startDes">
+                                <ng-template #startDes>
+                                    <div class="my-sm">
+                                        {{ progressInfo.user.name }}
+                                    </div>
+                                    <div>
+                                        {{ progressInfo.start_time }}
+                                    </div>
+                                </ng-template>
+                            </nz-step>
+                            <ng-container *ngFor="let process of nodeProcess">
+                                <nz-step [nzTitle]="process.node.name"
+                                    [nzStatus]=" process.current ? 'process' : ( !process.finished ? 'wait' : ( !process.agree ?  'error' : 'finish') )"
+                                    [nzDescription]="createDesc">
+                                    <ng-template #createDesc>
+                                        <div class="desc">
+                                            <div class="my-sm">
+                                                {{ process.user.name }}
+                                            </div>
+                                            <div *ngIf="process.finished; else notFinished">
+                                                {{ process.finished_time }}
+                                            </div>
+                                            <span class="text-sm text-primary"
+                                                [class.text-error]="process.finished && !process.agree">{{ process.remark }}</span>
+                                            <ng-template #notFinished>
+                                                <!-- TODO:暂不开发 -->
+                                                <!-- <a *ngIf="process.current" (click)="msg.success('click')">催一下</a> -->
+                                            </ng-template>
+                                        </div>
+                                    </ng-template>
+                                </nz-step>
+                            </ng-container>
+
+                            <nz-step [nzTitle]="'完成'"
+                                [nzStatus]=" !progressInfo.finished ? 'wait' : ( progressInfo.agree ? 'finish' : 'error' ) "
+                                [nzDescription]="'项目审核完成'"></nz-step>
+                        </nz-steps>
+
+                    </ng-container>
+                    <ng-template #nodeProcessLoadingTpl>
+                        <div class="p-xl text-center text-lg text-primary">
+                            <nz-spin></nz-spin>
+                        </div>
+                    </ng-template>
+
+                    <div class="steps-content" *ngIf="isCurrentCheck">
+                        <div class="check-box mt-md float-right">
+                            <nz-radio-group [(ngModel)]="checkOption.agree" [nzButtonStyle]="'solid'">
+                                <label nz-radio-button [nzValue]="true">通过</label>
+                                <label nz-radio-button [nzValue]="false">不通过</label>
+                            </nz-radio-group>
+                            <textarea nz-input placeholder="请填写审核备注" [(ngModel)]="checkOption.remark"
+                                [nzAutosize]="{ minRows: 3, maxRows: 6 }" class="my-sm"></textarea>
+                            <div class="text-right">
+                                <a nz-popconfirm nz-button [nzType]="'primary'"
+                                    nzPopconfirmTitle="请确认项目信息全部查看，审核无误后确认提交！！！"
+                                    (nzOnConfirm)="submitCheckCurrentProcess()" (nzOnCancel)="cancel()">
+                                    审批
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                </sv>
+            </sv-container>
+
+
+            <sv-container class="mb-lg mt-mb" [title]="logsTpl">
+                <ng-template #logsTpl>
+                    <span class="font-weight-bold text-md">六、日志</span>
+                </ng-template>
+                <sv col="1" class="sv_block_width">
+                    <app-project-logs [logs]="logList"></app-project-logs>
+                </sv>
+            </sv-container>
+        </ng-container>
 
 
     </nz-card>

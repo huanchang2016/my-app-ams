@@ -11,7 +11,7 @@
         <span class="font-weight-bold">合计：{{ total | _currency }}</span>
     </div>
 </div> -->
-<sv-container>
+<sv-container *ngIf="projectInfo">
     <ng-container *ngFor="let item of costList">
         <sv [label]="item.cost_category.name"><span class="font-weight-bold text-nowrap">{{ item.amount | currency: 'CNY' }}</span>
         </sv>
@@ -20,6 +20,6 @@
         <ng-template #costTpl>
             <span class="font-weight-bold">总 &nbsp;计</span>
         </ng-template>
-        <strong>{{ projectInfo.budget?.cost_amount | currency: 'CNY' }}</strong>
+        <strong>{{ projectInfo.budget.cost_amount | currency: 'CNY' }}</strong>
     </sv>
 </sv-container>

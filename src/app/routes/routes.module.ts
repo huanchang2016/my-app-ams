@@ -14,8 +14,6 @@ import { CallbackComponent } from './callback/callback.component';
 import { UserLockComponent } from './passport/lock/lock.component';
 import { QrAuthComponent } from './passport/qr-auth/qr-auth.component';
 import { CommonFunctionService } from './service/common-function.service';
-// echarts
-import { NgxEchartsModule } from 'ngx-echarts';
 
 const COMPONENTS = [
   DashboardComponent,
@@ -32,7 +30,7 @@ const COMPONENTS = [
 const COMPONENTS_NOROUNT = [];
 
 @NgModule({
-  imports: [SharedModule, RouteRoutingModule, NgxEchartsModule],
+  imports: [SharedModule, RouteRoutingModule],
   declarations: [
     ...COMPONENTS,
     ...COMPONENTS_NOROUNT,

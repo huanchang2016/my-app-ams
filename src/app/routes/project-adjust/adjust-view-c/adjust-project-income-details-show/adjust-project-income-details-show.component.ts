@@ -23,7 +23,9 @@ export class AdjustProjectIncomeDetailsShowComponent implements OnInit {
   ngOnInit(): void {
     if(this.adjustInfo) {
       this.incomeInfo = this.adjustInfo.project_revenue_adjustment;
-      this.getProjectIncomeList();
+      if(this.incomeInfo) {
+        this.getProjectIncomeList();
+      }
     }
     
   }

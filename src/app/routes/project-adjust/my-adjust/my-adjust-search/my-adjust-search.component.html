@@ -25,7 +25,9 @@
     </div>
 </form>
 
-<nz-table #ajaxTable [nzData]="listOfData" [nzLoading]="loading" class="mt-md">
+<nz-table #ajaxTable [nzFrontPagination]="false" [nzData]="listOfData" [nzLoading]="loading"
+        [nzTotal]="total" [(nzPageIndex)]="pageOption.page" [(nzPageSize)]="pageOption.page_size"
+        (nzPageIndexChange)="pageIndexChange($event)" (nzPageSizeChange)="pageSizeChange($event)" class="mt-md">
     <thead>
         <tr>
             <th nzWidth="80px">序号</th>
@@ -39,12 +41,8 @@
     <tbody>
         <tr *ngFor="let data of ajaxTable.data; let i = index">
             <td>{{ i + 1 }}</td>
-<<<<<<< HEAD
             <td *ngIf="data.project.number">{{ data.project.number }}</td>
             <td *ngIf="!data.project.number">/</td>
-=======
-            <td>{{ data.project.number }}</td>
->>>>>>> 3bb52bebd9789b1c428a77118ed2cc527f2f6eb7
             <td>
                 <sv-container size="small" col="1">
                     <sv label="项目名称">{{ data.project.name }}</sv>
@@ -59,23 +57,14 @@
                     <sv label="单位">{{ data.project.company.name }}</sv>
                 </sv-container>
             </td>
-<<<<<<< HEAD
             <td class="text-primary text-nowrap">{{ data.adjustment_status.name }}</td>
-=======
-            <td class="text-primary text-nowrap">{{ data.project.project_status.name }}</td>
->>>>>>> 3bb52bebd9789b1c428a77118ed2cc527f2f6eb7
             <td>
                 <a *ngIf="swithFlag" (click)="edit(data)" class="text-nowrap">
                     <i nz-icon nz-tooltip nzTooltipTitle="项目调整" nzType="edit" nzTheme="outline"></i>
                 </a>
                 <nz-divider nzType="vertical"></nz-divider>
-                <a (click)="view(data)"><i nz-icon nzType="eye" nzTheme="outline"></i></a>
+                <a (click)="view(data)"><i nz-icon nz-tooltip nzTooltipTitle="查看调整详情" nzType="eye" nzTheme="outline"></i></a>
 
-                <nz-divider nzType="vertical"></nz-divider>
-                <a *ngIf="swithFlag" nz-popconfirm class="text-nowrap" nzPopconfirmTitle="请确认项目信息全部填写完整，无误后确认提交！！！"
-                    (nzOnConfirm)="submitProject(data.id)" (nzOnCancel)="cancel()">
-                    提交
-                </a>
                 <nz-divider nzType="vertical"></nz-divider>
                 <a *ngIf="swithFlag" nz-popconfirm class="text-error text-nowrap" nzPopconfirmTitle="是否确认删除当前项目信息？"
                     (nzOnConfirm)="deletedProject(data.id)" (nzOnCancel)="cancel()">

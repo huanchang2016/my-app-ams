@@ -85,21 +85,6 @@ export class MyAdjustSearchComponent implements OnInit {
     this.router.navigateByUrl(`/adjust/view/${data.project.id}`);
   }
 
-  submitProject(id: number): void {
-    this.settingsConfigService
-      .post('/api/project/submit', { project_id: id })
-      .subscribe((res: ApiData) => {
-        if (res.code === 200) {
-          this.msg.success('项目已提交');
-          // this.list = this.list.filter(v => v.id !== id);
-          // this.searchOptionsChange();
-          this.submit();
-        } else {
-          this.msg.error(res.error || '提交失败，请重试');
-        }
-      })
-  }
-
   deletedProject(id: number): void {
     this.settingsConfigService
       .post('/api/project/disable', { project_ids: id })

@@ -23,7 +23,9 @@ export class AdjustSubsidyIncomeDetailsShowComponent implements OnInit {
   ngOnInit(): void {
     if(this.adjustInfo) {
       this.incomeInfo = this.adjustInfo.subsidy_income_adjustment;
-      this.getSubsidyIncomeList();
+      if(this.incomeInfo) {
+        this.getSubsidyIncomeList();
+      }
     }
     
   }

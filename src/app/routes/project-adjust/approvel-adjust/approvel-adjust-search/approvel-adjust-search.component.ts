@@ -49,9 +49,7 @@ export class ApprovelAdjustSearchComponent implements OnInit {
     this.validateForm = this.fb.group({
       status_name: ['待审批'], // 状态名称
       project_name: [null],  // 项目名称
-      project_number: [null],  // 项目编号
-      page: [null], // 页
-      page_size: [null] // 页码
+      project_number: [null]  // 项目编号
     });
     this.submit();
   }
@@ -75,17 +73,9 @@ export class ApprovelAdjustSearchComponent implements OnInit {
     }
   }
 
-  add(): void {
-    this.router.navigateByUrl('/project/create');
-  }
-
-  edit(data: any): void {
-    this.router.navigateByUrl(`/project/edit/${data.id}`);
-  }
-
   view(data: any) {
     // this.router.navigateByUrl(`/approve/no-contract/pay/view/${data.project.id}?treaty_pay_id=${data.id}`);
-    this.router.navigateByUrl(`/project/view/${data.id}`);
+    this.router.navigateByUrl(`/adjust/view/${data.project.id}`);
   }
 
   submitProject(id: number): void {
@@ -136,6 +126,7 @@ export class ApprovelAdjustSearchComponent implements OnInit {
     this.submit();
   }
 
+
   listRequest(option) {
     console.log('listRequest option', option);
     this.settingsConfigService.post('/api/adjustment/approval', option).subscribe((res: ApiData) => {
@@ -143,6 +134,7 @@ export class ApprovelAdjustSearchComponent implements OnInit {
       if (res.code === 200) {
         console.log('项目调整 调整审批');
         this.listOfData = res.data.adjustment;
+        this.total = res.data.count;
         console.log('listRequest listOfData', this.listOfData);
         return;
       }

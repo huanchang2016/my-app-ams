@@ -29,6 +29,7 @@ export class UploadFileAttachmentTplComponent implements OnChanges, OnInit, OnDe
   @Input() Attachment: any[];
   @Input() AttachmentCategory: List[];
   @Input() isAttachmentChange: boolean;
+  @Input() project_type?:string;
 
   @Output() attachmentChange: EventEmitter<any> = new EventEmitter();
 
@@ -117,14 +118,28 @@ export class UploadFileAttachmentTplComponent implements OnChanges, OnInit, OnDe
 
     if (this.validateForm.valid) {
       this.isConfirmLoading = true;
-      const fileOption = new FormData();
-      const object = this.validateForm.value;
+      this.createAttachment();
+      
+    }
+  }
 
-      fileOption.append('name', object.file_name);
-      fileOption.append('category_id', object.file_type);
-      fileOption.append('page_nums', object.page_nums);
-      fileOption.append('attachment', object.file[0]);
+  createAttachment():void {
+    const object = this.validateForm.value;
+    const fileOption = new FormData();
+    fileOption.append('name', object.file_name);
+    fileOption.append('category_id', object.file_type);
+    fileOption.append('page_nums', object.page_nums);
+    fileOption.append('attachment', object.file[0]);
 
+    if(this.project_type && this.project_type === 'adjustment_project') {
+      this.settingsService.post('/api/attachment_adjustment/create', fileOption).subscribe((res: ApiData) => {
+        console.log(res);
+        if (res.code === 200) {
+          this.attachmentChange.emit(res.data.attachment);
+          this.handleCancel();
+        }
+      })
+    }else {
       this.uploadAttachment$ = this.settingsService.post('/api/attachment/create', fileOption).subscribe((res: ApiData) => {
         console.log(res);
         if (res.code === 200) {
@@ -132,28 +147,51 @@ export class UploadFileAttachmentTplComponent implements OnChanges, OnInit, OnDe
           this.handleCancel();
         }
       })
+        
     }
   }
 
   deletedAttachment(id: number, category_id: number) {
-    this.settingsService.post('/api/attachment/delete', { attachment_id: id }).subscribe((res: ApiData) => {
-      if (res.code === 200) {
-        // this.msg.success('附件删除成功');
-        this.attachmentArray = this.attachmentArray.map(v => {
-          if (v.id === category_id) {
-            const members = v.members.filter(item => item.id !== id);
-            v.members = members;
-          }
-          return v;
-        });
-        console.log(this.attachmentArray);
-
-        this.attachmentOpt = this.Attachment.filter( v => v.id !== id);
-        this.attachmentIdsChange.emit(this.attachmentOpt);
-      } else {
-        this.msg.error(res.error || '附件删除失败');
-      }
-    })
+    if(this.project_type && this.project_type === 'adjustment_project') {
+      this.settingsService.post('/api/attachment_adjustment/delete', { attachment_id: id }).subscribe((res: ApiData) => {
+        if (res.code === 200) {
+          // this.msg.success('附件删除成功');
+          this.attachmentArray = this.attachmentArray.map(v => {
+            if (v.id === category_id) {
+              const members = v.members.filter(item => item.id !== id);
+              v.members = members;
+            }
+            return v;
+          });
+          console.log(this.attachmentArray);
+  
+          this.attachmentOpt = this.Attachment.filter( v => v.id !== id);
+          this.attachmentIdsChange.emit(this.attachmentOpt);
+        } else {
+          this.msg.error(res.error || '附件删除失败');
+        }
+      })
+    }else {
+      this.settingsService.post('/api/attachment/delete', { attachment_id: id }).subscribe((res: ApiData) => {
+        if (res.code === 200) {
+          // this.msg.success('附件删除成功');
+          this.attachmentArray = this.attachmentArray.map(v => {
+            if (v.id === category_id) {
+              const members = v.members.filter(item => item.id !== id);
+              v.members = members;
+            }
+            return v;
+          });
+          console.log(this.attachmentArray);
+  
+          this.attachmentOpt = this.Attachment.filter( v => v.id !== id);
+          this.attachmentIdsChange.emit(this.attachmentOpt);
+        } else {
+          this.msg.error(res.error || '附件删除失败');
+        }
+      })
+    }
+    
   }
 
   cancel(): void { }

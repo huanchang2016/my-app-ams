@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { SettingsConfigService } from 'src/app/routes/service/settings-config.service';
 import { ApiData } from 'src/app/data/interface.data';
 
@@ -13,7 +13,7 @@ import { ApiData } from 'src/app/data/interface.data';
     `
   ]
 })
-export class AdjustTreatyShowComponent implements OnInit {
+export class AdjustTreatyShowComponent implements OnChanges {
 
   @Input() projectInfo:any;
 
@@ -24,10 +24,11 @@ export class AdjustTreatyShowComponent implements OnInit {
     private settingsConfigService: SettingsConfigService
   ) { }
 
-  ngOnInit(): void {
-    this.getDataList();
+  ngOnChanges(): void {
+    if(this.projectInfo) {
+      this.getDataList();
+    }
   }
-
   
 
   getDataList():void {

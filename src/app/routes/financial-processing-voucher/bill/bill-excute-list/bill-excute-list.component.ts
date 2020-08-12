@@ -26,6 +26,22 @@ export class BillExcuteListComponent implements OnInit {
       id: 3,
       name: '无法执行'
     },
+    {
+      id: 4,
+      name: '待废弃'
+    },
+    {
+      id: 5,
+      name: '已废弃'
+    },
+    {
+      id: 6,
+      name: '待红冲'
+    },
+    {
+      id: 7,
+      name: '已红冲'
+    },
   ];
 
   pos = 0;

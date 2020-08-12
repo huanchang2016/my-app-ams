@@ -1,0 +1,236 @@
+<form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()" class="info-form">
+
+    <div nz-row [nzGutter]="24">
+        <nz-card nzTitle="基本信息" style="width: 100%;" [nzBordered]="false" class="mt-md">
+            <div nz-col [nzSpan]="24">
+                <nz-form-item>
+                    <nz-form-label nzFor="name" nzRequired>申请人</nz-form-label>
+                    <nz-form-control nzErrorTip="请填写项目名称">
+                        <input nz-input placeholder="项目名称" formControlName="name" id="name" />
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+
+            <div nz-col [nzSpan]="24">
+                <nz-form-item>
+                    <nz-form-label nzFor="theme">主题</nz-form-label>
+                    <nz-form-control nzErrorTip="请填写主题">
+                        <input nz-input placeholder="请填写您申请的主题" formControlName="theme" id="theme" />
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+
+            <div nz-col [nzSpan]="24">
+                <nz-form-item>
+                    <nz-form-label nzFor="description">内容</nz-form-label>
+                    <nz-form-control>
+                        <textarea nz-input id="description" placeholder="请在这里填写必要的说明" formControlName="description"
+                            [nzAutosize]="{ minRows: 4, maxRows: 8 }"></textarea>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+
+            <div nz-col [nzMd]="12" [nzSm]="24">
+                <nz-form-item>
+                    <nz-form-label nzFor="priority_id">优先级</nz-form-label>
+                    <nz-form-control>
+                        <nz-select style="width: 100%;" id="priority_id" nzShowSearch nzPlaceHolder="请选择流程的优先级"
+                            formControlName="priority_id">
+                            <ng-container *ngFor="let item of priority">
+                                <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
+                            </ng-container>
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col [nzMd]="12" [nzSm]="24">
+                <nz-form-item>
+                    <nz-form-label nzFor="isNotice">是否进行邮件通知</nz-form-label>
+                    <nz-form-control style="width: 100%;">
+                        <label nz-checkbox formControlName="isNotice" id="isNotice"></label>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+
+            <div nz-col [nzSpan]="24">
+                <nz-form-item>
+                    <nz-form-label nzFor="flow_type_id">流程类型</nz-form-label>
+                    <nz-form-control nzErrorTip="请选择客户单位">
+                        <nz-select style="width: 100%;" id="flow_type_id" nzPlaceHolder="请选择流程类型"
+                            formControlName="flow_type_id" (ngModelChange)="selectType($event)">
+                            <ng-container *ngFor="let item of flow_type">
+                                <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
+                            </ng-container>
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+
+            <div nz-col [nzSpan]="24">
+                <nz-form-item>
+                    <nz-form-label nzFor="instructions">流程使用说明</nz-form-label>
+                    <div>
+                        <div style="display: flex;flex-direction: column;"
+                            *ngIf="selectedType&&selectedType.name==='开票流程'">
+                            <span>主题：写明单位简称和费用月份</span>
+                            <span>内容：简要写明费用构成</span>
+                        </div>
+                        <div style="display: flex;flex-direction: column;"
+                            *ngIf="selectedType&&selectedType.name==='付款流程'">
+                            <span>主题：写明单位简称和费用月份</span>
+                            <span>内容：简要写明支付费用类型和支付时间</span>
+                        </div>
+                    </div>
+                </nz-form-item>
+            </div>
+        </nz-card>
+
+        <div nz-col [nzSpan]="24" *ngIf="selectedType">
+            <div *ngIf="selectedType.name==='开票流程'">
+                <nz-form-item>
+                    <nz-form-label nzFor="company">公司</nz-form-label>
+                    <nz-form-control nzErrorTip="请选择公司">
+                        <nz-select style="width: 100%;" id="company" nzPlaceHolder="请选择公司" formControlName="company"
+                            (ngModelChange)="selectType($event)">
+                            <!-- <ng-container *ngFor="let item of flow_type">
+                            <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
+                        </ng-container> -->
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label nzFor="business_type">业务类型</nz-form-label>
+                    <nz-form-control nzErrorTip="请选择业务类型">
+                        <nz-select style="width: 100%;" id="business_type" nzPlaceHolder="请选择业务类型"
+                            formControlName="business_type" (ngModelChange)="selectType($event)">
+                            <ng-container *ngFor="let item of business_type">
+                                <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
+                            </ng-container>
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-card nzTitle="协议信息" [nzBordered]="false" class="mt-md">
+                    <div nz-col [nzMd]="12" [nzSm]="24">
+                        <nz-form-item>
+                            <nz-form-label nzFor="agreement_name">协议名称</nz-form-label>
+                            <nz-form-control>
+                                <input nz-input placeholder="请填写协议名称" formControlName="agreement_name"
+                                    id="agreement_name" />
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col [nzMd]="12" [nzSm]="24">
+                        <nz-form-item>
+                            <nz-form-label nzFor="agreement_num">协议编号</nz-form-label>
+                            <nz-form-control>
+                                <input nz-input placeholder="请填写协议编号" formControlName="agreement_num"
+                                    id="agreement_num" />
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                </nz-card>
+                <nz-card nzTitle="开票信息" [nzBordered]="false" class="mt-md">
+                    <div nz-col [nzMd]="12" [nzSm]="24">
+                        <nz-form-label nzFor="bill_category_id">发票类型</nz-form-label>
+                        <nz-form-control nzErrorTip="请选择发票类型">
+                            <nz-select style="width: 100%;" id="bill_category_id" nzPlaceHolder="请选择发票类型"
+                                formControlName="bill_category_id">
+                                <ng-container *ngFor="let item of bill_category">
+                                    <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
+                                </ng-container>
+                            </nz-select>
+                        </nz-form-control>
+                    </div>
+                    <div nz-col [nzMd]="12" [nzSm]="24">
+                        <nz-form-item>
+                            <nz-form-label nzFor="bill_head">开票台头</nz-form-label>
+                            <nz-form-control>
+                                <input nz-input placeholder="请填写开票台头" formControlName="bill_head" id="bill_head" />
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+
+                    <div nz-col [nzMd]="12" [nzSm]="24">
+                        <nz-form-item>
+                            <nz-form-label nzFor="bank_account">银行账号</nz-form-label>
+                            <nz-form-control>
+                                <input nz-input placeholder="请填写银行账号" formControlName="bank_account"
+                                    id="bank_account" />
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col [nzMd]="12" [nzSm]="24">
+                        <nz-form-item>
+                            <nz-form-label nzFor="customer_code">客户代码</nz-form-label>
+                            <nz-form-control>
+                                <input nz-input placeholder="请填写客户代码" formControlName="customer_code"
+                                    id="customer_code" />
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+
+                    <div nz-col [nzMd]="12" [nzSm]="24">
+                        <nz-form-item>
+                            <nz-form-label nzFor="bank_name">开户行名称</nz-form-label>
+                            <nz-form-control>
+                                <input nz-input placeholder="请填写开户行名称" formControlName="bank_name" id="bank_name" />
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col [nzMd]="12" [nzSm]="24">
+                        <nz-form-item>
+                            <nz-form-label nzFor="taxpayer_num">纳税人识别号</nz-form-label>
+                            <nz-form-control>
+                                <input nz-input placeholder="请填写纳税人识别号" formControlName="taxpayer_num"
+                                    id="taxpayer_num" />
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+
+                    <div nz-col [nzMd]="12" [nzSm]="24">
+                        <nz-form-item>
+                            <nz-form-label nzFor="company_address">公司地址</nz-form-label>
+                            <nz-form-control>
+                                <input nz-input placeholder="请填写公司地址" formControlName="company_address"
+                                    id="company_address" />
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col [nzMd]="12" [nzSm]="24">
+                        <nz-form-item>
+                            <nz-form-label nzFor="phone">联系电话</nz-form-label>
+                            <nz-form-control>
+                                <input nz-input placeholder="请填写联系电话" formControlName="phone" id="phone" />
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                </nz-card>
+            </div>
+            <div *ngIf="selectedType.name==='付款流程'">
+
+            </div>
+        </div>
+
+        <div nz-col [nzSpan]="24">
+            <nz-card nzTitle="附件信息" [nzBordered]="false" class="mt-md">
+                <nz-form-item>
+                    <nz-form-label style="line-height: 40px;">项目附件</nz-form-label>
+                    <nz-form-control>
+                        <!-- <app-upload-file [Attachment]="attachment" [AttachmentCategory]="attachmentCategory" [isAttachmentChange]="isAttachmentChange" (attachmentChange)="attachmentChange($event)"></app-upload-file> -->
+                        <app-upload-file-attachment-tpl [Attachment]="attachment"
+                            [AttachmentCategory]="attachmentCategory" [isAttachmentChange]="isAttachmentChange"
+                            (attachmentChange)="attachmentChange($event)">
+                        </app-upload-file-attachment-tpl>
+                    </nz-form-control>
+                </nz-form-item>
+            </nz-card>
+        </div>
+
+    </div>
+
+    <!-- <nz-form-item nz-row class="register-area">
+        <nz-form-control [nzSpan]="24" class="text-right">
+            <button nz-button nzType="primary" [nzLoading]="submitLoading">下一步</button>
+        </nz-form-control>
+    </nz-form-item> -->
+</form>

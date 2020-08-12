@@ -1,0 +1,13 @@
+<page-header [title]="'我的项目'" [breadcrumb]="breadcrumb">
+    <ng-template #breadcrumb>
+        <nz-breadcrumb>
+            <nz-breadcrumb-item><a [routerLink]="['/dashboard']">首页</a></nz-breadcrumb-item>
+            <nz-breadcrumb-item>项目调整</nz-breadcrumb-item>
+            <nz-breadcrumb-item>我的项目</nz-breadcrumb-item>
+        </nz-breadcrumb>
+    </ng-template>
+</page-header>
+
+<nz-card [nzBordered]="false">
+    <app-project-adjust-search [type_id]="type_id" [type_name]="type_name" (outer)="readOuter()"></app-project-adjust-search>
+</nz-card>

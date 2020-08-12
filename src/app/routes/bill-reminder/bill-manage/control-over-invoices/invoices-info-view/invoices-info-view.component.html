@@ -11,8 +11,12 @@
   </ng-template>
 
   <app-project-info-show-tpl [projectInfo]="projectDetailInfo"></app-project-info-show-tpl>
-  
+
   <ng-template #action>
+    <!-- 废弃和红冲按钮当有申请人或者执行人的时候显示 -->
+    <button *ngIf="progressInfo?.workflow_status.name==='已完成' && projectDetailInfo?.user.name" nz-button
+      nzType="primary" nzDanger>废弃</button>
+    <button nz-button nzType="primary" nzDanger>红冲</button>
     <button nz-button (click)="printCurrentModal('print-box',  projectDetailInfo?.name)">打印</button>
     <button nz-button nz-dropdown [nzDropdownMenu]="opMenu" class="mx-sm">
       下载 <i nz-icon nzType="download" nzTheme="outline"></i>
@@ -34,7 +38,7 @@
     <div class="text-center font-weight-bold">发票确认单</div>
   </ng-template>
   <div id="print-box" class="bill-info-box" *ngIf="projectDetailInfo && billInfo">
-    <nz-table #borderedTable nzData="[1]" nzBordered [nzFrontPagination]="false" [nzTitle]="tableTitle" [nzFooter]="tableFooter">
+    <nz-table #borderedTable nzData="[1]" nzBordered [nzFrontPagination]="false" [nzTitle]="tableTitle">
       <ng-template #tableTitle>
         <div class="text-center text-lg">{{ billInfo?.company.name }}</div>
       </ng-template>
@@ -43,17 +47,17 @@
           <td colspan="5" class="text-md text-center">发票确认单</td>
         </tr>
         <tr>
-          <td class="font-weight-bold td-left">项目名称</td>
-          <td colspan="4">{{ billInfo?.project.name }}</td>
-        </tr>
-        <tr>
-          <td class="font-weight-bold td-left">项目编号</td>
-          <td colspan="4">{{ billInfo?.project.number }}</td>
-        </tr>
-        <tr>
           <td class="font-weight-bold td-left">项目类型</td>
           <td colspan="4">{{ billInfo?.project.category?.name }}</td>
         </tr>
+        <tr>
+          <td class="font-weight-bold td-left">项目名称</td>
+          <td colspan="4">{{ billInfo?.project.name }}</td>
+        </tr>
+        <!-- <tr> // 2020 年7月31日 上午 10：07 修改发票详情预览 显示
+          <td class="font-weight-bold td-left">项目编号</td>
+          <td colspan="4">{{ billInfo?.project.number }}</td>
+        </tr> -->
         <tr>
           <td class="font-weight-bold">协议号</td>
           <td colspan="4">{{ billInfo?.customer_contract_code }}</td>
@@ -62,17 +66,18 @@
           <td class="font-weight-bold">发票类型</td>
           <td colspan="4">
             <ng-container *ngFor="let billCate of billCategoryArray">
-              <label class="mr-lg bill-category-box" nzDisabled nz-checkbox [ngModel]="billCate.id === billInfo?.bill_category.id">{{ billCate.name }}</label>
+              <label class="mr-lg bill-category-box" nzDisabled nz-checkbox
+                [ngModel]="billCate.id === billInfo?.bill_category.id">{{ billCate.name }}</label>
             </ng-container>
 
           </td>
         </tr>
         <tr>
-          <td class="font-weight-bold">开票单位</td>
+          <td class="font-weight-bold">开票单位名称</td>
           <td colspan="4">{{ billInfo?.customer.name }}</td>
         </tr>
         <tr>
-          <td class="font-weight-bold">统一社会信用代码</td>
+          <td class="font-weight-bold">纳税人识别号</td>
           <td colspan="4">{{ billInfo?.customer.code }}</td>
         </tr>
         <tr>
@@ -88,15 +93,30 @@
           <td colspan="4">{{ billInfo?.customer.bank_name }} / {{ billInfo?.customer.bank_account }}
           </td>
         </tr>
-        <tr>
-          <td class="font-weight-bold">合计</td>
-          <td colspan="4" class="text-error font-weight-bold">{{ billInfo?.amount | currency: 'CNY' }}</td>
+        <tr *ngIf="billInfo.tax">
+          <td class="font-weight-bold">开票税目</td>
+          <td colspan="2" class="font-weight-bold">
+            {{ billInfo?.tax.name }}
+          </td>
+          <td class="font-weight-bold">税率</td>
+          <td colspan="4" class="font-weight-bold">
+            {{ billInfo?.tax.rate }}
+          </td>
+        </tr>
+        <tr *ngIf="billInfo.subsidy_income_detail">
+          <!-- <td class="font-weight-bold">开票税目</td>
+          <td colspan="2" class="font-weight-bold">
+            {{ billInfo?.tax.name }}
+          </td> -->
+          <td class="font-weight-bold">税率</td>
+          <td colspan="4" class="font-weight-bold">
+            {{ billInfo?.subsidy_income_detail.tax_rate }}
+          </td>
         </tr>
         <tr>
-          <td class="font-weight-bold">大写</td>
-          <td colspan="4" class="font-weight-bold">
-            {{ billInfo.amount | n2c }}
-          </td>
+        <tr>
+          <td class="font-weight-bold">开票金额</td>
+          <td colspan="4" class="text-error font-weight-bold text-nowrap">{{ billInfo?.amount | currency: 'CNY' }}</td>
         </tr>
         <tr>
           <td class="font-weight-bold">经费所属期</td>
@@ -104,19 +124,20 @@
         </tr>
         <tr>
           <td class="font-weight-bold">备注信息</td>
-          <td colspan="4" class="text-error font-weight-bold"><span
-              [innerHTML]="billInfo?.remark | showTextareaContent"></span></td>
+          <td colspan="4">
+            <span [innerHTML]="billInfo?.remark | showTextareaContent"></span></td>
         </tr>
         <tr *ngIf="billId">
           <td class="font-weight-bold">附件</td>
           <td colspan="4">
-            <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/bill/' + billId"></app-upload-file-attachment-show-c>
+            <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/bill/' + billId">
+            </app-upload-file-attachment-show-c>
           </td>
         </tr>
       </tbody>
-      <ng-template #tableFooter>
+      <!-- <ng-template #tableFooter>
         <div class="text-right">开票日期： {{ billInfo?.submit_time }}</div>
-      </ng-template>
+      </ng-template> -->
     </nz-table>
   </div>
 </nz-card>
@@ -144,13 +165,13 @@
         </ng-template>
       </nz-step>
       <ng-container *ngFor="let process of nodeProcess">
-        <nz-step [nzTitle]="process.node.name"
+        <nz-step [nzTitle]="process?.node.name"
           [nzStatus]=" process.current ? 'process' : ( !process.finished ? 'wait' : ( !process.agree ?  'error' : 'finish') )"
           [nzDescription]="createDesc">
           <ng-template #createDesc>
             <div class="desc">
               <div class="my-sm">
-                {{ process.user.name }}
+                {{ process?.user.name }}
               </div>
               <div *ngIf="process.finished; else notFinished">
                 {{ process.finished_time }}
@@ -181,16 +202,16 @@
             </div>
           </ng-template>
         </nz-step>
-        <nz-step [nzTitle]="process.node.name"
+        <nz-step [nzTitle]="process?.node.name"
           [nzStatus]=" process.current ? 'process' : ( !process.finished ? 'wait' : ( !process.agree ?  'error' : 'finish') )"
           [nzDescription]="createDesc">
           <ng-template #createDesc>
             <div class="desc">
               <div class="my-sm">
-                {{ process.user.name }}
+                {{ process?.user.name }}
               </div>
               <div *ngIf="process.finished; else notFinished">
-                {{ process.finished_time }}
+                {{ process?.finished_time }}
               </div>
               <span class="text-sm text-primary" [class.text-error]="process.finished && !process.agree"
                 [innerHTML]="process.remark | showTextareaContent"></span>
@@ -234,5 +255,6 @@
 </nz-card>
 
 <ng-container *ngIf="progressInfo && progressInfo.execute_user">
-  <app-users-bill-execute-flow [progressInfo]="progressInfo" [billInfo]="billInfo" (executeChange)="executeChange($event)"></app-users-bill-execute-flow>
+  <app-users-bill-execute-flow [progressInfo]="progressInfo" [billInfo]="billInfo" (outer)="readOuter()"
+    (executeChange)="executeChange($event)"></app-users-bill-execute-flow>
 </ng-container>

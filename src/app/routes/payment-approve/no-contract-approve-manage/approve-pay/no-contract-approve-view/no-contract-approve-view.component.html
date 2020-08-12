@@ -33,6 +33,15 @@
     </ng-template> -->
     <tbody>
       <tr>
+<<<<<<< HEAD
+=======
+        <td colspan="6" class="text-md text-center font-weight-bold">{{ projectInfo?.company.name }}</td>
+      </tr>
+      <tr>
+        <td colspan="6" class="text-md text-center font-weight-bold">项目非合同支付</td>
+      </tr>
+      <tr>
+>>>>>>> 0457674505824deb0ca56166216f28b8990ba032
         <td colspan="2" class="text-md text-center font-weight-bold">项目名称</td>
         <td colspan="4" class="text-md text-center">{{ projectInfo?.name }}</td>
       </tr>
@@ -51,13 +60,18 @@
         <td colspan="4">{{ treatypayInfo?.bank_account }}</td>
       </tr>
       <tr>
-        <td class="font-weight-bold">扣借款</td>
-        <td colspan="2"> 扣借款  ？  抵扣金额？ </td>
+        <td class="font-weight-bold">是否抵扣借款</td>
+        <td colspan="2">
+          <span *ngIf="treatypayInfo">
+            {{ treatypayInfo.if_write_off ? '是' : '否' }}
+          </span>
+        </td>
         <td class="font-weight-bold">抵扣金额</td>
         <td colspan="2">
-          <span *ngIf="treatypayInfo?.if_write_off;else notWriteOff">{{ treatypayInfo?.write_off_amount | currency: 'CNY' }}</span>
+          <span class="text-nowrap"
+            *ngIf="treatypayInfo?.if_write_off;else notWriteOff">{{ treatypayInfo?.write_off_amount | currency: 'CNY' }}</span>
           <ng-template #notWriteOff>
-              <span class="font-weight-bold">无冲抵</span>
+            <span class="font-weight-bold">无冲抵</span>
           </ng-template>
         </td>
       </tr>
@@ -82,35 +96,46 @@
         <td>费用预算累计金额</td>
         <td>成本类型预算总金额</td>
       </tr>
-      
+
       <ng-container *ngFor="let data of listOfData;let i = index">
         <tr>
           <td>{{ i + 1 }}</td>
           <td>{{ data.cost.cost_category.name }}</td>
-          <td>{{ data.amount | _currency }}</td>
-          <td>{{ data.cost.amount | _currency }}</td>
-          <td>{{ data.cost.pay_amount | _currency }}</td>
+          <td class="text-nowrap">{{ data.amount | _currency }}</td>
+          <td class="text-nowrap">{{ data.cost.amount | _currency }}</td>
+          <td class="text-nowrap">{{ data.cost.pay_amount | _currency }}</td>
           <td>
             <span [innerHTML]="data.remark | showTextareaContent"></span>
           </td>
         </tr>
       </ng-container>
       <tr>
-        <td colspan="3" class="font-weight-bold">合计</td>
-        <td colspan="3">
+        <td colspan="2" class="font-weight-bold text-center">合计</td>
+        <td>
           <ng-container *ngIf="treatypayInfo">
-            <span>{{ treatypayInfo.before_deduct_amount | _currency }}</span>
+            <span class="text-nowrap">{{ treatypayInfo.before_deduct_amount | _currency }}</span>
             <span class="ml-sm">{{ treatypayInfo.before_deduct_amount | n2c }}</span>
+          </ng-container>
+        </td>
+        <td colspan="3"></td>
+      </tr>
+      <tr>
+        <td colspan="2" class="font-weight-bold text-center">本期支付金额(大写)</td>
+        <td colspan="4">
+          <ng-container *ngIf="treatypayInfo">
+            <span class="text-nowrap">{{ treatypayInfo.amount | _currency }}</span>
+            <span class="ml-sm">{{ treatypayInfo.amount | n2c }}</span>
           </ng-container>
         </td>
       </tr>
       <tr>
-        <td colspan="2" class="font-weight-bold">本期支付金额(大写)</td>
-        <td colspan="4"><ng-container *ngIf="treatypayInfo">{{ treatypayInfo.amount | n2c }}</ng-container></td>
-      </tr>
-      <tr>
         <td colspan="6">
+<<<<<<< HEAD
           <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/treaty_pay/' + treaty_pay_id"></app-upload-file-attachment-show-c>
+=======
+          <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/treaty_pay/' + treaty_pay_id">
+          </app-upload-file-attachment-show-c>
+>>>>>>> 0457674505824deb0ca56166216f28b8990ba032
         </td>
       </tr>
 
@@ -231,5 +256,12 @@
 <!-- 支付流程进展： 草稿 不显示 -->
 
 <ng-container *ngIf="progressInfo && progressInfo.execute_user">
+<<<<<<< HEAD
   <app-users-execute-flow [payType]="'treaty'" [payInfo]="treatypayInfo" [paymentArr]="listOfData" [progressInfo]="progressInfo" (executeChange)="executeChange($event)"></app-users-execute-flow>
+=======
+  <app-users-execute-flow [payType]="'treaty'" (refresh)="refreshPage()" [payInfo]="treatypayInfo"
+    [paymentArr]="listOfData" [approveFlag]="approveFlag" [progressInfo]="progressInfo"
+    (executeChange)="executeChange($event)">
+  </app-users-execute-flow>
+>>>>>>> 0457674505824deb0ca56166216f28b8990ba032
 </ng-container>

@@ -13,7 +13,7 @@
     </div>
     <div class="subsidy-income-box mb-md" *ngIf="incomeOpt.subsidy">
         <app-subsidy-income-c [projectInfo]="projectInfo" [incomeList]="subsidyIncome"
-        (listValueChange)="listValueChange($event)" (incomeChange)="subIncomeChange($event)"></app-subsidy-income-c>
+            (listValueChange)="listValueChange($event)" (incomeChange)="subIncomeChange($event)"></app-subsidy-income-c>
     </div>
     <nz-card>
         <form nz-form [formGroup]="validateForm">
@@ -36,22 +36,23 @@
                 <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="12">
                     <sv-container col="1">
                         <sv label="价税合计" class="text-right">
-                            <strong class="">{{ currentCountResult.income || 0 | currency: 'CNY' }}</strong>
+                            <strong class="text-nowrap">{{ currentCountResult.income || 0 | currency: 'CNY' }}</strong>
                         </sv>
                         <sv label="税&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;金" class="text-right">
                             <strong
-                                class="text-error">{{ currentCountResult.tax_income || 0 | currency: 'CNY' }}</strong>
+                                class="text-error text-nowrap">{{ currentCountResult.tax_income || 0 | currency: 'CNY' }}</strong>
                         </sv>
                         <sv label="不含税收入" class="text-right">
                             <strong
-                                class="text-primary">{{ currentCountResult.exclude_tax_income || 0 | currency: 'CNY' }}</strong>
+                                class="text-primary text-nowrap">{{ currentCountResult.exclude_tax_income || 0 | currency: 'CNY' }}</strong>
                         </sv>
                     </sv-container>
                 </div>
-                
+
                 <div nz-col [nzSpan]="24" class="my-lg text-right">
-                    <span>毛利润：<span class="text-primary font-weight-bold">{{ currentCountResult.gross_profit | currency: 'CNY' }}</span></span>
-                    
+                    <span>毛利润：<span
+                            class="text-primary font-weight-bold text-nowrap">{{ currentCountResult.gross_profit | currency: 'CNY' }}</span></span>
+
                     <span class="ml-lg">
                         毛利率：
                         <span class="text-primary font-weight-bold">{{ currentCountResult.gross_profit_percent }}</span>
@@ -71,12 +72,9 @@
                     </ng-container>
                     <ng-template #nextBtnTpl>
                         <a nz-popconfirm nz-button nzType="primary" [nzLoading]="submitLoading"
-                            [nzPopconfirmTitle]="popconfirmTitle"
-                            [nzCondition]="switchPopconfirm"
-                            (nzOnConfirm)="confirm()"
-                            (nzOnCancel)="cancel()"
-                            >下一步</a>
-                    </ng-template>                            
+                            [nzPopconfirmTitle]="popconfirmTitle" [nzCondition]="switchPopconfirm"
+                            (nzOnConfirm)="confirm()" (nzOnCancel)="cancel()">下一步</a>
+                    </ng-template>
                     <!-- <button nz-button nzType="primary" [nzLoading]="submitLoading" (click)="submitForm()">下一步</button> -->
                 </nz-form-control>
             </nz-form-item>

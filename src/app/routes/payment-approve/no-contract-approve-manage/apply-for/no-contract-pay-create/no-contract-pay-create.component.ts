@@ -24,24 +24,6 @@ import html2canvas from 'html2canvas';
   `]
 })
 export class NoContractPayCreateComponent implements OnInit {
-  listOfData: any[] = [];
-
-  costlist: any[] = []; // 所有成本数据 
-
-  projectInfo: any = null;
-  projectId: number = null;
-
-  treaty_pay_id: number = null;
-  treatypayInfo: any = null;
-  treaty_id: number = null;
-
-  treatyListArr: any[] = [];
-
-  costArr: any[] = []; // 所有的成本列表  需要通过预算（通过项目） 获取
-
-  pageTitle: string = '';
-  
-  billCategoryArray:any[] = [];
 
   constructor(
     public msg: NzMessageService,
@@ -53,18 +35,18 @@ export class NoContractPayCreateComponent implements OnInit {
     private settings: SettingsService
   ) {
 
-    this.settingsConfigService.get('/api/bill/category/all').subscribe((res:ApiData) => {
-      if(res.code === 200) {
-        const list:any = res.data.bill_category;
-        if(list.length !== 0) {
-          this.billCategoryArray = list.sort((a:any, b:any) => a.sequence - b.sequence);
+    this.settingsConfigService.get('/api/bill/category/all').subscribe((res: ApiData) => {
+      if (res.code === 200) {
+        const list: any = res.data.bill_category;
+        if (list.length !== 0) {
+          this.billCategoryArray = list.sort((a: any, b: any) => a.sequence - b.sequence);
         }
       }
     })
 
     this.activatedRoute.params.subscribe((params: Params) => {
-      if (params && params['id']) {
-        this.projectId = +params['id'];
+      if (params && params.id) {
+        this.projectId = +params.id;
         this.getProjectInfo(); // 项目信息
         this.getTreatyList(); // 项目下的协议信息
         this.getBudgetInfo();
@@ -72,8 +54,8 @@ export class NoContractPayCreateComponent implements OnInit {
     });
 
     this.activatedRoute.queryParams.subscribe(params => {
-      if (params && params['treaty_pay_id']) {
-        this.treaty_pay_id = +(params['treaty_pay_id']);
+      if (params && params.treaty_pay_id) {
+        this.treaty_pay_id = +(params.treaty_pay_id);
         this.pageTitle = '编辑非合约支付';
         this.getAttachment();
       } else {
@@ -82,12 +64,74 @@ export class NoContractPayCreateComponent implements OnInit {
     })
 
   }
-  saveLoading: boolean = false;
-  submitLoading: boolean = false;
+  listOfData: any[] = [];
+
+  costlist: any[] = []; // 所有成本数据 
+
+  projectInfo: any = null;
+  projectId: number = null;
+
+  treaty_pay_id: number = null;
+  treatypayInfo: any = null;
+  // treaty_id: number = null;
+
+  treatyListArr: any[] = [];
+
+  costArr: any[] = []; // 所有的成本列表  需要通过预算（通过项目） 获取
+
+  pageTitle = '';
+
+  billCategoryArray: any[] = [];
+  saveLoading = false;
+  submitLoading = false;
 
   validateTreatyForm: FormGroup;
 
-  ifWriteOff: boolean = false;
+  ifWriteOff = false;
+
+  max_pay_amount = 0;
+
+  currentSelectCost: any = null;
+  currentTreaty: any = null;
+
+  // 新增 成本支付
+  tplModal: NzModalRef;
+
+  validateCostForm: FormGroup;
+
+  submitCostLoading = false;
+
+  isEditCost = false;
+  currentEditCost: any = null;
+  editCostData: any = null;
+
+  contractTaxTotal: any = null;
+
+
+  // 附件上传
+  attachment: any[] = [];
+  isAttachmentChange = false;
+
+
+  attachmentCategory: List[] = [];
+
+  // 流程进程信息
+  progressInfo: any = null;
+  nodeProcess: any[] = [];
+  currentNodeProcess: any = null;
+  isCurrentCheck = false;
+
+  checkOption: any = {
+    agree: null,
+    remark: ''
+  }
+
+  isPrinter = false;
+  pdfPosition = 0;
+
+  readOuter() {
+    this.getTreatyPayDetail();
+  }
 
   ngOnInit() {
     this.validateTreatyForm = this.fb.group({
@@ -109,7 +153,7 @@ export class NoContractPayCreateComponent implements OnInit {
         this.ifWriteOff = false;
         this.validateTreatyForm.get('write_off_amount').setValue(0);
       }
-      
+
     });
 
 
@@ -120,12 +164,12 @@ export class NoContractPayCreateComponent implements OnInit {
       amount: [null, [Validators.required, this.confirmationAmountValidator]],
       remark: [null]
     });
-    
+
     // 当成本类型发生变化时，支付金额也有限制输入
     this.validateCostForm.get('treaty_id').valueChanges.subscribe((treaty_id: number) => {
       if (treaty_id) {
-        [this.currentTreaty] = this.treatyListArr.filter( v => v.id === treaty_id);
-        console.log(treaty_id , 'treaty change', this.currentTreaty);
+        [this.currentTreaty] = this.treatyListArr.filter(v => v.id === treaty_id);
+        console.log(treaty_id, 'treaty change', this.currentTreaty);
         this.countMaxAmount();
         this.changeCostItemStatus();
       }
@@ -135,7 +179,7 @@ export class NoContractPayCreateComponent implements OnInit {
     this.validateCostForm.get('cost_id').valueChanges.subscribe((cost_id: number) => {
       if (cost_id) {
         console.log(cost_id, 'cost -id');
-        
+
         this.currentSelectCost = this.costArr.filter(v => v.id === cost_id)[0];
         console.log(this.currentSelectCost, 'currentselectCost');
         this.countMaxAmount();
@@ -148,41 +192,41 @@ export class NoContractPayCreateComponent implements OnInit {
     /***
      * 供应商发生变化, 将当前供应商选择的成本类型设置为 disabled
      * ******/
-    if(this.listOfData.length !== 0) {
+    if (this.listOfData.length !== 0) {
       this.costArr = this.costArr.map(v => {
         // if (v.id === value.cost_id) {
         //   v.disabled = true;
         // }
-        
-        
-        if(this.supplierCostFind(v.id)) {
+
+
+        if (this.supplierCostFind(v.id)) {
           v.disabled = true;
-        }else {
+        } else {
           v.disabled = false;
         }
         return v;
       });
       console.log(this.costArr);
-      
+
     }
-    
+
+  }
+  disableInput() {
+    if (!this.ifWriteOff) {
+      return false;
+    }
   }
 
-  supplierCostFind(cost_id:number): boolean {
-    const supplier:any[] = this.listOfData.filter(v => v.treaty.id === this.currentTreaty.id);
-    return supplier.filter( v => v.cost.id === cost_id).length > 0;
+  supplierCostFind(cost_id: number): boolean {
+    const supplier: any[] = this.listOfData.filter(v => v.treaty.id === this.currentTreaty.id);
+    return supplier.filter(v => v.cost.id === cost_id).length > 0;
   }
-
-  max_pay_amount:number = 0;
   countMaxAmount() {
     // 计算可以支付的最大金额数
-    const cost_pay:number = this.currentSelectCost ? this.currentSelectCost.max - this.currentSelectCost.pay_amount : 0;
-    const treaty_pay:number = this.currentTreaty ? this.currentTreaty.amount - this.currentTreaty.use_amount : 0;
+    const cost_pay: number = this.currentSelectCost ? this.currentSelectCost.max - this.currentSelectCost.pay_amount : 0;
+    const treaty_pay: number = this.currentTreaty ? this.currentTreaty.amount - this.currentTreaty.use_amount : 0;
     this.max_pay_amount = Math.min(cost_pay, treaty_pay);
   }
-
-  currentSelectCost: any = null;
-  currentTreaty:any = null;
   confirmationAmountValidator = (control: FormControl): { [s: string]: boolean } => {
     if (!this.currentSelectCost) {
       return { required: true };
@@ -216,7 +260,9 @@ export class NoContractPayCreateComponent implements OnInit {
       .subscribe((res: ApiData) => {
         console.log(res, '非合约支付信息1111');
         if (res.code === 200) {
-          this.treaty_id = res.data.id;
+          this.contractTaxTotal = res.data.tax_use_amount;
+          console.log('this.contractTaxTotal', this.contractTaxTotal);
+          // this.treaty_id = res.data.id;
           this.treatypayInfo = res.data;
           this.setTreatyForm(res.data);
           this.getTreatyPayment();
@@ -227,12 +273,14 @@ export class NoContractPayCreateComponent implements OnInit {
       })
   }
   getTreatyPayment() {
-    this.settingsConfigService.get(`/api/treaty/payment/${this.treaty_id}`)
+    this.settingsConfigService.get(`/api/treaty/payment/${this.treaty_pay_id}`)
       .subscribe((res: ApiData) => {
         console.log(res, '非合约支付详情列表2222');
         if (res.code === 200) {
           const treatyPayment: any[] = res.data.treaty_payment;
+          console.log('treatyPayment.....', treatyPayment);
           this.listOfData = treatyPayment;
+          console.log('listOfData......', this.listOfData);
         }
       })
   }
@@ -274,11 +322,6 @@ export class NoContractPayCreateComponent implements OnInit {
     })
   }
 
-  // 新增 成本支付
-  tplModal: NzModalRef;
-
-  validateCostForm: FormGroup;
-
   addPaymentCost(tplTitle: TemplateRef<{}>, tplContent: TemplateRef<{}>, tplFooter: TemplateRef<{}>, e: MouseEvent): void {
     e.preventDefault();
     this.tplModal = this.modalService.create({
@@ -304,8 +347,6 @@ export class NoContractPayCreateComponent implements OnInit {
       nzOnOk: () => console.log('Click ok')
     });
   }
-
-  submitCostLoading:boolean = false;
   handleOk(): void {
     this.submitCostForm();
   }
@@ -313,14 +354,11 @@ export class NoContractPayCreateComponent implements OnInit {
   closeModal(): void {
     this.currentSelectCost = null;
     this.isEditCost = false;
+    this.submitCostLoading = false;
     this.currentEditCost = null;
     this.tplModal.destroy();
     this.validateCostForm.reset();
   }
-
-  isEditCost: boolean = false;
-  currentEditCost:any = null;
-  editCostData:any = null;
 
   submitCostForm(): void {
     for (const key in this.validateCostForm.controls) {
@@ -339,45 +377,51 @@ export class NoContractPayCreateComponent implements OnInit {
         }
         return v;
       });
-      if(this.isEditCost) {
+      if (this.isEditCost) {
         this.updatePayment(value);
-      }else {
+      } else {
         this.createPayment(value);
       }
-      
+      console.log('2.listOfData......', this.listOfData);
+
     }
   }
 
-  updatePayment(opt:any) {
+  updatePayment(opt: any) {
 
-    const option:any = Object.assign(opt, { treaty_payment_id: this.currentEditCost.id, amount: +opt.amount });
+    const option: any = { ...opt, treaty_payment_id: this.currentEditCost.id, amount: +opt.amount };
 
-    this.settingsConfigService.post('/api/treaty/payment/update', option).subscribe((res:ApiData) => {
+    this.settingsConfigService.post('/api/treaty/payment/update', option).subscribe((res: ApiData) => {
       this.submitCostLoading = false;
-      if(res.code === 200) {
+      if (res.code === 200) {
         this.msg.success('更新成功');
         this.getTreatyPayment(); // 获取详情支付列表
+        this.getProjectInfo(); // 项目信息
+        this.getTreatyList(); // 项目下的协议信息
         this.closeModal();
       }
     })
   }
-  createPayment(opt:any) {
-    const option:any = Object.assign(opt, { treaty_pay_id: this.treaty_pay_id, amount: +opt.amount });
+  createPayment(opt: any) {
+    const option: any = { ...opt, treaty_pay_id: this.treaty_pay_id, amount: +opt.amount };
 
-    this.settingsConfigService.post('/api/treaty/payment/create', option).subscribe((res:ApiData) => {
+    this.settingsConfigService.post('/api/treaty/payment/create', option).subscribe((res: ApiData) => {
       this.submitCostLoading = false;
-      if(res.code === 200) {
+      if (res.code === 200) {
         this.msg.success('创建成功');
         this.getTreatyPayment(); // 获取详情支付列表
+        this.getProjectInfo(); // 项目信息
+        this.getTreatyList(); // 项目下的协议信息
+        console.log('1.listOfData......', this.listOfData);
         this.closeModal();
       }
     })
   }
-  disabledPayment(id:number) {
-    this.settingsConfigService.post('/api/treaty/payment/disable', { treaty_payment_id: id }).subscribe((res:ApiData) => {
-      if(res.code === 200) {
+  disabledPayment(id: number) {
+    this.settingsConfigService.post('/api/treaty/payment/disable', { treaty_payment_id: id }).subscribe((res: ApiData) => {
+      if (res.code === 200) {
         this.msg.success('删除成功');
-        this.listOfData = this.listOfData.filter( v => v.id !== id);
+        this.listOfData = this.listOfData.filter(v => v.id !== id);
       }
     })
   }
@@ -397,13 +441,13 @@ export class NoContractPayCreateComponent implements OnInit {
         this.createTreatyPay(this.validateTreatyForm.value);
       }
 
-    }else {
+    } else {
       this.msg.warning('协议支付信息填写不完整');
     }
   }
 
   createTreatyPay(data: any): void {
-    let obj: any = {
+    const obj: any = {
       project_id: this.projectId,
       pay_company: data.pay_company,
       bank_account: data.bank_account,
@@ -414,10 +458,11 @@ export class NoContractPayCreateComponent implements OnInit {
     this.settingsConfigService.post(`/api/treaty/pay/create`, obj).subscribe((res: ApiData) => {
       console.log(res, '新增无合约非合约支付')
       this.saveLoading = false;
+      this.treaty_pay_id = res.data.id;
       if (res.code === 200) {
-        if(this.attachment.length !== 0) {
+        if (this.attachment.length !== 0) {
           this.bindAttachment(res.data.id);
-        }else {
+        } else {
           this.treaty_pay_id = res.data.id;
           this.msg.success('新增成功');
           // this.router.navigateByUrl(`/approve/no-contract/list/apply/pay/edit/${this.projectId}?treaty_pay_id=${res.data.id}`);
@@ -431,26 +476,26 @@ export class NoContractPayCreateComponent implements OnInit {
 
 
   updateTreatyPay(data: any) {
-    const obj: any = Object.assign(data, { treaty_pay_id: this.treaty_pay_id });
+    const obj: any = { ...data, treaty_pay_id: this.treaty_pay_id };
 
     this.settingsConfigService.post(`/api/treaty/pay/update`, obj).subscribe((res: ApiData) => {
       console.log(res, '编辑无合约非合约支付审批单')
       this.saveLoading = false;
       if (res.code === 200) {
-        if(this.submitLoading) {
+        if (this.submitLoading) {
           this.submit(res.data.id);
-        }else {
+        } else {
           this.msg.success('保存成功');
           // this.router.navigateByUrl(`/approve/no-contract/list/apply/pay/${this.projectId}`);
         }
-        
+
       } else {
         this.msg.error(res.error || '保存失败');
       }
     })
   }
 
-  submit(id:number) {
+  submit(id: number) {
     this.settingsConfigService.post('/api/treaty_pay/submit', { treaty_pay_id: id }).subscribe((res: ApiData) => {
       console.log(res);
       this.submitLoading = false;
@@ -509,11 +554,6 @@ export class NoContractPayCreateComponent implements OnInit {
     this.submitLoading = true;
     this.saveTreatyForm();
   }
-
-
-  // 附件上传
-  attachment: any[] = [];
-  isAttachmentChange: boolean = false;
   attachmentChange(option: any) {
     this.attachment.push(option);
     this.isAttachmentChange = !this.isAttachmentChange;
@@ -526,7 +566,7 @@ export class NoContractPayCreateComponent implements OnInit {
     const opt: any = {
       attachment_ids: this.attachment.map(v => v.id),
       project_id: this.projectInfo.id,
-      treaty_pay_id: treaty_pay_id,
+      treaty_pay_id,
       is_basic: false
     };
     console.log(opt);
@@ -540,11 +580,11 @@ export class NoContractPayCreateComponent implements OnInit {
           }
           this.getAttachment();
         } else {
-          if(this.submitLoading) {
+          if (this.submitLoading) {
             this.submit(res.data.id);
-          }else {
+          } else {
             this.msg.success('保存成功');
-            this.router.navigateByUrl(`/approve/no-contract/list/apply/pay/${this.projectId}`);
+            // this.router.navigateByUrl(`/approve/no-contract/list/apply/pay/${this.projectId}`);
           }
         }
       } else {
@@ -561,9 +601,6 @@ export class NoContractPayCreateComponent implements OnInit {
       }
     })
   }
-
-
-  attachmentCategory: List[] = [];
   getCategoryList() {
     const opt: any = {
       is_project: false,
@@ -583,24 +620,13 @@ export class NoContractPayCreateComponent implements OnInit {
     });
   }
 
-  treatyCostTotal(arr:any[]):number {
-    let total:number = 0;
-    if(arr && arr.length !== 0) {
-      total = arr.map(item => item.amount).reduce( (a, b) => a + b, 0);
+  treatyCostTotal(arr: any[]): number {
+    let total = 0;
+    if (arr && arr.length !== 0) {
+      total = arr.map(item => item.amount).reduce((a, b) => a + b, 0);
     }
-    
+
     return total;
-  }
-
-  // 流程进程信息
-  progressInfo: any = null;
-  nodeProcess: any[] = [];
-  currentNodeProcess: any = null;
-  isCurrentCheck: boolean = false;
-
-  checkOption: any = {
-    agree: null,
-    remark: ''
   }
 
   getWorkflow() {
@@ -633,10 +659,10 @@ export class NoContractPayCreateComponent implements OnInit {
   }
   // 打印
   printCurrentModal(idname: string, title: string) {
-    let printWindow = window.open();
+    const printWindow = window.open();
 
     html2canvas(document.querySelector(`#${idname}`)).then(canvas => {
-      let compress = document.createElement('canvas');
+      const compress = document.createElement('canvas');
 
       // change the image size
 
@@ -646,7 +672,7 @@ export class NoContractPayCreateComponent implements OnInit {
 
       const imageStr = canvas.toDataURL("image/png");
 
-      let image = new Image();
+      const image = new Image();
 
       image.src = imageStr;
 
@@ -658,7 +684,7 @@ export class NoContractPayCreateComponent implements OnInit {
 
         // const iframe = '<iframe src="' + imageStr + '" frameborder="0" style="border:0;" allowfullscreen></iframe>'
         const head: string = document.querySelector('head').innerHTML;;
-        const style: string = `<style>body {-webkit-print-color-adjust: exact; padding: 12px!important;}</style>`;
+        const style = `<style>body {-webkit-print-color-adjust: exact; padding: 12px!important;}</style>`;
         const div: string = '<div>' + '<img src="' + imgString + '" />' + '</div>';
 
         const docStr = head + style + div;
@@ -678,8 +704,6 @@ export class NoContractPayCreateComponent implements OnInit {
 
     });
   }
-
-  isPrinter: boolean = false;
   // pdf
   downloadFile(type: string) {
     this.isPrinter = true;
@@ -688,10 +712,10 @@ export class NoContractPayCreateComponent implements OnInit {
       html2canvas(data).then(canvas => {
         this.isPrinter = false;
         // Few necessary setting options  
-        const imgWidth: number = 208;
+        const imgWidth = 208;
         const imgHeight: number = canvas.height * imgWidth / canvas.width;
         console.log(canvas, imgWidth, imgHeight);
-        const pageHeight: number = 295;
+        const pageHeight = 295;
         const leftHeight: number = imgHeight;
 
         const contentDataURL = canvas.toDataURL('image/png', 1.0)
@@ -706,9 +730,8 @@ export class NoContractPayCreateComponent implements OnInit {
     }, 500);
 
   }
-  pdfPosition: number = 0;
   exportPdf(contentDataURL: any, imgWidth: number, imgHeight: number, pageHeight: number, leftHeight: number) {
-    let pdf = new jspdf('p', 'mm', 'a4'); // A4 size page of PDF  
+    const pdf = new jspdf('p', 'mm', 'a4'); // A4 size page of PDF  
     if (leftHeight + 10 < pageHeight) {
       pdf.addImage(contentDataURL, 'PNG', 0, 0, imgWidth, imgHeight)
     } else {
@@ -728,11 +751,11 @@ export class NoContractPayCreateComponent implements OnInit {
   }
   // 图片和 pdf 下载 功能
   exportImage(contentDataURL: any) {
-    var base64Img = contentDataURL;
-    let oA: any = document.createElement('a');
+    const base64Img = contentDataURL;
+    const oA: any = document.createElement('a');
     oA.href = base64Img;
     oA.download = this.projectInfo.name + "_" + (new Date().getTime());
-    var event = document.createEvent('MouseEvents');
+    const event = document.createEvent('MouseEvents');
     event.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
     oA.dispatchEvent(event);
   }

@@ -1,0 +1,153 @@
+<page-header [title]="'发票凭证详情'" [breadcrumb]="breadcrumb">
+
+    <ng-template #breadcrumb>
+        <nz-breadcrumb>
+            <nz-breadcrumb-item><a [routerLink]="['/dashboard']">首页</a></nz-breadcrumb-item>
+            <nz-breadcrumb-item><a [routerLink]="['/financial/bill']">财务处理凭证</a></nz-breadcrumb-item>
+            <nz-breadcrumb-item>凭证详情</nz-breadcrumb-item>
+        </nz-breadcrumb>
+    </ng-template>
+
+    <app-project-info-show-tpl [projectInfo]="billInfo?.project"></app-project-info-show-tpl>
+
+</page-header>
+
+<nz-card nzTitle="发票凭证" [nzExtra]="generateBtnTpl" *ngIf="billInfo">
+    <ng-template #generateBtnTpl>
+        <ng-container *ngIf="billInfo.certificate && !billInfo.certificate.is_deal">
+            <button nz-button nzType="primary" (click)="generateCertificate()" [nzLoading]="loading">生成凭证</button>
+        </ng-container>
+    </ng-template>
+
+    <button nz-button (click)="download()" [disabled]="list.length === 0" nzType="primary">下载excel</button>
+    <st [data]="listOfData" [ps]="999" [columns]="columns" class="mt-sm" (change)="change($event)"
+        [loading]="loadingData"></st>
+</nz-card>
+
+<div class="info_box mt-md" *ngIf="billInfo">
+    <nz-table #borderedTable nzData="[1]" nzBordered [nzFrontPagination]="false" [nzTitle]="tableTitle">
+        <ng-template #tableTitle>
+            <div class="text-center text-lg" style="color: #333;">{{ billInfo.company.name }}</div>
+        </ng-template>
+        <tbody>
+            <tr>
+                <td colspan="5" class="text-md text-center" style="color: #333;">发票确认单</td>
+            </tr>
+            <tr>
+                <td class="font-weight-bold td-left">项目类型</td>
+                <td colspan="4">{{ billInfo.project.category?.name }}</td>
+            </tr>
+            <tr>
+                <td class="font-weight-bold td-left">项目名称</td>
+                <td colspan="4">{{ billInfo.project.name }}</td>
+            </tr>
+            <!-- <tr>
+                <td class="font-weight-bold td-left">项目编号</td>
+                <td colspan="4">{{ billInfo.project.number }}</td>
+            </tr> -->
+            <tr>
+                <td class="font-weight-bold">协议号</td>
+                <td colspan="4">{{ billInfo.customer_contract_code }}</td>
+            </tr>
+            <tr>
+                <td class="font-weight-bold">发票类型</td>
+                <td colspan="4">
+                    <ng-container *ngFor="let billCate of billCategoryArray">
+                        <label class="mr-lg bill-category-box" nzDisabled nz-checkbox
+                            [ngModel]="billCate.id === billInfo.bill_category.id">{{ billCate.name }}</label>
+                    </ng-container>
+
+                </td>
+            </tr>
+            <tr>
+                <td class="font-weight-bold">开票单位名称</td>
+                <td colspan="4">{{ billInfo.customer.name }}</td>
+            </tr>
+            <tr>
+                <td class="font-weight-bold">纳税人识别号</td>
+                <td colspan="4">{{ billInfo.customer.code }}</td>
+            </tr>
+            <tr>
+                <td class="font-weight-bold">地址</td>
+                <td colspan="4">{{ billInfo.customer.address }}</td>
+            </tr>
+            <tr>
+                <td class="font-weight-bold">联系电话</td>
+                <td colspan="4">{{ billInfo.customer.tel }}</td>
+            </tr>
+            <tr>
+                <td class="font-weight-bold">开户行及账号</td>
+                <td colspan="4">{{ billInfo.customer.bank_name }} / {{ billInfo.customer.bank_account }}
+                </td>
+            </tr>
+            <tr *ngIf="billInfo.tax">
+                <td class="font-weight-bold">开票税目</td>
+                <td colspan="2">
+                    {{ billInfo.tax.name }}
+                </td>
+                <td class="font-weight-bold">税率</td>
+                <td colspan="4">
+                    {{ billInfo.tax.rate * 100 }} %
+                </td>
+            </tr>
+            <tr *ngIf="billInfo.subsidy_income_detail">
+                <td class="font-weight-bold">税率</td>
+                <td colspan="4">
+                    {{ billInfo.subsidy_income_detail.tax_rate }}
+                </td>
+            </tr>
+            <tr>
+            <tr>
+                <td class="font-weight-bold">开票金额</td>
+                <td colspan="4" class="text-error font-weight-bold text-nowrap">{{ billInfo.amount | currency: 'CNY' }}
+                </td>
+            </tr>
+            <tr>
+                <td class="font-weight-bold">经费所属期</td>
+                <td colspan="4">{{ billInfo.bill_period_start_time + ' - ' + billInfo.bill_period_end_time }}</td>
+            </tr>
+            <tr>
+                <td class="font-weight-bold">备注信息</td>
+                <td colspan="4">
+                    <span [innerHTML]="billInfo.remark | showTextareaContent"></span></td>
+            </tr>
+            <tr *ngIf="bill_id">
+                <td class="font-weight-bold">附件</td>
+                <td colspan="4">
+                    <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/bill/' + bill_id">
+                    </app-upload-file-attachment-show-c>
+                </td>
+            </tr>
+        </tbody>
+    </nz-table>
+</div>
+
+<nz-card nzTitle="发票管理" class="info_box mt-md" [nzBodyStyle]="{ padding: '0' }">
+    <nz-table #invoiceTable [nzData]="invoiceOfData" [nzShowPagination]="false" [nzFooter]="invoiceTotalTpl">
+        <thead>
+            <tr>
+                <th nzWidth="80px">序号</th>
+                <th>发票号码</th>
+                <th>发票金额</th>
+                <th>发票税额</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let data of invoiceTable.data; let i = index">
+                <td>{{ i + 1}}</td>
+                <td>{{ data.invoice_number }}</td>
+                <td class="text-nowrap">{{ data.invoice_amount | _currency}}</td>
+                <td class="text-nowrap">{{ data.tax_amount | _currency}}</td>
+            </tr>
+        </tbody>
+    </nz-table>
+    <ng-template #invoiceTotalTpl>
+        <div class="text-right" *ngIf="billInfo">
+            <span><span class="font-weight-bold text-nowrap">总金额： </span>{{ billInfo.amount | _currency }}</span>
+            <span class="mx-md text-nowrap"><span class="font-weight-bold text-nowrap">开票总金额：
+                </span>{{ billInfo.invoice_amount | _currency }}</span>
+            <span><span class="font-weight-bold text-nowrap">总税额： </span>{{ billInfo.tax_amount | _currency }}</span>
+        </div>
+    </ng-template>
+
+</nz-card>

@@ -1,5 +1,4 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { CommonFunctionService } from 'src/app/routes/service/common-function.service';
 import { ApiData } from 'src/app/data/interface.data';
 import { SettingsConfigService } from 'src/app/routes/service/settings-config.service';
 import { Router } from '@angular/router';
@@ -12,7 +11,6 @@ import { Router } from '@angular/router';
 export class BillApplyListCComponent implements OnInit {
 
   @Input() postUrl:string;
-  @Input() isApprove?:boolean = false;
 
   list: any[] = [];
   listOfData:any[] = [];
@@ -29,7 +27,6 @@ export class BillApplyListCComponent implements OnInit {
   companyArray:any[] = [];
 
   constructor(
-    private commonFn: CommonFunctionService,
     private settingsConfigService: SettingsConfigService,
     private router: Router
   ) {

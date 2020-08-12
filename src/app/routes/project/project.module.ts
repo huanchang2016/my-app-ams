@@ -52,6 +52,12 @@ import { ProjectIncomeTypeAndAmountComponent } from './project-adjust/adjust-bud
 import { TypeAmountListComponent } from './project-adjust/adjust-budget-info/project-income-type-and-amount/type-amount-list/type-amount-list.component';
 import { SubsidyIncomeTypeAndAmountComponent } from './project-adjust/adjust-budget-info/subsidy-income-type-and-amount/subsidy-income-type-and-amount.component';
 import { SubsidyIncomeTypeAmountComponent } from './component/project-budget/budget-index/subsidy-income-c/subsidy-income-type-amount/subsidy-income-type-amount.component';
+import { ProjectSearchComponent } from './project-list-search/project-search/project-search.component';
+import { ProjectListComponent } from './project-list-search/project-list/project-list.component';
+import { ProjectMyProjectListComponent } from './my-project/list-search/project-my-project-list/project-my-project-list.component';
+import { ProjectMyProjectSearchComponent } from './my-project/list-search/project-my-project-search/project-my-project-search.component';
+import { ProjectApprovalListComponent } from './approval-project/list-search/project-approval-list/project-approval-list.component';
+import { ProjectApprovalSearchComponent } from './approval-project/list-search/project-approval-search/project-approval-search.component';
 
 const COMPONENTS = [
   DraftListComponent,
@@ -65,7 +71,8 @@ const COMPONENTS = [
   MyForApprovaledListComponent,
   ProjectAdjustComponent,
   MyProjectListComponent,
-  ApprovalProjectListComponent
+  ApprovalProjectListComponent,
+  ProjectListComponent
 ];
 const COMPONENTS_NOROUNT = [
   ProductSearchOptionComponent,
@@ -115,7 +122,12 @@ const COMPONENTS_NOROUNT = [
   declarations: [
     ...COMPONENTS,
     ...COMPONENTS_NOROUNT,
-    SubsidyIncomeTypeAmountComponent
+    SubsidyIncomeTypeAmountComponent,
+    ProjectSearchComponent,
+    ProjectMyProjectListComponent,
+    ProjectMyProjectSearchComponent,
+    ProjectApprovalListComponent,
+    ProjectApprovalSearchComponent,
   ],
   entryComponents: COMPONENTS_NOROUNT
 })

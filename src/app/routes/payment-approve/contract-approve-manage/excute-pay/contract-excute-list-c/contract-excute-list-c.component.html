@@ -1,19 +1,10 @@
-
 <div class="hidden-mobile">
     <app-approve-search-option (searchOptionsEmit)="searchOptionsChange($event)"></app-approve-search-option>
 </div>
 
-<nz-table
-    #ajaxTable
-    nzShowSizeChanger
-    [nzFrontPagination]="false"
-    [nzData]="listOfData"
-    [nzLoading]="loading"
-    [nzTotal]="total"
-    [(nzPageIndex)]="pageOption.page"
-    [(nzPageSize)]="pageOption.page_size"
-    (nzPageIndexChange)="pageIndexChange($event)"
-    (nzPageSizeChange)="pageSizeChange($event)"
+<nz-table #ajaxTable nzShowSizeChanger [nzFrontPagination]="false" [nzData]="listOfData" [nzLoading]="loading"
+    [nzTotal]="total" [(nzPageIndex)]="pageOption.page" [(nzPageSize)]="pageOption.page_size"
+    (nzPageIndexChange)="pageIndexChange($event)" (nzPageSizeChange)="pageSizeChange($event)"
     class="mt-md hidden-mobile">
     <thead>
         <tr>
@@ -29,18 +20,19 @@
         <tr *ngFor="let data of ajaxTable.data; let i = index">
             <td>{{ i + 1 }}</td>
             <td>{{ data.deal.contract.name }}</td>
-            <td class="text-error">{{ data.amount | _currency }}</td>
+            <td class="text-nowrap">{{ data.amount | _currency }}</td>
             <td>
                 <sv-container size="small" col="1">
                     <sv label="项目名称"><span class="font-weight-bold">{{ data.project.name }}</span></sv>
-                    <sv label="创 建 人 "><span class="text-success">{{ data.user.name }}</span></sv>
+                    <sv label="创 建 人 "><span>{{ data.user.name }}</span></sv>
                     <sv label="所在部门">{{ data.user.department?.name }}</sv>
                     <sv label="所属单位">{{ data.user.company?.name }}</sv>
                 </sv-container>
             </td>
             <td class="text-primary text-nowrap">{{ data.pay_status?.name }}</td>
             <td>
-                <a class="text-nowrap" [routerLink]="['/approve/contract/pay/view', data.project.id ]" [queryParams]="{ contract_pay_id: data.id }"><i nz-icon nzType="eye" nzTheme="outline"></i></a>
+                <a class="text-nowrap" [routerLink]="['/approve/contract/pay/view', data.project.id ]"
+                    [queryParams]="{ contract_pay_id: data.id }"><i nz-icon nzType="eye" nzTheme="outline"></i></a>
             </td>
         </tr>
     </tbody>
@@ -59,25 +51,31 @@
                     <nz-card-meta [nzTitle]="contractTitleTpl"></nz-card-meta>
                     <ng-template #contractTitleTpl>
                         <span>{{ data.deal.contract.name }}</span>
-                        <span class="text-primary text-xs ml-md" [class.text-error]="data.pay_status?.name === '未通过'" [class.text-success]="data.pay_status?.name === '已通过'">{{ data.pay_status?.name }}</span>
+                        <span class="text-primary text-xs ml-md" [class.text-error]="data.pay_status?.name === '未通过'"
+                            [class.text-success]="data.pay_status?.name === '已通过'">{{ data.pay_status?.name }}</span>
                     </ng-template>
                     <div class="pt-md">
                         <sv-container size="small">
-                            <sv label="支付金额"><span class="font-weight-bold text-error">{{ data.amount | currency: 'CNY' }}</span></sv>
+                            <sv label="支付金额"><span
+                                    class="font-weight-bold text-nowrap">{{ data.amount | currency: 'CNY' }}</span>
+                            </sv>
                             <sv label="项目名称"><span class="font-weight-bold">{{ data.project.name }}</span></sv>
-                            <sv label="创 建 人 "><span class="text-success">{{ data.user.name }}</span></sv>
+                            <sv label="创 建 人 "><span>{{ data.user.name }}</span></sv>
                             <sv label="所在部门">{{ data.user.department?.name }}</sv>
                             <sv label="所属单位">{{ data.user.company?.name }}</sv>
                         </sv-container>
                     </div>
                 </nz-skeleton>
                 <ng-template #actionEllipsis>
-                    <a [routerLink]="['/approve/contract/pay/view', data.project.id ]" [queryParams]="{ contract_pay_id: data.id }"><i nz-icon nzType="eye" nzTheme="outline"></i></a>
+                    <a [routerLink]="['/approve/contract/pay/view', data.project.id ]"
+                        [queryParams]="{ contract_pay_id: data.id }"><i nz-icon nzType="eye" nzTheme="outline"></i></a>
                 </ng-template>
             </nz-card>
         </ng-container>
         <div class="mt-md text-center">
-            <nz-pagination [nzSize]="'small'" nzShowSizeChanger [(nzPageSize)]="pageOption.page_size" [nzPageIndex]="pageOption.page" [nzTotal]="total" (nzPageIndexChange)="pageIndexChange($event)" (nzPageSizeChange)="pageSizeChange($event)"></nz-pagination>
+            <nz-pagination [nzSize]="'small'" nzShowSizeChanger [(nzPageSize)]="pageOption.page_size"
+                [nzPageIndex]="pageOption.page" [nzTotal]="total" (nzPageIndexChange)="pageIndexChange($event)"
+                (nzPageSizeChange)="pageSizeChange($event)"></nz-pagination>
         </div>
     </div>
 </div>

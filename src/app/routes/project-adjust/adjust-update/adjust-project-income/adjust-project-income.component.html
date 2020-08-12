@@ -1,0 +1,125 @@
+<form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()" class="info-form">
+
+    <div nz-row [nzGutter]="24">
+        <div nz-col [nzSpan]="12">
+            <div nz-row [nzGutter]="24">
+                <div nz-col [nzSpan]="6" class="text-right font-weight-bold text-md mb-lg">甲方</div>
+            </div>
+            <nz-form-item>
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="customer_ids" nzRequired>甲方</nz-form-label>
+                <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请选择甲方单位">
+                    <nz-select style="width: 100%;" nzMode="multiple" id="customer_ids" nzPlaceHolder="请选择甲方单位"
+                        formControlName="customer_ids">
+                        <ng-container *ngFor="let item of adjustInfo?.project.customer">
+                            <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
+                        </ng-container>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="partyA_power">甲方权责界定</nz-form-label>
+                <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请填写甲方权责界定描述">
+                    <textarea nz-input id="partyA_power" placeholder="请填写甲方权责界定描述" formControlName="partyA_power"
+                        [nzAutosize]="{ minRows: 2, maxRows: 6 }"></textarea>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="partyA_condition">甲方费用及支付条件</nz-form-label>
+                <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请填写甲方费用及支付条件">
+                    <textarea nz-input id="partyA_condition" placeholder="请填写甲方费用及支付条件"
+                        formControlName="partyA_condition" [nzAutosize]="{ minRows: 2, maxRows: 6 }"></textarea>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="12">
+            <div nz-row [nzGutter]="24">
+                <div nz-col [nzSpan]="6" class="text-right font-weight-bold text-md mb-lg">乙方</div>
+            </div>
+            <nz-form-item>
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="partyB" nzRequired>乙方</nz-form-label>
+                <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请填写乙方单位">
+                    <input nz-input placeholder="请填写乙方单位" formControlName="partyB" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="partyB_power">乙方服务</nz-form-label>
+                <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请填写乙方服务内容">
+                    <textarea nz-input id="partyB_power" placeholder="请填写乙方服务内容" formControlName="partyB_power"
+                        [nzAutosize]="{ minRows: 2, maxRows: 6 }"></textarea>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="partyB_condition">附加条件</nz-form-label>
+                <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="请填写乙方服务相关附加条件">
+                    <textarea nz-input id="partyB_condition" placeholder="请填写乙方服务相关附加条件"
+                        formControlName="partyB_condition" [nzAutosize]="{ minRows: 2, maxRows: 6 }"></textarea>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <ng-template #incomeItemLoadingTpl>
+            <div class="text-center py-lg">
+                <nz-spin nzSimple></nz-spin>
+            </div>
+        </ng-template>
+        <ng-container *ngIf="!incomeListLoading; else incomeItemLoadingTpl">
+            <div nz-col [nzSpan]="24" formArrayName="incomeArr">
+                <div nz-row [nzGutter]="24" *ngFor="let item of formGroupArrayControls; let i = index"
+                    [formGroupName]="i.toString()">
+                    <div nz-col [nzSpan]="2" class="text-center font-weight-bold" style="line-height: 32px;">{{ i + 1 }}
+                    </div>
+                    <div nz-col [nzSpan]="8">
+                        <nz-form-item>
+                            <nz-form-label nzFor="tax_id" nzRequired>收入税目</nz-form-label>
+                            <nz-form-control nzErrorTip="请选择项目收入税目">
+                                <nz-select style="width: 100%;" nzShowSearch nzPlaceHolder="请选择项目收入税目"
+                                    formControlName="tax_id">
+                                    <ng-container *ngFor="let item of taxList">
+                                        <nz-option [nzLabel]="item.name" [nzValue]="item.id"
+                                            [nzDisabled]="checkIsSelectedCost(item.id)"></nz-option>
+                                    </ng-container>
+                                </nz-select>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col [nzSpan]="8">
+                        <nz-form-item>
+                            <nz-form-label nzFor="income" nzRequired>收入金额</nz-form-label>
+                            <nz-form-control nzErrorTip="项目预算收入金额只能输入数字且最多保留2位小数">
+                                <nz-input-group nzSuffix="元" nzPrefix="￥" style="width: 100%">
+                                    <input type="text" nzPlaceHolder="填写项目预算收入金额" formControlName="income" nz-input />
+                                </nz-input-group>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col [nzSpan]="4" style="line-height: 32px;"><span style="color: #000000d9">税率：</span>
+                        {{ currentTaxChange(formGroupArrayControls[i].get('tax_id').value) }}</div>
+                    <div nz-col [nzSpan]="2" style="line-height: 32px;">
+                        <a nz-popconfirm nzPopconfirmTitle="是否确定删除当前收入预算？" nzPopconfirmPlacement="bottom"
+                            (nzOnConfirm)="deleted(i, formGroupArrayControls[i].get('project_revenue_detail_id').value)"
+                            (nzOnCancel)="cancel()" class="text-error delete_btn border-radius-sm bg-white">
+                            <i nz-icon nzType="delete" nzTheme="outline"></i> <span class="text-xs">删除</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="font-weight-bold">
+                    <!-- <span class="font-weight-bold">含税收入： {{ totalOption.income | _currency }}</span>
+                <span class="font-weight-bold mx-md">税金合计： {{ totalOption.tax_amount | _currency }}</span>
+                <span class="font-weight-bold">不含税收入： {{ totalOption.exclude_tax_income | _currency }}</span> -->
+
+                    <button nzBlock nz-button nzType="dashed" (click)="add($event)"><i nz-icon
+                            nzType="plus"></i>添加项目收入</button>
+                </div>
+            </div>
+        </ng-container>
+
+    </div>
+    <nz-form-item nz-row class="mt-lg">
+        <nz-form-control [nzSpan]="24" class="text-right">
+            <a [nzLoading]="submitLoading" [disabled]="!validateForm.valid" nz-popconfirm class="text-nowrap" nz-button
+                nzType="primary" nzPopconfirmTitle="请确认项目收入调整内容是否已经全部填写完整，仔细核对无误后确认提交！！！" (nzOnConfirm)="submitForm()"
+                (nzOnCancel)="cancel()">
+                保存项目收入调整表单
+            </a>
+        </nz-form-control>
+    </nz-form-item>
+</form>

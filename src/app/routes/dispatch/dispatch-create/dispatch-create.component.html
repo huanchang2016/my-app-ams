@@ -1,1 +1,40 @@
-<p>dispatch-create works!</p>
+<page-header [title]=" isEdit ? '派遣编辑' : '派遣创建' " [breadcrumb]="breadcrumb">
+    <ng-template #breadcrumb>
+        <nz-breadcrumb>
+            <nz-breadcrumb-item><a [routerLink]="['/dashboard']">首页</a></nz-breadcrumb-item>
+            <nz-breadcrumb-item>派遣管理</nz-breadcrumb-item>
+            <nz-breadcrumb-item>派遣编辑</nz-breadcrumb-item>
+        </nz-breadcrumb>
+    </ng-template>
+</page-header>
+
+<nz-card>
+    <nz-steps [nzCurrent]="currentSteps" class="hidden-mobile">
+        <nz-step nzTitle="基础信息" nzIcon="profile"></nz-step>
+        <nz-step nzTitle="完成" nzIcon="check"></nz-step>
+    </nz-steps>
+    <nz-steps [nzCurrent]="currentSteps" class="hidden-pc" nzDirection="vertical" nzProgressDot>
+        <nz-step nzTitle="基础信息" nzIcon="profile"></nz-step>
+        <nz-step nzTitle="完成" nzIcon="check"></nz-step>
+    </nz-steps>
+
+    <div class="steps-content pt-lg">
+        <ng-container [ngSwitch]="currentSteps">
+            <div *ngSwitchCase="0">
+                <app-dispatch-info (submitChangeSuccess)="submitChangeSuccess($event)"></app-dispatch-info>
+            </div>
+            <!-- <div *ngSwitchCase="1">
+                <app-project-budget [projectInfo]="project.info" (submitChangeSuccess)="submitChangeSuccess($event)"
+                    (prevStepsChange)="prevStepsChange()"></app-project-budget>
+            </div>
+            <div *ngSwitchCase="2">
+                <app-project-supplier [projectInfo]="project.info" (prevStepsChange)="prevStepsChange()"
+                    (nextStepsChange)="nextStepsChange()"></app-project-supplier>
+            </div>
+            <div *ngSwitchDefault>
+                <app-project-edit-success [projectInfo]="project.info" (prevStepsChange)="prevStepsChange()">
+                </app-project-edit-success>
+            </div> -->
+        </ng-container>
+    </div>
+</nz-card>

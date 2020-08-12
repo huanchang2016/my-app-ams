@@ -1,0 +1,21 @@
+<page-header [title]="'我的项目'" [breadcrumb]="breadcrumb" [tab]="tab">
+    <ng-template #breadcrumb>
+        <nz-breadcrumb>
+            <nz-breadcrumb-item><a [routerLink]="['/dashboard']">首页</a></nz-breadcrumb-item>
+            <nz-breadcrumb-item>项目管理</nz-breadcrumb-item>
+            <nz-breadcrumb-item>我的项目</nz-breadcrumb-item>
+        </nz-breadcrumb>
+    </ng-template>
+
+    <ng-template #tab>
+        <nz-tabset [nzSelectedIndex]="pos">
+            <nz-tab *ngFor="let i of tabs" [nzTitle]="i.name" (nzClick)="to(i)">
+            </nz-tab>
+        </nz-tabset>
+    </ng-template>
+</page-header>
+
+<nz-card [nzBordered]="false">
+    <app-project-my-project-search [type_id]="type_id" [type_name]="type_name" (outer)="readOuter()">
+    </app-project-my-project-search>
+</nz-card>

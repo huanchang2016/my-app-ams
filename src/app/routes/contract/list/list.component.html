@@ -5,7 +5,8 @@
     <app-contract-manage-search-form (searchOptionsEmit)="searchOptionsChange($event)" (addContentEmit)="add()">
     </app-contract-manage-search-form>
 
-    <nz-table #basicTable [nzData]="listOfData" [nzLoading]="loading" class="mt-md hidden-mobile" [nzScroll]="{ x: '1800px' }">
+    <nz-table #basicTable [nzData]="listOfData" [nzLoading]="loading" class="mt-md hidden-mobile"
+        [nzScroll]="{ x: '1800px' }">
         <thead>
             <tr>
                 <th nzWidth="80px" nzLeft>序号</th>
@@ -38,9 +39,10 @@
                         <div>类型：{{ data.service_category.name }}</div>
                     </td>
                     <td>
-                        <div>{{ data.request_amount ? '请示' : '合同' }}金额：{{ data.amount | _currency }}</div>
-                        <div>已使用金额：{{ data.pay_amount | _currency }}</div>
-                        <div *ngIf="data.is_split">已分割金额：{{ data.pay_amount | _currency }}</div>
+                        <div class="text-nowrap">{{ data.request_amount ? '请示' : '合同' }}金额：{{ data.amount | _currency }}
+                        </div>
+                        <div class="text-nowrap">已使用金额：{{ data.pay_amount | _currency }}</div>
+                        <div class="text-nowrap" *ngIf="data.is_split">已分割金额：{{ data.pay_amount | _currency }}</div>
                     </td>
                     <td [innerHTML]="data.is_split | yn"></td>
                     <td>

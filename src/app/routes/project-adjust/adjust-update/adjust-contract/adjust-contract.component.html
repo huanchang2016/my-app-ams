@@ -1,0 +1,64 @@
+<div class="mt-lg mb-md text-md font-weight-bold">合约调整数据</div>
+<ng-template #contractAddTemplate>
+    <button
+        class="mr-lg"
+        nz-button
+        [nzType]="'primary'"
+        (click)="addContract()"
+    >新增合约</button>
+</ng-template>
+<nz-card class="mb-md" nzTitle="签订合约" [nzExtra]="contractAddTemplate" [nzBordered]="false">
+    <nz-table #contracTable [nzData]="contractList" [nzShowPagination]="false">
+        <thead>
+            <tr>
+                <th nzWidth="80px">序号</th>
+                <th>供应商</th>
+                <th>合同</th>
+                <th>分割情况</th>
+                <th>项目金额</th>
+                <th>附件</th>
+                <th nzWidth="100px">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let data of contracTable.data;let i = index">
+                <td>{{ i + 1 }}</td>
+                <td>{{ data.contract.supplier.name }}</td>
+                <td>
+                    <div>合同名称：{{ data.contract.name }}</div>
+                    <div>合同金额：<span class="text-nowrap">{{ data.contract.amount | _currency }}</span></div>
+                </td>
+                <td>
+                    <ng-container *ngIf="data.split_contract">
+                        <div>部门：{{ data.split_contract.department.name }}</div>
+                        <div>金额：<span class="text-nowrap">{{ data.split_contract.amount | _currency }}</span></div>
+                    </ng-container>
+                    <ng-container *ngIf="!data.split_contract">
+                        <div [innerHTML]="data.split_contract | yn"></div>
+                    </ng-container>
+                </td>
+                <td class="text-nowrap">{{ data.amount | _currency }}</td>
+                <td>
+                    <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/contract/' + data.contract.id" [isShowName]="false"></app-upload-file-attachment-show-c>
+                </td>
+                <td>
+                    <a (click)="editContract(data, i)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
+                    <nz-divider nzType="vertical"></nz-divider>
+                    <a nz-popconfirm nzPopconfirmTitle="确定删除当前项目合同？" (nzOnConfirm)="deleted(i, data.deal?.id)" (nzOnCancel)="cancel()"
+                        class="text-error">
+                        删除
+                    </a>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="7" class="text-right">
+                    <a [nzLoading]="submitLoading" nz-popconfirm class="text-nowrap" nz-button
+                        nzType="primary" nzPopconfirmTitle="请确认项目供应商合同调整内容是否已经全部填写完整，仔细核对无误后确认提交！！！" (nzOnConfirm)="submitForm()"
+                        (nzOnCancel)="cancel()">
+                        保存项目供应商合同调整表单
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </nz-table>
+</nz-card>

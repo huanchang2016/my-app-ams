@@ -41,6 +41,12 @@
         <td colspan="6" class="text-md text-center">（合同款项支付用）</td>
       </tr> -->
       <tr>
+        <td colspan="6" class="text-md text-center font-weight-bold">{{ selectedContract?.contract.company.name }}</td>
+      </tr>
+      <tr>
+        <td colspan="6" class="text-md text-center font-weight-bold">项目合同支付</td>
+      </tr>
+      <tr>
         <td class="font-weight-bold">合同编号</td>
         <td colspan="2">{{ selectedContract?.contract.number }}</td>
         <td class="font-weight-bold">收款单位</td>
@@ -64,7 +70,7 @@
       </tr>
       <tr>
         <td class="font-weight-bold">{{ selectedContract?.contract.contract_amount ? '合同总价金额' : '请示金额上限' }}</td>
-        <td colspan="5">{{ selectedContract?.contract.amount | _currency }}</td>
+        <td class="text-nowrap" colspan="5">{{ selectedContract?.contract.amount | _currency }}</td>
       </tr>
       <tr>
         <td class="font-weight-bold">摘要</td>
@@ -90,9 +96,9 @@
         <tr>
           <td>{{ i + 1 }}</td>
           <td>{{ data.cost.cost_category.name }}</td>
-          <td>{{ data.amount | _currency }}</td>
-          <td>{{ data.cost.pay_amount | _currency }}</td>
-          <td>{{ data.cost.amount | _currency }}</td>
+          <td class="text-nowrap">{{ data.amount | _currency }}</td>
+          <td class="text-nowrap">{{ data.cost.pay_amount | _currency }}</td>
+          <td class="text-nowrap">{{ data.cost.amount | _currency }}</td>
           <td>
             <span [innerHTML]="data.remark | showTextareaContent"></span>
           </td>
@@ -100,7 +106,7 @@
       </ng-container>
       <tr>
         <td colspan="2" class="font-weight-bold">合计</td>
-        <td colspan="4">{{ costTotalPay | _currency }}</td>
+        <td class="text-nowrap" colspan="4">{{ costTotalPay | _currency }}</td>
       </tr>
       <tr>
         <td colspan="2" class="font-weight-bold">本期支付金额(大写)</td>
@@ -235,6 +241,8 @@
 </nz-card>
 
 <ng-container *ngIf="progressInfo && progressInfo.execute_user">
-  <app-users-execute-flow [progressInfo]="progressInfo" (executeChange)="executeChange($event)">
+  <app-users-execute-flow [payType]="'contract'" [payInfo]="contractInfo" [paymentArr]="listOfData"
+    [isCurrentCheck]="isCurrentCheck" [listOfData]="listOfData" [contract_pay_id]="contract_pay_id"
+    [progressInfo]="progressInfo" (executeChange)="executeChange($event)">
   </app-users-execute-flow>
 </ng-container>

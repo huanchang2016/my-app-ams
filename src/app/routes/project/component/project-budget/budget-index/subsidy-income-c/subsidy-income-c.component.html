@@ -36,15 +36,17 @@
                 </tr>
                 <tr>
                     <td colspan="6">
-                        <app-subsidy-income-type-amount [subsidyId]="data.id" (incomeStatisticsChange)="incomeStatisticsChange($event)"></app-subsidy-income-type-amount>
+                        <app-subsidy-income-type-amount [subsidyId]="data.id"
+                            (incomeStatisticsChange)="incomeStatisticsChange($event)"></app-subsidy-income-type-amount>
                     </td>
                 </tr>
             </tbody>
             <ng-template #footerTpl>
                 <div class="text-right" *ngIf="staticOpt">
-                    <span class="font-weight-bold">含税收入： {{ staticOpt.sub_income | _currency }}</span>
-                    <span class="font-weight-bold mx-md">税金合计： {{ staticOpt.tax_amount | _currency }}</span>
-                    <span class="font-weight-bold">不含税收入： {{ staticOpt.exclude_tax_income | _currency }}</span>
+                    <span class="font-weight-bold text-nowrap">含税收入： {{ staticOpt.sub_income | _currency }}</span>
+                    <span class="font-weight-bold mx-md text-nowrap">税金合计： {{ staticOpt.tax_amount | _currency }}</span>
+                    <span class="font-weight-bold text-nowrap">不含税收入：
+                        {{ staticOpt.exclude_tax_income | _currency }}</span>
                 </div>
             </ng-template>
         </nz-table>

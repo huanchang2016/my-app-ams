@@ -1,0 +1,53 @@
+<form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+
+    <nz-form-item>
+        <nz-form-label nzFor="supplier_id" nzRequired>合同供应商</nz-form-label>
+        <nz-form-control nzErrorTip="请选择合同供应商">
+            <nz-select style="width: 100%;" id="supplier_id" nzShowSearch [nzDisabled]="data" (ngModelChange)="supplierChange($event)"
+                nzPlaceHolder="请选择合同供应商" formControlName="supplier_id">
+                <ng-container *ngFor="let item of supplierList">
+                    <nz-option [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
+               </ng-container>
+             </nz-select>
+        </nz-form-control>
+    </nz-form-item>
+    
+    <nz-form-item>
+        <nz-form-label nzFor="contract_id" nzRequired>合同</nz-form-label>
+        <nz-form-control nzErrorTip="请选择合同">
+            <nz-select style="width: 100%;" id="contract_id" nzShowSearch [nzDisabled]="data" (ngModelChange)="contractChange($event)"
+                nzPlaceHolder="{{ contractList.length === 0 ? '与该供应商无合同签订' : '请选择合同' }}" formControlName="contract_id">
+                <ng-container *ngFor="let item of contractList">
+                    <nz-option [nzLabel]="item.name" [nzValue]="item.id" [nzDisabled]="selectedOption[item.id]"></nz-option>
+               </ng-container>
+             </nz-select>
+        </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item *ngIf="is_split">
+        <nz-form-label nzFor="split_contract_id" nzRequired>分割部门</nz-form-label>
+        <nz-form-control nzErrorTip="请选择分割部门">
+            <nz-select style="width: 100%;" id="split_contract_id" nzShowSearch [nzDisabled]="data" (ngModelChange)="splitContractChange($event)"
+                nzPlaceHolder="请选择分割部门" formControlName="split_contract_id">
+                <ng-container *ngFor="let item of splitContractList">
+                    <nz-option [nzLabel]="item.department.name" [nzValue]="item.id" [nzDisabled]="selectedSplitOption[item.id]"></nz-option>
+               </ng-container>
+             </nz-select>
+        </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+        <nz-form-label nzFor="amount" nzRequired>合同金额</nz-form-label>
+        <nz-form-control nzErrorTip="请填写合同金额，合同金额不得大于{{ limtAmount }}元">
+            <nz-input-group nzSuffix="元">
+                <input type="text" id="amount" formControlName="amount" nz-input placeholder="请填写合同金额，合同金额不得大于{{ limtAmount }}元" />
+            </nz-input-group>
+        </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item nz-row>
+        <nz-form-control [nzSpan]="18" [nzOffset]="6">
+            <button nz-button nzType="primary">{{ data ? '保存' : '新增' }}</button>
+        </nz-form-control>
+    </nz-form-item>
+</form>

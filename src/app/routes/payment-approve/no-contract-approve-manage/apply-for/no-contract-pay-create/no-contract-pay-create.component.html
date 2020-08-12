@@ -25,15 +25,16 @@
       </ul>
     </nz-dropdown-menu>
     <!-- <ng-container *ngIf="listOfData.length !== 0 "> -->
-      <!-- <button *ngIf="!treatypayInfo || treatypayInfo.draft" nz-button [nzType]="'dashed'" (click)="submitTreatyForm()"
-        [nzLoading]="saveLoading">保存非合约支付</button> -->
+    <!-- <button *ngIf="!treatypayInfo || treatypayInfo.draft" nz-button [nzType]="'dashed'" (click)="submitTreatyForm()"
+      [nzLoading]="saveLoading">保存</button> -->
 
-      <ng-container *ngIf="treaty_pay_id">
-        <a *ngIf="!treatypayInfo || treatypayInfo.draft" nz-popconfirm nz-button [nzType]="'primary'" class="mx-sm"
-          nzPopconfirmTitle="请确认非合约支付信息填写完整，无误后继续提交！！！" (nzOnConfirm)="submitContractPay()" (nzOnCancel)="cancel()">
-          提交支付申请
-        </a>
-      </ng-container>
+    <ng-container
+      *ngIf="treaty_pay_id  &&  treatypayInfo?.amount === (treatypayInfo?.write_off_amount ? treatypayInfo?.tax_use_amount - treatypayInfo?.write_off_amount : treatypayInfo?.tax_use_amount) && treatypayInfo?.amount!==0">
+      <a *ngIf="!treatypayInfo || treatypayInfo.draft" nz-popconfirm nz-button [nzType]="'primary'" class="mx-sm"
+        nzPopconfirmTitle="请确认非合约支付信息填写完整，无误后继续提交！！！" (nzOnConfirm)="submitContractPay()" (nzOnCancel)="cancel()">
+        提交
+      </a>
+    </ng-container>
 
     <!-- </ng-container> -->
 
@@ -82,8 +83,8 @@
             <nz-form-label nzFor="write_off_amount" [nzRequired]="ifWriteOff">冲抵金额</nz-form-label>
             <nz-form-control nzErrorTip="请填写冲销个人借款金额">
               <nz-input-group nzSuffix="元" nzPrefix="￥" style="width: 100%">
-                <input type="text" id="write_off_amount" nzPlaceHolder="请填写冲销个人借款金额" formControlName="write_off_amount"
-                  nz-input />
+                <input type="text" id="write_off_amount" nzPlaceHolder="请填写冲销个人借款金额" (keydown)="disableInput()"
+                  formControlName="write_off_amount" nz-input />
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -116,8 +117,22 @@
             </nz-form-control>
           </nz-form-item>
         </div>
+<<<<<<< HEAD
         <div nz-col [nzSm]="24" class="text-right">
           <button *ngIf="!treatypayInfo || treatypayInfo.draft" nz-button [nzType]="'primary'" (click)="saveTreatyForm()" [nzLoading]="saveLoading">保存非合约支付</button>
+=======
+        <div nz-col [nzSm]="24">
+          <nz-form-item>
+            <nz-form-label style="line-height: 40px;">开票总金额</nz-form-label>
+            <ng-container>
+              <span class="mr-md text-nowrap" style="line-height: 40px;">{{ contractTaxTotal || 0 | _currency }}</span>
+            </ng-container>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSm]="24" class="text-right">
+          <button *ngIf="!treatypayInfo || treatypayInfo.draft" nz-button [nzType]="'primary'"
+            (click)="saveTreatyForm()" [nzLoading]="saveLoading">保存非合约支付</button>
+>>>>>>> 0457674505824deb0ca56166216f28b8990ba032
         </div>
 
       </div>
@@ -142,6 +157,7 @@
             <th>摘要</th>
             <th nzWidth="300px">服务单位</th>
             <th>本期支付（元）</th>
+            <th>开票金额</th>
             <th>
               <span>类型支付总计</span>
               <span nz-tooltip [nzTooltipTitle]="'当前成本已经使用非合约支付的总金额'" class="text-md ml-sm">
@@ -160,11 +176,12 @@
             <td>
               <sv-container size="small" col="1">
                 <sv label="单位名称"><span>{{ data.treaty.supplier.name }}</span></sv>
-                <sv label="预算金额"><span>{{ data.treaty.amount | currency: 'CNY' }}</span></sv>
+                <sv label="预算金额"><span class="text-nowrap">{{ data.treaty.amount | currency: 'CNY' }}</span></sv>
               </sv-container>
             </td>
-            <td>{{ data.amount | currency: 'CNY' }}</td>
-            <td>
+            <td class="text-nowrap">{{ data.amount | currency: 'CNY' }}</td>
+            <td class="text-nowrap">{{ data.tax_use_amount | currency: 'CNY' }}</td>
+            <td class="text-nowrap">
               {{ treatyCostTotal(data.treaty_cost) | _currency }}
             </td>
             <td>
@@ -175,11 +192,12 @@
                     <i nz-icon nzType="exclamation-circle" nzTheme="outline"></i>
                   </span>
                 </sv>
-                <sv label="预算总金额"><span>{{ data.cost.amount | currency: 'CNY' }}</span></sv>
-                <sv label="已使用金额"><span>{{ data.cost.pay_amount | currency: 'CNY' }}</span></sv>
-                <sv label="剩余使用"><span>{{ (data.cost.amount - data.cost.pay_amount) | currency: 'CNY' }}</span></sv>
+                <sv label="预算总金额"><span class="text-nowrap">{{ data.cost.amount | currency: 'CNY' }}</span></sv>
+                <sv label="已使用金额"><span class="text-nowrap">{{ data.cost.pay_amount | currency: 'CNY' }}</span></sv>
+                <sv label="剩余使用"><span
+                    class="text-nowrap">{{ (data.cost.amount - data.cost.pay_amount) | currency: 'CNY' }}</span></sv>
               </sv-container>
-              
+
             </td>
             <td>
               <span [innerHTML]="data.remark | showTextareaContent"></span>
@@ -208,11 +226,12 @@
             <div class="pt-md">
               <sv-container size="small">
                 <sv label="费用类型">{{ data.cost.cost_category.name }}</sv>
-                <sv label="预算金额支付"><span>{{ data.cost.amount | currency: 'CNY' }}</span></sv>
-                <sv label="累计支付"><span>{{ data.cost.pay_amount | currency: 'CNY' }}</span></sv>
-                <sv label="剩余支付"><span>{{ (data.cost.amount - data.cost.pay_amount) | currency: 'CNY' }}</span></sv>
+                <sv label="预算金额支付"><span class="text-nowrap">{{ data.cost.amount | currency: 'CNY' }}</span></sv>
+                <sv label="累计支付"><span class="text-nowrap">{{ data.cost.pay_amount | currency: 'CNY' }}</span></sv>
+                <sv label="剩余支付"><span
+                    class="text-nowrap">{{ (data.cost.amount - data.cost.pay_amount) | currency: 'CNY' }}</span></sv>
 
-                <sv label="本期支付"><span class="font-weight-bold">{{ data.amount | currency: 'CNY' }}</span>
+                <sv label="本期支付"><span class="font-weight-bold text-nowrap">{{ data.amount | currency: 'CNY' }}</span>
                 </sv>
               </sv-container>
             </div>
@@ -230,13 +249,21 @@
     </div>
   </nz-card>
 
+<<<<<<< HEAD
   <div class="mt-md" *ngIf="listOfData.length !== 0 && treatypayInfo">
     <app-payment-tax-manage [is_execute_user]="false" [payType]="'treaty'" [payInfo]="treatypayInfo" [paymentArray]="listOfData" [billCategoryArray]="billCategoryArray"></app-payment-tax-manage>
+=======
+  <!-- <div class="mt-md" *ngIf="listOfData.length !== 0 && treatypayInfo"> -->
+  <div class="mt-md" *ngIf="listOfData.length !== 0">
+    <app-payment-tax-manage [is_execute_user]="true" [payType]="'treaty'" [payInfo]="treatypayInfo"
+      [paymentArray]="listOfData" [billCategoryArray]="billCategoryArray" (outer)="readOuter()">
+    </app-payment-tax-manage>
+>>>>>>> 0457674505824deb0ca56166216f28b8990ba032
   </div>
-  
+
 </div>
 
-<!-- 流程进展 -->
+<!-- 流程进展  新增 或者编辑时  不需要显示流程信息 -->
 <nz-card [nzBordered]="false" class="mt-md" [nzTitle]="workflowStatusTitle"
   *ngIf="treatypayInfo && !treatypayInfo.draft">
   <ng-template #workflowStatusTitle>
@@ -270,8 +297,6 @@
               <span class="text-sm text-primary"
                 [class.text-error]="process.finished && !process.agree">{{ process.remark }}</span>
               <ng-template #notFinished>
-                <!-- TODO:暂不开发 -->
-                <!-- <a *ngIf="process.current" (click)="msg.success('click')">催一下</a> -->
               </ng-template>
             </div>
           </ng-template>
@@ -307,8 +332,6 @@
               <span class="text-sm text-primary"
                 [class.text-error]="process.finished && !process.agree">{{ process.remark }}</span>
               <ng-template #notFinished>
-                <!-- TODO:暂不开发 -->
-                <!-- <a *ngIf="process.current" (click)="msg.success('click')">催一下</a> -->
               </ng-template>
             </div>
           </ng-template>

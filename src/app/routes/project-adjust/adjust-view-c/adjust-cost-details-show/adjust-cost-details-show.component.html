@@ -1,0 +1,12 @@
+<sv-container>
+    <ng-container *ngFor="let item of list">
+        <sv [label]="item.cost_category.name"><span class="font-weight-bold text-nowrap">{{ item.amount | currency: 'CNY' }}</span>
+        </sv>
+    </ng-container>
+    <sv [label]="costTpl" col="1">
+        <ng-template #costTpl>
+            <span class="font-weight-bold">总 &nbsp;计</span>
+        </ng-template>
+        <strong>{{ total | currency: 'CNY' }}</strong>
+    </sv>
+</sv-container>

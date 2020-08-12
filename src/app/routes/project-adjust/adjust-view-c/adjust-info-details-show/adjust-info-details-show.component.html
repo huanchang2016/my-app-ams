@@ -1,0 +1,89 @@
+<!-- <div class="mb-md" *ngIf="adjustInfo">
+    <sv-container title="项目信息">
+      <sv label="客户单位" [col]="1">
+        <ng-container *ngFor="let data of adjustInfo.project.customer;let i = index">
+          <div>{{ i + 1}}. {{ data.name }}</div>
+        </ng-container>
+      </sv>
+  
+      <sv label="项目名称"><strong>{{ adjustInfo.info_adjustment.name }}</strong></sv>
+      <sv label="调整编号"><strong>{{ adjustInfo.info_adjustment.number || '未提交' }}</strong></sv>
+      <sv label="项目类型">{{ adjustInfo.info_adjustment.category.name }}</sv>
+  
+      <sv label="负 责 人 ">{{ adjustInfo.project.user.name }}</sv>
+      <sv label="负责部门">{{ adjustInfo.project.department.name }}</sv>
+  
+      <sv label="客户来源">{{ adjustInfo.info_adjustment.origin.code.code_name + adjustInfo.info_adjustment.origin.name }}</sv>
+      <sv label="预计执行时间">{{ adjustInfo.info_adjustment.plan_execution_start_time }} - {{ adjustInfo.info_adjustment.plan_execution_end_time }}</sv>
+  
+      <sv label="项目描述" col="1"><div [innerHTML]="adjustInfo.info_adjustment.description | showTextareaContent"></div></sv>
+      <sv label="项目计划" col="1"><div [innerHTML]="adjustInfo.info_adjustment.progress | showTextareaContent"></div></sv>
+
+    </sv-container>
+  
+    <div class="mb-lg">
+      <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/project/' + adjustInfo.info_adjustment.id" [isShowName]="false"></app-upload-file-attachment-show-c>
+    </div>
+  
+  </div> -->
+<ng-container *ngIf="adjustInfo">
+
+  <sv-container class="mb-lg" [title]="proDesTpl">
+    <ng-template #proDesTpl>
+      <span class="font-weight-bold text-md">一、项目描述</span>
+    </ng-template>
+    <sv col="1">
+      <div [innerHTML]="adjustInfo.info_adjustment.description | showTextareaContent"></div>
+    </sv>
+  </sv-container>
+
+  <sv-container class="mb-lg" [title]="proInfoTpl" col="1">
+    <ng-template #proInfoTpl>
+      <span class="font-weight-bold text-md">二、项目对象</span>
+    </ng-template>
+    <sv class="table-box">
+      <nz-table #basicTable [nzData]="[1]" [nzShowPagination]="false" [nzFrontPagination]="false">
+        <thead>
+          <tr>
+            <th>项目</th>
+            <th>客户单位</th>
+            <th nzWidth="250px">项目情况</th>
+            <th>项目进度计划</th>
+            <th>项目计划执行时间</th>
+            <th>附件</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <div>名称：{{ adjustInfo.info_adjustment.name }}</div>
+              <div>调整编号：
+                <span *ngIf="adjustInfo.info_adjustment.number; else notNumber">{{ adjustInfo.info_adjustment.number }}</span>
+                <ng-template #notNumber>无</ng-template>
+              </div>
+            </td>
+            <td>
+              <ng-container *ngFor="let data of adjustInfo.project.customer;let i = index">
+                <div class="text-nowrap">{{ i + 1}}. {{ data.name }}</div>
+              </ng-container>
+            </td>
+            <td>
+              <sv-container size="small" col="1">
+                <sv label="项目类型">{{ adjustInfo.info_adjustment.category.name }}</sv>
+                <sv label="执行人">{{ adjustInfo.project.user.name }}</sv>
+                <sv label="客户来源">{{ adjustInfo.info_adjustment.origin.code.code_name + adjustInfo.info_adjustment.origin.name }}</sv>
+              </sv-container>
+            </td>
+            <td>
+              <div [innerHTML]="adjustInfo.info_adjustment.progress | showTextareaContent"></div>
+            </td>
+            <td>{{ adjustInfo.info_adjustment.plan_execution_start_time }} - {{ adjustInfo.info_adjustment.plan_execution_end_time }}</td>
+            <td>
+              <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/project/' + adjustInfo.info_adjustment.id" [isShowName]="false"></app-upload-file-attachment-show-c>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </sv>
+  </sv-container>
+</ng-container>

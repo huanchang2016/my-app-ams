@@ -76,17 +76,13 @@ export class MyAdjustSearchComponent implements OnInit {
     }
   }
 
-  add(): void {
-    this.router.navigateByUrl('/project/create');
-  }
-
   edit(data: any): void {
-    this.router.navigateByUrl(`/project/edit/${data.id}`);
+    this.router.navigateByUrl(`/adjust/update/${data.project.id}`);
   }
 
   view(data: any) {
     // this.router.navigateByUrl(`/approve/no-contract/pay/view/${data.project.id}?treaty_pay_id=${data.id}`);
-    this.router.navigateByUrl(`/project/view/${data.id}`);
+    this.router.navigateByUrl(`/adjust/view/${data.project.id}`);
   }
 
   submitProject(id: number): void {

@@ -16,11 +16,7 @@ import { QrAuthComponent } from './passport/qr-auth/qr-auth.component';
 import { ProjectListComponent } from './project/project-list-search/project-list/project-list.component'
 import { ProjectMyProjectListComponent } from './project/my-project/list-search/project-my-project-list/project-my-project-list.component'
 import { ProjectApprovalListComponent } from './project/approval-project/list-search/project-approval-list/project-approval-list.component'
-// project-adjust
-import { ProjectAdjustListComponent } from './project-adjust/project-adjust-list/project-adjust-list.component'
-import { MyAdjustListComponent } from './project-adjust/my-adjust/my-adjust-list/my-adjust-list.component'
-import { ApprovelAdjustListComponent } from './project-adjust/approvel-adjust/approvel-adjust-list/approvel-adjust-list.component'
-import { AdjustListListComponent } from './project-adjust/adjust-list/adjust-list-list/adjust-list-list.component'
+
 // single pages
 import { CallbackComponent } from './callback/callback.component';
 import { UserLockComponent } from './passport/lock/lock.component';
@@ -64,10 +60,7 @@ const routes: Routes = [
       { path: 'project/approvalList', component: ProjectApprovalListComponent },
       // 项目调整
       { path: 'adjust', loadChildren: () => import('./project-adjust/project-adjust.module').then(m => m.ProjectAdjustModule) },
-      { path: 'adjust/my', component: ProjectAdjustListComponent },
-      { path: 'adjust/myAdjust', component: MyAdjustListComponent },
-      { path: 'adjust/approvel', component: ApprovelAdjustListComponent },
-      { path: 'adjust/list', component: AdjustListListComponent },
+      
       // 支付审批管理
       { path: 'approve', loadChildren: () => import('./payment-approve/payment-approve.module').then(m => m.PaymentApproveModule) },
       // 账务管理 （发票、账务处理）

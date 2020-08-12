@@ -25,9 +25,7 @@
     </div>
 </form>
 
-<div class="hidden-mobile">
-</div>
-<nz-table #ajaxTable [nzData]="listOfData" [nzLoading]="loading" class="mt-md hidden-mobile">
+<nz-table #ajaxTable [nzData]="listOfData" [nzLoading]="loading" class="mt-md">
     <thead>
         <tr>
             <th nzWidth="80px">序号</th>
@@ -41,26 +39,26 @@
     <tbody>
         <tr *ngFor="let data of ajaxTable.data; let i = index">
             <td>{{ i + 1 }}</td>
-            <td *ngIf="data.number">{{ data.number }}</td>
-            <td *ngIf="!data.number">/</td>
+            <td>{{ data.project.number }}</td>
             <td>
                 <sv-container size="small" col="1">
-                    <sv label="项目名称">{{ data.name }}</sv>
-                    <sv label="项目类型">{{ data.category.name }}</sv>
-                    <sv label="项目来源">{{ data.origin.code.code_name + data.origin.code.name }}</sv>
+                    <sv label="项目名称">{{ data.project.name }}</sv>
+                    <sv label="项目类型">{{ data.project.category.name }}</sv>
+                    <sv label="项目来源">{{ data.project.origin.code.code_name + data.project.origin.code.name }}</sv>
                 </sv-container>
             </td>
             <td>
                 <sv-container size="small" col="1">
-                    <sv label="创建人">{{ data.user.name }}</sv>
-                    <sv label="部门">{{ data.department.name }}</sv>
-                    <sv label="单位">{{ data.company.name }}</sv>
+                    <sv label="创建人">{{ data.project.user.name }}</sv>
+                    <sv label="部门">{{ data.project.department.name }}</sv>
+                    <sv label="单位">{{ data.project.company.name }}</sv>
                 </sv-container>
             </td>
-            <td class="text-primary text-nowrap">{{ data.project_status.name }}</td>
+            <td class="text-primary text-nowrap">{{ data.project.project_status.name }}</td>
             <td>
-                <a *ngIf="swithFlag" (click)="edit(data)" class="text-nowrap"><i nz-icon nzType="edit"
-                        nzTheme="outline"></i></a>
+                <a *ngIf="swithFlag" (click)="edit(data)" class="text-nowrap">
+                    <i nz-icon nz-tooltip nzTooltipTitle="项目调整" nzType="edit" nzTheme="outline"></i>
+                </a>
                 <nz-divider nzType="vertical"></nz-divider>
                 <a (click)="view(data)"><i nz-icon nzType="eye" nzTheme="outline"></i></a>
 
@@ -78,42 +76,3 @@
         </tr>
     </tbody>
 </nz-table>
-<!-- <div class="hidden-pc mt-md">
-    <div *ngIf="loading && listOfData.length === 0" class="p-md text-center">
-        <nz-spin nzSimple></nz-spin>
-    </div>
-    <div *ngIf="!loading && listOfData.length !== 0">
-        <ng-container *ngFor="let data of listOfData">
-            <nz-card [nzActions]="[actionEdit]" class="mt-md">
-                <nz-skeleton [nzActive]="true" [nzLoading]="false">
-                    <nz-card-meta [nzTitle]="treatyTitltTpl"></nz-card-meta>
-                    <ng-template #treatyTitltTpl>
-                        <span>{{ data.bill_category.name }}</span>
-                        <span class="text-primary text-xs ml-md" [class.text-error]="data.bill_status?.name === '未通过'"
-                            [class.text-success]="data.bill_status?.name === '已通过'">{{ data.bill_status?.name }}</span>
-                    </ng-template>
-                    <div class="pt-md">
-                        <sv-container size="small">
-                            <sv label="发票金额"><span class="font-weight-bold">{{ data.amount | currency: 'CNY' }}</span>
-                            </sv>
-                            <sv label="申请人">{{ data.user.name }}</sv>
-                            <sv label="部&nbsp;&nbsp;&nbsp;门">{{ data.department.name }}</sv>
-                            <sv label="公&nbsp;&nbsp;&nbsp;司">{{ data.company.name }}</sv>
-                            <sv label="开票单位">{{ data.customer.name }}</sv>
-                            <sv label="开票地址">{{ data.customer.address }}</sv>
-                        </sv-container>
-                    </div>
-                </nz-skeleton>
-                <ng-template #actionEdit>
-                    <a [routerLink]="['/bill/approve/view', data.id]" [queryParams]="{ project_id: data.project.id }"><i
-                            nz-icon nzType="eye" nzTheme="outline"></i></a>
-                </ng-template>
-            </nz-card>
-        </ng-container>
-        <div class="mt-md text-center">
-            <nz-pagination [nzSize]="'small'" nzShowSizeChanger [(nzPageSize)]="pageOption.page_size"
-                [nzPageIndex]="pageOption.page" [nzTotal]="total" (nzPageIndexChange)="pageIndexChange($event)"
-                (nzPageSizeChange)="pageSizeChange($event)"></nz-pagination>
-        </div>
-    </div>
-</div> -->

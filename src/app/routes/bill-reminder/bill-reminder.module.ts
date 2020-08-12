@@ -49,7 +49,7 @@ const COMPONENTS_NOROUNT = [
   BillApplyProjectSearchComponent,
   InvoicesTaxFeesCComponent,
   ViewTaxFeesListComponent,
-  BillExcuteListCComponent
+  BillExcuteListCComponent,
 ];
 
 @NgModule({

@@ -39,6 +39,22 @@ export class BillListComponent implements OnInit {
     },
     {
       id: 5,
+      name: '待废弃'
+    },
+    {
+      id: 6,
+      name: '已废弃'
+    },
+    {
+      id: 7,
+      name: '待红冲'
+    },
+    {
+      id: 8,
+      name: '已红冲'
+    },
+    {
+      id: 9,
       name: '未通过'
     },
   ];

@@ -254,3 +254,15 @@
     (executeChange)="executeChange($event)">
   </app-users-execute-flow>
 </ng-container>
+
+<!-- 日志 -->
+<nz-card>
+  <sv-container class="mb-lg" [title]="proLogTpl" *ngIf="projectInfo && !projectInfo.draft">
+    <ng-template #proLogTpl>
+      <span class="font-weight-bold text-md">日志</span>
+    </ng-template>
+    <sv col="1" class="income-show-box">
+      <app-project-logs [logs]="logs"></app-project-logs>
+    </sv>
+  </sv-container>
+</nz-card>

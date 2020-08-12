@@ -22,19 +22,22 @@ const routes: Routes = [
   // { path: 'my/progress', component: ProgressListComponent, data: { title: '进行中的项目'} },
   // { path: 'my/refuse', component: RefuseProjectListComponent, data: { title: '未通过的项目'} },
   // { path: 'my/finished', component: FinishedListComponent, data: { title: '提交通过的项目'} },
-  { path: 'list', component: MyProjectListComponent,
+  {
+    path: 'list', component: MyProjectListComponent,
     children: [
       { path: '', redirectTo: 'draft', pathMatch: 'full' },
-      { path: 'draft', component: DraftListComponent, data: { title: '草稿'} },
-      { path: 'progress', component: ProgressListComponent, data: { title: '进行中'} },
-      { path: 'refuse', component: RefuseProjectListComponent, data: { title: '未通过'} },
-      { path: 'finished', component: FinishedListComponent, data: { title: '已通过'} }
+      { path: 'draft', component: DraftListComponent, data: { title: '草稿' } },
+      { path: 'progress', component: ProgressListComponent, data: { title: '进行中' } },
+      { path: 'refuse', component: RefuseProjectListComponent, data: { title: '未通过' } },
+      { path: 'finished', component: FinishedListComponent, data: { title: '已通过' } }
     ]
   },
-  { path: 'approval', component: ApprovalProjectListComponent,
+  {
+    path: 'approval', component: ApprovalProjectListComponent,
     children: [
       { path: '', redirectTo: 'my', pathMatch: 'full' },
-      { path: 'my', component: MyInApprovalListComponent,
+      {
+        path: 'my', component: MyInApprovalListComponent,
         canActivate: [ACLGuard],
         data: {
           title: '该我审批',
@@ -43,7 +46,8 @@ const routes: Routes = [
           }
         }
       },
-      { path: 'pending', component: MyForApprovaledListComponent,
+      {
+        path: 'pending', component: MyForApprovaledListComponent,
         canActivate: [ACLGuard],
         data: {
           title: '待审批',
@@ -52,7 +56,8 @@ const routes: Routes = [
           }
         }
       },
-      { path: 'finished', component: MyApprovaledListComponent,
+      {
+        path: 'finished', component: MyApprovaledListComponent,
         canActivate: [ACLGuard],
         data: {
           title: '已审批',
@@ -63,11 +68,11 @@ const routes: Routes = [
       },
     ]
   },
-  
-  { path: 'create', component: ProjectCreateComponent, data: { title: '创建项目'} },
-  { path: 'edit/:id', component: ProjectCreateComponent, data: { title: '编辑项目信息'} },
-  { path: 'view/:id', component: ProjectViewComponent, data: { title: '预览项目信息'} },
-  { path: 'adjust/:id', component: ProjectAdjustComponent, data: { title: '调整项目信息'} }
+
+  { path: 'create', component: ProjectCreateComponent, data: { title: '创建项目' } },
+  { path: 'edit/:id', component: ProjectCreateComponent, data: { title: '编辑项目信息' } },
+  { path: 'view/:id', component: ProjectViewComponent, data: { title: '预览项目信息' } },
+  { path: 'adjust/:id', component: ProjectAdjustComponent, data: { title: '调整项目信息' } },
 ];
 
 @NgModule({

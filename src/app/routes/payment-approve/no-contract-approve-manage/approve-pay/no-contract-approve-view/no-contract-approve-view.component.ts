@@ -16,6 +16,10 @@ import html2canvas from 'html2canvas';
     #print-box {
       max-width: 1000px;
     }
+    :host ::ng-deep .income-show-box>.sv__detail
+    {
+      display: block;
+    }
   `]
 })
 export class NoContractApproveViewComponent implements OnInit {
@@ -31,6 +35,9 @@ export class NoContractApproveViewComponent implements OnInit {
       if (params && params.id) {
         this.projectId = +params.id;
         this.getProjectInfo(); // 项目信息
+        if (this.projectId) {
+          this.getProjectLog(this.projectId);
+        }
       }
     });
 
@@ -68,7 +75,23 @@ export class NoContractApproveViewComponent implements OnInit {
   isPrinter = false;
   pdfPosition = 0;
 
+  // 日志
+  logs: any[] = [];
+
   ngOnInit() { }
+
+  // 日志
+  getProjectLog(id: number): void {
+    this.settingsConfigService.get(`/api/project/log/${id}`).subscribe((res: ApiData) => {
+      console.log('log ....', res.data);
+      // this.logLoading = false;
+      if (res.code === 200) {
+        this.logs = res.data.project_log;
+      } else {
+        this.logs = [];
+      }
+    })
+  }
 
   getTreatyPayDetail(): void {
     this.settingsConfigService.get(`/api/treaty/pay/detail/${this.treaty_pay_id}`)

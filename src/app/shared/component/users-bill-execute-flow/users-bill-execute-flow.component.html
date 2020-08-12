@@ -140,8 +140,8 @@
               <tr *ngFor="let data of costSelectTable.data; let i = index">
                 <td>{{ i + 1}}</td>
                 <td>{{ data.invoice_number }}</td>
-                <td>{{ data.invoice_amount | _currency}}</td>
-                <td>{{ data.tax_amount | _currency}}</td>
+                <td class="text-nowrap">{{ data.invoice_amount | _currency}}</td>
+                <td class="text-nowrap">{{ data.tax_amount | _currency}}</td>
                 <!-- <td>
                   <sv-container size="small" col="1">
                     <sv label="预算金额"><span>{{ data.cost.amount | currency: 'CNY' }}</span></sv>
@@ -172,9 +172,9 @@
           </sv-container> -->
           <!-- <ng-template> -->
           <div class="text-right" *ngIf="billInfo">
-            <span class="font-weight-bold">总金额： {{ billInfo.amount | _currency }}</span>
-            <span class="font-weight-bold mx-md">开票总金额： {{ billInfo.invoice_amount | _currency }}</span>
-            <span class="font-weight-bold">总税额： {{ billInfo.tax_amount | _currency }}</span>
+            <span class="font-weight-bold text-nowrap">总金额： {{ billInfo.amount | _currency }}</span>
+            <span class="font-weight-bold mx-md text-nowrap">开票总金额： {{ billInfo.invoice_amount | _currency }}</span>
+            <span class="font-weight-bold text-nowrap">总税额： {{ billInfo.tax_amount | _currency }}</span>
           </div>
           <!-- </ng-template> -->
         </nz-card>

@@ -28,7 +28,7 @@ import { MyForApprovaledListComponent } from './approval-project/my-for-approval
 import { ProjectListCComponent } from './my-project/project-list-c/project-list-c.component';
 import { ApprovalProjectListCComponent } from './approval-project/approval-project-list-c/approval-project-list-c.component';
 import { ProjectInfoShowCComponent } from './component/project-info-show-c/project-info-show-c.component';
-import { ProjectLogsComponent } from './component/project-logs/project-logs.component';
+// import { ProjectLogsComponent } from './component/project-logs/project-logs.component';
 import { ProjectAdjustComponent } from './project-adjust/project-adjust.component';
 import { AdjustProjectInfoComponent } from './project-adjust/adjust-project-info/adjust-project-info.component';
 import { AdjustBudgetInfoComponent } from './project-adjust/adjust-budget-info/adjust-budget-info.component';
@@ -92,7 +92,7 @@ const COMPONENTS_NOROUNT = [
   ApprovalProjectListCComponent,
   ProjectInfoShowCComponent,
   SupplierNoContractListComponent,
-  ProjectLogsComponent,
+  // ProjectLogsComponent,
   AdjustProjectInfoComponent,
   AdjustBudgetInfoComponent,
   ProjectIncomeCComponent,
@@ -131,4 +131,4 @@ const COMPONENTS_NOROUNT = [
   ],
   entryComponents: COMPONENTS_NOROUNT
 })
-export class ProjecttModule { }
+export class ProjectModule { }

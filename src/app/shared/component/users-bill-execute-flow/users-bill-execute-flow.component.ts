@@ -65,10 +65,18 @@ export class UsersBillExecuteFlowComponent implements OnChanges {
 
   billAmount: any;
 
+  execute_man: any = null;
+
   ngOnChanges() {
     if (this.progressInfo) {
       console.log(this.progressInfo, 'app-users-execute-flow');
       this.nodeProcess = [this.progressInfo.execute_user];
+      console.log(this.nodeProcess, 'nodeProcess');
+      this.execute_man = this.nodeProcess[0].name;
+      if (this.execute_man) {
+        this.executeName.emit(this.execute_man);
+      }
+      // console.log(this.execute_man, 'execute_man');
       this.isExecuteUser = this.progressInfo.execute_user.id === this.settings.user.id;
     }
     if (this.billInfo) {

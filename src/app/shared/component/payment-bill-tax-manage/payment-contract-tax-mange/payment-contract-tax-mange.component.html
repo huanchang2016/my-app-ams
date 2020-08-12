@@ -25,9 +25,10 @@
                     <td>{{ data.bill_category===null?'未开发票':data.bill_category.name }}</td>
                     <td>
                         <sv-container size="small" col="1">
-                            <sv label="除税金额"><span>{{ data.exclude_tax_amount | currency: 'CNY' }}</span></sv>
-                            <sv label="税金"><span>{{ data.tax_amount | currency: 'CNY' }}</span></sv>
-                            <sv label="总金额"><span>{{ data.amount | currency: 'CNY' }}</span></sv>
+                            <sv label="除税金额"><span
+                                    class="text-nowrap">{{ data.exclude_tax_amount | currency: 'CNY' }}</span></sv>
+                            <sv label="税金"><span class="text-nowrap">{{ data.tax_amount | currency: 'CNY' }}</span></sv>
+                            <sv label="总金额"><span class="text-nowrap">{{ data.amount | currency: 'CNY' }}</span></sv>
                         </sv-container>
                     </td>
                     <td *ngIf="is_execute_user">
@@ -41,8 +42,8 @@
             </tbody>
         </nz-table>
         <div class="text-right" *ngIf="contractInfo">
-            <span class="font-weight-bold">总金额： {{ contractInfo.amount | _currency }}</span>
-            <span class="font-weight-bold mx-md">开票总金额： {{ contractInfo.tax_use_amount | _currency }}</span>
+            <span class="font-weight-bold text-nowrap">总金额： {{ contractInfo.amount | _currency }}</span>
+            <span class="font-weight-bold mx-md text-nowrap">开票总金额： {{ contractInfo.tax_use_amount | _currency }}</span>
         </div>
     </div>
 
@@ -63,11 +64,13 @@
                                     class="font-weight-bold">{{ data.bill_category===null?'未开发票':data.bill_category.name  }}</span>
                             </sv>
                             <sv label="除税金额"><span
-                                    class="font-weight-bold">{{ data.exclude_tax_amount | currency: 'CNY' }}</span>
+                                    class="font-weight-bold text-nowrap">{{ data.exclude_tax_amount | currency: 'CNY' }}</span>
                             </sv>
-                            <sv label="税金"><span class="font-weight-bold">{{ data.tax_amount | currency: 'CNY' }}</span>
+                            <sv label="税金"><span
+                                    class="font-weight-bold text-nowrap">{{ data.tax_amount | currency: 'CNY' }}</span>
                             </sv>
-                            <sv label="总金额"><span class="font-weight-bold">{{ data.amount | currency: 'CNY' }}</span>
+                            <sv label="总金额"><span
+                                    class="font-weight-bold text-nowrap">{{ data.amount | currency: 'CNY' }}</span>
                             </sv>
                         </sv-container>
                     </div>
@@ -221,8 +224,8 @@
             <tr *ngFor="let data of detailTable.data; let i = index">
                 <td>{{ i + 1 }}</td>
                 <td>{{ data.cost.cost_category.name }}</td>
-                <td>{{ data.amount | currency: 'CNY' }}</td>
-                <td>{{ data.tax_use_amount | currency: 'CNY' }}</td>
+                <td class="text-nowrap">{{ data.amount | currency: 'CNY' }}</td>
+                <td class="text-nowrap">{{ data.tax_use_amount | currency: 'CNY' }}</td>
                 <td>{{ data.contract_pay.pay_status.name }}</td>
                 <!-- <td>
                     <a (click)="editBillTicket(billTitle, billContent, billFooter, data, i)"><i nz-icon nzType="edit"

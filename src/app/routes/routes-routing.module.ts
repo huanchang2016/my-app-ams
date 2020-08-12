@@ -57,11 +57,11 @@ const routes: Routes = [
       // { path: 'widgets', loadChildren: () => import('./widgets/widgets.module').then(m => m.WidgetsModule) },
       // 新增模块
       // 项目管理
-      { path: 'project', loadChildren: () => import('./project/project.module').then(m => m.ProjecttModule) },
+      { path: 'project', loadChildren: () => import('./project/project.module').then(m => m.ProjectModule) },
       { path: 'pro-settings', loadChildren: () => import('./project-settings/project-settings.module').then(m => m.ProjectSettingsModule) },
-      { path: 'project/projectList', component: ProjectListComponent },
       { path: 'project/my-project', component: ProjectMyProjectListComponent },
       { path: 'project/approvalList', component: ProjectApprovalListComponent },
+      { path: 'project/projectList', component: ProjectListComponent },
       // 项目调整
       { path: 'adjust', loadChildren: () => import('./project-adjust/project-adjust.module').then(m => m.ProjectAdjustModule) },
       { path: 'adjust/my', component: ProjectAdjustListComponent },

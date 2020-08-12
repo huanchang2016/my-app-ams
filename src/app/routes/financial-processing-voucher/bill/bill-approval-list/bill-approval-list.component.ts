@@ -7,7 +7,8 @@ import { Component, OnInit } from '@angular/core';
   :host ::ng-deep .ant-tabs-nav-wrap>div {
     text-align: right;
   }
-  `]
+  `
+  ]
 })
 export class BillApprovalListComponent implements OnInit {
 
@@ -20,6 +21,14 @@ export class BillApprovalListComponent implements OnInit {
     },
     {
       id: 2,
+      name: '待废弃'
+    },
+    {
+      id: 3,
+      name: '待红冲'
+    },
+    {
+      id: 4,
       name: '已审批'
     },
   ];

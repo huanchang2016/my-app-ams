@@ -36,6 +36,7 @@ import { ProjectInfoShowTplComponent } from './component/project-info-show-tpl/p
 import { UsersBillExecuteFlowComponent } from './component/users-bill-execute-flow/users-bill-execute-flow.component';
 import { PaymentTaxManageComponent } from './component/payment-bill-tax-manage/payment-tax-manage/payment-tax-manage.component';
 import { PaymentContractTaxMangeComponent } from './component/payment-bill-tax-manage/payment-contract-tax-mange/payment-contract-tax-mange.component';
+import { ProjectLogsComponent } from './component/project-logs/project-logs.component'
 
 const COMPONENTS = [
   CascaderAreaComponent,
@@ -50,12 +51,13 @@ const COMPONENTS = [
   ProjectInfoShowTplComponent,
   UsersBillExecuteFlowComponent,
   PaymentTaxManageComponent,
-  PaymentContractTaxMangeComponent
+  PaymentContractTaxMangeComponent,
+  ProjectLogsComponent
 ];
 
 const DIRECTIVES = [
-    ShowTextareaContentPipe
-  ];
+  ShowTextareaContentPipe
+];
 // #endregion
 
 @NgModule({

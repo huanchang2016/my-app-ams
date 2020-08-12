@@ -41,23 +41,23 @@
     <tbody>
         <tr *ngFor="let data of ajaxTable.data; let i = index">
             <td>{{ i + 1 }}</td>
-            <td *ngIf="data.number">{{ data.number }}</td>
-            <td *ngIf="!data.number">/</td>
+            <td *ngIf="data.project.number">{{ data.project.number }}</td>
+            <td *ngIf="!data.project.number">/</td>
             <td>
                 <sv-container size="small" col="1">
-                    <sv label="项目名称">{{ data.name }}</sv>
-                    <sv label="项目类型">{{ data.category.name }}</sv>
-                    <sv label="项目来源">{{ data.origin.code.code_name + data.origin.code.name }}</sv>
+                    <sv label="项目名称">{{ data.project.name }}</sv>
+                    <sv label="项目类型">{{ data.project.category.name }}</sv>
+                    <sv label="项目来源">{{ data.project.origin.code.code_name + data.project.origin.code.name }}</sv>
                 </sv-container>
             </td>
             <td>
                 <sv-container size="small" col="1">
-                    <sv label="创建人">{{ data.user.name }}</sv>
-                    <sv label="部门">{{ data.department.name }}</sv>
-                    <sv label="单位">{{ data.company.name }}</sv>
+                    <sv label="创建人">{{ data.project.user.name }}</sv>
+                    <sv label="部门">{{ data.project.department.name }}</sv>
+                    <sv label="单位">{{ data.project.company.name }}</sv>
                 </sv-container>
             </td>
-            <td class="text-primary text-nowrap">{{ data.project_status.name }}</td>
+            <td class="text-primary text-nowrap">{{ data.adjustment_status.name }}</td>
             <td>
                 <a *ngIf="swithFlag" (click)="edit(data)" class="text-nowrap"><i nz-icon nzType="edit"
                         nzTheme="outline"></i></a>

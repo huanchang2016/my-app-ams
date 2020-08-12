@@ -37,7 +37,7 @@
           </ng-container>
         </td>
         <td>
-          <ng-container *ngIf="data.exclude_tax_amount">
+          <ng-container *ngIf="data.exclude_tax_amount" class="text-nowrap">
             {{ data.exclude_tax_amount | _currency }}
           </ng-container>
           <ng-container *ngIf="!data.exclude_tax_amount">
@@ -45,7 +45,7 @@
           </ng-container>
         </td>
         <td>
-          <ng-container *ngIf="data.tax_amount">
+          <ng-container *ngIf="data.tax_amount" class="text-nowrap">
             {{ data.tax_amount | _currency }}
           </ng-container>
           <ng-container *ngIf="!data.tax_amount">
@@ -53,10 +53,10 @@
           </ng-container>
         </td>
         <td>
-          <ng-container *ngIf="data.bill_category">
+          <ng-container *ngIf="data.bill_category" class="text-nowrap">
             {{ data.exclude_tax_amount + data.tax_amount | _currency }}
           </ng-container>
-          <ng-container *ngIf="!data.bill_category">
+          <ng-container *ngIf="!data.bill_category" class="text-nowrap">
             {{ data.amount | _currency }}
           </ng-container>
         </td>
@@ -71,9 +71,9 @@
     </tbody>
   </nz-table>
   <div class="text-right" *ngIf="payInfo">
-    <span class="font-weight-bold">实际支付金额： {{ payInfo.amount | _currency }}</span>
-    <span class="font-weight-bold mx-md">开票总金额： {{ payInfo.tax_use_amount | _currency }}</span>
-    <span *ngIf="payInfo.write_off_amount" class="font-weight-bold mx-md">冲抵金额：
+    <span class="font-weight-bold text-nowrap">实际支付金额： {{ payInfo.amount | _currency }}</span>
+    <span class="font-weight-bold mx-md text-nowrap">开票总金额： {{ payInfo.tax_use_amount | _currency }}</span>
+    <span *ngIf="payInfo.write_off_amount" class="font-weight-bold mx-md text-nowrap">冲抵金额：
       {{ payInfo.write_off_amount | _currency }}</span>
   </div>
 
@@ -211,8 +211,8 @@
       <tr *ngFor="let data of detailTable.data; let i = index">
         <td>{{ i + 1 }}</td>
         <td>{{ data.cost.cost_category.name }}</td>
-        <td>{{ data.amount | currency: 'CNY' }}</td>
-        <td>{{ data.tax_use_amount | currency: 'CNY' }}</td>
+        <td class="text-nowrap">{{ data.amount | currency: 'CNY' }}</td>
+        <td class="text-nowrap">{{ data.tax_use_amount | currency: 'CNY' }}</td>
         <td>{{ data.treaty_pay.pay_status.name }}</td>
       </tr>
     </tbody>

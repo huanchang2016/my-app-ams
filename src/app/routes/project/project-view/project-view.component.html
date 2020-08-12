@@ -148,19 +148,20 @@
 
       <sv-title>2. 成本</sv-title>
       <ng-container *ngFor="let cost of project.budget?.cost">
-        <sv [label]="cost.cost_category.name"><span class="font-weight-bold">{{ cost.amount | currency: 'CNY' }}</span>
+        <sv [label]="cost.cost_category.name"><span
+            class="font-weight-bold text-nowrap">{{ cost.amount | currency: 'CNY' }}</span>
         </sv>
       </ng-container>
       <sv [label]="costTpl" col="1">
         <ng-template #costTpl>
           <span class="font-weight-bold">总 &nbsp;计</span>
         </ng-template>
-        <strong>{{ project.budget?.cost_amount | currency: 'CNY' }}</strong>
+        <strong class="text-nowrap">{{ project.budget?.cost_amount | currency: 'CNY' }}</strong>
       </sv>
 
       <sv-title>3. 项目利润</sv-title>
       <ng-container *ngIf="project.budget">
-        <sv label="毛利润"><span>{{ project.budget?.gross_profit | currency: 'CNY' }}</span></sv>
+        <sv label="毛利润"><span class="text-nowrap">{{ project.budget?.gross_profit | currency: 'CNY' }}</span></sv>
         <sv label="毛利率"><span>{{ countPercent(project.budget?.gross_profit_rate, 100) }} %</span></sv>
       </ng-container>
 
@@ -193,14 +194,14 @@
                     <td>{{ data.supplier.name }}</td>
                     <td>
                       <div>合同名称：{{ data.contract.name }}</div>
-                      <div>合同金额：{{ data.contract.amount | _currency }}</div>
+                      <div class="text-nowrap">合同金额：{{ data.contract.amount | _currency }}</div>
                       <div>服务类型：{{ data.contract.service_category.name }}</div>
                       <div>起止时间：{{ data.contract.start_time }} 至 {{ data.contract.end_time }}</div>
                     </td>
                     <td>
                       <ng-container *ngIf="data.split_contract">
                         <div>部门：{{ data.split_contract.department.name }}</div>
-                        <div>金额：{{ data.split_contract.amount | _currency }}</div>
+                        <div class="text-nowrap">金额：{{ data.split_contract.amount | _currency }}</div>
                       </ng-container>
                       <ng-container *ngIf="!data.split_contract">
                         <div [innerHTML]="data.split_contract | yn"></div>
@@ -210,9 +211,9 @@
                       <div>收款银行：{{ data.contract.bank_name }}</div>
                       <div>银行账号：{{ data.contract.bank_account }}</div>
                       <div>收款单位：{{ data.contract.pay_company }}</div>
-                      <div>收款金额：{{ data.contract.amount | _currency }}</div>
+                      <div class="text-nowrap">收款金额：{{ data.contract.amount | _currency }}</div>
                     </td>
-                    <td>{{ data.amount | _currency }}</td>
+                    <td class="text-nowrap">{{ data.amount | _currency }}</td>
                     <td>
                       <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/contract/' + data.id"
                         [isShowName]="false"></app-upload-file-attachment-show-c>
@@ -244,7 +245,7 @@
                     <td>{{  data.supplier?.name }}</td>
                     <td>{{  data.service_category?.name }}</td>
                     <td>
-                      <span>{{ data.amount | _currency }}</span>
+                      <span class="text-nowrap">{{ data.amount | _currency }}</span>
                     </td>
                   </tr>
                 </tbody>
@@ -265,10 +266,10 @@
                   </sv>
                   <ng-container *ngIf="data.split_contract">
                     <sv label="分割部门">{{ data.split_contract.department.name }}</sv>
-                    <sv label="分割金额">{{ data.split_contract.amount | _currency }}</sv>
+                    <sv class="text-nowrap" label="分割金额">{{ data.split_contract.amount | _currency }}</sv>
                   </ng-container>
-                  <sv label="合同总金额">{{ data.contract.amount | _currency }}</sv>
-                  <sv label="项目金额">{{ data.amount | _currency }}</sv>
+                  <sv class="text-nowrap" label="合同总金额">{{ data.contract.amount | _currency }}</sv>
+                  <sv class="text-nowrap" label="项目金额">{{ data.amount | _currency }}</sv>
                   <sv label="收款银行">{{ data.contract.bank_name }}</sv>
                   <sv label="银行账号">{{ data.contract.bank_account }}</sv>
                   <sv label="收款单位">{{ data.contract.pay_company }}</sv>
@@ -289,7 +290,7 @@
               <nz-card class="mb-sm">
                 <sv-container col="1" size="small">
                   <sv label="服务商类型">{{  data.service_category?.name }}</sv>
-                  <sv label="金额（元）"><span>{{ data.amount | _currency }}</span></sv>
+                  <sv class="text-nowrap" label="金额（元）"><span>{{ data.amount | _currency }}</span></sv>
                   <sv label="供应商名称">{{ data.company?.name }}</sv>
                 </sv-container>
               </nz-card>

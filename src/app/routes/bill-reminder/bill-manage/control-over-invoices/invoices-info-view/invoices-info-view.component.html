@@ -14,9 +14,23 @@
 
   <ng-template #action>
     <!-- 废弃和红冲按钮当有申请人或者执行人的时候显示 -->
-    <button *ngIf="progressInfo?.workflow_status.name==='已完成' && projectDetailInfo?.user.name" nz-button
-      nzType="primary" nzDanger>废弃</button>
-    <button nz-button nzType="primary" nzDanger>红冲</button>
+    <!-- <button
+      *ngIf="status==='已完成' && ( projectUserName === localstorageUser.name || localstorageUser.name===executeName )"
+      nz-button nzType="primary" nzDanger (click)="abandonedBill()">废弃</button> -->
+
+    <a *ngIf="status==='已完成' && ( projectUserName === localstorageUser.name || localstorageUser.name===executeName )"
+      nz-popconfirm nz-button nzType="primary" nzDanger nzPopconfirmTitle="请确认废弃该发票吗，请确认无误后提交！！！"
+      (nzOnConfirm)="abandonedBill()" (nzOnCancel)="cancel()">
+      废弃
+    </a>
+    <!-- <button
+      *ngIf="status==='已完成' && ( projectUserName === localstorageUser.name || localstorageUser.name===executeName )"
+      nz-button nzType="primary" nzDanger (click)="redPunch()">红冲</button> -->
+    <a *ngIf="status==='已完成' && ( projectUserName === localstorageUser.name || localstorageUser.name===executeName )"
+      nz-popconfirm nz-button nzType="primary" nzDanger nzPopconfirmTitle="请确认红冲该发票吗，请确认无误后提交！！！"
+      (nzOnConfirm)="redPunch()" (nzOnCancel)="cancel()">
+      红冲
+    </a>
     <button nz-button (click)="printCurrentModal('print-box',  projectDetailInfo?.name)">打印</button>
     <button nz-button nz-dropdown [nzDropdownMenu]="opMenu" class="mx-sm">
       下载 <i nz-icon nzType="download" nzTheme="outline"></i>
@@ -35,226 +49,450 @@
 
 <nz-card class="bill-info">
   <ng-template #billTitleTpl>
-    <div class="text-center font-weight-bold">发票确认单</div>
+    <div class="text-center font-weight-bold">发票确认单111</div>
   </ng-template>
-  <div id="print-box" class="bill-info-box" *ngIf="projectDetailInfo && billInfo">
-    <nz-table #borderedTable nzData="[1]" nzBordered [nzFrontPagination]="false" [nzTitle]="tableTitle">
-      <ng-template #tableTitle>
-        <div class="text-center text-lg">{{ billInfo?.company.name }}</div>
-      </ng-template>
-      <tbody>
-        <tr>
-          <td colspan="5" class="text-md text-center">发票确认单</td>
-        </tr>
-        <tr>
-          <td class="font-weight-bold td-left">项目类型</td>
-          <td colspan="4">{{ billInfo?.project.category?.name }}</td>
-        </tr>
-        <tr>
-          <td class="font-weight-bold td-left">项目名称</td>
-          <td colspan="4">{{ billInfo?.project.name }}</td>
-        </tr>
-        <!-- <tr> // 2020 年7月31日 上午 10：07 修改发票详情预览 显示
-          <td class="font-weight-bold td-left">项目编号</td>
-          <td colspan="4">{{ billInfo?.project.number }}</td>
-        </tr> -->
-        <tr>
-          <td class="font-weight-bold">协议号</td>
-          <td colspan="4">{{ billInfo?.customer_contract_code }}</td>
-        </tr>
-        <tr>
-          <td class="font-weight-bold">发票类型</td>
-          <td colspan="4">
-            <ng-container *ngFor="let billCate of billCategoryArray">
-              <label class="mr-lg bill-category-box" nzDisabled nz-checkbox
-                [ngModel]="billCate.id === billInfo?.bill_category.id">{{ billCate.name }}</label>
-            </ng-container>
+  <div id="print-box" *ngIf="projectDetailInfo && billInfo">
+    <div class="bill-info-box">
+      <nz-table #borderedTable nzData="[1]" nzBordered [nzFrontPagination]="false" [nzTitle]="tableTitle">
+        <ng-template #tableTitle>
+          <div class="text-center text-lg">{{ billInfo?.company.name }}</div>
+        </ng-template>
+        <tbody>
+          <tr>
+            <td colspan="5" class="text-md text-center">发票确认单</td>
+          </tr>
+          <tr>
+            <td class="font-weight-bold td-left">项目类型</td>
+            <td colspan="4">{{ billInfo?.project.category?.name }}</td>
+          </tr>
+          <tr>
+            <td class="font-weight-bold td-left">项目名称</td>
+            <td colspan="4">{{ billInfo?.project.name }}</td>
+          </tr>
+          <!-- <tr> // 2020 年7月31日 上午 10：07 修改发票详情预览 显示
+            <td class="font-weight-bold td-left">项目编号</td>
+            <td colspan="4">{{ billInfo?.project.number }}</td>
+          </tr> -->
+          <tr>
+            <td class="font-weight-bold">协议号</td>
+            <td colspan="4">{{ billInfo?.customer_contract_code }}</td>
+          </tr>
+          <tr>
+            <td class="font-weight-bold">发票类型</td>
+            <td colspan="4">
+              <ng-container *ngFor="let billCate of billCategoryArray">
+                <label class="mr-lg bill-category-box" nzDisabled nz-checkbox
+                  [ngModel]="billCate.id === billInfo?.bill_category.id">{{ billCate.name }}</label>
+              </ng-container>
 
-          </td>
-        </tr>
-        <tr>
-          <td class="font-weight-bold">开票单位名称</td>
-          <td colspan="4">{{ billInfo?.customer.name }}</td>
-        </tr>
-        <tr>
-          <td class="font-weight-bold">纳税人识别号</td>
-          <td colspan="4">{{ billInfo?.customer.code }}</td>
-        </tr>
-        <tr>
-          <td class="font-weight-bold">地址</td>
-          <td colspan="4">{{ billInfo?.customer.address }}</td>
-        </tr>
-        <tr>
-          <td class="font-weight-bold">联系电话</td>
-          <td colspan="4">{{ billInfo?.customer.tel }}</td>
-        </tr>
-        <tr>
-          <td class="font-weight-bold">开户行及账号</td>
-          <td colspan="4">{{ billInfo?.customer.bank_name }} / {{ billInfo?.customer.bank_account }}
-          </td>
-        </tr>
-        <tr *ngIf="billInfo.tax">
-          <td class="font-weight-bold">开票税目</td>
-          <td colspan="2" class="font-weight-bold">
-            {{ billInfo?.tax.name }}
-          </td>
-          <td class="font-weight-bold">税率</td>
-          <td colspan="4" class="font-weight-bold">
-            {{ billInfo?.tax.rate }}
-          </td>
-        </tr>
-        <tr *ngIf="billInfo.subsidy_income_detail">
-          <!-- <td class="font-weight-bold">开票税目</td>
-          <td colspan="2" class="font-weight-bold">
-            {{ billInfo?.tax.name }}
-          </td> -->
-          <td class="font-weight-bold">税率</td>
-          <td colspan="4" class="font-weight-bold">
-            {{ billInfo?.subsidy_income_detail.tax_rate }}
-          </td>
-        </tr>
-        <tr>
-        <tr>
-          <td class="font-weight-bold">开票金额</td>
-          <td colspan="4" class="text-error font-weight-bold text-nowrap">{{ billInfo?.amount | currency: 'CNY' }}</td>
-        </tr>
-        <tr>
-          <td class="font-weight-bold">经费所属期</td>
-          <td colspan="4">{{ billInfo?.bill_period_start_time + ' - ' + billInfo?.bill_period_end_time }}</td>
-        </tr>
-        <tr>
-          <td class="font-weight-bold">备注信息</td>
-          <td colspan="4">
-            <span [innerHTML]="billInfo?.remark | showTextareaContent"></span></td>
-        </tr>
-        <tr *ngIf="billId">
-          <td class="font-weight-bold">附件</td>
-          <td colspan="4">
-            <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/bill/' + billId">
-            </app-upload-file-attachment-show-c>
-          </td>
-        </tr>
-      </tbody>
-      <!-- <ng-template #tableFooter>
-        <div class="text-right">开票日期： {{ billInfo?.submit_time }}</div>
-      </ng-template> -->
-    </nz-table>
+            </td>
+          </tr>
+          <tr>
+            <td class="font-weight-bold">开票单位名称</td>
+            <td colspan="4">{{ billInfo?.customer.name }}</td>
+          </tr>
+          <tr>
+            <td class="font-weight-bold">纳税人识别号</td>
+            <td colspan="4">{{ billInfo?.customer.code }}</td>
+          </tr>
+          <tr>
+            <td class="font-weight-bold">地址</td>
+            <td colspan="4">{{ billInfo?.customer.address }}</td>
+          </tr>
+          <tr>
+            <td class="font-weight-bold">联系电话</td>
+            <td colspan="4">{{ billInfo?.customer.tel }}</td>
+          </tr>
+          <tr>
+            <td class="font-weight-bold">开户行及账号</td>
+            <td colspan="4">{{ billInfo?.customer.bank_name }} / {{ billInfo?.customer.bank_account }}
+            </td>
+          </tr>
+          <tr *ngIf="billInfo.tax">
+            <td class="font-weight-bold">开票税目</td>
+            <td colspan="2" class="font-weight-bold">
+              {{ billInfo?.tax.name }}
+            </td>
+            <td class="font-weight-bold">税率</td>
+            <td colspan="4" class="font-weight-bold">
+              {{ billInfo?.tax.rate }}
+            </td>
+          </tr>
+          <tr *ngIf="billInfo.subsidy_income_detail">
+            <!-- <td class="font-weight-bold">开票税目</td>
+            <td colspan="2" class="font-weight-bold">
+              {{ billInfo?.tax.name }}
+            </td> -->
+            <td class="font-weight-bold">税率</td>
+            <td colspan="4" class="font-weight-bold">
+              {{ billInfo?.subsidy_income_detail.tax_rate }}
+            </td>
+          </tr>
+          <tr>
+          <tr>
+            <td class="font-weight-bold">开票金额</td>
+            <td colspan="4" class="text-error font-weight-bold text-nowrap">{{ billInfo?.amount | currency: 'CNY' }}
+            </td>
+          </tr>
+          <tr>
+            <td class="font-weight-bold">经费所属期</td>
+            <td colspan="4">{{ billInfo?.bill_period_start_time + ' - ' + billInfo?.bill_period_end_time }}</td>
+          </tr>
+          <tr>
+            <td class="font-weight-bold">备注信息</td>
+            <td colspan="4">
+              <span [innerHTML]="billInfo?.remark | showTextareaContent"></span></td>
+          </tr>
+          <tr *ngIf="billId">
+            <td class="font-weight-bold">附件</td>
+            <td colspan="4">
+              <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/bill/' + billId">
+              </app-upload-file-attachment-show-c>
+            </td>
+          </tr>
+        </tbody>
+        <!-- <ng-template #tableFooter>
+          <div class="text-right">开票日期： {{ billInfo?.submit_time }}</div>
+        </ng-template> -->
+      </nz-table>
+    </div>
+    <!-- 开票 审批流程进展： 草稿 不显示 -->
+    <nz-card [nzBordered]="false" class="mt-md" [nzTitle]="workflowStatusTitle">
+      <ng-template #workflowStatusTitle>
+        <span>审批进展</span>
+        <span class="text-primary ml-md text-sm">{{ progressInfo?.workflow_status.name }}</span>
+      </ng-template>
+      <ng-container *ngIf="nodeProcess.length !== 0;else nodeProcessLoadingTpl">
+        <nz-steps nzDirection="vertical" nzProgressDot class="hidden-pc">
+          <nz-step [nzTitle]="'开票申请'" [nzStatus]="'finish'" [nzDescription]="startDes">
+            <ng-template #startDes>
+              <div class="my-sm">
+                {{ projectDetailInfo?.user.name }}
+              </div>
+              <div>
+                {{ projectDetailInfo?.submit_time }}
+              </div>
+            </ng-template>
+          </nz-step>
+          <ng-container *ngFor="let process of nodeProcess">
+            <nz-step [nzTitle]="process?.node.name"
+              [nzStatus]=" process.current ? 'process' : ( !process.finished ? 'wait' : ( !process.agree ?  'error' : 'finish') )"
+              [nzDescription]="createDesc">
+              <ng-template #createDesc>
+                <div class="desc">
+                  <div class="my-sm">
+                    {{ process?.user.name }}
+                  </div>
+                  <div *ngIf="process.finished; else notFinished">
+                    {{ process.finished_time }}
+                  </div>
+                  <span class="text-sm text-primary"
+                    [class.text-error]="process.finished && !process.agree">{{ process.remark }}</span>
+                  <ng-template #notFinished>
+                    <!-- TODO:暂不开发 -->
+                    <!-- <a *ngIf="process.current" (click)="msg.success('click')">催一下</a> -->
+                  </ng-template>
+                </div>
+              </ng-template>
+            </nz-step>
+          </ng-container>
+
+          <nz-step [nzTitle]="'完成'"
+            [nzStatus]=" !progressInfo.finished ? 'wait' : ( progressInfo.agree ? 'finish' : 'error' ) "></nz-step>
+        </nz-steps>
+        <nz-steps nzProgressDot class="hidden-mobile">
+          <ng-container *ngFor="let process of nodeProcess">
+            <nz-step [nzTitle]="'开票申请'" [nzStatus]="'finish'" [nzDescription]="startDes">
+              <ng-template #startDes>
+                <div class="my-sm">
+                  {{ projectDetailInfo?.user.name }}
+                </div>
+                <div>
+                  {{ projectDetailInfo?.submit_time }}
+                </div>
+              </ng-template>
+            </nz-step>
+            <nz-step [nzTitle]="process?.node.name"
+              [nzStatus]=" process.current ? 'process' : ( !process.finished ? 'wait' : ( !process.agree ?  'error' : 'finish') )"
+              [nzDescription]="createDesc">
+              <ng-template #createDesc>
+                <div class="desc">
+                  <div class="my-sm">
+                    {{ process?.user.name }}
+                  </div>
+                  <div *ngIf="process.finished; else notFinished">
+                    {{ process?.finished_time }}
+                  </div>
+                  <span class="text-sm text-primary" [class.text-error]="process.finished && !process.agree"
+                    [innerHTML]="process.remark | showTextareaContent"></span>
+                  <ng-template #notFinished>
+                    <!-- TODO:暂不开发 -->
+                    <!-- <a *ngIf="process.current" (click)="msg.success('click')">催一下</a> -->
+                  </ng-template>
+                </div>
+              </ng-template>
+            </nz-step>
+          </ng-container>
+
+          <nz-step [nzTitle]="'完成'"
+            [nzStatus]=" !progressInfo.finished ? 'wait' : ( progressInfo.agree ? 'finish' : 'error' ) "
+            [nzDescription]="'开票审批完成'"></nz-step>
+        </nz-steps>
+
+      </ng-container>
+      <ng-template #nodeProcessLoadingTpl>
+        <div class="p-xl text-center text-lg text-primary">
+          <nz-spin></nz-spin>
+        </div>
+      </ng-template>
+
+      <div class="steps-content" *ngIf="isCurrentCheck">
+        <div class="check-box mt-md float-right">
+          <nz-radio-group [(ngModel)]="checkOption.agree" [nzButtonStyle]="'solid'">
+            <label nz-radio-button [nzValue]="true">通过</label>
+            <label nz-radio-button [nzValue]="false">不通过</label>
+          </nz-radio-group>
+          <textarea nz-input placeholder="请填写审核备注" [(ngModel)]="checkOption.remark"
+            [nzAutosize]="{ minRows: 3, maxRows: 6 }" class="my-sm"></textarea>
+          <div class="text-right">
+            <a nz-popconfirm nz-button [nzType]="'primary'" nzPopconfirmTitle="请确认开票信息已全部查看，且审核无误后确认提交！！！"
+              (nzOnConfirm)="submitCheckCurrentProcess()" (nzOnCancel)="cancel()">
+              审批
+            </a>
+          </div>
+        </div>
+      </div>
+    </nz-card>
+
+    <ng-container *ngIf="progressInfo && progressInfo.execute_user">
+      <app-users-bill-execute-flow [progressInfo]="progressInfo" [billInfo]="billInfo" (outer)="readOuter()"
+        (executeChange)="executeChange($event)" (executeName)="getExecuteName($event)"></app-users-bill-execute-flow>
+    </ng-container>
+
+    <!-- 废弃流程进展： 只有从待废弃中点击才会显示 其他页面不显示 -->
+    <nz-card [nzBordered]="false" class="mt-md" [nzTitle]="abandoned" *ngFor="let item of abandonedInfo">
+      <ng-template #abandoned>
+        <span>废弃进展</span>
+        <span class="text-primary ml-md text-sm">{{ item?.workflow_status.name }}</span>
+      </ng-template>
+      <ng-container *ngIf="abandonedNodeProcess?.length !== 0;else nodeProcessLoadingTpl">
+        <nz-steps nzDirection="vertical" nzProgressDot class="hidden-pc">
+          <nz-step [nzTitle]="'废弃申请'" [nzStatus]="'finish'" [nzDescription]="startStep">
+            <ng-template #startStep>
+              <div class="my-sm">
+                {{ projectDetailInfo?.user.name }}
+              </div>
+              <div>
+                {{ item.create_time }}
+              </div>
+            </ng-template>
+          </nz-step>
+          <ng-container *ngFor="let process of abandonedNodeProcess">
+            <nz-step [nzTitle]="process?.node.name"
+              [nzStatus]=" process.current ? 'process' : ( !process.finished ? 'wait' : ( !process.agree ?  'error' : 'finish') )"
+              [nzDescription]="createStep">
+              <ng-template #createStep>
+                <div class="desc">
+                  <div class="my-sm">
+                    {{ process?.user.name }}
+                  </div>
+                  <div *ngIf="process.finished; else notFinished">
+                    {{ item.create_time }}
+                  </div>
+                  <span class="text-sm text-primary"
+                    [class.text-error]="process.finished && !process.agree">{{ process.remark }}</span>
+                  <ng-template #notFinished>
+                    <!-- TODO:暂不开发 -->
+                    <!-- <a *ngIf="process.current" (click)="msg.success('click')">催一下</a> -->
+                  </ng-template>
+                </div>
+              </ng-template>
+            </nz-step>
+          </ng-container>
+
+          <nz-step [nzTitle]="'完成'" [nzStatus]=" !item.finished ? 'wait' : ( item.agree ? 'finish' : 'error' ) ">
+          </nz-step>
+        </nz-steps>
+        <nz-steps nzProgressDot class="hidden-mobile">
+          <ng-container *ngFor="let process of abandonedNodeProcess">
+            <nz-step [nzTitle]="'废弃申请'" [nzStatus]="'finish'" [nzDescription]="startStep">
+              <ng-template #startStep>
+                <div class="my-sm">
+                  {{ projectDetailInfo?.user.name }}
+                </div>
+                <div>
+                  {{ item.create_time }}
+                </div>
+              </ng-template>
+            </nz-step>
+            <nz-step [nzTitle]="process?.node.name"
+              [nzStatus]=" process.current ? 'process' : ( !process.finished ? 'wait' : ( !process.agree ?  'error' : 'finish') )"
+              [nzDescription]="createStep">
+              <ng-template #createStep>
+                <div class="desc">
+                  <div class="my-sm">
+                    {{ process?.user.name }}
+                  </div>
+                  <div *ngIf="process.finished; else notFinished">
+                    {{ process?.start_time }}
+                  </div>
+                  <span class="text-sm text-primary" [class.text-error]="process.finished && !process.agree"
+                    [innerHTML]="process.remark | showTextareaContent"></span>
+                  <ng-template #notFinished>
+                    <!-- TODO:暂不开发 -->
+                    <!-- <a *ngIf="process.current" (click)="msg.success('click')">催一下</a> -->
+                  </ng-template>
+                </div>
+              </ng-template>
+            </nz-step>
+          </ng-container>
+
+          <nz-step [nzTitle]="'完成'" [nzStatus]=" !item.finished ? 'wait' : ( item.agree ? 'finish' : 'error' ) "
+            [nzDescription]="'废弃审批完成'"></nz-step>
+        </nz-steps>
+
+      </ng-container>
+      <ng-template #nodeProcessLoadingTpl>
+        <div class="p-xl text-center text-lg text-primary">
+          <nz-spin></nz-spin>
+        </div>
+      </ng-template>
+      <div class="steps-content" *ngIf="isApprovelShow">
+        <div class="check-box mt-md float-right">
+          <nz-radio-group [(ngModel)]="checkOption.agree" [nzButtonStyle]="'solid'">
+            <label nz-radio-button [nzValue]="true">通过</label>
+            <label nz-radio-button [nzValue]="false">不通过</label>
+          </nz-radio-group>
+          <textarea nz-input placeholder="请填写审核备注" [(ngModel)]="checkOption.remark"
+            [nzAutosize]="{ minRows: 3, maxRows: 6 }" class="my-sm"></textarea>
+          <div class="text-right">
+            <a nz-popconfirm nz-button [nzType]="'primary'" nzPopconfirmTitle="请确认废弃信息已全部查看，且审核无误后确认提交！！！"
+              (nzOnConfirm)="agreeAbandoned()" (nzOnCancel)="cancel()">
+              废弃审批
+            </a>
+          </div>
+        </div>
+      </div>
+    </nz-card>
+
+    <!-- 红冲流程进展： 只有从待红冲中点击才会显示 其他页面不显示 -->
+    <nz-card [nzBordered]="false" class="mt-md" [nzTitle]="red_punch_bill" *ngFor="let item of redPunchInfo">
+      <ng-template #red_punch_bill>
+        <span>红冲进展</span>
+        <span class="text-primary ml-md text-sm">{{ item?.workflow_status.name }}</span>
+      </ng-template>
+      <ng-container *ngIf="redPunchNodeProcess?.length !== 0;else nodeProcessLoadingTpl">
+        <nz-steps nzDirection="vertical" nzProgressDot class="hidden-pc">
+          <nz-step [nzTitle]="'红冲申请'" [nzStatus]="'finish'" [nzDescription]="startStep">
+            <ng-template #startStep>
+              <div class="my-sm">
+                {{ projectDetailInfo?.user.name }}
+              </div>
+              <div>
+                {{ item.create_time }}
+              </div>
+            </ng-template>
+          </nz-step>
+          <ng-container *ngFor="let process of redPunchNodeProcess">
+            <nz-step [nzTitle]="process?.node.name"
+              [nzStatus]=" process.current ? 'process' : ( !process.finished ? 'wait' : ( !process.agree ?  'error' : 'finish') )"
+              [nzDescription]="createStep">
+              <ng-template #createStep>
+                <div class="desc">
+                  <div class="my-sm">
+                    {{ process?.user.name }}
+                  </div>
+                  <div *ngIf="process.finished; else notFinished">
+                    {{ item.create_time }}
+                  </div>
+                  <span class="text-sm text-primary"
+                    [class.text-error]="process.finished && !process.agree">{{ process.remark }}</span>
+                  <ng-template #notFinished>
+                    <!-- TODO:暂不开发 -->
+                    <!-- <a *ngIf="process.current" (click)="msg.success('click')">催一下</a> -->
+                  </ng-template>
+                </div>
+              </ng-template>
+            </nz-step>
+          </ng-container>
+
+          <nz-step [nzTitle]="'完成'" [nzStatus]=" !item.finished ? 'wait' : ( item.agree ? 'finish' : 'error' ) ">
+          </nz-step>
+        </nz-steps>
+        <nz-steps nzProgressDot class="hidden-mobile">
+          <ng-container *ngFor="let process of redPunchNodeProcess">
+            <nz-step [nzTitle]="'红冲申请'" [nzStatus]="'finish'" [nzDescription]="startStep">
+              <ng-template #startStep>
+                <div class="my-sm">
+                  {{ projectDetailInfo?.user.name }}
+                </div>
+                <div>
+                  {{ item.create_time }}
+                </div>
+              </ng-template>
+            </nz-step>
+            <nz-step [nzTitle]="process?.node.name"
+              [nzStatus]=" process.current ? 'process' : ( !process.finished ? 'wait' : ( !process.agree ?  'error' : 'finish') )"
+              [nzDescription]="createStep">
+              <ng-template #createStep>
+                <div class="desc">
+                  <div class="my-sm">
+                    {{ process?.user.name }}
+                  </div>
+                  <div *ngIf="process.finished; else notFinished">
+                    {{ process?.start_time }}
+                  </div>
+                  <span class="text-sm text-primary" [class.text-error]="process.finished && !process.agree"
+                    [innerHTML]="process.remark | showTextareaContent"></span>
+                  <ng-template #notFinished>
+                    <!-- TODO:暂不开发 -->
+                    <!-- <a *ngIf="process.current" (click)="msg.success('click')">催一下</a> -->
+                  </ng-template>
+                </div>
+              </ng-template>
+            </nz-step>
+          </ng-container>
+
+          <nz-step [nzTitle]="'完成'" [nzStatus]=" !item.finished ? 'wait' : ( item.agree ? 'finish' : 'error' ) "
+            [nzDescription]="'红冲审批完成'"></nz-step>
+        </nz-steps>
+
+      </ng-container>
+      <ng-template #nodeProcessLoadingTpl>
+        <div class="p-xl text-center text-lg text-primary">
+          <nz-spin></nz-spin>
+        </div>
+      </ng-template>
+      <div class="steps-content" *ngIf="isRedApprove">
+        <div class="check-box mt-md float-right">
+          <nz-radio-group [(ngModel)]="checkOption.agree" [nzButtonStyle]="'solid'">
+            <label nz-radio-button [nzValue]="true">通过</label>
+            <label nz-radio-button [nzValue]="false">不通过</label>
+          </nz-radio-group>
+          <textarea nz-input placeholder="请填写审核备注" [(ngModel)]="checkOption.remark"
+            [nzAutosize]="{ minRows: 3, maxRows: 6 }" class="my-sm"></textarea>
+          <div class="text-right">
+            <a nz-popconfirm nz-button [nzType]="'primary'" nzPopconfirmTitle="请确认红冲信息已全部查看，且审核无误后确认提交！！！"
+              (nzOnConfirm)="agreeRedpunch()" (nzOnCancel)="cancel()">
+              红冲审批
+            </a>
+          </div>
+        </div>
+      </div>
+    </nz-card>
   </div>
+</nz-card>
+<nz-card>
+  <sv-container class="mb-lg" [title]="proLogTpl" *ngIf="projectDetailInfo && !projectDetailInfo.draft">
+    <ng-template #proLogTpl>
+      <span class="font-weight-bold text-md">日志</span>
+    </ng-template>
+    <sv col="1" class="income-show-box">
+      <app-project-logs [logs]="logs"></app-project-logs>
+    </sv>
+  </sv-container>
 </nz-card>
 
 <!-- <nz-card nzTitle="附件" *ngIf="billId" class="mt-md">
   <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/bill/' + billId"></app-upload-file-attachment-show-c>
 </nz-card> -->
-
-<!-- 开票 审批流程进展： 草稿 不显示 -->
-<nz-card [nzBordered]="false" class="mt-md" [nzTitle]="workflowStatusTitle">
-  <ng-template #workflowStatusTitle>
-    <span>审批进展</span>
-    <span class="text-primary ml-md text-sm">{{ progressInfo?.workflow_status.name }}</span>
-  </ng-template>
-  <ng-container *ngIf="nodeProcess.length !== 0;else nodeProcessLoadingTpl">
-    <nz-steps nzDirection="vertical" nzProgressDot class="hidden-pc">
-      <nz-step [nzTitle]="'开票申请'" [nzStatus]="'finish'" [nzDescription]="startDes">
-        <ng-template #startDes>
-          <div class="my-sm">
-            {{ projectDetailInfo?.user.name }}
-          </div>
-          <div>
-            {{ projectDetailInfo?.submit_time }}
-          </div>
-        </ng-template>
-      </nz-step>
-      <ng-container *ngFor="let process of nodeProcess">
-        <nz-step [nzTitle]="process?.node.name"
-          [nzStatus]=" process.current ? 'process' : ( !process.finished ? 'wait' : ( !process.agree ?  'error' : 'finish') )"
-          [nzDescription]="createDesc">
-          <ng-template #createDesc>
-            <div class="desc">
-              <div class="my-sm">
-                {{ process?.user.name }}
-              </div>
-              <div *ngIf="process.finished; else notFinished">
-                {{ process.finished_time }}
-              </div>
-              <span class="text-sm text-primary"
-                [class.text-error]="process.finished && !process.agree">{{ process.remark }}</span>
-              <ng-template #notFinished>
-                <!-- TODO:暂不开发 -->
-                <!-- <a *ngIf="process.current" (click)="msg.success('click')">催一下</a> -->
-              </ng-template>
-            </div>
-          </ng-template>
-        </nz-step>
-      </ng-container>
-
-      <nz-step [nzTitle]="'完成'"
-        [nzStatus]=" !progressInfo.finished ? 'wait' : ( progressInfo.agree ? 'finish' : 'error' ) "></nz-step>
-    </nz-steps>
-    <nz-steps nzProgressDot class="hidden-mobile">
-      <ng-container *ngFor="let process of nodeProcess">
-        <nz-step [nzTitle]="'开票申请'" [nzStatus]="'finish'" [nzDescription]="startDes">
-          <ng-template #startDes>
-            <div class="my-sm">
-              {{ projectDetailInfo?.user.name }}
-            </div>
-            <div>
-              {{ projectDetailInfo?.submit_time }}
-            </div>
-          </ng-template>
-        </nz-step>
-        <nz-step [nzTitle]="process?.node.name"
-          [nzStatus]=" process.current ? 'process' : ( !process.finished ? 'wait' : ( !process.agree ?  'error' : 'finish') )"
-          [nzDescription]="createDesc">
-          <ng-template #createDesc>
-            <div class="desc">
-              <div class="my-sm">
-                {{ process?.user.name }}
-              </div>
-              <div *ngIf="process.finished; else notFinished">
-                {{ process?.finished_time }}
-              </div>
-              <span class="text-sm text-primary" [class.text-error]="process.finished && !process.agree"
-                [innerHTML]="process.remark | showTextareaContent"></span>
-              <ng-template #notFinished>
-                <!-- TODO:暂不开发 -->
-                <!-- <a *ngIf="process.current" (click)="msg.success('click')">催一下</a> -->
-              </ng-template>
-            </div>
-          </ng-template>
-        </nz-step>
-      </ng-container>
-
-      <nz-step [nzTitle]="'完成'"
-        [nzStatus]=" !progressInfo.finished ? 'wait' : ( progressInfo.agree ? 'finish' : 'error' ) "
-        [nzDescription]="'开票审批完成'"></nz-step>
-    </nz-steps>
-
-  </ng-container>
-  <ng-template #nodeProcessLoadingTpl>
-    <div class="p-xl text-center text-lg text-primary">
-      <nz-spin></nz-spin>
-    </div>
-  </ng-template>
-
-  <div class="steps-content" *ngIf="isCurrentCheck">
-    <div class="check-box mt-md float-right">
-      <nz-radio-group [(ngModel)]="checkOption.agree" [nzButtonStyle]="'solid'">
-        <label nz-radio-button [nzValue]="true">通过</label>
-        <label nz-radio-button [nzValue]="false">不通过</label>
-      </nz-radio-group>
-      <textarea nz-input placeholder="请填写审核备注" [(ngModel)]="checkOption.remark"
-        [nzAutosize]="{ minRows: 3, maxRows: 6 }" class="my-sm"></textarea>
-      <div class="text-right">
-        <a nz-popconfirm nz-button [nzType]="'primary'" nzPopconfirmTitle="请确认开票信息已全部查看，且审核无误后确认提交！！！"
-          (nzOnConfirm)="submitCheckCurrentProcess()" (nzOnCancel)="cancel()">
-          审批
-        </a>
-      </div>
-    </div>
-  </div>
-</nz-card>
-
-<ng-container *ngIf="progressInfo && progressInfo.execute_user">
-  <app-users-bill-execute-flow [progressInfo]="progressInfo" [billInfo]="billInfo" (outer)="readOuter()"
-    (executeChange)="executeChange($event)"></app-users-bill-execute-flow>
-</ng-container>

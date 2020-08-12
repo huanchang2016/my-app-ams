@@ -86,7 +86,7 @@
             <td>
                 <sv-container size="small" col="1">
                     <sv label="项目名称">{{ data.name }}</sv>
-                    <sv label="项目类型">{{ data.category.name }}</sv>
+                    <sv label="项目类型">{{ data.category?.name }}</sv>
                     <sv label="项目来源">{{ data.origin.code.code_name + data.origin.code.name }}</sv>
                 </sv-container>
             </td>

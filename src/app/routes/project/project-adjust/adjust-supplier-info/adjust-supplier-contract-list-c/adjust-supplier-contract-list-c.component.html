@@ -3,13 +3,13 @@
         <span class="float-left text-primary">签订合约</span>
         <a (click)="addContract(true)" class="float-right">新增合约</a>
     </div>
-    
+
     <ng-container *ngIf="contractList.length !== 0;else noDataContractMobile">
         <ng-container *ngFor="let data of contractList">
             <nz-card [nzActions]="[actionEdit, actionDisabled]" class="mb-sm">
                 <sv-container>
                     <sv label="合约名称">{{ data.name }}</sv>
-                    <sv label="金额（元）"><span>{{ data.amount | _currency }}</span></sv>
+                    <sv label="金额（元）"><span class="text-nowrap">{{ data.amount | _currency }}</span></sv>
                     <sv label="合约编号">{{ data.number }}</sv>
                     <sv label="起止日期">{{ data.start_time }} - {{ data.end_time }}</sv>
                     <sv label="服务类型">{{ data.service_category.name }}</sv>
@@ -18,8 +18,8 @@
                     <a (click)="editContract(data, true)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
                 </ng-template>
                 <ng-template #actionDisabled>
-                    <a nz-popconfirm nzPopconfirmTitle="确定禁用当前合约？" (nzOnConfirm)="disabled(data.id, true)" (nzOnCancel)="cancel()"
-                        class="text-error">
+                    <a nz-popconfirm nzPopconfirmTitle="确定禁用当前合约？" (nzOnConfirm)="disabled(data.id, true)"
+                        (nzOnCancel)="cancel()" class="text-error">
                         禁用
                     </a>
                 </ng-template>
@@ -29,21 +29,17 @@
     <ng-template #noDataContractMobile>
         <p>无数据</p>
     </ng-template>
-    
+
 </div>
 
 <div class="contract-box hidden-mobile">
     <ng-template #contractAddTemplate>
-        <button
-            class="mr-lg"
-            nz-button
-            [nzType]="'primary'"
-            (click)="addContract(true)"
-        >新增合约</button>
+        <button class="mr-lg" nz-button [nzType]="'primary'" (click)="addContract(true)">新增合约</button>
     </ng-template>
     <nz-card class="mb-md" nzTitle="签订合约" [nzExtra]="contractAddTemplate">
         <ng-container *ngIf="contractList.length !== 0;else noDataContract">
-            <nz-table #contracTable [nzData]="contractList" nzSize="small" [nzLoading]="loadingContract" [nzFrontPagination]="false">
+            <nz-table #contracTable [nzData]="contractList" nzSize="small" [nzLoading]="loadingContract"
+                [nzFrontPagination]="false">
                 <thead>
                     <tr>
                         <th nzWidth="80px">序号</th>
@@ -61,19 +57,20 @@
                         <td>{{ i + 1 }}</td>
                         <td>{{ data.name }}</td>
                         <td>
-                            <span>{{ data.amount | _currency }}</span>
+                            <span class="text-nowrap">{{ data.amount | _currency }}</span>
                         </td>
                         <td>{{ data.number }}</td>
                         <td>{{ data.start_time }} - {{ data.end_time }}</td>
                         <td>{{ data.service_category.name }}</td>
                         <td>
-                            <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/contract/' + data.id"></app-upload-file-attachment-show-c>
+                            <app-upload-file-attachment-show-c [attachmentUrl]="'/api/attachment/contract/' + data.id">
+                            </app-upload-file-attachment-show-c>
                         </td>
                         <td>
                             <a (click)="editContract(data, true)"><i nz-icon nzType="edit" nzTheme="outline"></i></a>
                             <nz-divider nzType="vertical"></nz-divider>
-                            <a nz-popconfirm nzPopconfirmTitle="确定禁用当前合约？" (nzOnConfirm)="disabled(data.id, true)" (nzOnCancel)="cancel()"
-                                class="text-error">
+                            <a nz-popconfirm nzPopconfirmTitle="确定禁用当前合约？" (nzOnConfirm)="disabled(data.id, true)"
+                                (nzOnCancel)="cancel()" class="text-error">
                                 禁用
                             </a>
                         </td>

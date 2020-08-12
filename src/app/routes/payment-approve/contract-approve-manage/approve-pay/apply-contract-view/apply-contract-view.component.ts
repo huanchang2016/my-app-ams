@@ -17,6 +17,10 @@ import html2canvas from 'html2canvas';
     #print-box {
       max-width: 1000px;
     }
+    :host ::ng-deep .income-show-box>.sv__detail
+    {
+      display: block;
+    }
   `]
 })
 export class ApplyContractViewComponent implements OnInit {
@@ -33,6 +37,9 @@ export class ApplyContractViewComponent implements OnInit {
         this.projectId = +params.id;
         this.getContractList();
         this.getProjectInfo();
+        if (this.projectId) {
+          this.getProjectLog(this.projectId);
+        }
       }
     });
     // 如果有 contract_pay_id 参数， 则表示为编辑 合约支付
@@ -76,6 +83,9 @@ export class ApplyContractViewComponent implements OnInit {
   isPrinter = false;
   pdfPosition = 0;
 
+  // 日志
+  logs: any[] = [];
+
 
   ngOnInit() {
     console.log(this.isCurrentCheck, '通过不通过 isCurrentCheck');
@@ -83,6 +93,19 @@ export class ApplyContractViewComponent implements OnInit {
 
   ngOnChanges(): void {
     console.log(this.isCurrentCheck, '通过不通过change isCurrentCheck');
+  }
+
+  // 日志
+  getProjectLog(id: number): void {
+    this.settingsConfigService.get(`/api/project/log/${id}`).subscribe((res: ApiData) => {
+      console.log('log ....', res.data);
+      // this.logLoading = false;
+      if (res.code === 200) {
+        this.logs = res.data.project_log;
+      } else {
+        this.logs = [];
+      }
+    })
   }
 
   getContractList(): void { // 通过项目获取合约

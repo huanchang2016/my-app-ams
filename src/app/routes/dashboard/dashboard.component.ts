@@ -7,6 +7,7 @@ import { ApiData } from 'src/app/data/interface.data';
 import { LoadingService, LoadingType } from '@delon/abc';
 import { LodopService, Lodop } from '@delon/abc/lodop';
 import { NzMessageService } from 'ng-zorro-antd';
+import { EChartOption } from 'echarts';
 
 @Component({
   selector: 'app-dashboard',
@@ -14,9 +15,8 @@ import { NzMessageService } from 'ng-zorro-antd';
   styleUrls: ['./dashboard.component.less']
 })
 export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
-
-
-  getDataFn$: Observable<ApiData>;
+  // 创建表格对象
+  chartOption: EChartOption = {};
 
   constructor(
     private fb: FormBuilder,
@@ -27,11 +27,109 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   ) {
     this.getDataFn$ = this.settingsService.get('/api/project/submit/forApproval/my');
   }
+  getDataFn$: Observable<ApiData>;
 
-  text: string = '获取验证码';
+  text = '获取验证码';
   types = ['url', 'email'];
   value = '';
   type = '';
+
+  source = `https://blz-videos.nosdn.127.net/1/OverWatch/AnimatedShots/Overwatch_AnimatedShot_Bastion_TheLastBastion.mp4`;
+
+  validateForm: FormGroup;
+
+  listData$: Subscription;
+
+
+
+  loadingCaptcha = false;
+
+  opacityChange$: Subscription;
+
+  op = 1.0;
+  boxClick$: Observable<any>;
+  subs$: Subscription;
+
+  // echarts
+  initCharts() {
+    this.chartOption = {
+      title: {
+        text: '堆叠区域图'
+      },
+      tooltip: {
+        trigger: 'axis'
+      },
+      legend: {
+        data: ['邮件营销', '联盟广告', '视频广告', '直接访问', '搜索引擎']
+      },
+      toolbox: {
+        feature: {
+          saveAsImage: {}
+        }
+      },
+      grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+      },
+      xAxis: [
+        {
+          type: 'category',
+          boundaryGap: false,
+          data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+        }
+      ],
+      yAxis: [
+        {
+          type: 'value'
+        }
+      ],
+      series: [
+        {
+          name: '邮件营销',
+          type: 'line',
+          stack: '总量',
+          areaStyle: { normal: {} },
+          data: [120, 132, 101, 134, 90, 230, 210]
+        },
+        {
+          name: '联盟广告',
+          type: 'line',
+          stack: '总量',
+          areaStyle: { normal: {} },
+          data: [220, 182, 191, 234, 290, 330, 310]
+        },
+        {
+          name: '视频广告',
+          type: 'line',
+          stack: '总量',
+          areaStyle: { normal: {} },
+          data: [150, 232, 201, 154, 190, 330, 410]
+        },
+        {
+          name: '直接访问',
+          type: 'line',
+          stack: '总量',
+          areaStyle: { normal: {} },
+          data: [320, 332, 301, 334, 390, 330, 320]
+        },
+        {
+          name: '搜索引擎',
+          type: 'line',
+          stack: '总量',
+          label: {
+            normal: {
+              show: true,
+              position: 'top'
+            }
+          },
+          areaStyle: { normal: {} },
+          data: [820, 932, 901, 934, 1290, 1330, 1320]
+        }
+      ]
+    }
+  }
   change(type: string) {
     this.type = type;
     switch (type) {
@@ -59,11 +157,8 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   printN(i) {
     console.log(i);
   }
-
-  source: string = `https://blz-videos.nosdn.127.net/1/OverWatch/AnimatedShots/Overwatch_AnimatedShot_Bastion_TheLastBastion.mp4`;
-  
-  validateForm: FormGroup;
   ngOnInit(): void {
+    this.initCharts();
 
     this.getData();
 
@@ -96,55 +191,53 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     //   console.log('取消 Observable 事件发起!')
     //   obFn.unsubscribe();
     // }, 2000);
-    
+
     // this.letterCasePermutation('a1b2')
 
   }
 
-  letterCasePermutation = function(S: string): string[] {
-    let result:string[] = [];
-    if(this.hasLetter(S)) {
+  letterCasePermutation = function (S: string): string[] {
+    let result: string[] = [];
+    if (this.hasLetter(S)) {
       result = this.dealWidthStr(S, [], []);
-    }else {
+    } else {
       result = [S];
     }
-console.log(result)
+    console.log(result)
     return result;
-};
+  };
 
-dealWidthStr = (str:string, arr:string[], res:string[]):string[] => {
+  dealWidthStr = (str: string, arr: string[], res: string[]): string[] => {
     const regx = /^[A-Za-z]*$/;
-    if(str === '') {
-      let s = arr.join("");
+    if (str === '') {
+      const s = arr.join("");
       res.push(s);
       console.log(s, 'finish', res)
-      return  res;
+      return res;
     }
-    if(regx.test(str[0])) {
-        let upper = str[0].toUpperCase();
-        let lower = str[0].toLowerCase();
-        let a = str.slice(1);
+    if (regx.test(str[0])) {
+      const upper = str[0].toUpperCase();
+      const lower = str[0].toLowerCase();
+      const a = str.slice(1);
 
-        this.dealWidthStr(str.slice(1), arr.concat([upper]), res);
-        this.dealWidthStr(str.slice(1), arr.concat([lower]), res);
-    }else {
-      let a = str.slice(1);
-        arr.push(str[0]);
-        this.dealWidthStr(str.slice(1), arr, res);
+      this.dealWidthStr(str.slice(1), arr.concat([upper]), res);
+      this.dealWidthStr(str.slice(1), arr.concat([lower]), res);
+    } else {
+      const a = str.slice(1);
+      arr.push(str[0]);
+      this.dealWidthStr(str.slice(1), arr, res);
     }
-}
+  }
 
-hasLetter = (str:any) => {
-    for (let i in str) {
-        var asc = str.charCodeAt(i);
-        if ((asc >= 65 && asc <= 90 || asc >= 97 && asc <= 122)) {
-            return true;
-        }
+  hasLetter = (str: any) => {
+    for (const i in str) {
+      const asc = str.charCodeAt(i);
+      if ((asc >= 65 && asc <= 90 || asc >= 97 && asc <= 122)) {
+        return true;
+      }
     }
     return false;
-}
-
-  listData$: Subscription;
+  }
 
   getData() {
     this.listData$ = this.getDataFn$.pipe(
@@ -156,13 +249,9 @@ hasLetter = (str:any) => {
       () => console.log('request complete!')
     )
   }
-
-
-
-  loadingCaptcha: boolean = false;
   getCaptcha() {
 
-    let count: number = 10;
+    let count = 10;
     this.loadingCaptcha = true;
     const timer = interval(1000).subscribe(_ => {
       console.log(count)
@@ -177,8 +266,6 @@ hasLetter = (str:any) => {
 
     })
   }
-
-  opacityChange$: Subscription;
   ngAfterViewInit() {
     // this.addClickEvent();
     // this.boxClick$ = fromEvent(document.querySelector('#box'), 'click');
@@ -201,10 +288,6 @@ hasLetter = (str:any) => {
     console.log('unsbscribe works!');
     // this.opacityChange$.unsubscribe();
   }
-
-  op: number = 1.0;
-  boxClick$: Observable<any>;
-  subs$: Subscription;
   addClickEvent(): void {
     // this.subs$ = this.boxClick$
     //     .pipe(

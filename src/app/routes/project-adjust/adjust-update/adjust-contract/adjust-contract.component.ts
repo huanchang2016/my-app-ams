@@ -30,14 +30,14 @@ export class AdjustContractComponent implements OnChanges, OnInit {
   }
 
   ngOnChanges() {
-    if(this.adjustInfo.deal_adjustment) {
+    if(this.adjustInfo && this.adjustInfo.deal_adjustment) {
       this.contractList = this.adjustInfo.deal_adjustment.deal_adjustment;
       this.selectedItems();
     }
   }
 
   ngOnInit() {
-    if(this.adjustInfo) {
+    if(this.adjustInfo.deal_adjustment) {
       this.contractList = this.adjustInfo.deal_adjustment.deal_adjustment;
       this.selectedItems();
     }

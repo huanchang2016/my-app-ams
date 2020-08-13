@@ -52,7 +52,7 @@ export class AdjustProjectIncomeComponent implements OnChanges, OnInit {
       customer_ids: [null, [Validators.required]],  // 甲方
       partyA_power: [null ],  // 甲方权责界定
       partyA_condition: [null ], // 甲方费用支付条件
-      partyB: [ partyB, [Validators.required]], // 乙方
+      partyB: [ {value: partyB, disabled: true }, [Validators.required]], // 乙方
       partyB_power: [null ], // 乙方服务内容
       partyB_condition: [null ], // 乙方服务 附加条件
       incomeArr: this.fb.array([
@@ -65,7 +65,7 @@ export class AdjustProjectIncomeComponent implements OnChanges, OnInit {
       ])
     });
 
-    this.validateForm.get('partyB').disabled;
+    // this.validateForm.get('partyB').disabled;
     
     if(this.adjustInfo.project_revenue_adjustment) {
       this.getProjectIncomeList();
@@ -110,30 +110,6 @@ export class AdjustProjectIncomeComponent implements OnChanges, OnInit {
         income: [null, [Validators.required]]
       })
     )
-  }
-  
-  Income(index: number, project_revenue_detail_id:number | null): void {
-    const groupArray:FormArray = this.validateForm.get('incomeArr') as FormArray;
-    // 删除时需要判断 当前数据是否可以删除， 如果可以删除，则继续删除。
-    // 如果不能删除，则提示用户，当前数据不可删除。
-    if(project_revenue_detail_id) {
-      this.settingsConfigService.get(`/api/is_delete_project_revenue_detail/${project_revenue_detail_id}`).subscribe((res:ApiData) => {
-        const data = res.data;
-        if(res.code === 200) {
-          if(data.delete) {
-            groupArray.removeAt(index);
-          }else {
-            this.msg.warning(data.msg);
-          }
-          
-        }else {
-          this.msg.warning(res.error || '删除失败');
-        }
-      })
-    }else {
-      groupArray.removeAt(index);
-    }
-    
   }
 
   checkIsSelectedCost(id: number): boolean {
@@ -186,7 +162,6 @@ export class AdjustProjectIncomeComponent implements OnChanges, OnInit {
       }
     }
 
-
     if (this.validateForm.valid) {
       const value: any = this.validateForm.value;
       // 处理 表单组 里面的数据
@@ -203,7 +178,7 @@ export class AdjustProjectIncomeComponent implements OnChanges, OnInit {
         adjustment_id: this.adjustInfo.id,
 
         customer_ids: value.customer_ids,
-        partyB: value.partyB,
+        partyB: this.validateForm.get('partyB').value,
         partyA_power: value.partyA_power,
         partyB_power: value.partyB_power,
         partyA_condition: value.partyA_condition,

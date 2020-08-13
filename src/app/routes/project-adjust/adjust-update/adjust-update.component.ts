@@ -155,28 +155,9 @@ export class AdjustUpdateComponent implements OnInit {
     this.settingsConfigService.get(`/api/adjustment/${this.id}`).subscribe((res:ApiData) => {
       if(res.code === 200) {
         const data = res.data;
-        // const category
-        // if(data.info_adjustment) { // 项目信息调整
-        //   this.stepsCategoryLoading['项目信息调整'] = true;
-        // }
-        // if(data.project_revenue_adjustment) { // 项目收入调整
-        //   this.stepsCategoryLoading['项目收入调整'] = true;
-        // }
-        // if(data.subsidy_income_adjustment) { // 补贴收入调整
-        //   this.stepsCategoryLoading['补贴收入调整'] = true;
-        // }
-        // if(data.cost_adjustment) { // 成本调整
-        //   this.stepsCategoryLoading['成本调整'] = true;
-        // }
-        // if(data.deal_adjustment) { // 合约调整
-        //   this.stepsCategoryLoading['合约调整'] = true;
-        // }
-        // if(data.treaty_adjustment) { // 非合约调整
-        //   this.stepsCategoryLoading['非合约调整'] = true;
-        // }
         this.adjustInfo = res.data;
         console.log('adjustment info update: ', this.adjustInfo);
-        if(this.adjustInfo.adjustment_category) {
+        if(this.adjustInfo.category.adjustment_category) {
           this.showAdjustmentModal();
         }
         

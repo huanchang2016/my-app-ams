@@ -54,6 +54,11 @@ export class SettingsConfigService {
     return this.httpClient.post(api, opt);
   }
 
+  // 判断是否有权限
+  isPermissionsIncludes(auth:string, permissions:string[]):boolean {
+    return permissions.includes(auth);
+  }
+
   /***** 测试学习
    * promise 和 Observable 处理请求的区别 
    * 

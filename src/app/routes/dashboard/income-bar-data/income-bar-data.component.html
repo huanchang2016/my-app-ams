@@ -1,0 +1,15 @@
+<nz-card nzTitle="收入概况" [nzExtra]="extraTemplate" [nzLoading]="loadingData">
+    <div id="income_category_data" style="width:100%; height:400px"></div>
+</nz-card>
+<ng-template #extraTemplate>
+    <div class="pr-md">
+        <form nz-form [formGroup]="validateForm">
+            <nz-form-item class="mb0">
+                <nz-form-control>
+                    <nz-year-picker style="min-width: 200px;" formControlName="year" nzPlaceHolder="选择年份"></nz-year-picker>
+                </nz-form-control>
+            </nz-form-item>
+            
+        </form>
+    </div>
+</ng-template>

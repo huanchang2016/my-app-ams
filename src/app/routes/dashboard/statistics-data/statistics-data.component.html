@@ -1,0 +1,40 @@
+<div nz-row [nzGutter]="24" class="pt-lg" *ngIf="!loadingData;else loadingSpinTpl">
+    <div nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6" *ngIf="dataV.project_count">
+        <g2-card [title]="'本月已提交项目'" [total]=" dataV.project_count.count > 0 ? (dataV.project_count.count + '个') : '0个'" contentHeight="44px" [action]="actionProject">
+            <ng-template #actionProject>
+                <i nz-tooltip [nzTooltipTitle]="'本月所有已经确认提交的项目个数'" nz-icon nzType="info-circle"></i>
+            </ng-template>
+        </g2-card>
+    </div>
+
+    <div nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6" *ngIf="dataV.pay_count">
+        <g2-card [title]="'本月支付统计'" [total]="'￥' + dataV.pay_count.current_month_pay" contentHeight="44px" [action]="actionPayCount">
+            <ng-template #actionPayCount>
+                <i nz-tooltip [nzTooltipTitle]="'本月已经付款的金额总计'" nz-icon nzType="info-circle"></i>
+            </ng-template>
+            环比<trend [flag]="dataV.pay_count.current_month_pay > dataV.pay_count.last_month_pay ? 'up' : 'down'" style="margin: 0 0 0 8px; color: rgba(0,0,0,.85)">{{ dataV.pay_count.percent }} %</trend>
+            <p class="text-truncate mb0 text-danger">
+                上月支付统计
+                <span class="ml-sm">{{ dataV.pay_count.last_month_pay | _currency }}</span>
+              </p>
+        </g2-card>
+    </div>
+
+    <div nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6" *ngIf="dataV.income_count">
+        <g2-card [title]="'本月收入统计'" [total]="'￥' + dataV.income_count.current_month_pay" contentHeight="44px" [action]="actionPayCount">
+            <ng-template #actionPayCount>
+                <i nz-tooltip [nzTooltipTitle]="'本月实际收到的款项总计金额'" nz-icon nzType="info-circle"></i>
+            </ng-template>
+            环比<trend [flag]="dataV.income_count.current_month_pay > dataV.income_count.last_month_pay ? 'up' : 'down'" style="margin: 0 0 0 8px; color: rgba(0,0,0,.85)">{{ dataV.income_count.percent }} %</trend>
+            <p class="text-truncate mb0 text-danger">
+                上月收入统计
+                <span class="ml-sm">{{ dataV.income_count.last_month_pay | _currency }}</span>
+              </p>
+        </g2-card>
+    </div>
+</div>
+<ng-template #loadingSpinTpl>
+    <div class="text-center py-lg">
+        <nz-spin nzSimple></nz-spin>
+    </div>
+</ng-template>

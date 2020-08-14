@@ -1,0 +1,15 @@
+<nz-card nzTitle="成本支出概况" [nzExtra]="extraTemplate" [nzLoading]="loadingData">
+    <div id="cost_category_data" style="width:100%; height:400px"></div>
+</nz-card>
+<ng-template #extraTemplate>
+    <div class="pr-md">
+        <form nz-form [formGroup]="validateForm">
+            <nz-form-item class="mb0">
+                <nz-form-control>
+                    <app-range-datepicker formControlName="range_date"></app-range-datepicker>
+                </nz-form-control>
+            </nz-form-item>
+            
+        </form>
+    </div>
+</ng-template>

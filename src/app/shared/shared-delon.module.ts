@@ -8,8 +8,9 @@ import { SEModule } from '@delon/abc/se';
 import { SidebarNavModule } from '@delon/abc/sidebar-nav';
 import { STModule } from '@delon/abc/st';
 import { SVModule } from '@delon/abc/sv';
-import { QRModule } from '@delon/abc/qr';
+// import { QRModule } from '@delon/abc/qr';
 import { NumberToChineseModule } from '@delon/abc/number-to-chinese';
+import { DelonChartModule } from '@delon/chart';
 
 export const SHARED_DELON_MODULES = [
   PageHeaderModule,
@@ -21,7 +22,8 @@ export const SHARED_DELON_MODULES = [
   STModule,
   SEModule,
   SVModule,
-  QRModule,
-  NumberToChineseModule
+  // QRModule,
+  NumberToChineseModule,
+  DelonChartModule
   // ReuseTabModule,
 ];

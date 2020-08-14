@@ -90,22 +90,26 @@ export class ProjectBudgetComponent implements OnInit {
 
     console.log(this.incomeOpt, isProjectIncome, isSubsidyIncome, this.proIncomeOpt, this.subIncomeOpt, 'submit');
     
-    if(!this.incomeOpt.project && !this.incomeOpt.subsidy ) {
-      this.msg.warning('收入类型未选择');
-      return;
-    }
-    if (this.incomeOpt.project) {
-      if (!isProjectIncome || !this.proIncomeOpt.pro_income ) {
-        this.msg.warning('项目收入或者金额未正确填写！');
+    // 项目情况特殊时，不对项目/补贴收入情况做判断
+    if(!this.projectInfo.special) {
+      if(!this.incomeOpt.project && !this.incomeOpt.subsidy ) {
+        this.msg.warning('收入类型未选择');
         return;
       }
-    }
-    if (this.incomeOpt.subsidy){
-      if (!isSubsidyIncome || !this.subIncomeOpt.sub_income) {
-        this.msg.warning('补贴收入金额或者补贴明细未正确填写')
-        return;
+      if (this.incomeOpt.project) {
+        if (!isProjectIncome || !this.proIncomeOpt.pro_income ) {
+          this.msg.warning('项目收入或者金额未正确填写！');
+          return;
+        }
+      }
+      if (this.incomeOpt.subsidy){
+        if (!isSubsidyIncome || !this.subIncomeOpt.sub_income) {
+          this.msg.warning('补贴收入金额或者补贴明细未正确填写')
+          return;
+        }
       }
     }
+    
 
 
     console.log(this.validateForm);

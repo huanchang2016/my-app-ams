@@ -70,6 +70,7 @@ export class ProjectInfoComponent implements OnChanges, OnInit {
     this.validateForm = this.fb.group({
       name: [null, [Validators.required]],
       customer_ids: [null, [Validators.required]],
+      special: [false, [Validators.required]],
       category_id: [null],
       origin_id: [null],
       plan_time: [null],
@@ -91,6 +92,7 @@ export class ProjectInfoComponent implements OnChanges, OnInit {
       console.log(this.validateForm.value);
       let opt: any = this.validateForm.value;
       this.submitLoading = true;
+      
       if (this.data) {
         let _opt: any = Object.assign({ project_id: this.data.id }, opt);
         this.edit(_opt);
@@ -136,16 +138,13 @@ export class ProjectInfoComponent implements OnChanges, OnInit {
       this.validateForm.patchValue({
         name: opt.name,
         customer_ids: customer_ids,
+        special: opt.special,
         category_id: opt.category ? opt.category.id : null,
         origin_id: opt.origin.id,
         plan_time: {
           start: opt.plan_execution_start_time,
           end: opt.plan_execution_end_time
         },
-        // actual_time: {
-        //   start: opt.actual_execution_start_time,
-        //   end: opt.actual_execution_end_time
-        // },
         description: opt.description,
         progress: opt.progress
       });

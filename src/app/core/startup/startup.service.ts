@@ -567,6 +567,22 @@ export class StartupService {
           //     // }
           //   ]
           // }
+
+          {
+            text: '报表管理',
+            link: '/report',
+            icon: { type: 'icon', value: 'key' },
+            children: [
+              {
+                text: '发票报表',
+                link: '/report/bill-report',
+              },
+              // {
+              //   text: '派遣创建',
+              //   link: '/dispatch/create',
+              // }
+            ]
+          }
         ]
       }
     ];

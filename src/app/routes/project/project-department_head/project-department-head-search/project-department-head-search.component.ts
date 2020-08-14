@@ -15,6 +15,8 @@ export class ProjectDepartmentHeadSearchComponent implements OnInit {
   @Output() private outer = new EventEmitter();
   @Input() type_id: number;
   @Input() type_name: number;
+  @Input() page: number;
+  @Input() page_size: number;
 
   constructor(
     private fb: FormBuilder,
@@ -25,30 +27,13 @@ export class ProjectDepartmentHeadSearchComponent implements OnInit {
 
   @Output() searchOptionsEmit: EventEmitter<any> = new EventEmitter();
 
-  contract: any = [];
-
-  customer: any = [];
-
-  // customerId: any = null;
-
-  taxArr: any = [];
-
-  tax_id: any = [];
-
   listOfData: any = [];
 
   loading = false;
 
   total = 0;
 
-  pageOption: any = {
-    page: 1,
-    page_size: 10
-  };
-
   status: any;
-
-  supplierList: any = [];
 
   companyList: any = [];
 
@@ -62,11 +47,6 @@ export class ProjectDepartmentHeadSearchComponent implements OnInit {
 
   department_id: any = null;
 
-  if_write_off_arr: any = [
-    { name: '是', disabled: true },
-    { name: '否', disabled: false }
-  ];
-
   ngOnInit(): void {
     console.log(this.disableFlag, 'this.disableFlag');
     this.validateForm = this.fb.group({
@@ -76,21 +56,28 @@ export class ProjectDepartmentHeadSearchComponent implements OnInit {
       company_id: [null],  // 客户单位
       department_id: [null],  // 部门
       category_id: [null],  // 项目类型
-      page: [null], // 页
-      page_size: [null] // 页码
+      page: [1], // 页
+      page_size: [10] // 页码
     });
-    // const user = JSON.parse(localStorage.getItem('user'));
-    // this.customerId = user.company?.id;
     this.getCompany();
     this.submit();
+  }
+
+  pageOption: any = {
+    page: 1,
+    page_size: 10
   }
 
   ngOnChanges(changes: SimpleChanges) {
     console.log('changes', changes, this.type_id, 'this.type_id', this.type_name, 'this.type_name');
     if (this.validateForm) {
       this.validateForm.patchValue({
-        status_name: this.type_name
+        status_name: this.type_name,
+        page: this.page,
+        page_size: this.page_size
       });
+      this.pageOption.page = this.validateForm.get('page').value
+      this.pageOption.page_size = this.validateForm.get('page_size').value
       this.submit();
       console.log('this.validateForm.value', this.validateForm.value);
     }
@@ -146,7 +133,6 @@ export class ProjectDepartmentHeadSearchComponent implements OnInit {
   }
 
   view(data: any) {
-    // this.router.navigateByUrl(`/approve/no-contract/pay/view/${data.project.id}?treaty_pay_id=${data.id}`);
     this.router.navigateByUrl(`/project/view/${data.id}`);
   }
 
@@ -157,12 +143,16 @@ export class ProjectDepartmentHeadSearchComponent implements OnInit {
   }
 
   pageIndexChange($event: number) {
-    this.pageOption.page = $event;
+    this.validateForm.patchValue({
+      page: $event,
+    })
     this.submit();
   }
 
   pageSizeChange($event: number) {
-    this.pageOption.page_size = $event;
+    this.validateForm.patchValue({
+      page_size: $event,
+    })
     this.submit();
   }
 
@@ -182,7 +172,7 @@ export class ProjectDepartmentHeadSearchComponent implements OnInit {
   }
 
   resetForm(): void {
-    console.log('........reset start')
+
     this.outer.emit();
     this.validateForm.patchValue({
       name: null,  // 项目名称
@@ -191,10 +181,10 @@ export class ProjectDepartmentHeadSearchComponent implements OnInit {
       company_id: null,  // 客户单位
       department_id: null,  // 部门
       category_id: null,  // 项目类型
-      page: null, // 页
-      page_size: null // 页码
+      page: 1, // 页
+      page_size: 10 // 页码
     });
     this.submit();
-    console.log('........reset end')
+
   }
 }

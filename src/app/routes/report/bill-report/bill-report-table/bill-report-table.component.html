@@ -1,0 +1,98 @@
+<form nz-form [formGroup]="validateForm" class="ant-advanced-search-form search-option-form">
+    <div nz-row [nzGutter]="24">
+        <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="8">
+            <nz-form-item>
+                <nz-form-label nzFor="company_id">客户单位</nz-form-label>
+                <nz-form-control style="flex-grow: 1;">
+                    <nz-select id="company_id" nzShowSearch nzAllowClear (ngModelChange)="chooseCompany($event)"
+                        [nzDisabled]="" nzPlaceHolder="请选择客户单位" formControlName="company_id">
+                        <ng-container *ngFor="let item of companyList">
+                            <nz-option [nzLabel]="item.name" [nzValue]="item.id" [nzDisabled]=""></nz-option>
+                        </ng-container>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="8">
+            <nz-form-item>
+                <nz-form-label nzFor="department_id">部门</nz-form-label>
+                <nz-form-control style="flex-grow: 1;">
+                    <nz-select id="department_id" nzShowSearch nzAllowClear [nzDisabled]="disableFlag"
+                        (ngModelChange)="chooseDepartment($event)" nzPlaceHolder="请选择部门"
+                        formControlName="department_id">
+                        <ng-container *ngFor="let item of departmentList">
+                            <nz-option [nzLabel]="item.name" [nzValue]="item.id" [nzDisabled]=""></nz-option>
+                        </ng-container>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+    </div>
+    <div nz-row>
+        <div nz-col [nzSpan]="24" class="search-area">
+            <button nz-button [nzType]="'primary'" (click)="submit()">查询</button>
+            <button nz-button (click)="resetForm()" class="ml-sm">清空条件</button>
+        </div>
+    </div>
+</form>
+
+<div class="hidden-mobile">
+</div>
+<nz-table #ajaxTable nzShowSizeChanger [nzFrontPagination]="false" [nzData]="listOfData" [nzLoading]="loading"
+    [nzTotal]="total" [(nzPageIndex)]="pageOption.page" [(nzPageSize)]="pageOption.page_size"
+    (nzPageIndexChange)="pageIndexChange($event)" (nzPageSizeChange)="pageSizeChange($event)" class="mt-md">
+    <thead>
+        <tr>
+            <th nzWidth="80px">序号</th>
+            <th>开票日期</th>
+            <th>开票单位</th>
+            <th>发票号码</th>
+            <th>开票金额</th>
+            <th>税率</th>
+            <th>税额</th>
+            <th>价税合计</th>
+            <th>部门</th>
+            <th>项目版块</th>
+            <th>发票类型</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let data of ajaxTable.data; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td *ngIf="data.invoice_time">{{ data.invoice_time }}</td>
+            <td *ngIf="!data.invoice_time">/</td>
+            <td>{{ data.bill.company.name }}</td>
+            <td>{{ data.invoice_number }}</td>
+            <td>{{ data.invoice_amount - data.tax_amount | currency: 'CNY' }}</td>
+            <td>{{ data.tax_rate * 100 }}%</td>
+            <td>{{ data.tax_amount | currency: 'CNY' }}</td>
+            <td>{{ data.invoice_amount | currency: 'CNY' }}</td>
+            <td>{{ data.bill.department.name }}</td>
+            <td>{{ data.bill.project.name }}</td>
+            <td>{{ data.bill.bill_category.name }}</td>
+        </tr>
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="3" class="font-weight-bold text-nowrap" align="center">总计</td>
+            <td></td>
+            <td class="font-weight-bold text-nowrap" *ngIf="invoice_amount_sum && tax_amount_sum">
+                {{ invoice_amount_sum - tax_amount_sum | currency: 'CNY' }}</td>
+            <td></td>
+            <td class="font-weight-bold text-nowrap" *ngIf="tax_amount_sum">
+                {{ tax_amount_sum | currency: 'CNY' }}</td>
+            <td class="font-weight-bold text-nowrap" *ngIf="invoice_amount_sum">
+                {{ invoice_amount_sum | currency: 'CNY' }}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </tfoot>
+</nz-table>
+<!-- <div class="text-right" *ngIf="listOfData">
+    <span class="font-weight-bold text-nowrap">总计</span>
+    <span class="font-weight-bold text-nowrap">开票金额： {{ listOfData.amount | _currency }}</span>
+    <span class="font-weight-bold mx-md text-nowrap">税额： {{ listOfData.tax_use_amount | _currency }}</span>
+    <span *ngIf="listOfData.write_off_amount" class="font-weight-bold mx-md text-nowrap">价税合计：
+        {{ listOfData.write_off_amount | _currency }}</span>
+</div> -->

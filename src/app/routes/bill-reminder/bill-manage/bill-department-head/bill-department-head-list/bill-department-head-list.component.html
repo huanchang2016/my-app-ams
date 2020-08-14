@@ -16,6 +16,7 @@
 </page-header>
 
 <nz-card [nzBordered]="false">
-    <app-bill-department-head-search [type_id]="type_id" [type_name]="type_name" (outer)="readOuter()">
+    <app-bill-department-head-search [type_id]="type_id" [type_name]="type_name" [page]="this.pageOption.page"
+        [page_size]="this.pageOption.page_size" (outer)="readOuter()">
     </app-bill-department-head-search>
 </nz-card>

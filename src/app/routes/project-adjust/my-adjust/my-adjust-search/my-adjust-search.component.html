@@ -25,9 +25,9 @@
     </div>
 </form>
 
-<nz-table #ajaxTable [nzFrontPagination]="false" [nzData]="listOfData" [nzLoading]="loading"
-        [nzTotal]="total" [(nzPageIndex)]="pageOption.page" [(nzPageSize)]="pageOption.page_size"
-        (nzPageIndexChange)="pageIndexChange($event)" (nzPageSizeChange)="pageSizeChange($event)" class="mt-md">
+<nz-table #ajaxTable nzShowSizeChanger [nzFrontPagination]="false" [nzData]="listOfData" [nzLoading]="loading"
+    [nzTotal]="total" [(nzPageIndex)]="pageOption.page" [(nzPageSize)]="pageOption.page_size"
+    (nzPageIndexChange)="pageIndexChange($event)" (nzPageSizeChange)="pageSizeChange($event)" class="mt-md">
     <thead>
         <tr>
             <th nzWidth="80px">序号</th>
@@ -63,7 +63,8 @@
                     <i nz-icon nz-tooltip nzTooltipTitle="项目调整" nzType="edit" nzTheme="outline"></i>
                 </a>
                 <nz-divider nzType="vertical"></nz-divider>
-                <a (click)="view(data)"><i nz-icon nz-tooltip nzTooltipTitle="查看调整详情" nzType="eye" nzTheme="outline"></i></a>
+                <a (click)="view(data)"><i nz-icon nz-tooltip nzTooltipTitle="查看调整详情" nzType="eye"
+                        nzTheme="outline"></i></a>
 
                 <nz-divider nzType="vertical"></nz-divider>
                 <a *ngIf="swithFlag" nz-popconfirm class="text-error text-nowrap" nzPopconfirmTitle="是否确认删除当前项目信息？"

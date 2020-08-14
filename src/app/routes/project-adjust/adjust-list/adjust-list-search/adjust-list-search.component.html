@@ -27,9 +27,9 @@
 
 <!-- <div class="hidden-mobile">
 </div> -->
-<nz-table #ajaxTable [nzFrontPagination]="false" [nzData]="listOfData" [nzLoading]="loading"
-[nzTotal]="total" [(nzPageIndex)]="pageOption.page" [(nzPageSize)]="pageOption.page_size"
-(nzPageIndexChange)="pageIndexChange($event)" (nzPageSizeChange)="pageSizeChange($event)" class="mt-md">
+<nz-table #ajaxTable [nzFrontPagination]="false" [nzData]="listOfData" [nzLoading]="loading" [nzTotal]="total"
+    [(nzPageIndex)]="pageOption.page" [(nzPageSize)]="pageOption.page_size"
+    (nzPageIndexChange)="pageIndexChange($event)" (nzPageSizeChange)="pageSizeChange($event)" class="mt-md">
     <thead>
         <tr>
             <th nzWidth="80px">序号</th>
@@ -49,17 +49,17 @@
                 <sv-container size="small" col="1">
                     <sv label="项目名称">{{ data.name }}</sv>
                     <sv label="项目类型">{{ data.category.name }}</sv>
-                    <sv label="项目来源">{{ data.origin.code.code_name + data.origin.code.name }}</sv>
+                    <sv label="项目来源">{{ data.origin?.code.code_name + data.origin?.code.name }}</sv>
                 </sv-container>
             </td>
             <td>
                 <sv-container size="small" col="1">
                     <sv label="创建人">{{ data.user.name }}</sv>
-                    <sv label="部门">{{ data.department.name }}</sv>
-                    <sv label="单位">{{ data.company.name }}</sv>
+                    <sv label="部门">{{ data.department?.name }}</sv>
+                    <sv label="单位">{{ data.company?.name }}</sv>
                 </sv-container>
             </td>
-            <td class="text-primary text-nowrap">{{ data.project_status.name }}</td>
+            <td class="text-primary text-nowrap">{{ data.project_status?.name }}</td>
             <td>
                 <a *ngIf="swithFlag" (click)="edit(data)" class="text-nowrap"><i nz-icon nzType="edit"
                         nzTheme="outline"></i></a>

@@ -59,7 +59,9 @@
 
 <div class="hidden-mobile">
 </div>
-<nz-table #ajaxTable [nzData]="listOfData" [nzLoading]="loading" class="mt-md hidden-mobile">
+<nz-table #ajaxTable nzShowSizeChanger [nzFrontPagination]="false" [nzData]="listOfData" [nzLoading]="loading"
+    [nzTotal]="total" [(nzPageIndex)]="pageOption.page" [(nzPageSize)]="pageOption.page_size"
+    (nzPageIndexChange)="pageIndexChange($event)" (nzPageSizeChange)="pageSizeChange($event)" class="mt-md">
     <thead>
         <tr>
             <th nzWidth="80px">序号</th>
@@ -103,43 +105,3 @@
         </tr>
     </tbody>
 </nz-table>
-<div class="hidden-pc mt-md">
-    <div *ngIf="loading && listOfData.length === 0" class="p-md text-center">
-        <nz-spin nzSimple></nz-spin>
-    </div>
-    <div *ngIf="!loading && listOfData.length !== 0">
-        <ng-container *ngFor="let data of listOfData">
-            <nz-card [nzActions]="[actionEdit]" class="mt-md">
-                <nz-skeleton [nzActive]="true" [nzLoading]="false">
-                    <nz-card-meta [nzTitle]="treatyTitltTpl"></nz-card-meta>
-                    <ng-template #treatyTitltTpl>
-                        <span>{{ data.bill_category.name }}</span>
-                        <span class="text-primary text-xs ml-md" [class.text-error]="data.bill_status?.name === '未通过'"
-                            [class.text-success]="data.bill_status?.name === '已通过'">{{ data.bill_status?.name }}</span>
-                    </ng-template>
-                    <div class="pt-md">
-                        <sv-container size="small">
-                            <sv label="发票金额"><span
-                                    class="font-weight-bold text-nowrap">{{ data.amount | currency: 'CNY' }}</span>
-                            </sv>
-                            <sv label="申请人">{{ data.user.name }}</sv>
-                            <sv label="部&nbsp;&nbsp;&nbsp;门">{{ data.department.name }}</sv>
-                            <sv label="公&nbsp;&nbsp;&nbsp;司">{{ data.company.name }}</sv>
-                            <sv label="开票单位">{{ data.customer.name }}</sv>
-                            <sv label="开票地址">{{ data.customer.address }}</sv>
-                        </sv-container>
-                    </div>
-                </nz-skeleton>
-                <ng-template #actionEdit>
-                    <a [routerLink]="['/bill/approve/view', data.id]" [queryParams]="{ project_id: data.project.id }"><i
-                            nz-icon nzType="eye" nzTheme="outline"></i></a>
-                </ng-template>
-            </nz-card>
-        </ng-container>
-        <div class="mt-md text-center">
-            <nz-pagination [nzSize]="'small'" nzShowSizeChanger [(nzPageSize)]="pageOption.page_size"
-                [nzPageIndex]="pageOption.page" [nzTotal]="total" (nzPageIndexChange)="pageIndexChange($event)"
-                (nzPageSizeChange)="pageSizeChange($event)"></nz-pagination>
-        </div>
-    </div>
-</div>

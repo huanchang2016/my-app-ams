@@ -1,0 +1,15 @@
+<page-header [title]="'发票报表'" [breadcrumb]="breadcrumb">
+    <ng-template #breadcrumb>
+        <nz-breadcrumb>
+            <nz-breadcrumb-item><a [routerLink]="['/dashboard']">首页</a></nz-breadcrumb-item>
+            <nz-breadcrumb-item>报表管理</nz-breadcrumb-item>
+            <nz-breadcrumb-item>发票报表</nz-breadcrumb-item>
+        </nz-breadcrumb>
+    </ng-template>
+
+</page-header>
+
+<nz-card [nzBordered]="false">
+    <app-bill-report-table [type_id]="type_id" [type_name]="type_name" [page]="this.pageOption.page"
+        [page_size]="this.pageOption.page_size" (outer)="readOuter()"></app-bill-report-table>
+</nz-card>

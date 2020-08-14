@@ -15,9 +15,12 @@ export class FinancialBillListComponent implements OnInit {
   constructor(
   ) { }
 
-  pos = 0;
-
   type_id = 0;
+
+  pageOption: any = {
+    page: 1,
+    page_size: 10
+  }
 
   type_name = '已完成';
 

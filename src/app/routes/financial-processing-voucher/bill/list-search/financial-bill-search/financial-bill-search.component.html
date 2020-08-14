@@ -59,7 +59,9 @@
 
 <div class="hidden-mobile">
 </div>
-<nz-table #ajaxTable [nzData]="listOfData" [nzLoading]="loading" class="mt-md hidden-mobile">
+<nz-table #ajaxTable nzShowSizeChanger [nzFrontPagination]="false" [nzData]="listOfData" [nzLoading]="loading"
+    [nzTotal]="total" [(nzPageIndex)]="pageOption.page" [(nzPageSize)]="pageOption.page_size"
+    (nzPageIndexChange)="pageIndexChange($event)" (nzPageSizeChange)="pageSizeChange($event)" class="mt-md">
     <thead>
         <tr>
             <th nzShowCheckbox [(nzChecked)]="isAllDisplayDataChecked" [nzIndeterminate]="isIndeterminate"
@@ -104,7 +106,7 @@
         </tr>
     </tbody>
 </nz-table>
-<div class="hidden-pc mt-md">
+<!-- <div class="hidden-pc mt-md">
     <div *ngIf="loading && listOfData.length === 0" class="p-md text-center">
         <nz-spin nzSimple></nz-spin>
     </div>
@@ -143,4 +145,4 @@
                 (nzPageSizeChange)="pageSizeChange($event)"></nz-pagination>
         </div>
     </div>
-</div>
+</div> -->

@@ -14,6 +14,8 @@ export class ApproveSearchComponent implements OnInit {
   @Output() private outer = new EventEmitter();
   @Input() type_id: number;
   @Input() type_name: number;
+  @Input() page: number;
+  @Input() page_size: number;
 
   constructor(
     private fb: FormBuilder,
@@ -23,16 +25,6 @@ export class ApproveSearchComponent implements OnInit {
   validateForm: FormGroup;
 
   @Output() searchOptionsEmit: EventEmitter<any> = new EventEmitter();
-
-  contract: any = [];
-
-  customer: any = [];
-
-  // customerId: any = null;
-
-  taxArr: any = [];
-
-  tax_id: any = [];
 
   listOfData: any = [];
 
@@ -60,12 +52,11 @@ export class ApproveSearchComponent implements OnInit {
       // start_amount: [null], // 起始金额
       // end_amount: [null],  // 终止金额
       invoice_number: [null],  // 发票编号
-      page: [null], // 页
-      page_size: [null] // 页码
+      page: [1], // 页
+      page_size: [10] // 页码
     });
     console.log(this.pageOption, 'pageOption');
     const user = JSON.parse(localStorage.getItem('user'));
-    // this.customerId = user.company?.id;
     this.getSupplier();
     this.submit();
   }
@@ -74,8 +65,12 @@ export class ApproveSearchComponent implements OnInit {
     console.log('changes', changes, this.type_id, 'this.type_id', this.type_name, 'this.type_name');
     if (this.validateForm) {
       this.validateForm.patchValue({
-        status_name: this.type_name
+        status_name: this.type_name,
+        page: this.page,
+        page_size: this.page_size
       });
+      this.pageOption.page = this.validateForm.get('page').value
+      this.pageOption.page_size = this.validateForm.get('page_size').value
       this.submit();
       console.log('this.validateForm.value', this.validateForm.value);
     }
@@ -133,7 +128,7 @@ export class ApproveSearchComponent implements OnInit {
   }
 
   resetForm(): void {
-    console.log('........reset start')
+
     this.outer.emit();
     this.validateForm.patchValue({
       status_name: '待审批', // 状态名称
@@ -143,11 +138,11 @@ export class ApproveSearchComponent implements OnInit {
       // start_amount: null, // 起始金额
       // end_amount: null,  // 终止金额
       invoice_number: '',  // 发票编号
-      page: '', // 页
-      page_size: '' // 页码
+      page: 1, // 页
+      page_size: 10 // 页码
     });
     this.submit();
-    console.log('........reset end')
+
   }
 
   view(data: any) {

@@ -147,7 +147,14 @@ export class IncomeBarDataComponent implements OnInit {
         {
           type: 'category',
           name: '月份',
-          axisTick: { show: false },
+          axisTick: {
+            alignWithLabel: true,
+            inside: true
+          },
+          axisLabel: {
+            formatter: (item) => item + '月',
+          },
+          
           // 显示类型 横坐标
           data: xData // ['2012', '2013', '2014', '2015', '2016']
         }

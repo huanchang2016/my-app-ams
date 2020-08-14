@@ -152,17 +152,13 @@ export class CostBarDataComponent implements OnInit {
           name: '类型',
           axisTick: {
             alignWithLabel: true,
-            interval: 0,
-
+            inside: true,
+            interval: 0
           },
-          axisLable: {
+          axisLabel: {
             show: true,
             interval: 0,
-            // rotate: 90
-            formatter: function(val){
-              console.log(val, '.ssssssssss')
-              return val.split('').join('\n');
-            }
+            rotate: -20
           },
           // 显示成本类型 横坐标
           data: xData // ['2012', '2013', '2014', '2015', '2016']

@@ -64,6 +64,19 @@ import { NoContractExcutePayedListComponent } from './no-contract-approve-manage
 import { ContractPayForPayedComponent } from './contract-approve-manage/apply-for/contract-pay-for-payed/contract-pay-for-payed.component';
 import { ContractExcuteForPayedComponent } from './contract-approve-manage/excute-pay/contract-excute-for-payed/contract-excute-for-payed.component';
 
+// 合约支付列表
+import { ApplyListIndexComponent } from './contract-approve-manage/apply-list/apply-list-index/apply-list-index.component'
+import { MyApplyListComponent } from './contract-approve-manage/apply-for/my-apply-list/my-apply-list.component'
+import { ApproveListComponent } from './contract-approve-manage/apply-for/approve-list/approve-list.component'
+import { ApplyExcuteListComponent } from './contract-approve-manage/apply-for/apply-excute-list/apply-excute-list.component'
+// 非合约支付列表
+import { NoContractApplyListIndexComponent } from './no-contract-approve-manage/apply-list/no-contract-apply-list-index/no-contract-apply-list-index.component'
+import { NoMyApplyListComponent } from './no-contract-approve-manage/apply-for/no-contract-list-search/my-apply/no-my-apply-list/no-my-apply-list.component'
+import { NoApplyApproveListComponent } from './no-contract-approve-manage/apply-for/no-contract-list-search/apply-approve/no-apply-approve-list/no-apply-approve-list.component'
+import { NoApplyExcuteListComponent } from './no-contract-approve-manage/apply-for/no-contract-list-search/apply-excute/no-apply-excute-list/no-apply-excute-list.component'
+
+
+
 const routes: Routes = [
   // 合约支付列表（草稿、进行中、提交审批通过（未通过））
   // { path: 'contract/apply/draft', component: ApproveNotStartedComponent },
@@ -276,6 +289,16 @@ const routes: Routes = [
     ]
   },
 
+  // 路由配置修改
+  { path: 'contract/list', component: ApplyListIndexComponent },
+  { path: 'contract/myApply', component: MyApplyListComponent },
+  { path: 'contract/approve', component: ApproveListComponent },
+  { path: 'contract/excuteList', component: ApplyExcuteListComponent },
+  // 非合约 合同管理
+  { path: 'no-contract/applyList', component: NoContractApplyListIndexComponent },
+  { path: 'no-contract/myApply', component: NoMyApplyListComponent },
+  { path: 'no-contract/excuteList', component: NoApplyApproveListComponent },
+  { path: 'no-contract/approve', component: NoApplyExcuteListComponent },
 
   // 协议审批  信息查看
   { path: 'no-contract/pay/view/:id', component: NoContractApproveViewComponent, data: { title: '非合约支付详情查看' } }

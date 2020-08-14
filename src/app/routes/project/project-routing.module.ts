@@ -17,6 +17,11 @@ import { ProjectAdjustComponent } from './project-adjust/project-adjust.componen
 import { MyProjectListComponent } from './my-project/my-project-list/my-project-list.component';
 import { ProjectDepartmentHeadListComponent } from './project-department_head/project-department-head-list/project-department-head-list.component';
 
+// project
+import { ProjectListComponent } from './project-list-search/project-list/project-list.component'
+import { ProjectMyProjectListComponent } from './my-project/list-search/project-my-project-list/project-my-project-list.component'
+import { ProjectApprovalListComponent } from './approval-project/list-search/project-approval-list/project-approval-list.component'
+
 
 const routes: Routes = [
   // { path: 'my/draft', component: DraftListComponent, data: { title: '项目草稿'} },
@@ -69,6 +74,9 @@ const routes: Routes = [
       },
     ]
   },
+  { path: 'my-project', component: ProjectMyProjectListComponent },
+  { path: 'approvalList', component: ProjectApprovalListComponent },
+  { path: 'projectList', component: ProjectListComponent },
 
   { path: 'create', component: ProjectCreateComponent, data: { title: '创建项目' } },
   { path: 'department_head_list', component: ProjectDepartmentHeadListComponent, data: { title: '项目列表(部门负责人)' } },

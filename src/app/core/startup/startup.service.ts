@@ -1,4 +1,4 @@
-import { Injectable, Injector, Inject } from '@angular/core';
+import { Injectable, Injector, Inject, Optional } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { zip } from 'rxjs';
@@ -11,6 +11,7 @@ import { NzIconService } from 'ng-zorro-antd/icon';
 import { ICONS_AUTO } from '../../../style-icons-auto';
 import { ICONS } from '../../../style-icons';
 import { ApiData } from 'src/app/data/interface.data';
+import { ReuseTabService } from '@delon/abc';
 
 /**
  * Used for application startup
@@ -26,6 +27,9 @@ export class StartupService {
     private settingService: SettingsService,
     private aclService: ACLService,
     private titleService: TitleService,
+    @Optional()
+    @Inject(ReuseTabService)
+    private reuseTabService: ReuseTabService,
     @Inject(DA_SERVICE_TOKEN) private tokenService: ITokenService,
     private httpClient: HttpClient,
     private injector: Injector
@@ -629,44 +633,45 @@ export class StartupService {
   }
 
   load(): Promise<any> {
-    
-      // // 授权登录
-      // let s: string = window.location.href.split('?')[1];
-      // let h: string[] = s ? s.split('&') : null;
-      // // console.log('h', h);
-      // let arr: string = h ? h.filter((item: string) => item.indexOf('code') !== -1)[0] : null;
-      // // console.log('arr', arr);
-      // let code = arr ? arr.split('=')[1] : null;
-      // // console.log('code', code);
-      // // 授权登录
-      // /***** 如果code 存在，则表示是从微信授权登录过来的 *****/
-      // // this.httpClient.get('https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe6b54b37370b2706&redirect_uri=http%3a%2f%2fkpi.cdtfhr.com%2f%23%2fpassport%2flogin&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect').subscribe((res:any) => {
-      // //   alert(res);
-      // // })
-      // if (code) {
-      //   window.localStorage.removeItem('cw_permission');
-      //   this.httpClient.post('/api/qywechat_login', { code: code }).subscribe((res: ApiData) => {
-      //     if (res.code === 200) {
-      //       // 清空路由复用信息
-      //       this.reuseTabService.clear();
-      //       // 设置用户Token信息
-      //       this.tokenService.set({ token: res.data.access_token });
-      //       // this.startupService.initMenuBypermission();
-      //       // 重新获取 StartupService 内容，我们始终认为应用信息一般都会受当前用户授权范围而影响
-      //       // this.injector.get(Router).navigateByUrl('/');
-      //       this.viaHttp(resolve, reject);
-      //     } else {
-      //       this.injector.get(Router).navigateByUrl('/passport/login');
-      //     }
-      //   });
-      //   // resolve(null);
-      // } else {
-      //   this.viaHttp(resolve, reject);
-      // }
     // only works with promises
     return new Promise((resolve, reject) => {
+
+      // 授权登录
+      let s: string = window.location.href.split('?')[1];
+      let h: string[] = s ? s.split('&') : null;
+      // console.log('h', h);
+      let arr: string = h ? h.filter((item: string) => item.indexOf('code') !== -1)[0] : null;
+      // console.log('arr', arr);
+      let code = arr ? arr.split('=')[1] : null;
+      // console.log('code', code);
+      // 授权登录
+      /***** 如果code 存在，则表示是从微信授权登录过来的 *****/
+      // this.httpClient.get('https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe6b54b37370b2706&redirect_uri=http%3a%2f%2fkpi.cdtfhr.com%2f%23%2fpassport%2flogin&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect').subscribe((res:any) => {
+      //   alert(res);
+      // })
+      if (code) {
+        window.localStorage.removeItem('cw_permission');
+        this.httpClient.post('/api/qywechat_login', { code: code }).subscribe((res: ApiData) => {
+          if (res.code === 200) {
+            // 清空路由复用信息
+            this.reuseTabService.clear();
+            // 设置用户Token信息
+            this.tokenService.set({ token: res.data.access_token });
+            // this.startupService.initMenuBypermission();
+            // 重新获取 StartupService 内容，我们始终认为应用信息一般都会受当前用户授权范围而影响
+            // this.injector.get(Router).navigateByUrl('/');
+            this.viaHttp(resolve, reject);
+          } else {
+            this.injector.get(Router).navigateByUrl('/passport/login');
+          }
+        });
+        // resolve(null);
+      } else {
+        this.viaHttp(resolve, reject);
+      }
+
       // http
-      this.viaHttp(resolve, reject);
+      // this.viaHttp(resolve, reject);
       // this.viaMock(resolve, reject);
     });
   }

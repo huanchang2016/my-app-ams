@@ -14,8 +14,8 @@ export class QrAuthComponent implements AfterViewInit {
     this.d({
       "id": "wx_reg",
       "appid": "wxe6b54b37370b2706",
-      "agentid": "1000005",
-      "redirect_uri": "http%3a%2f%2fkpi.cdtfhr.com",
+      "agentid": "1000007",
+      "redirect_uri": "http%3a%2f%2fcw.cdtfhr.com",
       "state": "",
       "href": "",
     });

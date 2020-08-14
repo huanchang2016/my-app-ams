@@ -69,20 +69,20 @@ export class UserLoginComponent implements OnDestroy {
     this.type = ret.index;
   }
 
-  getCaptcha() {
-    if (this.mobile.invalid) {
-      this.mobile.markAsDirty({ onlySelf: true });
-      this.mobile.updateValueAndValidity({ onlySelf: true });
-      return;
-    }
-    this.count = 59;
-    this.interval$ = interval(1000).subscribe( _ => {
-      this.count -= 1;
-      if (this.count <= 0) {
-        this.interval$.unsubscribe();
-      }
-    })
-  }
+  // getCaptcha() {
+  //   if (this.mobile.invalid) {
+  //     this.mobile.markAsDirty({ onlySelf: true });
+  //     this.mobile.updateValueAndValidity({ onlySelf: true });
+  //     return;
+  //   }
+  //   this.count = 59;
+  //   this.interval$ = interval(1000).subscribe( _ => {
+  //     this.count -= 1;
+  //     if (this.count <= 0) {
+  //       this.interval$.unsubscribe();
+  //     }
+  //   })
+  // }
 
   // #endregion
 

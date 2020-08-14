@@ -203,7 +203,7 @@ const DEFAULT_VARS = {
   templateUrl: './setting-drawer.component.html',
   // tslint:disable-next-line: no-host-metadata-property
   host: {
-    '[class.setting-drawer]': 'true',
+    '[class.setting-drawer]': 'false',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -53,7 +53,7 @@ export class StartupService {
           {
             text: '数据中心',
             link: '/dashboard',
-            icon: { type: 'icon', value: 'appstore' }
+            icon: { type: 'icon', value: 'pie-chart' }
           },
           {
             text: '项目管理',
@@ -122,7 +122,7 @@ export class StartupService {
           {
             text: '项目调整',
             link: '/adjust',
-            icon: { type: 'icon', value: 'bars' },
+            icon: { type: 'icon', value: 'undo' },
             children: [
               {
                 text: '我的项目',
@@ -134,7 +134,8 @@ export class StartupService {
               },
               {
                 text: '调整审批',
-                link: '/adjust/approvel'
+                link: '/adjust/approvel',
+                hide: this.isHideRouter(['adjustment_approval'], permissionGroup),
               },
               {
                 text: '调整列表',
@@ -390,12 +391,12 @@ export class StartupService {
             text: '合同管理',
             link: '/contract',
             icon: { type: 'icon', value: 'file-protect' },
-            // hide: this.isHideRouter(['cost_list', 'tax_list', 'supplier_service_list'], permissionGroup),
+            hide: this.isHideRouter(['contract_list'], permissionGroup),
             children: [
               {
                 text: '合同列表',
                 link: '/contract/list',
-                // hide: this.isHideRouter(['cost_list'], permissionGroup)
+                hide: this.isHideRouter(['contract_list'], permissionGroup)
               }
             ]
           },
@@ -403,7 +404,7 @@ export class StartupService {
             text: '财务处理凭证',
             link: '/financial',
             icon: { type: 'icon', value: 'heat-map' },
-            // hide: this.isHideRouter(['cost_list', 'tax_list', 'supplier_service_list'], permissionGroup),
+            hide: this.isHideRouter(['contract_pay_certificate', 'treaty_pay_certificate', 'bill_certificate'], permissionGroup),
             children: [
               {
                 text: '合约凭证',
@@ -423,6 +424,23 @@ export class StartupService {
                 link: '/financial/billList',
                 hide: this.isHideRouter(['bill_certificate'], permissionGroup)
               }
+            ]
+          },
+          {
+            text: '报表管理',
+            link: '/report',
+            icon: { type: 'icon', value: 'table' },
+            hide: this.isHideRouter(['ticket_statistics_list'], permissionGroup),
+            children: [
+              {
+                text: '发票报表',
+                link: '/report/bill-report',
+                hide: this.isHideRouter(['ticket_statistics_list'], permissionGroup)
+              },
+              // {
+              //   text: '派遣创建',
+              //   link: '/dispatch/create',
+              // }
             ]
           },
           {
@@ -572,21 +590,6 @@ export class StartupService {
           //   ]
           // }
 
-          {
-            text: '报表管理',
-            link: '/report',
-            icon: { type: 'icon', value: 'key' },
-            children: [
-              {
-                text: '发票报表',
-                link: '/report/bill-report',
-              },
-              // {
-              //   text: '派遣创建',
-              //   link: '/dispatch/create',
-              // }
-            ]
-          }
         ]
       }
     ];
@@ -639,16 +642,10 @@ export class StartupService {
       // 授权登录
       let s: string = window.location.href.split('?')[1];
       let h: string[] = s ? s.split('&') : null;
-      // console.log('h', h);
       let arr: string = h ? h.filter((item: string) => item.indexOf('code') !== -1)[0] : null;
       // console.log('arr', arr);
       let code = arr ? arr.split('=')[1] : null;
-      // console.log('code', code);
       // 授权登录
-      /***** 如果code 存在，则表示是从微信授权登录过来的 *****/
-      // this.httpClient.get('https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe6b54b37370b2706&redirect_uri=http%3a%2f%2fkpi.cdtfhr.com%2f%23%2fpassport%2flogin&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect').subscribe((res:any) => {
-      //   alert(res);
-      // })
       if (code) {
         window.localStorage.removeItem('cw_permission');
         this.httpClient.post('/api/qywechat_login', { code: code }).subscribe((res: ApiData) => {
@@ -665,7 +662,7 @@ export class StartupService {
             this.injector.get(Router).navigateByUrl('/passport/login');
           }
         });
-        // resolve(null);
+        
       } else {
         this.viaHttp(resolve, reject);
       }

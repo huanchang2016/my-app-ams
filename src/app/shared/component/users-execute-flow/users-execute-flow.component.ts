@@ -65,6 +65,8 @@ export class UsersExecuteFlowComponent implements OnChanges {
   ngOnChanges() {
     console.log('progressInfoprogressInfoprogressInfoprogressInfoprogressInfo', this.progressInfo);
     console.log('中间组件 listOfData', this.listOfData);
+
+    
     if (this.progressInfo) {
       this.nodeProcess = [this.progressInfo];
       this.isExecuteUser = this.progressInfo.execute_user.id === this.settings.user.id;

@@ -30,8 +30,8 @@ export class UserLoginComponent implements OnDestroy {
     public msg: NzMessageService,
   ) {
     this.form = fb.group({
-      userName: ['admin', [Validators.required, Validators.minLength(4)]],
-      password: ['12345678', Validators.required],
+      userName: [null, [Validators.required, Validators.minLength(4)]],
+      password: [null, Validators.required],
       // password: ['Cdtfhr028', Validators.required],
       mobile: [null, [Validators.required, Validators.pattern(/^1\d{10}$/)]],
       captcha: [null, [Validators.required]],

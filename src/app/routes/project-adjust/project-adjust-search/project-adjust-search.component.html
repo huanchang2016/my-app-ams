@@ -114,21 +114,25 @@
                 <span [innerHTML]="data.remark | showTextareaContent"></span>
             </td> -->
             <td>
-                <a *ngIf="swithFlag" (click)="edit(data)" class="text-nowrap"><i nz-icon nzType="edit"
-                        nzTheme="outline"></i></a>
-                <nz-divider nzType="vertical"></nz-divider>
+                <ng-container *ngIf="swithFlag">
+                    <a  (click)="edit(data)" class="text-nowrap"><i nz-icon nzType="edit"
+                            nzTheme="outline"></i></a>
+                    <nz-divider nzType="vertical"></nz-divider>
+                </ng-container>
                 <a (click)="view(data)"><i nz-icon nzType="eye" nzTheme="outline"></i></a>
-
-                <nz-divider nzType="vertical"></nz-divider>
-                <a *ngIf="swithFlag" nz-popconfirm class="text-nowrap" nzPopconfirmTitle="请确认项目信息全部填写完整，无误后确认提交！！！"
-                    (nzOnConfirm)="submitProject(data.id)" (nzOnCancel)="cancel()">
-                    提交
-                </a>
-                <nz-divider nzType="vertical"></nz-divider>
-                <a *ngIf="swithFlag" nz-popconfirm class="text-error text-nowrap" nzPopconfirmTitle="是否确认删除当前项目信息？"
-                    (nzOnConfirm)="deletedProject(data.id)" (nzOnCancel)="cancel()">
-                    删除
-                </a>
+                
+                <ng-container *ngIf="swithFlag">
+                    <nz-divider nzType="vertical"></nz-divider>
+                    <a nz-popconfirm class="text-nowrap" nzPopconfirmTitle="请确认项目信息全部填写完整，无误后确认提交！！！"
+                        (nzOnConfirm)="submitProject(data.id)" (nzOnCancel)="cancel()">
+                        提交
+                    </a>
+                    <nz-divider nzType="vertical"></nz-divider>
+                    <a nz-popconfirm class="text-error text-nowrap" nzPopconfirmTitle="是否确认删除当前项目信息？"
+                        (nzOnConfirm)="deletedProject(data.id)" (nzOnCancel)="cancel()">
+                        删除
+                    </a>
+                </ng-container>
             </td>
         </tr>
     </tbody>

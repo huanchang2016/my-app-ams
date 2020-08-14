@@ -14,11 +14,16 @@ export class ProjectAdjustListComponent implements OnInit {
 
   type_id = 0;
 
+  pageOption: any = {
+    page: 1,
+    page_size: 10
+  }
+
   type_name = '进行中';
 
   ngOnInit(): void {
   }
-  
+
   readOuter() {
     this.type_name = '进行中';
   }

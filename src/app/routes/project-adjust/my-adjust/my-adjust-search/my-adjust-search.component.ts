@@ -15,10 +15,10 @@ import { SettingsConfigService } from 'src/app/routes/service/settings-config.se
 export class MyAdjustSearchComponent implements OnInit {
 
   @Output() private outer = new EventEmitter();
-
   @Input() type_id: number;
-
   @Input() type_name: number;
+  @Input() page: number;
+  @Input() page_size: number;
 
   // @Output() searchOptionsEmit: EventEmitter<any> = new EventEmitter();
   constructor(
@@ -37,11 +37,6 @@ export class MyAdjustSearchComponent implements OnInit {
 
   total = 0;
 
-  pageOption: any = {
-    page: 1,
-    page_size: 10
-  };
-
   list: any[] = [];
 
   swithFlag = true;
@@ -51,18 +46,27 @@ export class MyAdjustSearchComponent implements OnInit {
       status_name: ['草稿'], // 状态名称
       project_name: [null],  // 项目名称
       project_number: [null],  // 项目编号
-      page: [null], // 页
-      page_size: [null] // 页码
+      page: [1], // 页
+      page_size: [10] // 页码
     });
     this.submit();
+  }
+
+  pageOption: any = {
+    page: 1,
+    page_size: 10
   }
 
   ngOnChanges(changes: SimpleChanges) {
     console.log('changes', changes, this.type_id, 'this.type_id', this.type_name, 'this.type_name');
     if (this.validateForm) {
       this.validateForm.patchValue({
-        status_name: this.type_name
+        status_name: this.type_name,
+        page: this.page,
+        page_size: this.page_size
       });
+      this.pageOption.page = this.validateForm.get('page').value
+      this.pageOption.page_size = this.validateForm.get('page_size').value
       this.submit();
       console.log('this.validateForm.value', this.validateForm.value);
       console.log(this.validateForm.get('status_name').value, 'status_name value');
@@ -109,12 +113,16 @@ export class MyAdjustSearchComponent implements OnInit {
   }
 
   pageIndexChange($event: number) {
-    this.pageOption.page = $event;
+    this.validateForm.patchValue({
+      page: $event,
+    })
     this.submit();
   }
 
   pageSizeChange($event: number) {
-    this.pageOption.page_size = $event;
+    this.validateForm.patchValue({
+      page_size: $event,
+    })
     this.submit();
   }
 
@@ -133,16 +141,16 @@ export class MyAdjustSearchComponent implements OnInit {
   }
 
   resetForm(): void {
-    console.log('........reset start')
+
     this.outer.emit();
     this.validateForm.patchValue({
       status_name: '草稿', // 状态名称
       project_name: null,  // 项目名称
       project_number: null,  // 项目编号
-      page: null, // 页
-      page_size: null // 页码
+      page: 1, // 页
+      page_size: 10 // 页码
     });
     this.submit();
-    console.log('........reset end')
+
   }
 }

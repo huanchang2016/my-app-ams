@@ -14,6 +14,8 @@ export class NoMyApplySearchComponent implements OnInit {
   @Output() private outer = new EventEmitter();
   @Input() type_id: number;
   @Input() type_name: number;
+  @Input() page: number;
+  @Input() page_size: number;
 
   constructor(
     private fb: FormBuilder,
@@ -24,26 +26,11 @@ export class NoMyApplySearchComponent implements OnInit {
 
   @Output() searchOptionsEmit: EventEmitter<any> = new EventEmitter();
 
-  contract: any = [];
-
-  customer: any = [];
-
-  // customerId: any = null;
-
-  taxArr: any = [];
-
-  tax_id: any = [];
-
   listOfData: any = [];
 
   loading = false;
 
   total = 0;
-
-  pageOption: any = {
-    page: 1,
-    page_size: 10
-  };
 
   status: any;
 
@@ -60,21 +47,29 @@ export class NoMyApplySearchComponent implements OnInit {
       invoice_number: [null],  // 发票编号
       pay_company: [null],  // 支付公司
       if_write_off: [null],  // 是否冲销
-      page: [null], // 页
-      page_size: [null] // 页码
+      page: [1], // 页
+      page_size: [10] // 页码
     });
     const user = JSON.parse(localStorage.getItem('user'));
-    // this.customerId = user.company?.id;
     this.getSupplier();
     this.submit();
+  }
+
+  pageOption: any = {
+    page: 1,
+    page_size: 10
   }
 
   ngOnChanges(changes: SimpleChanges) {
     console.log('changes', changes, this.type_id, 'this.type_id', this.type_name, 'this.type_name');
     if (this.validateForm) {
       this.validateForm.patchValue({
-        status_name: this.type_name
+        status_name: this.type_name,
+        page: this.page,
+        page_size: this.page_size
       });
+      this.pageOption.page = this.validateForm.get('page').value
+      this.pageOption.page_size = this.validateForm.get('page_size').value
       this.submit();
       console.log('this.validateForm.value', this.validateForm.value);
     }
@@ -105,12 +100,16 @@ export class NoMyApplySearchComponent implements OnInit {
   }
 
   pageIndexChange($event: number) {
-    this.pageOption.page = $event;
+    this.validateForm.patchValue({
+      page: $event,
+    })
     this.submit();
   }
 
   pageSizeChange($event: number) {
-    this.pageOption.page_size = $event;
+    this.validateForm.patchValue({
+      page_size: $event,
+    })
     this.submit();
   }
 
@@ -130,17 +129,17 @@ export class NoMyApplySearchComponent implements OnInit {
   }
 
   resetForm(): void {
-    console.log('........reset start')
+
     this.outer.emit();
     this.validateForm.patchValue({
       status_name: '进行中', // 状态名称
       invoice_number: '',  // 发票编号
       pay_company: '',  // 支付公司
       if_write_off: null,  // 是否冲销
-      page: null, // 页
-      page_size: null // 页码
+      page: 1, // 页
+      page_size: 10 // 页码
     });
     this.submit();
-    console.log('........reset end')
+
   }
 }

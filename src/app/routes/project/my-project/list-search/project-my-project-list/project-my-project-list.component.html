@@ -16,6 +16,7 @@
 </page-header>
 
 <nz-card [nzBordered]="false">
-    <app-project-my-project-search [type_id]="type_id" [type_name]="type_name" (outer)="readOuter()">
+    <app-project-my-project-search [type_id]="type_id" [type_name]="type_name" [page]="this.pageOption.page"
+        [page_size]="this.pageOption.page_size" (outer)="readOuter()">
     </app-project-my-project-search>
 </nz-card>

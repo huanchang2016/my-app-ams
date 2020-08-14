@@ -16,11 +16,11 @@ export class ApproveListComponent implements OnInit {
 
   tabs: any[] = [
     {
-      id: 1,
+      id: 0,
       name: '待审批'
     },
     {
-      id: 2,
+      id: 1,
       name: '已审批'
     },
   ];
@@ -28,6 +28,11 @@ export class ApproveListComponent implements OnInit {
   pos = 0;
 
   type_id = 0;
+
+  pageOption: any = {
+    page: 1,
+    page_size: 10
+  }
 
   type_name = '待审批';
 
@@ -37,11 +42,15 @@ export class ApproveListComponent implements OnInit {
   to(item: any) {
     this.type_id = item.id;
     this.type_name = item.name;
+    this.pos = this.type_id;
     console.log(this.type_id, 'type_id', item);
     console.log(this.type_name, 'type_name', item);
   }
   readOuter() {
     this.type_name = '待审批';
+    this.pageOption.page = 1
+    this.pageOption.page_size = 10
+    this.pos = 0;
   }
 
 }

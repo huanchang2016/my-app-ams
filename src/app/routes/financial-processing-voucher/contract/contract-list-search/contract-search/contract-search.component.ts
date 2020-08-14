@@ -14,6 +14,8 @@ export class ContractSearchComponent implements OnInit {
   @Output() private outer = new EventEmitter();
   @Input() type_id: number;
   @Input() type_name: number;
+  @Input() page: number;
+  @Input() page_size: number;
 
   constructor(
     private fb: FormBuilder,
@@ -40,11 +42,6 @@ export class ContractSearchComponent implements OnInit {
 
   total = 0;
 
-  pageOption: any = {
-    page: 1,
-    page_size: 10
-  };
-
   status: any;
 
   // TODO: checkbox
@@ -70,8 +67,8 @@ export class ContractSearchComponent implements OnInit {
       customer_id: [null],  // 客户id
       customer_contract_code: [null],  // 客户合同编码
       tax_id: [null],  // 税目id
-      page: [null], // 页
-      page_size: [null] // 页码
+      page: [1], // 页
+      page_size: [10] // 页码
     });
     const user = JSON.parse(localStorage.getItem('user'));
     this.customerId = user.company?.id;
@@ -81,12 +78,21 @@ export class ContractSearchComponent implements OnInit {
     this.submit();
   }
 
+  pageOption: any = {
+    page: 1,
+    page_size: 10
+  }
+
   ngOnChanges(changes: SimpleChanges) {
     console.log('changes', changes, this.type_id, 'this.type_id', this.type_name, 'this.type_name');
     if (this.validateForm) {
       this.validateForm.patchValue({
-        status_name: this.type_name
+        status_name: this.type_name,
+        page: this.page,
+        page_size: this.page_size
       });
+      this.pageOption.page = this.validateForm.get('page').value
+      this.pageOption.page_size = this.validateForm.get('page_size').value
       this.submit();
       console.log('this.validateForm.value', this.validateForm.value);
     }
@@ -130,12 +136,14 @@ export class ContractSearchComponent implements OnInit {
   }
 
   getTax() {
-    this.settingsConfigService.get(`/api/tax/company/${this.customerId}`).subscribe((res: ApiData) => {
-      if (res.code === 200) {
-        console.log('获取税目', res.data);
-        this.taxArr = res.data.tax;
-      }
-    })
+    if (this.customerId) {
+      this.settingsConfigService.get(`/api/tax/company/${this.customerId}`).subscribe((res: ApiData) => {
+        if (res.code === 200) {
+          console.log('获取税目', res.data);
+          this.taxArr = res.data.tax;
+        }
+      })
+    }
   }
 
   submit() {
@@ -145,12 +153,16 @@ export class ContractSearchComponent implements OnInit {
   }
 
   pageIndexChange($event: number) {
-    this.pageOption.page = $event;
+    this.validateForm.patchValue({
+      page: $event,
+    })
     this.submit();
   }
 
   pageSizeChange($event: number) {
-    this.pageOption.page_size = $event;
+    this.validateForm.patchValue({
+      page_size: $event,
+    })
     this.submit();
   }
 
@@ -192,7 +204,7 @@ export class ContractSearchComponent implements OnInit {
   }
 
   resetForm(): void {
-    console.log('........reset start')
+
     this.outer.emit();
     this.validateForm.patchValue({
       status_name: '已完成',
@@ -200,10 +212,10 @@ export class ContractSearchComponent implements OnInit {
       customer_id: null,
       customer_contract_code: '',
       tax_id: null,
-      page: '',
-      page_size: '',
+      page: 1,
+      page_size: 10,
     });
     this.submit();
-    console.log('........reset end')
+
   }
 }

@@ -15,10 +15,10 @@ import { SettingsConfigService } from 'src/app/routes/service/settings-config.se
 export class ProjectMyProjectSearchComponent implements OnInit {
 
   @Output() private outer = new EventEmitter();
-
   @Input() type_id: number;
-
   @Input() type_name: number;
+  @Input() page: number;
+  @Input() page_size: number;
 
   // @Output() searchOptionsEmit: EventEmitter<any> = new EventEmitter();
   constructor(
@@ -30,21 +30,13 @@ export class ProjectMyProjectSearchComponent implements OnInit {
   ) { }
   validateForm: FormGroup;
 
-
   listOfData: any = [];
 
   loading = false;
 
   total = 0;
 
-  pageOption: any = {
-    page: 1,
-    page_size: 10
-  };
-
   status: any;
-
-  supplierList: any = [];
 
   companyList: any = [];
 
@@ -75,21 +67,28 @@ export class ProjectMyProjectSearchComponent implements OnInit {
       company_id: [null],  // 客户单位
       department_id: [null],  // 部门
       category_id: [null],  // 项目类型
-      page: [null], // 页
-      page_size: [null] // 页码
+      page: [1], // 页
+      page_size: [10] // 页码
     });
-    // const user = JSON.parse(localStorage.getItem('user'));
-    // this.customerId = user.company?.id;
     this.getCompany();
     this.submit();
+  }
+
+  pageOption: any = {
+    page: 1,
+    page_size: 10
   }
 
   ngOnChanges(changes: SimpleChanges) {
     console.log('changes', changes, this.type_id, 'this.type_id', this.type_name, 'this.type_name');
     if (this.validateForm) {
       this.validateForm.patchValue({
-        status_name: this.type_name
+        status_name: this.type_name,
+        page: this.page,
+        page_size: this.page_size
       });
+      this.pageOption.page = this.validateForm.get('page').value
+      this.pageOption.page_size = this.validateForm.get('page_size').value
       this.submit();
       console.log('this.validateForm.value', this.validateForm.value);
       console.log(this.validateForm.get('status_name').value, 'status_name value');
@@ -231,12 +230,16 @@ export class ProjectMyProjectSearchComponent implements OnInit {
   }
 
   pageIndexChange($event: number) {
-    this.pageOption.page = $event;
+    this.validateForm.patchValue({
+      page: $event,
+    })
     this.submit();
   }
 
   pageSizeChange($event: number) {
-    this.pageOption.page_size = $event;
+    this.validateForm.patchValue({
+      page_size: $event,
+    })
     this.submit();
   }
 
@@ -255,7 +258,7 @@ export class ProjectMyProjectSearchComponent implements OnInit {
   }
 
   resetForm(): void {
-    console.log('........reset start')
+
     this.outer.emit();
     this.validateForm.patchValue({
       name: null,  // 项目名称
@@ -264,11 +267,11 @@ export class ProjectMyProjectSearchComponent implements OnInit {
       company_id: null,  // 客户单位
       department_id: null,  // 部门
       category_id: null,  // 项目类型
-      page: null, // 页
-      page_size: null // 页码
+      page: 1, // 页
+      page_size: 10 // 页码
     });
     this.submit();
-    console.log('........reset end')
+
   }
 
 }

@@ -5,23 +5,24 @@ import { SettingsConfigService } from 'src/app/routes/service/settings-config.se
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-project-approval-search',
-  templateUrl: './project-approval-search.component.html',
+  selector: 'app-bill-report-table',
+  templateUrl: './bill-report-table.component.html',
   styles: [
   ]
 })
-export class ProjectApprovalSearchComponent implements OnInit {
-  @Output() private outer = new EventEmitter();
-  @Input() type_id: number;
-  @Input() type_name: number;
-  @Input() page: number;
-  @Input() page_size: number;
+export class BillReportTableComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
     private settingsConfigService: SettingsConfigService,
     private router: Router
   ) { }
+
+  @Output() private outer = new EventEmitter();
+  @Input() type_id: number;
+  @Input() type_name: number;
+  @Input() page: number;
+  @Input() page_size: number;
   validateForm: FormGroup;
 
   @Output() searchOptionsEmit: EventEmitter<any> = new EventEmitter();
@@ -46,27 +47,25 @@ export class ProjectApprovalSearchComponent implements OnInit {
 
   department_id: any = null;
 
-  ngOnInit(): void {
-    console.log(this.disableFlag, 'this.disableFlag');
-    this.validateForm = this.fb.group({
-      name: [null],  // 项目名称
-      status_name: ['待审批'], // 状态名称
-      number: [null],  // 发票编号
-      company_id: [null],  // 客户单位
-      department_id: [null],  // 部门
-      category_id: [null],  // 项目类型
-      page: [1], // 页
-      page_size: [10] // 页码
-    });
-    // const user = JSON.parse(localStorage.getItem('user'));
-    // this.customerId = user.company?.id;
-    this.getCompany();
-    this.submit();
-  }
-
   pageOption: any = {
     page: 1,
     page_size: 10
+  }
+
+  tax_amount_sum = 0;
+
+  invoice_amount_sum = 0;
+
+  ngOnInit(): void {
+    console.log(this.disableFlag, 'this.disableFlag');
+    this.validateForm = this.fb.group({
+      company_id: [null],  // 客户单位
+      department_id: [null],  // 部门
+      page: [1], // 页
+      page_size: [10] // 页码
+    });
+    this.getCompany();
+    this.submit();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -159,13 +158,14 @@ export class ProjectApprovalSearchComponent implements OnInit {
 
   listRequest(option) {
     console.log('listRequest option', option);
-    this.settingsConfigService.post('/api/project/approval/list', option).subscribe((res: ApiData) => {
+    this.settingsConfigService.post('/api/ticket_statistics', option).subscribe((res: ApiData) => {
       console.log('listRequest res', res.data);
       if (res.code === 200) {
-        console.log('项目审批');
-        this.listOfData = res.data.project;
+        console.log('发票报表');
+        this.listOfData = res.data.bill;
         this.total = res.data.count;
         console.log('listRequest listOfData', this.listOfData);
+        this.getSum();
         return;
       }
       return;
@@ -176,16 +176,21 @@ export class ProjectApprovalSearchComponent implements OnInit {
 
     this.outer.emit();
     this.validateForm.patchValue({
-      name: null,  // 项目名称
-      status_name: '待审批', // 状态名称
-      number: null,  // 发票编号
       company_id: null,  // 客户单位
       department_id: null,  // 部门
-      category_id: null,  // 项目类型
       page: 1, // 页
       page_size: 10 // 页码
     });
     this.submit();
 
   }
+
+  getSum() {
+    for (const item of this.listOfData) {
+      this.tax_amount_sum += item.tax_amount
+      this.invoice_amount_sum += item.invoice_amount
+    }
+    console.log(Number((this.tax_amount_sum).toFixed(2)), 'tax_amount_sum', this.invoice_amount_sum, 'invoice_amount_sum');
+  }
+
 }

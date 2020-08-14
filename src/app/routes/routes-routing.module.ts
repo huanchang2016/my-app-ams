@@ -60,7 +60,7 @@ const routes: Routes = [
       { path: 'project/projectList', component: ProjectListComponent },
       // 项目调整
       { path: 'adjust', loadChildren: () => import('./project-adjust/project-adjust.module').then(m => m.ProjectAdjustModule) },
-      
+
       // 支付审批管理
       { path: 'approve', loadChildren: () => import('./payment-approve/payment-approve.module').then(m => m.PaymentApproveModule) },
       // 账务管理 （发票、账务处理）
@@ -99,6 +99,8 @@ const routes: Routes = [
       { path: 'person-center', loadChildren: () => import('./person-center/person-center.module').then(m => m.PersonCenterModule) },
       // 派遣
       { path: 'dispatch', loadChildren: () => import('./dispatch/dispatch.module').then(m => m.DispatchModule) },
+      // 报表
+      { path: 'report', loadChildren: () => import('./report/report.module').then(m => m.ReportModule) },
       // { path: 'dispatch/create', component: DispatchCreateComponent },
       // { path: 'dispatch/index', component: DispathIndexComponent },
     ]

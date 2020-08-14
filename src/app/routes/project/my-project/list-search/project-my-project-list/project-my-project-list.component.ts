@@ -17,23 +17,23 @@ export class ProjectMyProjectListComponent implements OnInit {
 
   tabs: any[] = [
     {
-      id: 1,
+      id: 0,
       name: '草稿'
     },
     {
-      id: 2,
+      id: 1,
       name: '已提交，待审核'
     },
     {
-      id: 3,
+      id: 2,
       name: '已提交，未通过'
     },
     {
-      id: 4,
+      id: 3,
       name: '进行中'
     },
     {
-      id: 5,
+      id: 4,
       name: '已完成'
     },
   ];
@@ -42,6 +42,11 @@ export class ProjectMyProjectListComponent implements OnInit {
 
   type_id = 0;
 
+  pageOption: any = {
+    page: 1,
+    page_size: 10
+  }
+
   type_name = '草稿';
 
   ngOnInit(): void {
@@ -49,10 +54,14 @@ export class ProjectMyProjectListComponent implements OnInit {
   to(item: any) {
     this.type_id = item.id;
     this.type_name = item.name;
+    this.pos = this.type_id;
     console.log(this.type_id, 'type_id', item);
     console.log(this.type_name, 'type_name', item);
   }
   readOuter() {
     this.type_name = '草稿';
+    this.pageOption.page = 1
+    this.pageOption.page_size = 10
+    this.pos = 0;
   }
 }

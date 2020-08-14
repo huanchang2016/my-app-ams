@@ -14,9 +14,15 @@ import { CallbackComponent } from './callback/callback.component';
 import { UserLockComponent } from './passport/lock/lock.component';
 import { QrAuthComponent } from './passport/qr-auth/qr-auth.component';
 import { CommonFunctionService } from './service/common-function.service';
+import { StatisticsDataComponent } from './dashboard/statistics-data/statistics-data.component';
+import { CostBarDataComponent } from './dashboard/cost-bar-data/cost-bar-data.component';
+import { IncomeBarDataComponent } from './dashboard/income-bar-data/income-bar-data.component';
 
 const COMPONENTS = [
-  DashboardComponent,
+  DashboardComponent, // 图表数据展示
+  StatisticsDataComponent,
+  CostBarDataComponent,
+  IncomeBarDataComponent,
   // passport pages
   UserLoginComponent,
   UserRegisterComponent,

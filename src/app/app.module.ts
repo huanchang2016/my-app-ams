@@ -1,6 +1,6 @@
 // tslint:disable: no-duplicate-imports
 import { NgModule, LOCALE_ID, APP_INITIALIZER, Injector } from '@angular/core';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -42,12 +42,15 @@ const INTERCEPTOR_PROVIDES = [
 // #endregion
 
 // #region global third module
-import { QRModule } from '@delon/abc/qr';
-import { LodopModule } from '@delon/abc/lodop';
+// import { QRModule } from '@delon/abc/qr';
+// import { LodopModule } from '@delon/abc/lodop';
+// #region global third module
+import { NgxEchartsModule } from 'ngx-echarts';
 // import { MediaModule } from '@delon/abc/media';
 const GLOBAL_THIRD_MODULES = [
-  QRModule,
-  LodopModule,
+  // QRModule,
+  // LodopModule,
+  NgxEchartsModule
   // MediaModule
 ];
 // #endregion

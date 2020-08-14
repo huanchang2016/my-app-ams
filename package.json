@@ -42,6 +42,7 @@
     "@delon/theme": "^9.2.3",
     "@delon/util": "^9.2.3",
     "@ngx-translate/core": "^12.1.2",
+    "@types/echarts": "^4.6.4",
     "ajv": "^6.12.0",
     "echarts": "^4.8.0",
     "html2canvas": "^1.0.0-rc.5",
@@ -58,7 +59,7 @@
     "zone.js": "~0.10.2"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^0.901.7",
+    "@angular-devkit/build-angular": "^0.1000.5",
     "@angular/cli": "~9.1.6",
     "@angular/compiler-cli": "~9.1.7",
     "@angular/language-service": "~9.1.7",

@@ -27,6 +27,20 @@
 
         <div nz-col [nzMd]="12" [nzSm]="24">
             <nz-form-item>
+                <nz-form-label nzFor="special">
+                    <span nz-tooltip nzTooltipTitle="发生不可拆分的费用，如派遣员工人工成本、系统共用的费用等等，业务部门可以立一个特殊的项目，以归集此类费用">特殊项目<i nz-icon nzType="exclamation-circle" nzTheme="outline"></i></span>
+                </nz-form-label>
+                <nz-form-control nzErrorTip="项目收入情况必选">
+                    <nz-radio-group id="special" formControlName="special">
+                        <label nz-radio [nzValue]="false">否</label>
+                        <label nz-radio [nzValue]="true">是</label>
+                      </nz-radio-group>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+
+        <div nz-col [nzMd]="12" [nzSm]="24">
+            <nz-form-item>
                 <nz-form-label nzFor="origin_id">项目来源</nz-form-label>
                 <nz-form-control>
                     <nz-select style="width: 100%;" id="origin_id" nzShowSearch

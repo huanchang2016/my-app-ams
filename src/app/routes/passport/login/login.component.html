@@ -61,7 +61,7 @@
   </nz-tabset>
   <nz-form-item>
     <nz-col [nzSpan]="12">
-      <label nz-checkbox formControlName="remember">自动登录</label>
+      <a class="forgot" [routerLink]="['/passport/auth']">扫码登录</a>
     </nz-col>
     <nz-col [nzSpan]="12" class="text-right">
       <a class="forgot" [routerLink]="['/passport/reset']">忘记密码</a>

@@ -80,18 +80,29 @@
   <div class="steps-content">
     <!-- *ngIf="isExecuteUser && !progressInfo.complete" -->
     <div class="check-box mt-md">
-      <nz-radio-group *ngIf="contractInfo.pay_status?.name==='待执行'||payInfo?.pay_status.name==='待执行'"
+
+      <!-- <nz-radio-group *ngIf="contractInfo.pay_status?.name==='待执行'||payInfo?.pay_status.name==='待执行'" -->
+      <nz-radio-group *ngIf="settings.user.id === excuteUser.id && payInfo"
+        [(ngModel)]="checkOption.status" [nzButtonStyle]="'solid'"
+        [nzDisabled]="progressInfo.workflow_status.name === '无法执行' || progressInfo.workflow_status.name === '已完成'">
+        <label nz-radio-button [nzValue]="'A'" [nzDisabled]="payInfo.pay_status.name === '已付款'">已付款</label>
+        <label nz-radio-button [nzValue]="'B'">已执行</label>
+        <label nz-radio-button [nzValue]="'C'" [nzDisabled]="payInfo.pay_status.name==='已付款'">无法执行</label>
+      </nz-radio-group>
+      <!-- <nz-radio-group *ngIf="payInfo?.pay_status.name==='待执行'"
         [(ngModel)]="checkOption.status" [nzButtonStyle]="'solid'"
         [nzDisabled]="progressInfo.workflow_status.name === '无法执行' || progressInfo.workflow_status.name === '已完成'">
         <label nz-radio-button [nzValue]="'A'">已付款</label>
         <label nz-radio-button [nzValue]="'B'">已执行</label>
         <label nz-radio-button [nzValue]="'C'">无法执行</label>
-      </nz-radio-group>
-      <nz-radio-group *ngIf="contractInfo.pay_status?.name==='已付款'||payInfo?.pay_status.name==='已付款'"
+      </nz-radio-group> -->
+
+      <!-- <nz-radio-group *ngIf="contractInfo.pay_status?.name==='已付款'||payInfo?.pay_status.name==='已付款'" -->
+      <!-- <nz-radio-group *ngIf="payInfo?.pay_status.name==='已付款'"
         [(ngModel)]="checkOption.status" [nzButtonStyle]="'solid'"
         [nzDisabled]="progressInfo.workflow_status.name === '无法执行' || progressInfo.workflow_status.name === '已完成'">
         <label nz-radio-button [nzValue]="'B'">已执行</label>
-      </nz-radio-group>
+      </nz-radio-group> -->
       <ng-container *ngIf="checkOption.status ==='C'">
         <textarea nz-input placeholder="请填写无法执行的原因" [(ngModel)]="checkOption.remark"
           [nzAutosize]="{ minRows: 3, maxRows: 6 }" class="my-sm">
@@ -129,13 +140,21 @@
             提交（无法执行）
           </a>
         </ng-container>
-        <ng-container
+        <ng-container *ngIf="checkOption.status !== 'C'">
+          <ng-container *ngIf="settings.user.id === excuteUser.id">
+            <a nz-popconfirm nz-button [nzType]="'primary'" nzPopconfirmTitle="请确认当前付款或者执行情况是否填写完整，确认请继续。"
+              (nzOnConfirm)="submitCheckCurrentProcess()" (nzOnCancel)="cancel()" [disabled]="flag">
+              提交
+            </a>
+          </ng-container>
+        </ng-container>
+        <!-- <ng-container
           *ngIf=" checkOption.status !== 'C' && approveFlag && (filterUser||(payInfo?.pay_status.name==='待执行'||payInfo?.pay_status.name==='草稿'))">
           <a nz-popconfirm nz-button [nzType]="'primary'" nzPopconfirmTitle="请确认当前付款或者执行情况是否填写完整，确认请继续。"
             (nzOnConfirm)="submitCheckCurrentProcess()" (nzOnCancel)="cancel()" [disabled]="flag">
             提交
           </a>
-        </ng-container>
+        </ng-container> -->
 
       </div>
     </div>

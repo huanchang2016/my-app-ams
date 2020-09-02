@@ -33,7 +33,7 @@
             {{ data.bill_category.name }}
           </ng-container>
           <ng-container *ngIf="!data.bill_category">
-            暂未取得发票
+            <span>未开票</span>
           </ng-container>
         </td>
         <td>
@@ -98,11 +98,11 @@
   <div class="modal-form">
     <form nz-form [formGroup]="validateForm">
       <nz-form-item>
-        <nz-form-label nzFor="treaty_payment_id" nzRequired>{{ payType === 'contract' ? '合约支付' : '协议支付'}}
+        <nz-form-label nzFor="treaty_payment_id" nzRequired>{{ payType === 'contract' ? '合约支付' : '非合约支付'}}
         </nz-form-label>
-        <nz-form-control nzErrorTip="请选择{{ payType === 'contract' ? '合约支付' : '协议支付'}}详情">
+        <nz-form-control nzErrorTip="请选择{{ payType === 'contract' ? '合约支付' : '非合约支付'}}详情">
           <nz-select style="width: 100%;" id="treaty_payment_id" nzShowSearch [nzDisabled]="isEditCost"
-            nzPlaceHolder="请选择{{ payType === 'contract' ? '合约支付' : '协议支付'}}支付详情" formControlName="treaty_payment_id"
+            nzPlaceHolder="请选择{{ payType === 'contract' ? '合约支付' : '非合约支付'}}支付详情" formControlName="treaty_payment_id"
             (ngModelChange)="treatyPaymentChange($event)">
             <ng-container *ngFor="let item of paymentArray">
               <nz-option [nzLabel]="item.treaty.supplier.name+'('+item.cost.cost_category.name+')'" [nzValue]="item.id">
@@ -143,10 +143,10 @@
           <nz-form-item>
             <nz-form-label nzFor="exclude_tax_amount" [nzRequired]="validateForm.get('is_get_bill').value">除税金额
             </nz-form-label>
-            <nz-form-control nzErrorTip="请填写支付金额中除税金额{{ currentPayment ? '，不得超过' + amountTaxUse + '元' : '' }}">
+            <nz-form-control nzErrorTip="请填写支付金额中除税金额">
               <nz-input-group nzSuffix="RMB" nzPrefix="￥" style="width: 100%;">
                 <input type="text" nz-input (ngModelChange)="amountChange()"
-                  placeholder="请填写支付金额中除税金额{{ currentPayment ? '，不得超过' + amountTaxUse + '元' : '' }}"
+                  placeholder="请填写支付金额中除税金额"
                   formControlName="exclude_tax_amount" />
               </nz-input-group>
             </nz-form-control>
@@ -164,10 +164,10 @@
         <ng-container *ngIf="!validateForm.get('is_get_bill').value">
           <nz-form-item>
             <nz-form-label nzFor="amount" nzRequired>支付总金额</nz-form-label>
-            <nz-form-control nzErrorTip="请填写非合约支付总金额{{ currentPayment ? '，不得超过' + amountTaxUse + '元' : '' }}">
+            <nz-form-control nzErrorTip="请填写非合约支付总金额">
               <nz-input-group nzSuffix="RMB" nzPrefix="￥" style="width: 100%;">
                 <input type="text" nz-input (ngModelChange)="amountChange()"
-                  placeholder="非合约支付总金额{{ currentPayment ? '，不得超过' + amountTaxUse + '元' : '' }}"
+                  placeholder="非合约支付总金额"
                   formControlName="amount" />
               </nz-input-group>
             </nz-form-control>
@@ -180,12 +180,18 @@
           <input type="text" id="invoice_number" formControlName="invoice_number" placeHolder="填写票号" nz-input />
         </nz-form-control>
       </nz-form-item>
-      <ng-container *ngIf="validateForm.get('is_get_bill').value && totalAmountError && currentPayment">
-        <div class="text-center text-error">除税金额和税金总和不得超过 {{ amountTaxUse }} 元</div>
+      <ng-container *ngIf="totalAmountError">
+        <ng-container *ngIf="validateForm.get('is_get_bill').value && currentPayment">
+          <div class="text-center text-error">除税金额和税金总和不得超过 {{ amountTaxUse }} 元</div>
+        </ng-container>
+        <ng-container *ngIf="!validateForm.get('is_get_bill').value && currentPayment">
+          <div class="text-center text-error">支付总金额不得超过 {{ amountTaxUse }} 元</div>
+        </ng-container>
       </ng-container>
-      <ng-container *ngIf="!validateForm.get('is_get_bill').value && totalAmountError && currentPayment">
-        <div class="text-center text-error">支付总金额不得超过 {{ amountTaxUse }} 元</div>
+      <ng-container *ngIf="!totalAmountError && currentPayment">
+        <div class="text-right">累计支付金额不得超过 {{ currentPayment.amount }} 元</div>
       </ng-container>
+      
     </form>
   </div>
 </ng-template>

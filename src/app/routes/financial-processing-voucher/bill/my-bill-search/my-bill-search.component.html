@@ -98,7 +98,7 @@
             <td class="text-primary text-nowrap">{{ data.bill_status.name }}</td>
             <td>
                 <!-- approve/view/ -->
-                <a [routerLink]="['/bill/approve/view', data.id]" [queryParams]="{ project_id: data.project.id }"><i
+                <a [routerLink]="['/bill/approve/view', data.id]" [queryParams]="{ project_id: data.project.id, status: data.bill_status.name }"><i
                         nz-icon nzType="eye" nzTheme="outline"></i></a>
             </td>
         </tr>

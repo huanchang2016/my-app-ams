@@ -447,6 +447,8 @@ export class PaymentTaxManageComponent implements OnChanges, OnInit {
         this.getDataList(); // 获取详情支付列表
         this.outer.emit();
         this.closeModal();
+      }else {
+        this.msg.error(res.error);
       }
     })
   }

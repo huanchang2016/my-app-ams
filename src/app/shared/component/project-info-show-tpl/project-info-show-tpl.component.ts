@@ -1,5 +1,4 @@
 import { Component, OnChanges, Input } from '@angular/core';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-project-info-show-tpl',
@@ -10,15 +9,10 @@ import { Router } from '@angular/router';
 export class ProjectInfoShowTplComponent implements OnChanges {
 
   @Input() projectInfo: any;
-  constructor(
-    private router: Router
-  ) { }
+  constructor() { }
 
   ngOnChanges(): void {
 
   }
 
-  view(data: any) {
-    this.router.navigateByUrl(`/project/view/${data.id}`);
-  }
 }

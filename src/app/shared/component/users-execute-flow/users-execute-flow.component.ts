@@ -21,10 +21,12 @@ export class UsersExecuteFlowComponent implements OnChanges {
   @Input() paymentArr?: any[];
   @Input() listOfData?: any[];
   @Input() contract_pay_id?: number;
-  @Input() treatypayInfo?: any = [];
+  // @Input() treatypayInfo?: any = [];
   @Input() isCurrentCheck?: boolean;
   @Input() approveFlag?: any;
-  @Input() filterUser?: any;
+  // @Input() filterUser?: any; // 当前变量  无父元素传递。
+
+  filterUser:boolean = false;
 
 
   @Output() executeChange: EventEmitter<any> = new EventEmitter();
@@ -33,11 +35,11 @@ export class UsersExecuteFlowComponent implements OnChanges {
 
   nodeProcess: any[] = [];
 
-  isExecuteUser = false;
+  // isExecuteUser = false;
 
 
   checkOption: any = {
-    status: 'A',
+    status: null,
     remark: '' // 备注原因
   }
 
@@ -48,7 +50,7 @@ export class UsersExecuteFlowComponent implements OnChanges {
   contractInfo: any = [];
 
   constructor(
-    private settings: SettingsService,
+    public settings: SettingsService,
     private notice: NzNotificationService,
     private settingsConfigService: SettingsConfigService
   ) {
@@ -62,14 +64,25 @@ export class UsersExecuteFlowComponent implements OnChanges {
     })
   }
 
-  ngOnChanges() {
-    console.log('progressInfoprogressInfoprogressInfoprogressInfoprogressInfo', this.progressInfo);
-    console.log('中间组件 listOfData', this.listOfData);
+  // 设置 执行人， 当前登录用户， 以及当前流程 发起人（如  张三  创建了当前支付）, 当前支付的状态 （是否为草稿）
+  excuteUser:any = null; // 支付 执行人
+  createUser:any = null; // 支付发起人
+  is_draft:boolean = false;
+  // loginUser:any = null; // 当前登录用户  this.settings.user
 
+  ngOnChanges() {
+    console.log('...', this.progressInfo, 'payInfo', this.payInfo, 'this.filterUser', this.filterUser);
+    console.log('中间组件 listOfData', this.listOfData);
+    if(this.payInfo) {
+      this.is_draft = this.payInfo.draft;
+    }
     
     if (this.progressInfo) {
       this.nodeProcess = [this.progressInfo];
-      this.isExecuteUser = this.progressInfo.execute_user.id === this.settings.user.id;
+      // this.isExecuteUser = this.progressInfo.execute_user.id === this.settings.user.id;
+
+      this.excuteUser = this.progressInfo.execute_user;
+      this.createUser = this.progressInfo.user;
 
       let status = '';
       if (this.progressInfo.workflow_status.name === '待执行') {
@@ -84,13 +97,19 @@ export class UsersExecuteFlowComponent implements OnChanges {
 
       this.checkOption.status = status;
     }
+
   }
 
   submitCheckCurrentProcess() {
-    if (this.checkOption.is_execute === null) {
+    if (this.checkOption.status === null) {
       this.notice.error('错误', '是否执行未选择');
       return;
     }
+    if(this.progressInfo.workflow_status.name === '已付款' && this.checkOption.status !== 'B') {
+      this.notice.error('错误', '已付款后不能选择无法执行');
+      return;
+    }
+
     const is_pay = this.checkOption.status === 'A';
     const is_execute = this.checkOption.status === 'B';
 
@@ -101,6 +120,7 @@ export class UsersExecuteFlowComponent implements OnChanges {
     }
 
     // 提交
+    console.log("触发子元素事件之前 before", this.checkOption,  option);
     this.executeChange.emit(option);
     // 刷新列表
     // console.log("触发子元素事件之前 before");

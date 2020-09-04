@@ -82,13 +82,24 @@
     <div class="check-box mt-md">
 
       <!-- <nz-radio-group *ngIf="contractInfo.pay_status?.name==='待执行'||payInfo?.pay_status.name==='待执行'" -->
-      <nz-radio-group *ngIf="settings.user.id === excuteUser.id && payInfo"
-        [(ngModel)]="checkOption.status" [nzButtonStyle]="'solid'"><!-- [nzDisabled]="progressInfo.workflow_status.name === '无法执行' || progressInfo.workflow_status.name === '已完成'" -->
+      <ng-container *ngIf="settings.user.id === excuteUser.id && payInfo">
+        <ng-container *ngIf="progressInfo.workflow_status.name === '无法执行' || progressInfo.workflow_status.name === '已完成'; else notFinished">
+          <nz-radio-group [(ngModel)]="checkOption.status" [nzButtonStyle]="'solid'">
+            <label nz-radio-button [nzValue]="'A'" nzDisabled>已付款</label>
+            <label nz-radio-button [nzValue]="'B'" nzDisabled>已执行</label>
+            <label nz-radio-button [nzValue]="'C'" nzDisabled>无法执行</label>
+          </nz-radio-group>
+        </ng-container>
+        <ng-template #notFinished>
+          <nz-radio-group [(ngModel)]="checkOption.status" [nzButtonStyle]="'solid'">
+            <label nz-radio-button [nzValue]="'A'" [nzDisabled]="payInfo.pay_status.name === '已付款'">已付款</label>
+            <label nz-radio-button [nzValue]="'B'">已执行</label>
+            <label nz-radio-button [nzValue]="'C'" [nzDisabled]="payInfo.pay_status.name==='已付款'">无法执行</label>
+          </nz-radio-group>
+        </ng-template>
         
-        <label nz-radio-button [nzValue]="'A'" [nzDisabled]="payInfo.pay_status.name === '已付款'">已付款</label>
-        <label nz-radio-button [nzValue]="'B'">已执行</label>
-        <label nz-radio-button [nzValue]="'C'" [nzDisabled]="payInfo.pay_status.name==='已付款'">无法执行</label>
-      </nz-radio-group>
+      </ng-container>
+      
       <!-- <nz-radio-group *ngIf="payInfo?.pay_status.name==='待执行'"
         [(ngModel)]="checkOption.status" [nzButtonStyle]="'solid'"
         [nzDisabled]="progressInfo.workflow_status.name === '无法执行' || progressInfo.workflow_status.name === '已完成'">

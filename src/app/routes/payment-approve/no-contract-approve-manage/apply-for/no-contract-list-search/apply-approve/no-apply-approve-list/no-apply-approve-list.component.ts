@@ -23,10 +23,14 @@ export class NoApplyApproveListComponent implements OnInit {
     },
     {
       id: 1,
-      name: '已完成'
+      name: '已付款'
     },
     {
       id: 2,
+      name: '已完成'
+    },
+    {
+      id: 3,
       name: '无法执行'
     },
   ];

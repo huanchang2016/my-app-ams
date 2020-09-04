@@ -26,14 +26,18 @@ export class NoMyApplyListComponent implements OnInit {
     },
     {
       id: 2,
-      name: '已完成'
+      name: '已付款'
     },
     {
       id: 3,
-      name: '无法执行'
+      name: '已完成'
     },
     {
       id: 4,
+      name: '无法执行'
+    },
+    {
+      id: 5,
       name: '未通过'
     },
   ];
